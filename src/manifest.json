@@ -1,0 +1,71 @@
+{
+  "manifest_version": 3,
+  "name": "BringID Extension",
+  "description": "A chrome extension for BringID verification",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyNZXxnJXxmmzs30AQwiyF7Ub7EEpICmjlTt12I3cxlzWAgT/uQHFJm6jWMZ8eGEcwNZNIbFiTG++iWVydpkwZ290RNVvvxcJL4PtkXRhb99LSLn9kTNZQw1ii3ond68KOA3NFGp86V85bQ+PKDipdehyhXzML+RgS0VPkcdBKHqBUIOeXuy5pOk49nd+vRuatmoaQ226mPvU6l775vLLmoa0fuvkyrRDLtMp8JlYXWdkM0X879GSXFz9C5hvg8r1DSSZPnhzDznzMQPN8fvRB9MKvoOMFlIkXczMU+rbfggamwkTK0fBZ3HAfkG8TEvPZAz6XsMaR6SGzxyFk7KttQIDAQAB",
+  "background": {
+    "service_worker": "background.bundle.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon-32.png"
+  },
+  "side_panel": {
+    "default_path": "sidePanel.html"
+  },
+  "icons": {
+    "128": "icon-128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://extension-verifications.vercel.app/*",
+        "*://localhost/*",
+        "https://x.com/*",
+        "https://api.x.com/*"
+      ],
+      "js": ["contentScript.bundle.js"],
+      "css": []
+    }
+  ],
+  "externally_connectable": {
+    "matches": [
+      "http://*/*",
+      "https://*/*",
+      "*://localhost/*",
+      "https://*.zkbring.com/*",
+      "https://extension-verifications.vercel.app/*",
+      "<all_urls>"
+    ]
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content.styles.css",
+        "icon-128.png",
+        "icon-32.png",
+        "content.bundle.js"
+      ],
+      "matches": ["http://*/*", "https://*/*", "<all_urls>"]
+    }
+  ],
+  "host_permissions": [
+    "https://x.com/*",
+    "https://api.x.com/*",
+    "https://extension-verifications.vercel.app/*",
+    "*://localhost/*",
+    "<all_urls>"
+  ],
+  "permissions": [
+    "offscreen",
+    "storage",
+    "webRequest",
+    "activeTab",
+    "sidePanel",
+    "scripting",
+    "tabs"
+  ]
+}
