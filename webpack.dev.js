@@ -6,6 +6,9 @@ module.exports = merge(config, {
   devtool: "inline-source-map",
   devServer: {
     hot: true,
+    devMiddleware: {
+      writeToDisk: true,
+    },
     headers: {
       'Cross-Origin-Embedder-Policy': 'require-corp',
       'Cross-Origin-Opener-Policy': 'same-origin',
