@@ -6,6 +6,7 @@ type TGetProofResponse = Promise<{
 }>
 
 type TGetProof = (
+  apiUrl: string,
   identityCommitment: string,
   semaphoreGroupId: string
 ) => Promise<TGetProofResponse>

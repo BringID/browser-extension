@@ -9,6 +9,11 @@ import Text from "./text"
 import Note from "./note"
 import Tag from "./tag"
 import ProgressBar from "./progress-bar"
+import TaskContainer from './task-container'
+import Task from './task'
+import Verification from './verification'
+import Message from './message'
+import LogoWrapper from './logo-wrapper'
 
 export {
   Spinner,
@@ -21,5 +26,10 @@ export {
   Text,
   Note,
   Tag,
-  ProgressBar
+  ProgressBar,
+  TaskContainer,
+  Task,
+  Message,
+  Verification,
+  LogoWrapper
 }

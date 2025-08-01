@@ -1,7 +1,10 @@
 import React, { FC, useEffect } from 'react'
 import browser from 'webextension-polyfill'
 import { Page } from '../components'
-import { Home } from './pages'
+import {
+  Home,
+  Tasks
+} from './pages'
 import './styles.css'
 import { Navigate, Route, Routes, useNavigate } from 'react-router'
 
@@ -22,6 +25,7 @@ const Popup: FC = () => {
     <Page>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/tasks" element={<Tasks />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Page>

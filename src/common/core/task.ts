@@ -1,8 +1,8 @@
 export type Task = {
-    title: string;
-    description?: string;
-    icon?: string;
-    points: number;
+  title: string;
+  description?: string;
+  icon?: string;
+  points: number;
 }
 
 function loadTasks(): Task[] {

@@ -85,6 +85,13 @@ const options = {
         exclude: /node_modules/,
       },
       {
+        test: /\.png$/,
+        loader: "file-loader",
+        exclude: /node_modules/,
+   
+
+      },
+      {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
         use: [
@@ -119,7 +126,7 @@ const options = {
     alias: alias,
     extensions: fileExtensions
       .map((extension) => "." + extension)
-      .concat([".js", ".jsx", ".ts", ".tsx", ".css"]),
+      .concat([".js", ".jsx", ".ts", ".tsx", ".css", ".png"]),
   },
   plugins: [
     isDevelopment && new ReactRefreshWebpackPlugin(),

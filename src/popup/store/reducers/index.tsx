@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
 import user from './user'
+import verifications from './verifications'
 
 const rootReducer = combineReducers({
-  user
+  user,
+  verifications
 })
 
 export type AppRootState = ReturnType<typeof rootReducer>

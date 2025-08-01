@@ -1,5 +1,5 @@
 import { Level } from 'level'
-import { TUser, TUserStatus, TTask } from '../types'
+import { TUser, TUserStatus, TVerification } from '../types'
 import TDBStorage from './types'
 import { setId, setKey, setStatus } from '../store/reducers/user'
 import store from '../store'
@@ -8,7 +8,7 @@ const charwise = require('charwise')
 
 class DBStorage implements TDBStorage {
   db?: Level
-  taskDb?: any
+  verificationsDb?: any
   userDb?: any
 
   constructor () {
@@ -16,7 +16,7 @@ class DBStorage implements TDBStorage {
       valueEncoding: 'json',
     })
 
-    this.taskDb = this.db.sublevel<string, TTask>('task', {
+    this.verificationsDb = this.db.sublevel<string, TVerification>('verifications', {
       valueEncoding: 'json',
     });
 
@@ -88,16 +88,16 @@ class DBStorage implements TDBStorage {
   }
 
 
-  async addTask(
-    task: TTask,
-  ): Promise<TTask> {
-    await this.taskDb.put(task.taskId, task)
-    return task
+  async addVerification(
+    verification: TVerification,
+  ): Promise<TVerification> {
+    await this.verificationsDb.put(verification.verificationId, verification)
+    return verification
   }
 
-  async getTasks(): Promise<TTask[]> {
+  async getVerifications(): Promise<TVerification[]> {
     const retVal = []
-    for await (const [key, value] of this.taskDb.iterator()) {
+    for await (const [key, value] of this.verificationsDb.iterator()) {
       retVal.push(value)
     }
     return retVal

@@ -2,7 +2,8 @@ import styled from "styled-components"
 import {
   ProgressBar,
   Subtitle,
-  Button
+  Button,
+  Message
 } from '../../../components'
 
 export const Container = styled.div`
@@ -21,4 +22,8 @@ export const SubtitleStyled = styled(Subtitle)`
 
 export const ButtonStyled = styled(Button)`
   margin-left: auto;
+`
+
+export const MessageStyled = styled(Message)`
+
 `

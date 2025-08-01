@@ -1,3 +1,7 @@
 import api from "./api"
+import msToTime from './ms-to-time'
 
-export default api
+export {
+  msToTime,
+  api
+}

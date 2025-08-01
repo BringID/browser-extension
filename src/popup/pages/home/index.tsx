@@ -5,20 +5,27 @@ import {
   Container,
   ProgressBarStyled,
   SubtitleStyled,
-  ButtonStyled
+  ButtonStyled,
+  MessageStyled
 } from './styled-components'
+import { Link } from '../../../components'
 import { Header } from '../../components'
 import browser from 'webextension-polyfill'
-import { TTask } from "../../types"
+import { TVerificationType } from "../../types"
 import { useNavigate } from 'react-router'
+import { useVerifications } from "../../store/reducers/verifications"
+import { VerificationsList } from "../../components"
+import tasks from "../../../common/task"
 
 const Home: FC = () => {
   const user = useUser()
+  const verifications = useVerifications()
+  const availableTasks = tasks()
   console.log({ user })
+
 
   const percentageFinished = 0
   const leftForAdvanced = 20
-  const tasks: TTask[] = []
   const navigate = useNavigate()
 
   return <Container>
@@ -32,19 +39,33 @@ const Home: FC = () => {
 
     <SubtitleStyled>
       Your verifications
-      {tasks && tasks.length > 0 && <ButtonStyled
+      {verifications && verifications.length > 0 && <ButtonStyled
         size='small'
         onClick={() => {
-          navigate('/plugins')
+          navigate('/tasks')
         }}
       >
         + Add
       </ButtonStyled>}
     </SubtitleStyled>
 
-    {user.key}
+    {verifications && verifications.length > 0 && <MessageStyled>
+      Verifications are batched for better privacy. <Link href="#">Learn more</Link>
+    </MessageStyled>}
 
-    <ButtonStyled onClick={async () => {
+
+
+    <VerificationsList
+      tasks={availableTasks}
+      verifications={verifications}
+      onAddVerifications={() => {
+        navigate('/tasks')
+      }}
+    />
+
+    {/* {user.key} */}
+
+    {/* <ButtonStyled onClick={async () => {
       const [tab] = await browser.tabs.query({
         active: true,
         currentWindow: true
@@ -77,7 +98,7 @@ const Home: FC = () => {
       }}
     >
       AddKey
-    </ButtonStyled>
+    </ButtonStyled> */}
   </Container>
 }
 
