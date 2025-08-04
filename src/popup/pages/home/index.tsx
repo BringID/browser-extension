@@ -11,7 +11,6 @@ import {
 import { Link } from '../../../components'
 import { Header } from '../../components'
 import browser from 'webextension-polyfill'
-import { TVerificationType } from "../../types"
 import { useNavigate } from 'react-router'
 import { useVerifications } from "../../store/reducers/verifications"
 import { VerificationsList } from "../../components"

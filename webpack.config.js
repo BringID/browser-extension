@@ -85,7 +85,7 @@ const options = {
         exclude: /node_modules/,
       },
       {
-        test: /\.png$/,
+        test: /\.png|gif$/,
         loader: "file-loader",
         exclude: /node_modules/,
    
@@ -126,7 +126,7 @@ const options = {
     alias: alias,
     extensions: fileExtensions
       .map((extension) => "." + extension)
-      .concat([".js", ".jsx", ".ts", ".tsx", ".css", ".png"]),
+      .concat([".js", ".jsx", ".ts", ".tsx", ".css", ".png", ".gif"]),
   },
   plugins: [
     isDevelopment && new ReactRefreshWebpackPlugin(),
