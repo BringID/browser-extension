@@ -7,7 +7,7 @@ export type Task = {
 
 function loadTasks(): Task[] {
     try {
-        const tasksConfig = require('../../cfg/tasks.json');
+        const tasksConfig = require('../../../cfg/tasks.json');
 
         // Validate that it's an array
         if (!Array.isArray(tasksConfig)) {
