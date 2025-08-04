@@ -37,6 +37,6 @@ function loadTasks(): Task[] {
 }
 
 const TASKS = loadTasks();
-export default function tasks(): Task[] {
+export function tasks(): Task[] {
     return [...TASKS];
 }

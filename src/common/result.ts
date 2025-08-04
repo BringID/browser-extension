@@ -1,1 +1,1 @@
-type Result<T> = T | Error;
+export type Result<T> = T | Error;
