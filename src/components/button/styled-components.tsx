@@ -15,6 +15,7 @@ export const Button = styled.button<TProps>`
   padding: 6px 12px;
   position: relative;
   font-size: 14px;
+  cursor: pointer;
   height: 40px;
   line-height: 16px;
   font-weight: 500;

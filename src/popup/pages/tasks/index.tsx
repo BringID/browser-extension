@@ -14,7 +14,7 @@ import TProps from './types'
 import { useSelector } from 'react-redux'
 import { AppRootState } from '../../store/reducers'
 import { useNavigate } from 'react-router'
-import tasks from "../../../common/task"
+import { tasks } from "../../../common/task"
 import { TasksList } from '../../components';
 
 export default function Home(props: {
@@ -45,7 +45,7 @@ export default function Home(props: {
 
       <Content>
 
-      <TasksList tasks={availableTasks} />
+        <TasksList tasks={availableTasks} />
 
       </Content>
       
