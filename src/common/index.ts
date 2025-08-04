@@ -1,2 +1,2 @@
-export {Result} from './result';
-export {Task, tasks} from './task';
+export * as Core from './core';
+export * as Types from './types';
