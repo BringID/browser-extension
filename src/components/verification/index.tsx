@@ -15,6 +15,8 @@ import { Icons } from "../../components"
 import { Button } from "../../components"
 import { msToTime } from "../../popup/utils"
 import { Tag } from "../../components"
+import { useDispatch } from "react-redux"
+import getStorage from "../../popup/db-storage"
 
 const definePluginContent = (
   status: TVerificationStatus,
@@ -95,17 +97,24 @@ const Verification: FC<TProps> = ({
   onSelect
 }) => {
 
+
   const [ expiration, setExpiration ] = useState<number | null>(null)
   const [ fetched, setFetched ] = useState<boolean>(false)
 
   useEffect(() => {
-    const interval = window.setInterval(() => {
+    const interval = window.setInterval(async () => {
       const now = +new Date()
       const expiration = scheduledTime - now
       setExpiration(expiration)
-
+      console.log({ expiration })
       if ((expiration) <= 0 ) {
         window.clearInterval(interval)
+        const storage = await getStorage()
+        await storage.updateVerificationStatus(
+          taskId,
+          'completed'
+        )
+        
       }
     }, 1000)
 

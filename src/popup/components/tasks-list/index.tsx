@@ -17,10 +17,10 @@ const TasksList: FC<TProps> = ({
     <Container className={className}>
       {tasks.map((task, idx) => 
         <Task
-          key={idx + 1}
+          key={task.credentialGroupId}
           title={task.title}
           description={task.description}
-          taskId={String(idx + 1)}
+          taskId={task.credentialGroupId}
           points={task.points}
         />
       )}

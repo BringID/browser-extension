@@ -4,6 +4,7 @@ import TAddInitialVerifications from './add-initial-verifications'
 import TGetUserId from './get-user-id'
 import TGetVerifications from './get-verifications'
 import TGetUserKey from './get-user-key'
+import TGetUser from './get-user'
 
 interface TDBStorage {
   db?: Level
@@ -17,6 +18,8 @@ interface TDBStorage {
   getVerifications: TGetVerifications
 
   getUserKey: TGetUserKey
+
+  getUser: TGetUser
 }
 
 export default TDBStorage
@@ -26,5 +29,6 @@ export {
   TAddInitialVerifications,
   TGetUserId,
   TGetVerifications,
-  TGetUserKey
+  TGetUserKey,
+  TGetUser
 }

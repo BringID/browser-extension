@@ -6,7 +6,8 @@ import deepEqual from 'fast-deep-equal'
 enum ActionType {
   '/user/setKey' = '/user/setKey',
   '/user/setStatus' = '/user/setStatus',
-  '/user/setId' = '/user/setId'
+  '/user/setId' = '/user/setId',
+  '/user/setUser' = '/user/setUser'
 }
 
 type Action<payload> = {
@@ -38,11 +39,18 @@ export const setStatus = (status: TUserStatus): Action<string> => ({
   payload: status
 })
 
+export const setUser = (user: TUser): Action<TUser> => ({
+  type: ActionType['/user/setUser'],
+  payload: user
+})
+
 export default function user(state = initState, action: Action<any>): State {
   console.log({ action })
   switch (action.type) {
     case ActionType['/user/setKey']:
       return { ...state, key: action.payload }
+    case ActionType['/user/setUser']:
+      return action.payload
     case ActionType['/user/setId']:
       return { ...state, id: action.payload }
     case ActionType['/user/setStatus']:

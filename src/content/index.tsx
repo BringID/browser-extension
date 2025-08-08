@@ -7,7 +7,6 @@ import { TExtensionRequestType } from '../popup/types'
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     if (message.type === TExtensionRequestType.proofs_generated) {
-      console.log('content listener detected message: ', { message })
       // goes to website, connected to extension
       window.postMessage(
         {

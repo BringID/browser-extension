@@ -23,11 +23,14 @@ import { ScheduleOverlay, ConfirmationOverlay } from "../../components"
 import { calculateAvailablePoints } from "../../utils"
 import configs from "../../configs"
 
+
 const Home: FC = () => {
   const user = useUser()
   const verifications = useVerifications()
   const availableTasks = tasks()
-  
+
+
+  console.log('HOME: ', { verifications })
   const [
     confirmationOverlayShow,
     setConfirmationOverlayShow
@@ -49,6 +52,10 @@ const Home: FC = () => {
     setDropAddress
   ] = useState<string>('')
 
+  const [
+    scheduledTime,
+    setScheduledTime
+  ] = useState<number | null>(null)
 
   const availablePoints = calculateAvailablePoints(verifications)
   const leftForAdvanced = configs.ADVANCED_STATUS_POINTS - availablePoints
@@ -58,7 +65,6 @@ const Home: FC = () => {
 
   useEffect(() => {
     chrome.storage.local.get('request', (data) => {
-      console.log('Got param:', data.request);
       if (!data || !data.request) {
         return chrome.storage.local.set({ request: `` });
       }
@@ -78,6 +84,30 @@ const Home: FC = () => {
       })
     })
   }, [])
+
+  useEffect(() => {
+    if (!verifications) {
+      return 
+    }
+    const findNotCompleted = verifications.find(verification => verification.status !== 'completed')
+    console.log({
+      verifications, findNotCompleted
+    })
+    if (findNotCompleted) {
+      const now = +new Date()
+      if (now >= findNotCompleted.scheduledTime) {
+        return
+      }
+
+      setScheduledTime(findNotCompleted.scheduledTime)
+      setTimerOverlayShow(true)
+    } else {
+      setScheduledTime(null)
+      setTimerOverlayShow(false)
+    }
+  }, [
+    verifications
+  ])
 
   const onRequestClose = () => {
     setDropAddress('')
@@ -101,7 +131,16 @@ const Home: FC = () => {
       />
     )}
 
-    <Header status={user.status} points={10} />
+    {!confirmationOverlayShow && timerOverlayShow && scheduledTime && <ScheduleOverlay
+        onClose={() => {
+          setScheduledTime(null)
+          setTimerOverlayShow(false)
+        }}
+        scheduledTime={scheduledTime}
+      />}
+
+    <Header status={user.status} points={availablePoints} />
+  
     <ProgressBarStyled
       current={percentageFinished > 100 ? 100 : percentageFinished}
       max={100}

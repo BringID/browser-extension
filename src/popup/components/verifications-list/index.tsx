@@ -16,7 +16,7 @@ const VerificationsList: FC<TProps> = ({
   onAddVerifications,
   className
 }) => {
-
+  console.log({ verifications })
   return (
     <Container className={className}>
       {verifications.length === 0 && <NoVerificationsFound
@@ -25,13 +25,13 @@ const VerificationsList: FC<TProps> = ({
         />
       }
       {verifications.length > 0 && verifications.map((verification, idx) => {
-        const relatedTask = tasks.find((task, idx) => String(idx) === verification.credentialGroupId)
+        const relatedTask = tasks.find((task, idx) => task.credentialGroupId === verification.credentialGroupId)
         if (relatedTask) {
           return <Verification
-            key={idx + 1}
+            key={relatedTask.credentialGroupId}
             title={relatedTask.title}
             description={relatedTask.description}
-            taskId={String(idx + 1)}
+            taskId={relatedTask.credentialGroupId}
             points={relatedTask.points}
             scheduledTime={verification.scheduledTime}
             status={verification.status}

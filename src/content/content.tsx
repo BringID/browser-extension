@@ -1,5 +1,3 @@
-console.log('content/script loaded')
-
 import configs from '../popup/configs'
 
 import { TWebsiteRequestType } from '../popup/types'
@@ -17,7 +15,6 @@ window.addEventListener("message", (event) => {
   switch (event.data.type) {
     //  from client to extension
     case TWebsiteRequestType.set_private_key: {
-      console.log(configs.EXTENSION_ID, event)
       chrome.runtime.sendMessage(configs.EXTENSION_ID, event.data, (response) => {
         console.log("Background response:", response)
       });

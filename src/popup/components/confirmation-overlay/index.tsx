@@ -99,9 +99,10 @@ const ConfirmationOverlay: FC<TProps> = ({
     let result = 0
 
     {verifications.forEach((verification, idx) => {
-      const taskId = String(idx + 1)
-      if (!selected.includes(taskId)) { return }
-      const relatedTask = availableTasks.find((task, idx) => taskId === verification.credentialGroupId)
+      const relatedTask = availableTasks.find((task, idx) => task.credentialGroupId === verification.credentialGroupId)
+      if (!relatedTask) { return }
+      if (verification.status !== 'completed') { return }
+      if (!selected.includes(relatedTask?.credentialGroupId)) { return }
       if (relatedTask) {
         result = result + relatedTask?.points
       }
@@ -191,7 +192,7 @@ const ConfirmationOverlay: FC<TProps> = ({
             setLoading(false)
         }}
         >
-          Confirm Selection ({pointsSelected} pts)
+          Confirm ({pointsSelected} pts)
         </ButtonStyled>
 
         <ButtonStyled

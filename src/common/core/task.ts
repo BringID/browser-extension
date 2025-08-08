@@ -4,6 +4,7 @@ export type Task = {
   icon?: string;
   points: number;
   semaphoreGroupId: string;
+  credentialGroupId: string;
 }
 
 function loadTasks(): Task[] {
@@ -29,7 +30,8 @@ function loadTasks(): Task[] {
                 description: task.description,
                 icon: task.icon,
                 points: task.points,
-                semaphoreGroupId: task.semaphoreGroupId
+                semaphoreGroupId: task.semaphoreGroupId,
+                credentialGroupId: task.credentialGroupId
             };
         });
     } catch (error) {

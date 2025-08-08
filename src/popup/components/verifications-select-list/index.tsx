@@ -20,15 +20,17 @@ const VerificationsSelectList: FC<TProps> = ({
   return (
     <Container className={className}>
       {verifications.map((verification, idx) => {
-        const taskId = String(idx + 1)
-        const relatedTask = tasks.find((task, idx) => taskId === verification.credentialGroupId)
+        if (verification.status !== 'completed') {
+          return
+        }
+        const relatedTask = tasks.find((task, idx) => task.credentialGroupId === verification.credentialGroupId)
         if (relatedTask) {
-          const isSelected = selected.includes(taskId)
+          const isSelected = selected.includes(relatedTask.credentialGroupId)
           return <Verification
-            key={taskId}
+            key={relatedTask.credentialGroupId}
             title={relatedTask.title}
             description={relatedTask.description}
-            taskId={taskId}
+            taskId={relatedTask.credentialGroupId}
             points={relatedTask.points}
             scheduledTime={verification.scheduledTime}
             status='default'
@@ -36,7 +38,7 @@ const VerificationsSelectList: FC<TProps> = ({
             selected={isSelected}
             onSelect={(selected) => {
               onSelect(
-                taskId,
+                relatedTask.credentialGroupId,
                 selected
               )
             }}

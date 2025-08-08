@@ -18,32 +18,38 @@ type State = TVerification[]
 
 const initState: State = []
 
-export const addVerification = (task: TVerification): Action<TVerification> => ({
+export const addVerification = (verification: TVerification): Action<TVerification> => ({
   type: ActionType['/verifications/addVerification'],
-  payload: task
+  payload: verification
 })
 
-export const addVerifications = (tasks: TVerification[]): Action<TVerification[]> => ({
+export const addVerifications = (verifications: TVerification[]): Action<TVerification[]> => ({
   type: ActionType['/verifications/addVerifications'],
-  payload: tasks
+  payload: verifications
 })
 
 export default function verifications(state = initState, action: Action<any>): State {
-  console.log({ action })
+
+  console.log('verifications store:', { action })
   switch (action.type) {
     case ActionType['/verifications/addVerification']:
+      console.log('adding to store addVerification: ', { result: [ action.payload, ...state ] })
       return [ action.payload, ...state ]
     case ActionType['/verifications/addVerifications']:
+      console.log('adding to store addVerifications: ', { result: action.payload })
+
       return action.payload
   
     default:
+      console.log('default: ', { state })
       return state;
   }
 }
 
 export const useVerifications: (() => State) = () => {
   return useSelector((state: AppRootState) => {
+    console.log('useVerifications: ', { state })
     return state.verifications
-  }, deepEqual)
+  })
 }
 

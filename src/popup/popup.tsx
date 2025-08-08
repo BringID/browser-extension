@@ -7,7 +7,9 @@ import {
 } from './pages'
 import './styles.css'
 import { Navigate, Route, Routes, useNavigate } from 'react-router'
-
+import getStorage from "./db-storage"
+import { useDispatch } from 'react-redux'
+import { addVerifications } from './store/reducers/verifications'
 
 const Popup: FC = () => {
   useEffect(() => {
@@ -19,6 +21,15 @@ const Popup: FC = () => {
       }
     })
     
+  }, [])
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    (async () => {
+      const dbStorage = await getStorage()
+      await dbStorage.syncUser()
+      await dbStorage.syncVerifications()
+    })()
   }, [])
 
   return (
