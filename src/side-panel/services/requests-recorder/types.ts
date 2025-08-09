@@ -1,6 +1,11 @@
-import {AtLeastOne} from "../../common/types";
+import {AtLeastOne, HttpMethod} from "../../common/types";
 
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+export enum Status {
+    Idle = 'idle',
+    Recording = 'recording',
+    Stopped = 'stopped'
+}
+
 export type UrlPattern = `https://${string}`;
 export type TargetRequest = {
     method: HttpMethod;
@@ -19,7 +24,6 @@ export type RequestBodyHandlerData = {
 export type RequestHeadersHandlerData = {
     requestId: string;
     headers: Record<string, string>;
-    cookies: Record<string, string>;
 }
 
 export type PartialRequestLog = AtLeastOne<RequestHeadersHandlerData, RequestBodyHandlerData>;

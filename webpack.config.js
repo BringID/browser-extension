@@ -1,6 +1,5 @@
 const webpack = require("webpack")
 const path = require("path")
-const fileSystem = require("fs-extra")
 
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
@@ -101,7 +100,7 @@ const options = {
     new CleanWebpackPlugin({ verbose: false }),
     new webpack.ProgressPlugin(),
     // expose and write the allowed env vars on the compiled bundle
-    new webpack.EnvironmentPlugin(["NODE_ENV"]),
+    new webpack.EnvironmentPlugin(["NODE_ENV", "NOTARY_URL", "PROXY_URL"]),
     // new ExtReloader({
     //   manifest: path.resolve(__dirname, "src/manifest.json")
     // }),
@@ -111,7 +110,7 @@ const options = {
           from: "src/manifest.json",
           to: path.join(__dirname, "build"),
           force: true,
-          transform: function (content, path) {
+          transform: function (content) {
             // generates the manifest file using the package.json informations
             return Buffer.from(
               JSON.stringify({
@@ -140,6 +139,15 @@ const options = {
           to: path.join(__dirname, "build"),
           force: true,
         },
+      ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "node_modules/tlsn-js/build",
+          to: path.join(__dirname, "build"),
+          force: true,
+        }
       ],
     }),
     new HtmlWebpackPlugin({

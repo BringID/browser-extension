@@ -1,25 +1,20 @@
 import {Task} from "../../../common/core";
 import {Result} from "../../../common/types";
+import {OnStateUpdated, State as ProgressiveState} from "../../common/helpers/progressive";
+import {Presentation} from "tlsn-js";
 
 export enum NotarizationStatus {
-    NotStarted,
-    InProgress,
-    Completed,
-    Stopped
+    NotStarted = "Not Started",
+    InProgress = "In Progress",
+    Completed = "Completed",
+    Stopped = "Stopped"
 }
 
-export type NotarizationState = {
-    status: NotarizationStatus;
-    progress: number;
-    error?: Error;
-}
-
-export type UpdatesCallback = (state: NotarizationState) => Promise<void> | void;
-export type ResultCallback = (presentation: Result<Presentation>) => Promise<void> | void;
+export type ResultCallback = (presentation: Result<Presentation>) => void;
 
 export interface NotarizationHandler {
     task: Task;
-    state: NotarizationState;
-    start: (resultCallback: ResultCallback, updatesCallback?: UpdatesCallback) => Promise<void>;
+    state: ProgressiveState<NotarizationStatus>;
+    start: (resultCallback: ResultCallback, updatesCallback?: OnStateUpdated<NotarizationStatus>) => Promise<void>;
     stop: () => Promise<void>;
 }

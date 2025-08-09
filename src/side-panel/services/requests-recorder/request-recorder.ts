@@ -1,43 +1,52 @@
 import {
+    PartialRequestLog,
     RequestBodyHandlerData,
     RequestHeadersHandlerData,
-    PartialRequestLog,
-    RequestLog,
+    Status,
     TargetRequest,
     UrlPattern
 } from "./types";
-import {toCompleteLog, toHttpMethod} from "./type-guards";
+import {toCompleteLog} from "./guards";
+import {toHttpMethod} from "../../common/guards";
+import {Result} from "../../../common/types";
+import {Request} from "../../common/types";
+import {toRequest} from "./helpers";
+import {Progressive, State} from "../../common/helpers/progressive";
 
-type SuccessCallback = (log: Array<RequestLog>) => void;
+type SuccessCallback = (log: Array<Request>) => void;
 
-export class RequestRecorder {
+export class RequestRecorder extends Progressive<Status>{
     readonly #successCallback: SuccessCallback;
     readonly #targetRequests: TargetRequest[] = [];
     #completeCounter: number = 0;
     #requestsLog: Array<PartialRequestLog | undefined> = [];
-    #completedRequestsLog: Array<RequestLog> = [];
-    #recording: boolean = false;
+    #completedRequestsLog: Array<Request> = [];
 
-    public get completedRequestsLog(): Array<RequestLog> { return this.#completedRequestsLog; }
-    public get recording(): boolean { return this.#recording; }
+    public get completedRequestsLog(): Array<Request> { return this.#completedRequestsLog; }
 
-    constructor(targetRequests: TargetRequest[], successCallback: SuccessCallback) {
+    constructor(
+        targetRequests: TargetRequest[],
+        successCallback: SuccessCallback,
+        onStateUpdated?: (state: State<Status>) => void,
+    ) {
+        super({ progress: 0, status: Status.Idle }, onStateUpdated);
         this.#targetRequests = targetRequests;
         this.#successCallback = successCallback;
     }
 
     start(): void {
-        this.#completedRequestsLog = new Array<RequestLog>(this.#targetRequests.length);
+        if (this.state.status === Status.Recording) return;
+        this.#completedRequestsLog = new Array<Request>(this.#targetRequests.length);
         this.#requestsLog = new Array<PartialRequestLog | undefined>(this.#targetRequests.length).fill(undefined);
-        this.#recording = true;
 
         const urls: UrlPattern[] = this.#targetRequests.map((tr: TargetRequest) => tr.urlPattern);
         chrome.webRequest.onBeforeRequest.addListener(this.handleRequestBody, {urls}, ["requestBody"]);
-        chrome.webRequest.onSendHeaders.addListener(this.handleRequestHeaders, {urls}, ["requestHeaders"]);
+        chrome.webRequest.onSendHeaders.addListener(this.handleRequestHeaders, {urls}, ["requestHeaders", "extraHeaders"]);
+        this.setStatus(Status.Recording);
     }
 
     stop(): void {
-        this.#recording = false;
+        this.setStatus(Status.Stopped);
         chrome.webRequest.onBeforeRequest.removeListener(this.handleRequestBody);
         chrome.webRequest.onSendHeaders.removeListener(this.handleRequestHeaders);
     }
@@ -58,8 +67,13 @@ export class RequestRecorder {
     private completeRequestLog(requestId: number, existingLog: PartialRequestLog): void {
         if (toCompleteLog(existingLog)) {
             this.#completeCounter++;
-            const completeLog: RequestLog = existingLog;
-            this.#completedRequestsLog[requestId] = completeLog;
+            const requestRes = toRequest(existingLog)
+            if(requestRes instanceof Error) {
+                this.stop()
+                this.setError(new Error(`Failed to convert request log to Request object: ${requestRes.message}`))
+                return;
+            }
+            this.#completedRequestsLog[requestId] = requestRes;
             delete this.#requestsLog[requestId];
             if(this.#completeCounter === this.#targetRequests.length) {
                 this.stop();
@@ -68,7 +82,7 @@ export class RequestRecorder {
         }
     }
 
-    private updateRequestLog(requestId: number, updates: RequestBodyHandlerData | RequestHeadersHandlerData): void {
+    private updateRequestLog(requestId: number, updates: RequestBodyHandlerData | RequestHeadersHandlerData): Result<void> {
         if (requestId < 0 || requestId >= this.#targetRequests.length) return;
         const existingLog: PartialRequestLog | undefined = this.#requestsLog[requestId];
 
@@ -87,7 +101,7 @@ export class RequestRecorder {
     // Note: keep arrow function for a proper scope management
     private handleRequestBody = (details: chrome.webRequest.WebRequestBodyDetails): void => {
         const requestId = this.requestId(details.method, details.url)
-        if (!this.#recording) return;
+        if (this.state.status !== Status.Recording) return;
 
         this.updateRequestLog(requestId, {
             requestId: details.requestId,
@@ -102,12 +116,11 @@ export class RequestRecorder {
     // Note: keep arrow function for a proper scope management
     private handleRequestHeaders = (details: chrome.webRequest.WebRequestHeadersDetails): void => {
         const requestId = this.requestId(details.method, details.url)
-        if (!this.#recording) return;
+        if (this.state.status !== Status.Recording) return;
 
         this.updateRequestLog(requestId, {
             requestId: details.requestId,
-            headers: this.parseHeaders(details.requestHeaders || []),
-            cookies: this.parseCookiesFromHeaders(details.requestHeaders || [])
+            headers: this.parseHeaders(details.requestHeaders || [])
         } satisfies RequestHeadersHandlerData);
     };
 
@@ -115,25 +128,6 @@ export class RequestRecorder {
         return headers.reduce((acc, header) => {
             if (header.name && header.value) {
                 acc[header.name] = header.value;
-            }
-            return acc;
-        }, {} as Record<string, string>);
-    }
-
-    private parseCookiesFromHeaders(headers: chrome.webRequest.HttpHeader[]): Record<string, string> {
-        const cookieHeader = headers.find(h => h.name?.toLowerCase() === 'cookie');
-        if (!cookieHeader?.value) return {};
-
-        // TODO Use URL
-        return cookieHeader.value.split(';').reduce((acc, cookie) => {
-            const trimmed = cookie.trim()
-            const separatorIndex = trimmed.indexOf('=')
-            const [name, value] = [
-                trimmed.substring(0, separatorIndex),
-                trimmed.substring(separatorIndex + 1)
-            ]
-            if (name && value) {
-                acc[name] = value;
             }
             return acc;
         }, {} as Record<string, string>);

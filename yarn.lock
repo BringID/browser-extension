@@ -2741,6 +2741,11 @@ colors@^1.4.0:
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.4.0.tgz#c50491479d4c1bdaed2c9ced32cf7c7dc2360f78"
   integrity sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
 
+comlink@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/comlink/-/comlink-4.4.2.tgz#cbbcd82742fbebc06489c28a183eedc5c60a2bca"
+  integrity sha512-OxGdvBmJuNKSCMO4NTl1L47VRp6xn2wG4F/2hYzB6tiCb709otOxtEYCSvK80PtjODfXXZu8ds+Nw5kVCjqd2g==
+
 commander@^10.0.0:
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-10.0.1.tgz#881ee46b4f77d1c1dccc5823433aa39b022cbe06"
@@ -4246,7 +4251,7 @@ http-errors@~1.6.2:
     setprototypeof "1.1.0"
     statuses ">= 1.4.0 < 2"
 
-http-parser-js@>=0.5.1, http-parser-js@^0.5.9:
+http-parser-js@>=0.5.1, http-parser-js@^0.5.10:
   version "0.5.10"
   resolved "https://registry.yarnpkg.com/http-parser-js/-/http-parser-js-0.5.10.tgz#b3277bd6d7ed5588e20ea73bf724fcbe44609075"
   integrity sha512-Pysuw9XpUq5dVc/2SMHpuTY01RFl8fttgcyunjL7eEMhGM3cI4eOmiCycJDVCo/7O7ClfQD3SaI6ftDzqOXYMA==
@@ -6701,6 +6706,18 @@ thunky@^1.0.2:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-1.1.0.tgz#5abaf714a9405db0504732bbccd2cedd9ef9537d"
   integrity sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==
+
+tlsn-js@^0.1.0-alpha.12.0:
+  version "0.1.0-alpha.12.0"
+  resolved "https://registry.yarnpkg.com/tlsn-js/-/tlsn-js-0.1.0-alpha.12.0.tgz#d37dd5ea411beaeb31dd49bb98b23feec94c168c"
+  integrity sha512-un2ImvRjZ8d3BypReHJkC58NV1JPIppIhDrPLeR75+1uSsv805fSBruBtIYHklnLZQX38iyMJdDf+BEz7Z4nZQ==
+  dependencies:
+    tlsn-wasm "0.1.0-alpha.12"
+
+tlsn-wasm@0.1.0-alpha.12:
+  version "0.1.0-alpha.12"
+  resolved "https://registry.yarnpkg.com/tlsn-wasm/-/tlsn-wasm-0.1.0-alpha.12.tgz#1d7c3b612270281bb13397b05076c6a05965936d"
+  integrity sha512-0HlhM466ewogualMmpevFAgfWfUh1qwt/RjbOKSQiE+EPK99x8BrMBlChAxjnCxWpuUaDfaVEXTEPF07RYBtuQ==
 
 tmp@0.0.x:
   version "0.0.33"

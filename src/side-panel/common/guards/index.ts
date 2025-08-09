@@ -1,0 +1,1 @@
+export {toHttpMethod} from "./http";

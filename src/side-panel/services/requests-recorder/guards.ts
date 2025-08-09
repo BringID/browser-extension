@@ -1,16 +1,10 @@
-import {RequestLog, PartialRequestLog, HttpMethod} from "./types";
-
-const HTTP_METHODS: HttpMethod[] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
-export function toHttpMethod(value: string): value is HttpMethod {
-    return HTTP_METHODS.includes(value as HttpMethod);
-}
+import {RequestLog, PartialRequestLog} from "./types";
 
 const REQUEST_LOG_SCHEMA: Record<keyof RequestLog, 'required' | 'nullable' | 'optional'> = {
     requestId: 'required',
     url: 'required',
     method: 'required',
     headers: 'required',
-    cookies: 'required',
     query: 'required',
     body: 'optional',
     timestamp: 'required',

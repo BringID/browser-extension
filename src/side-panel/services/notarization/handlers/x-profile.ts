@@ -1,6 +1,8 @@
 import {NotarizationBase} from "../notarization-base";
 import {RequestRecorder} from "../../requests-recorder";
-import {RequestLog} from "../../requests-recorder/types";
+import {Request} from "../../../common/types";
+import {TLSNotary} from "../../tlsn";
+import {Commit} from "tlsn-js";
 
 export class NotarizationXProfile extends NotarizationBase {
     requestRecorder: RequestRecorder = new RequestRecorder(
@@ -14,10 +16,22 @@ export class NotarizationXProfile extends NotarizationBase {
         this.setProgress(30);
     };
 
-    private async onRequestsCaptured(log: Array<RequestLog>) {
+    private async onRequestsCaptured(log: Array<Request>) {
         this.setProgress(60);
-        console.log(log);
-        this.result(new Error("Notarization is not implemented"));
+        const notary = await TLSNotary.new("api.x.com");
+        console.log("LOG:", log[0]);
+        const result = await notary.transcript(log[0])
+        if(result instanceof Error) {
+            this.result(result);
+            return;
+        }
+        const [transcript,] = result;
+        const commit: Commit = {
+            sent: [{ start: 0, end: transcript.sent.length }],
+            recv: [{ start: 0, end: Math.floor(transcript.recv.length / 2) }],
+        };
+
+        this.result(await notary.notarize(commit));
     }
 
     public async onStop(): Promise<void> {

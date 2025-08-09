@@ -7,6 +7,7 @@
     "url": "https://github.com/zkbring/browser-extension-v2.git"
   },
   "scripts": {
+    "prebuild": "node prebuild.js",
     "build": "NODE_ENV=production webpack --config webpack.prod.js",
     "dev": "NODE_ENV=development webpack --config webpack.dev.js --watch",
     "lint": "eslint .",
@@ -15,8 +16,9 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
     "buffer": "^6.0.3",
+    "comlink": "^4.4.2",
     "ethers": "^6.8.0",
-    "http-parser-js": "^0.5.9",
+    "http-parser-js": "^0.5.10",
     "json-source-map": "^0.6.1",
     "level": "^8.0.0",
     "minimatch": "^9.0.4",
@@ -28,7 +30,8 @@
     "redux": "^4.2.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
-    "styled-components": "^6.1.18"
+    "styled-components": "^6.1.18",
+    "tlsn-js": "^0.1.0-alpha.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
