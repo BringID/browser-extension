@@ -1,13 +1,13 @@
 import React, { FC, useEffect } from 'react'
 import browser from 'webextension-polyfill'
-import {notarizationManager} from "./services/notarization";
+import { notarizationManager } from "./services/notarization";
 
 const SidePanel: FC = () => {
   useEffect(() => {
     browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
       switch (request.type) {
         case 'VERIFICATION_START':
-          void notarizationManager.run(0);
+          void notarizationManager.run(2);
           break;
         default:
           console.log({ request })
