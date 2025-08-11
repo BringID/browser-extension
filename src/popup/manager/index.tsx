@@ -16,7 +16,7 @@ import { calculateScope } from '../utils'
 import { generateProof } from '@semaphore-protocol/core'
 
 class Manager implements IManager {
-  db?: DBStorage
+  #db?: DBStorage
 
   constructor () {
     console.log('Manager initialized')
@@ -24,13 +24,13 @@ class Manager implements IManager {
   }
 
   init: TInit = async () => {
-    this.db = await getStorage()
+    this.#db = await getStorage()
   }
 
   addUserKey: TAddUserKey = async (
     key: string
   ) => {
-    await this.db?.addUserKey(key)
+    await this.#db?.addUserKey(key)
   }
 
   runTask: TRunTask = async (
@@ -45,7 +45,7 @@ class Manager implements IManager {
     presentationData,
     credentialGroupId
   ) => {
-    const userKey = await this.db?.getUserKey()
+    const userKey = await this.#db?.getUserKey()
     
     console.log('runnign runVerify: ', { userKey })
     if (userKey) {
@@ -75,7 +75,7 @@ class Manager implements IManager {
     dropAddress,
     pointsRequired
   ) => {
-    const userKey = await this.db?.getUserKey()
+    const userKey = await this.#db?.getUserKey()
     console.log('runnign getProofs: ', { userKey })
 
     if (!userKey) {
@@ -84,7 +84,7 @@ class Manager implements IManager {
     const semaphoreProofs: TSemaphoreProof[] = []
     const availableTasks = tasks()
     let totalScore = 0
-    const verifications = await this.db?.getVerifications()
+    const verifications = await this.#db?.getVerifications()
   
     if (!verifications || verifications.length === 0) {
       throw new Error('no verifications found')
@@ -150,22 +150,29 @@ class Manager implements IManager {
     verificationData,
     credentialGroupId
   ) => {
-    const userKey = await this.db?.getUserKey()
-    console.log('runnign saveVerification: ', { userKey })
+    const userKey = await this.#db?.getUserKey()
+    console.log('running saveVerification: ', { userKey })
 
     if (userKey) {
       const identity = semaphore.createIdentity(
         userKey,
         credentialGroupId
       )
-      const verification = await relayer.createVerification(
-        credentialGroupId,
-        verificationData.verifierMessage.idHash,
-        String(identity.commitment),
-        verificationData.signature
-      )
 
-      return verification
+      try {
+        const verification = await relayer.createVerification(
+          credentialGroupId,
+          verificationData.verifierMessage.idHash,
+          String(identity.commitment),
+          verificationData.signature
+        )
+        return verification
+      } catch (err) {
+        alert('Check Error in console')
+        console.error(err)
+      }
+      
+
     }
   }
 

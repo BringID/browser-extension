@@ -16,6 +16,9 @@ import {
 import Button from '../button'
 import manager from "../../popup/manager"
 import semaphore from "../../popup/semaphore"
+import configs from "../../popup/configs"
+
+import getStorage from "../../popup/db-storage"
 
 // const definePluginContent = (
 //   status: TPluginStatus,
@@ -156,6 +159,15 @@ const Task: FC<TProps> = ({
         appearance="action"
         size='small'
         onClick={async () => {
+          const storage = await getStorage()
+          const userKey = await storage.getUserKey()
+
+          if (!userKey) {
+             chrome.tabs.create({
+              url: configs.CONNECT_WALLET_URL
+            })
+            return
+          }
           const data = await manager.runTask(taskId)
           console.log({ data })
           const verify = await manager.runVerify(

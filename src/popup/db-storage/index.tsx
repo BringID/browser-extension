@@ -14,27 +14,32 @@ import {
   TGetUserId,
   TGetVerifications,
   TGetUserKey,
-  TGetUser
+  TGetUser,
+  TUpdateVerificationStatus,
+  TAddUserKey,
+  TAddUserStatus,
+  TAddVerification,
+  TSyncUser,
+  TSyncVerifications
 } from './types'
 import { calculateAvailablePoints, defineUserStatus } from '../utils'
 
 const charwise = require('charwise')
 
 export class DBStorage implements TDBStorage {
-  db?: Level
-  verificationsDb?: any
-  userDb?: any
+  #verificationsDb?: any
+  #userDb?: any
 
   constructor () {
-    this.db = new Level('./ext-db', {
+    const db = new Level('./ext-db', {
       valueEncoding: 'json',
     })
 
-    this.verificationsDb = this.db.sublevel<string, TVerification>('verifications', {
+    this.#verificationsDb = db.sublevel<string, TVerification>('verifications', {
       valueEncoding: 'json',
     });
 
-    this.userDb = this.db.sublevel<string, TUser>('user', {
+    this.#userDb = db.sublevel<string, TUser>('user', {
       valueEncoding: 'json',
     })
 
@@ -49,7 +54,7 @@ export class DBStorage implements TDBStorage {
     const existingUserId = await this.getUserId()
     console.log('RUNNING addInitialUser', existingUserId)
     if (existingUserId) {
-      const user =  await this.userDb.get(existingUserId)
+      const user =  await this.#userDb.get(existingUserId)
       store.dispatch(setId(user.id))
       store.dispatch(setKey(user.key))
       store.dispatch(setStatus(user.status))
@@ -62,7 +67,7 @@ export class DBStorage implements TDBStorage {
       key: null,
       id: userId
     }
-    await this.userDb.put(userId, userNew)
+    await this.#userDb.put(userId, userNew)
 
     store.dispatch(setId(userId))
     return userNew
@@ -122,7 +127,7 @@ export class DBStorage implements TDBStorage {
     // address is always single
     try {
       let id = null
-      for await (const [key, value] of this.userDb.iterator()) {
+      for await (const [key, value] of this.#userDb.iterator()) {
         id = value.id
       }
       console.log('RUNNING getUserId', id)
@@ -134,19 +139,19 @@ export class DBStorage implements TDBStorage {
 
   getVerifications: TGetVerifications = async () => {
     const retVal: TVerification[] = []
-    for await (const [key, value] of this.verificationsDb.iterator()) {
+    for await (const [key, value] of this.#verificationsDb.iterator()) {
       retVal.push(value as TVerification)
     }
     return retVal
   }
 
-  updateVerificationStatus = async (
+  updateVerificationStatus: TUpdateVerificationStatus = async (
     credentialGroupId: string,
     status: TVerificationStatus
   ) => {
-    const verification: TVerification =  await this.verificationsDb.get(credentialGroupId)
+    const verification: TVerification =  await this.#verificationsDb.get(credentialGroupId)
     console.log({ verification })
-    await this.verificationsDb.put(credentialGroupId, {
+    await this.#verificationsDb.put(credentialGroupId, {
       ...verification,
       status
     })
@@ -154,15 +159,15 @@ export class DBStorage implements TDBStorage {
     await this.syncVerifications()
   }
 
-  addUserKey = async (
+  addUserKey: TAddUserKey = async (
     key: string
   ) => {
     const existingUserId = await this.getUserId()
     console.log('RUNNING addUserKey', existingUserId)
     if (existingUserId) {
-      const user: TUser =  await this.userDb.get(existingUserId);
+      const user: TUser =  await this.#userDb.get(existingUserId);
 
-      await this.userDb.put(existingUserId, {
+      await this.#userDb.put(existingUserId, {
         ...user,
         key
       })
@@ -178,14 +183,14 @@ export class DBStorage implements TDBStorage {
     }
   }
 
-  addUserStatus = async (
+  addUserStatus: TAddUserStatus = async (
     status: TUserStatus
   ) => {
     const existingUserId = await this.getUserId()
     console.log('RUNNING addUserStatus', existingUserId)
     if (existingUserId) {
-      const user: TUser =  await this.userDb.get(existingUserId);
-      await this.userDb.put(existingUserId, {
+      const user: TUser =  await this.#userDb.get(existingUserId);
+      await this.#userDb.put(existingUserId, {
         ...user,
         status
       })
@@ -193,7 +198,7 @@ export class DBStorage implements TDBStorage {
       store.dispatch(setStatus(status))
       return status
     } else {
-      // throw new Error('No user detected')
+      throw new Error('No user detected')
     }
   }
 
@@ -202,32 +207,32 @@ export class DBStorage implements TDBStorage {
     const existingUserId = await this.getUserId()
     console.log('RUNNING getUserKey', existingUserId)
     if (existingUserId) {
-      return (await this.userDb.get(existingUserId)).key
+      return (await this.#userDb.get(existingUserId)).key
     }
   }
 
   getUser: TGetUser = async () => {
     const existingUserId = await this.getUserId()
     if (existingUserId) {
-      return (await this.userDb.get(existingUserId))
+      return (await this.#userDb.get(existingUserId))
     }
   }
 
-  addVerification = async (
-    verification: TVerification,
+  addVerification: TAddVerification = async (
+    verification
   ) => {
     console.log('RUNNING addVerification: ', verification)
-    await this.verificationsDb.put(verification.credentialGroupId, verification)
+    await this.#verificationsDb.put(verification.credentialGroupId, verification)
     store.dispatch(addVerification(verification))
     return verification
   }
 
-  syncUser = async () => {
+  syncUser: TSyncUser = async () => {
     const user = await this.getUser()
     store.dispatch(setUser(user))
   }
 
-  syncVerifications = async () => {
+  syncVerifications: TSyncVerifications = async () => {
     const verifications = await this.getVerifications()
     store.dispatch(addVerifications(verifications))
   }
@@ -249,7 +254,6 @@ const getStorage = (() => {
 
     return storage
   }
-
 
 })()
 

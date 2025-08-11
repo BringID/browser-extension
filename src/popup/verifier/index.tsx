@@ -6,12 +6,12 @@ import config from '../configs'
 
 class Verifier implements IVerifier {
 
-  apiUrl: string = ''
+  #apiUrl: string
 
   constructor (
   
   ) {
-    this.apiUrl = config.VERIFIER_API
+    this.#apiUrl = config.VERIFIER_API
   }
 
 
@@ -24,7 +24,7 @@ class Verifier implements IVerifier {
 
     try {
       const response = await verifierApi.verify(
-        this.apiUrl,
+        this.#apiUrl,
         apiKey,
         presentationData,
         config.REGISTRY,

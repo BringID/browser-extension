@@ -5,6 +5,12 @@ import TGetUserId from './get-user-id'
 import TGetVerifications from './get-verifications'
 import TGetUserKey from './get-user-key'
 import TGetUser from './get-user'
+import TUpdateVerificationStatus from './update-verification-status'
+import TAddUserKey from './add-user-key'
+import TAddUserStatus from './add-user-status'
+import TAddVerification from './add-verification'
+import TSyncUser from './sync-user'
+import TSyncVerifications from './sync-verifications'
 
 interface TDBStorage {
   db?: Level
@@ -20,6 +26,19 @@ interface TDBStorage {
   getUserKey: TGetUserKey
 
   getUser: TGetUser
+
+  updateVerificationStatus: TUpdateVerificationStatus
+
+  addUserKey: TAddUserKey
+
+  addUserStatus: TAddUserStatus
+
+  addVerification: TAddVerification
+
+
+  syncUser: TSyncUser
+
+  syncVerifications: TSyncVerifications
 }
 
 export default TDBStorage
@@ -30,5 +49,11 @@ export {
   TGetUserId,
   TGetVerifications,
   TGetUserKey,
-  TGetUser
+  TGetUser,
+  TUpdateVerificationStatus,
+  TAddUserKey,
+  TAddUserStatus,
+  TAddVerification,
+  TSyncUser,
+  TSyncVerifications
 }

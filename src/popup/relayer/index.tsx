@@ -4,12 +4,12 @@ import configs from "../configs"
 
 class Relayer implements IRelayer {
 
-   apiUrl: string = ''
+  #apiUrl: string
   
   constructor (
   
   ) {
-    this.apiUrl = configs.INDEXER_API
+    this.#apiUrl = configs.INDEXER_API
   }
 
   createVerification: TCreateVerification = async (
@@ -20,7 +20,7 @@ class Relayer implements IRelayer {
   ) => {
 
     const { success, task } = await taskManager.addVerification(
-      this.apiUrl,
+      this.#apiUrl,
       configs.REGISTRY,
       credentialGroupId,
       idHash,

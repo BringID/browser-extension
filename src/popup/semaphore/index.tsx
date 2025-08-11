@@ -10,12 +10,12 @@ import { Identity } from "@semaphore-protocol/identity"
 
 class Semaphore implements ISemaphore {
 
-  apiUrl: string = ''
+  #apiUrl: string
 
   constructor (
   
   ) {
-    this.apiUrl = config.INDEXER_API
+    this.#apiUrl = config.INDEXER_API
   }
 
 
@@ -24,7 +24,7 @@ class Semaphore implements ISemaphore {
     semaphoreGroupId
   ) => {
     const response = await indexer.getProof(
-      this.apiUrl,
+      this.#apiUrl,
       identityCommitment,
       semaphoreGroupId
     )
