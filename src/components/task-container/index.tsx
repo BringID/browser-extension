@@ -8,7 +8,8 @@ import {
   Subtitle,
   Content,
   ImageWrapper,
-  Icon
+  Icon,
+  CheckboxStyled
 } from './styled-components'
 import DefaultPluginIcon from '../../assets/img/default-plugin-icon.png'
 
@@ -17,10 +18,22 @@ const TaskContainer: FC<TProps> = ({
   children,
   icon,
   title,
-  description
+  description,
+  selectable,
+  selected,
+  onSelect,
+  id
 }) => {
 
-  return <Container status={status}>
+  return <Container
+    status={status}
+    selectable={selectable}
+  >
+    {selectable && <CheckboxStyled
+      checked={Boolean(selected)}
+      onClick={onSelect}
+      id={id}
+    />}
     <ImageWrapper>
       <Icon src={icon || DefaultPluginIcon} />
     </ImageWrapper>

@@ -24,6 +24,7 @@ export const Wrapper = styled.div`
 export const Titles = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 3px;
 `
 
 export const Title = styled.span`

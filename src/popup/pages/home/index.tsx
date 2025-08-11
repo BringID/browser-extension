@@ -1,4 +1,8 @@
-import React, { FC } from "react"
+import React, {
+  FC,
+  useState,
+  useEffect
+} from "react"
 import manager from '../../manager'
 import { useUser } from '../../store/reducers/user'
 import {
@@ -6,28 +10,97 @@ import {
   ProgressBarStyled,
   SubtitleStyled,
   ButtonStyled,
-  MessageStyled
+  MessageStyled,
+  VerificationsListStyled
 } from './styled-components'
 import { Link } from '../../../components'
 import { Header } from '../../components'
 import browser from 'webextension-polyfill'
 import { useNavigate } from 'react-router'
 import { useVerifications } from "../../store/reducers/verifications"
-import { VerificationsList } from "../../components"
 import { tasks } from "../../../common/core/task"
+import { ScheduleOverlay, ConfirmationOverlay } from "../../components"
+import { calculateAvailablePoints } from "../../utils"
+import configs from "../../configs"
 
 const Home: FC = () => {
   const user = useUser()
   const verifications = useVerifications()
   const availableTasks = tasks()
-  console.log({ user })
+  
+  const [
+    confirmationOverlayShow,
+    setConfirmationOverlayShow
+  ] = useState<boolean>(false)
+  const [
+    timerOverlayShow,
+    setTimerOverlayShow
+  ] = useState<boolean>(false)
+  const [
+    requestHost,
+    setRequestHost
+  ] = useState<string>('')
+  const [
+    pointsRequired,
+    setPointsRequired
+  ] = useState<string>('')
+  const [
+    dropAddress,
+    setDropAddress
+  ] = useState<string>('')
 
 
-  const percentageFinished = 0
-  const leftForAdvanced = 20
+  const availablePoints = calculateAvailablePoints(verifications)
+  const leftForAdvanced = configs.ADVANCED_STATUS_POINTS - availablePoints
+  const percentageFinished = (availablePoints / configs.ADVANCED_STATUS_POINTS) * 100;
+
   const navigate = useNavigate()
 
+  useEffect(() => {
+    chrome.storage.local.get('request', (data) => {
+      console.log('Got param:', data.request);
+      if (!data || !data.request) {
+        return chrome.storage.local.set({ request: `` });
+      }
+
+      const [ host, pointsRequired, dropAddress ] =
+        data.request.split(`__`);
+
+      if (host && pointsRequired && dropAddress) {
+        setDropAddress(dropAddress)
+        setPointsRequired(pointsRequired)
+        setRequestHost(host)
+        setConfirmationOverlayShow(true)
+      }
+
+      chrome.storage.local.set({ request: null }, () => {
+        console.log('request data deleted');
+      })
+    })
+  }, [])
+
+  const onRequestClose = () => {
+    setDropAddress('')
+    setPointsRequired('')
+    setRequestHost('')
+    setConfirmationOverlayShow(false)
+    window.close()
+  };
+
   return <Container>
+    {confirmationOverlayShow && (
+      <ConfirmationOverlay
+        onClose={() => {
+          onRequestClose()
+        }}
+        host={requestHost}
+        points={availablePoints}
+        userStatus={user.status}
+        pointsRequired={Number(pointsRequired)}
+        dropAddress={dropAddress}
+      />
+    )}
+
     <Header status={user.status} points={10} />
     <ProgressBarStyled
       current={percentageFinished > 100 ? 100 : percentageFinished}
@@ -54,7 +127,7 @@ const Home: FC = () => {
 
 
 
-    <VerificationsList
+    <VerificationsListStyled
       tasks={availableTasks}
       verifications={verifications}
       onAddVerifications={() => {

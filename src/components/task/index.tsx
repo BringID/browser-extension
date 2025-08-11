@@ -10,8 +10,12 @@ import {
 import {
   TVerificationStatus
 } from '../../popup/types'
-import { TaskContainer } from "../../components"
-
+import {
+  TaskContainer
+} from "../../components"
+import Button from '../button'
+import manager from "../../popup/manager"
+import semaphore from "../../popup/semaphore"
 
 // const definePluginContent = (
 //   status: TPluginStatus,
@@ -42,7 +46,6 @@ import { TaskContainer } from "../../components"
 // }
 
 // const defineVerificationStatus = (
-//   config: PluginConfig | null,
 //   task?: TTask
 // ) => {
 //   if (!task || !config) {
@@ -141,13 +144,41 @@ const Task: FC<TProps> = ({
   // )
 
   return <TaskContainer
-    status={'default'}
+    status='default'
+    selectable={false}
     title={title}
     description={description}
     icon={icon}
+    id={taskId}
   >
     <Value>
-      {/* {content} */}
+      <Button
+        appearance="action"
+        size='small'
+        onClick={async () => {
+          const data = await manager.runTask(taskId)
+          console.log({ data })
+          const verify = await manager.runVerify(
+            data,
+            taskId
+          )
+          console.log({ verify })
+
+          if (verify) {
+            const verification = await manager.saveVerification(
+              verify,
+              taskId
+            )
+
+            console.log({
+              verification
+            })
+          }
+
+        }}
+      >
+        Verify
+      </Button>
     </Value>
   </TaskContainer>
 }

@@ -1,15 +1,24 @@
 import styled, { css } from "styled-components"
 import { TVerificationStatus } from "../../popup/types"
+import Checkbox from "../checkbox"
 
-export const Container = styled.div<{status: TVerificationStatus}>`
+export const Container = styled.div<{
+  status: TVerificationStatus,
+  selectable: boolean
+}>`
   padding: 12px;
   border-radius: 8px;
   display: grid;
   grid-template-columns: 30px 1fr max-content;
   gap: 10px;
   align-items: center;
+  min-height: 72px;
   background-color: ${props => props.theme.defaultStatusBackgroundColor};
   border: 1px solid ${props => props.theme.defaultStatusBorderColor};
+
+  ${props => props.selectable && css`
+    grid-template-columns: min-content 30px 1fr max-content;
+  `}
 
   ${props => props.status === 'completed' && css`
     background-color: ${props => props.theme.successStatusBackgroundColor};
@@ -24,6 +33,7 @@ export const Container = styled.div<{status: TVerificationStatus}>`
 
 `
 
+export const CheckboxStyled = styled(Checkbox)``
 
 export const Title = styled.h3`
   font-size: 14px;

@@ -14,6 +14,7 @@ import Task from './task'
 import Verification from './verification'
 import Message from './message'
 import LogoWrapper from './logo-wrapper'
+import Checkbox from './checkbox'
 
 export {
   Spinner,
@@ -31,5 +32,6 @@ export {
   Task,
   Message,
   Verification,
-  LogoWrapper
+  LogoWrapper,
+  Checkbox
 }

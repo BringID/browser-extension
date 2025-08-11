@@ -10,17 +10,17 @@ import { Task } from '../../../components'
 import TProps from './types'
 
 const TasksList: FC<TProps> = ({
-  tasks
+  tasks,
+  className
 }) => {
-  console.log({ tasks })
   return (
-    <Container>
+    <Container className={className}>
       {tasks.map((task, idx) => 
         <Task
-          key={idx}
+          key={idx + 1}
           title={task.title}
           description={task.description}
-          taskId={String(idx)}
+          taskId={String(idx + 1)}
           points={task.points}
         />
       )}

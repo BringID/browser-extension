@@ -5,6 +5,7 @@ import {
   Button,
   Message
 } from '../../../components'
+import { VerificationsList } from "../../components"
 
 export const Container = styled.div`
   padding: 16px;
@@ -25,5 +26,9 @@ export const ButtonStyled = styled(Button)`
 `
 
 export const MessageStyled = styled(Message)`
+  margin-bottom: 10px;
+`
 
+export const VerificationsListStyled = styled(VerificationsList)`
+  margin-bottom: 20px;
 `

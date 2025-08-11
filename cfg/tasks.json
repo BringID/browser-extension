@@ -2,11 +2,13 @@
   {
     "title": "X Account",
     "description": "Prove the ownership of an account on X",
-    "points": 10
+    "points": 10,
+    "semaphoreGroupId": "8"
   },
   {
     "title": "Uber rides",
     "description": "Prove you used Uber for at least 5 rides",
-    "points": 50
+    "points": 10,
+    "semaphoreGroupId": "9"
   }
 ]

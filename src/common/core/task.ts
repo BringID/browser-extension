@@ -3,6 +3,7 @@ export type Task = {
   description?: string;
   icon?: string;
   points: number;
+  semaphoreGroupId: string;
 }
 
 function loadTasks(): Task[] {
@@ -27,7 +28,8 @@ function loadTasks(): Task[] {
                 title: task.title,
                 description: task.description,
                 icon: task.icon,
-                points: task.points
+                points: task.points,
+                semaphoreGroupId: task.semaphoreGroupId
             };
         });
     } catch (error) {

@@ -6,6 +6,12 @@ type TProps = {
   icon?: string
   title: string
   description?: string
+  selectable: boolean
+  selected?: boolean
+  onSelect?: (
+    selected: boolean
+  ) => void
+  id: string
 }
 
 export default TProps

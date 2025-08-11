@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux'
 import deepEqual from 'fast-deep-equal'
 
 enum ActionType {
-  '/tasks/addTask' = '/tasks/addTask',
-  '/tasks/addTasks' = '/tasks/addTasks',
+  '/verifications/addVerification' = '/verifications/addVerification',
+  '/verifications/addVerifications' = '/verifications/addVerifications',
 }
 
 type Action<payload> = {
@@ -18,22 +18,22 @@ type State = TVerification[]
 
 const initState: State = []
 
-export const addTask = (task: TVerification): Action<TVerification> => ({
-  type: ActionType['/tasks/addTask'],
+export const addVerification = (task: TVerification): Action<TVerification> => ({
+  type: ActionType['/verifications/addVerification'],
   payload: task
 })
 
-export const addTasks = (tasks: TVerification[]): Action<TVerification[]> => ({
-  type: ActionType['/tasks/addTasks'],
+export const addVerifications = (tasks: TVerification[]): Action<TVerification[]> => ({
+  type: ActionType['/verifications/addVerifications'],
   payload: tasks
 })
 
 export default function verifications(state = initState, action: Action<any>): State {
   console.log({ action })
   switch (action.type) {
-    case ActionType['/tasks/addTask']:
+    case ActionType['/verifications/addVerification']:
       return [ action.payload, ...state ]
-    case ActionType['/tasks/addTasks']:
+    case ActionType['/verifications/addVerifications']:
       return action.payload
   
     default:

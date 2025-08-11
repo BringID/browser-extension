@@ -1,7 +1,8 @@
 import React, {
   FC,
   useState,
-  useEffect
+  useEffect,
+  useMemo
 } from "react"
 import {
   Container,
@@ -16,9 +17,12 @@ import {
   NoteStyled,
   OpenPopupButton,
   UserStatusRequired,
-  UserStatus
+  UserStatus,
+  VerificationsSelectListStyled
 } from './styled-components'
 import TProps from "./types"
+import { useDispatch } from "react-redux"
+import { useVerifications } from "../../store/reducers/verifications"
 import {
   defineUserStatus
 } from '../../utils'
@@ -26,23 +30,87 @@ import { Tag } from '../../../components'
 import BringGif from './bring.gif'
 import {
   TExtensionRequestType,
+  TUserStatus,
   TWebsiteRequestType
 } from "../../types"
 import browser from 'webextension-polyfill'
+import manager from "../../manager"
+import { tasks } from "../../../common/core"
+
+const defineIfButtonIsDisabled = (
+  isEnoughPoints: boolean,
+  pointsRequired: number,
+  pointsSelected: number
+) => {
+  if (!isEnoughPoints) return true
+  if (pointsRequired > pointsSelected) {
+    return true
+  }
+}
+
+const showInsufficientFundsNote = (
+  isEnoughPoints: boolean,
+  pointsRequired: number,
+  points: number,
+  requiredStatus: TUserStatus,
+  onClose: () => void 
+) => {
+  if (isEnoughPoints) return null
+
+  return <NoteStyled
+    title='Insufficient trust level'
+    status="warning"
+  >
+    You need {pointsRequired - points} more points to reach {requiredStatus} level. <OpenPopupButton
+      onClick={onClose}
+    >Complete verifications</OpenPopupButton> to increase your trust score.
+  </NoteStyled>
+}
+
+const showInsufficientFundsMessage = (
+  isEnoughPoints: boolean,
+  pointsRequired: number,
+  requiredStatus: TUserStatus,
+) => {
+  if (isEnoughPoints) return null
+  return <MessageStyled
+    status="error"
+  >
+    <span>Required: <UserStatusRequired>{requiredStatus}</UserStatusRequired></span><Tag status='error'>{pointsRequired} pts</Tag>
+  </MessageStyled>
+}
 
 const ConfirmationOverlay: FC<TProps> = ({
   onClose,
-  address,
   dropAddress,
-  pointsNeeded,
+  pointsRequired, // points required
   host,
-  points,
-  userStatus,
-  privateKey
+  points, // all points available
+  userStatus
 }) => {
   const [ loading, setLoading ] = useState<boolean>(false)
-  const isEnoughPoints = points >= pointsNeeded
-  const requiredStatus = defineUserStatus(pointsNeeded)
+  const isEnoughPoints = points >= pointsRequired
+  const requiredStatus = defineUserStatus(pointsRequired)
+  const availableTasks = tasks()
+  const verifications = useVerifications()
+  const [ selected, setSelected ] = useState<string[]>([])
+  
+  const pointsSelected = useMemo(() => {
+    let result = 0
+
+    {verifications.forEach((verification, idx) => {
+      const taskId = String(idx + 1)
+      if (!selected.includes(taskId)) { return }
+      const relatedTask = availableTasks.find((task, idx) => taskId === verification.credentialGroupId)
+      if (relatedTask) {
+        result = result + relatedTask?.points
+      }
+    })}
+
+    return result
+  }, [
+    selected
+  ])
 
   return <Container>
     <Content>
@@ -54,45 +122,67 @@ const ConfirmationOverlay: FC<TProps> = ({
       <TextStyled>
         A website is requesting verification of your trust score. This process is completely private and no personal information will be shared.
       </TextStyled>
-      {!isEnoughPoints && <NoteStyled
-        title='Insufficient trust level'
-        status="warning"
-      >
-        You need {pointsNeeded - points} more points to reach {requiredStatus} level. <OpenPopupButton
-          onClick={onClose}
-        >Complete verifications</OpenPopupButton> to increase your trust score.
-      </NoteStyled>}
-      {
-        !isEnoughPoints && <MessageStyled
-          status="error"
-        >
-          <span>Required: <UserStatusRequired>{requiredStatus}</UserStatusRequired></span><Tag status='error'>{pointsNeeded} pts</Tag>
-        </MessageStyled>
-      }
+      {showInsufficientFundsNote(
+        isEnoughPoints,
+        pointsRequired,
+        points,
+        requiredStatus,
+        onClose
+      )}
+      {showInsufficientFundsMessage(
+        isEnoughPoints,
+        pointsRequired,
+        requiredStatus
+      )}
       <MessageStyled>
         <span>Current: <UserStatus>{userStatus}</UserStatus></span><Tag status='info'>{points} pts</Tag>
       </MessageStyled>
+      {isEnoughPoints && <VerificationsSelectListStyled
+        tasks={availableTasks}
+        verifications={verifications}
+        selected={selected}
+        onSelect={(id, isSelected) => {
+          if (!isSelected) {
+            setSelected(selected.filter(verification => verification !== id))
+            return
+          }
+          setSelected([...selected, id])
+        }}
+      />}
       <ButtonsContainer>
         <ButtonStyled
           loading={loading}
           size='default'
-          disabled={!isEnoughPoints}
+          disabled={defineIfButtonIsDisabled(
+            isEnoughPoints,
+            pointsRequired,
+            pointsSelected
+          )}
           appearance="action"
           onClick={async () => {
             setLoading(true)
             try {
               
-              // const proofs = []
-              // const [
-              //   tab
-              // ] = await chrome.tabs.query({ active: true, currentWindow: true });
-              // if (!tab || !tab.id) { return }
-              // onClose()
-            
-              // chrome.tabs.sendMessage(tab.id as number, {
-              //   type: TExtensionRequestType.proofs_generated,
-              //   payload: proofs
-              // })
+              // const proofs = await manager.getProofs(
+              //   dropAddress,
+              //   pointsRequired
+              // )
+
+              // console.log({ proofs })
+
+              const [tab] = await chrome.tabs.query({
+                active: true,
+                currentWindow: true,
+              })
+
+              if (!tab || !tab.id) {
+                return;
+              }
+
+              chrome.tabs.sendMessage(tab.id as number, {
+                type: TExtensionRequestType.proofs_generated,
+                payload: []
+              })
 
             } catch (err) {
               setLoading(false)
@@ -101,7 +191,7 @@ const ConfirmationOverlay: FC<TProps> = ({
             setLoading(false)
         }}
         >
-          Confirm
+          Confirm Selection ({pointsSelected} pts)
         </ButtonStyled>
 
         <ButtonStyled

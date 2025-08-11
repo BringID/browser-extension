@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "BringID Extension",
   "description": "A chrome extension for BringID verification",
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyNZXxnJXxmmzs30AQwiyF7Ub7EEpICmjlTt12I3cxlzWAgT/uQHFJm6jWMZ8eGEcwNZNIbFiTG++iWVydpkwZ290RNVvvxcJL4PtkXRhb99LSLn9kTNZQw1ii3ond68KOA3NFGp86V85bQ+PKDipdehyhXzML+RgS0VPkcdBKHqBUIOeXuy5pOk49nd+vRuatmoaQ226mPvU6l775vLLmoa0fuvkyrRDLtMp8JlYXWdkM0X879GSXFz9C5hvg8r1DSSZPnhzDznzMQPN8fvRB9MKvoOMFlIkXczMU+rbfggamwkTK0fBZ3HAfkG8TEvPZAz6XsMaR6SGzxyFk7KttQIDAQAB",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxviVSPgScIV9iKRCJ2NOg05oVZaIaZyKpf/iXRrknKXwLInd0eTsUoofmspsgXoO3VJQrgJM7q4gTZquv0Al3eE0z8QstEOClOTT6VthREnW64EMxOiFxfvAmwyPbUgmtB0Ivd4ddi+/qBgTI/9BPLJgO2cIGDkZ6x+Z5NFliFe0HkF6tNOM/6mf9lG1hmBXqfTDUWqO4r651I4PK9403bedsG4Yc25rVaU1Av2x50eX+4mkId1f8OZpSqs1mLQJ1qmI0JXQ78XHB2mg8ecbTyRfCl87XiQOn3tldwezGXQFrP2oCPiCBnEu/pAYSRxcx9gZVSuW8h1So2F0j6woBwIDAQAB",
   "background": {
     "service_worker": "background.bundle.js"
   },
@@ -22,10 +22,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://extension-verifications.vercel.app/*",
-        "*://localhost/*",
-        "https://x.com/*",
-        "https://api.x.com/*"
+        "<all_urls>"
       ],
       "js": ["contentScript.bundle.js"],
       "css": []
@@ -33,12 +30,10 @@
   ],
   "externally_connectable": {
     "matches": [
-      "http://*/*",
-      "https://*/*",
-      "*://localhost/*",
-      "https://*.zkbring.com/*",
-      "https://extension-verifications.vercel.app/*",
-      "<all_urls>"
+      "http://localhost/*",
+      "http://localhost:*/*",
+      "http://127.0.0.1/*",
+      "http://127.0.0.1:*/*"
     ]
   },
   "web_accessible_resources": [
@@ -49,16 +44,12 @@
         "icon-32.png",
         "content.bundle.js"
       ],
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"]
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
-  "host_permissions": [
-    "https://x.com/*",
-    "https://api.x.com/*",
-    "https://extension-verifications.vercel.app/*",
-    "*://localhost/*",
-    "<all_urls>"
-  ],
+  "host_permissions": ["<all_urls>"],
   "permissions": [
     "offscreen",
     "storage",

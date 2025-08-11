@@ -11,35 +11,44 @@ import {
   TVerificationStatus
 } from '../../popup/types'
 import { TaskContainer } from "../../components"
+import { Icons } from "../../components"
+import { Button } from "../../components"
+import { msToTime } from "../../popup/utils"
+import { Tag } from "../../components"
 
+const definePluginContent = (
+  status: TVerificationStatus,
+  points: number,
+  expiration: null | number,
+  fetched: boolean,
+  onCheckTransactionClick?: () => void
+) => {
+  switch (status) {
+    case 'default':
+      return <Tag status='default'>{points} pts</Tag>
+    case 'pending':
+      return <Icons.Clock />
+    case 'scheduled':
+      return <>
+        <Icons.Clock />
+        {msToTime(expiration || 0)} left
+      </>
 
-// const definePluginContent = (
-//   status: TPluginStatus,
-//   expiration: null | number,
-//   fetched: boolean,
-//   onCheckTransactionClick?: () => void
-// ) => {
-//   switch (status) {
-//     case 'pending':
-//       return <Icons.Clock />
-//     case 'scheduled':
-//       return <>
-//         <Icons.Clock />
-//         {/* {msToTime(expiration || 0)} left */}
-//       </>
-
-//     case 'completed': 
-//       if (fetched) {
-//         return null
-//       }
-//       return <Button onClick={onCheckTransactionClick}>
-//         Check TX
-//       </Button>
+    case 'completed': 
+      if (fetched) {
+        return null
+      }
+      return <Button
+        onClick={onCheckTransactionClick}
+        size='small'
+      >
+        Check TX
+      </Button>
     
-//     default:
-//       return <Icons.Check />
-//   } 
-// }
+    default:
+      return <Icons.Check />
+  } 
+}
 
 // const defineVerificationStatus = (
 //   config: PluginConfig | null,
@@ -78,76 +87,61 @@ const Verification: FC<TProps> = ({
   taskId,
   points,
   icon,
-  description
+  description,
+  scheduledTime,
+  status,
+  selectable,
+  selected,
+  onSelect
 }) => {
 
-  const [ status, setStatus ] = useState<TVerificationStatus | null>('default')
-  const [ scheduledTime, setScheduledTime ] = useState<number | null>(null)
   const [ expiration, setExpiration ] = useState<number | null>(null)
   const [ fetched, setFetched ] = useState<boolean>(false)
 
-  // useEffect(() => {
-  //   if (!tasks || tasks.length === 0) {
-  //     return
-  //   }
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      const now = +new Date()
+      const expiration = scheduledTime - now
+      setExpiration(expiration)
 
-  //   const relatedTask = findRelatedTask(
-  //     config as TPluginObject,
-  //     tasks
-  //   )
+      if ((expiration) <= 0 ) {
+        window.clearInterval(interval)
+      }
+    }, 1000)
 
-  //   const { status, data } = defineVerificationStatus(
-  //     config,
-  //     relatedTask
-  //   )
+    return () => {
+      window.clearInterval(interval)
+    }
+  }, [
+    
+  ])
 
-  //   setFetched(Boolean(relatedTask?.fetched))
+  const content = definePluginContent(
+    status as TVerificationStatus,
+    points,
+    expiration,
+    fetched,
+    async () => {
+      alert('CHECK TXHASH')
 
-  //   setStatus(Boolean(relatedTask?.fetched) ? 'completed' : status as TPluginStatus)
-
-  //   if (data) {
-  //     setScheduledTime(data)
-  //   }
-  // }, [
-  //   tasks
-  // ])
-
-
-  if ((status !== 'scheduled' && status !== 'pending' && status !== 'completed')) {
-    return null
-  }
-
-  // const content = definePluginContent(
-  //   status as TPluginStatus,
-  //   expiration,
-  //   fetched,
-  //   async () => {
-  //     const relatedTask = findRelatedTask(
-  //       config as TPluginObject,
-  //       tasks
-  //     )
-
-  //     if (relatedTask) {
-  //       const data = await taskManagerApi.getTask(relatedTask.taskId)
-  //       const {
-  //         tx_hash
-  //       } = data.task
-
-  //       chrome.tabs.create({
-  //         url: `${defineExplorerURL(84532)}/tx/${tx_hash}`
-  //       })
-  //     }
-  //   }
-  // )
+      // chrome.tabs.create({
+      //   url: `${defineExplorerURL(84532)}/tx/${tx_hash}`
+      // })
+    }
+  )
 
   return <TaskContainer
     status={status}
+    selectable={selectable}
     title={title}
     description={description}
     icon={icon}
+    selected={selected}
+    onSelect={onSelect}
+    id={taskId}
   >
     <Value>
-      {/* {content} */}
+      {content}
     </Value>
   </TaskContainer>
 }
