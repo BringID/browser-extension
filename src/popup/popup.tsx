@@ -1,11 +1,14 @@
 import React, { FC, useEffect } from 'react'
 import browser from 'webextension-polyfill'
-import { Button, Page } from '../components'
+import { Page } from '../components'
+import { Home } from './pages'
+import './styles.css'
+import { Navigate, Route, Routes, useNavigate } from 'react-router'
+
 
 const Popup: FC = () => {
   useEffect(() => {
     browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      
       switch (request.type) {
         case 'VERIFICATION_FINISHED':
         default:
@@ -17,32 +20,12 @@ const Popup: FC = () => {
 
   return (
     <Page>
-      <h1>
-        Popup V23sss
-
-        <Button onClick={async () => {
-          const [tab] = await browser.tabs.query({
-            active: true,
-            currentWindow: true
-          })
-          // @ts-ignore
-          chrome.sidePanel.open({
-            tabId: tab.id
-          })
-        }}>
-          open sidebar
-        </Button>
-
-        <Button onClick={async () => {
-          const response = await browser.runtime.sendMessage({
-            type: 'VERIFICATION_START'
-          })
-        }}>
-          Send message to sidebar
-        </Button>
-      </h1>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </Page>
-  );
+  )
 }
 
 export default Popup

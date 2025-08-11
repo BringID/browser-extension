@@ -1,0 +1,21 @@
+html {
+  width: 400px;
+}
+
+body {
+  width: 480px;
+  height: 600px;
+  margin: 0;
+  font-family: -apple-system, Inter, "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+}
+
+
+#app-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}

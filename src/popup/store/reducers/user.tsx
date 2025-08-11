@@ -1,11 +1,12 @@
-import { TUserStatus } from "../../types"
+import { TUserStatus, TUser } from "../../types"
 import { AppRootState } from './index'
 import { useSelector } from 'react-redux'
 import deepEqual from 'fast-deep-equal'
 
 enum ActionType {
   '/user/setKey' = '/user/setKey',
-  '/user/setStatus' = '/user/setStatus'
+  '/user/setStatus' = '/user/setStatus',
+  '/user/setId' = '/user/setId'
 }
 
 type Action<payload> = {
@@ -14,19 +15,22 @@ type Action<payload> = {
   error?: boolean;
 }
 
-type State = {
-  key: string | null
-  status: TUserStatus
-}
+type State = TUser
 
 const initState: State = {
   key: null,
-  status: 'basic'
+  status: 'basic',
+  id: null
 }
 
-export const setPrivateKey = (privateKey: string): Action<string> => ({
+export const setKey = (key: string): Action<string> => ({
   type: ActionType['/user/setKey'],
-  payload: privateKey
+  payload: key
+})
+
+export const setId = (id: string): Action<string> => ({
+  type: ActionType['/user/setId'],
+  payload: id
 })
 
 export const setStatus = (status: TUserStatus): Action<string> => ({
@@ -35,9 +39,12 @@ export const setStatus = (status: TUserStatus): Action<string> => ({
 })
 
 export default function user(state = initState, action: Action<any>): State {
+  console.log({ action })
   switch (action.type) {
     case ActionType['/user/setKey']:
       return { ...state, key: action.payload }
+    case ActionType['/user/setId']:
+      return { ...state, id: action.payload }
     case ActionType['/user/setStatus']:
       return { ...state, status: action.payload }
     default:

@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "buffer": "^6.0.3",
     "comlink": "^4.4.2",
+    "charwise": "^3.0.1",
     "ethers": "^6.8.0",
     "http-parser-js": "^0.5.10",
     "json-source-map": "^0.6.1",

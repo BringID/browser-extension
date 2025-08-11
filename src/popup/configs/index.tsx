@@ -1,0 +1,19 @@
+const ADVANCED_STATUS_POINTS = 10
+const REGISTRY = '0xe6912badd4bf0194986c11cbb67876c4bfc0215f'
+const EXTENSION_ID = 'aamcalfoikkeniiaeekbgnchkpagaihc'
+const SEMAPHORE_SUBGRAPH_URL = 'https://api.goldsky.com/api/public/project_cm8g2ca7b0ewq01uea1xl12vp/subgraphs/semaphore-base-sepolia/1.0.0/gn'
+const TASK_MANAGER_API = 'https://zkbring-task-manager-5000565ab7bd.herokuapp.com'
+const VERIFIER_API = 'https://zkbring-tlsn-production.up.railway.app'
+const INDEXER_API = 'https://semaphore-indexer-854648a38846.herokuapp.com'
+const CONNECT_WALLET_URL = 'https://extension-verifications.vercel.app/get-started/connect'
+
+export default {
+  ADVANCED_STATUS_POINTS,
+  REGISTRY,
+  EXTENSION_ID,
+  SEMAPHORE_SUBGRAPH_URL,
+  TASK_MANAGER_API,
+  VERIFIER_API,
+  INDEXER_API,
+  CONNECT_WALLET_URL
+}
