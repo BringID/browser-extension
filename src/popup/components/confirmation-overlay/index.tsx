@@ -48,7 +48,7 @@ const defineIfButtonIsDisabled = (
   }
 }
 
-const showInsufficientFundsNote = (
+const showInsufficientPointsNote = (
   isEnoughPoints: boolean,
   pointsRequired: number,
   points: number,
@@ -67,7 +67,7 @@ const showInsufficientFundsNote = (
   </NoteStyled>
 }
 
-const showInsufficientFundsMessage = (
+const showInsufficientPointsMessage = (
   isEnoughPoints: boolean,
   pointsRequired: number,
   requiredStatus: TUserStatus,
@@ -123,14 +123,14 @@ const ConfirmationOverlay: FC<TProps> = ({
       <TextStyled>
         A website is requesting verification of your trust score. This process is completely private and no personal information will be shared.
       </TextStyled>
-      {showInsufficientFundsNote(
+      {showInsufficientPointsNote(
         isEnoughPoints,
         pointsRequired,
         points,
         requiredStatus,
         onClose
       )}
-      {showInsufficientFundsMessage(
+      {showInsufficientPointsMessage(
         isEnoughPoints,
         pointsRequired,
         requiredStatus
@@ -197,7 +197,10 @@ const ConfirmationOverlay: FC<TProps> = ({
 
         <ButtonStyled
           size='default'
-          onClick={onClose}
+          onClick={() => {
+            onClose()
+            window.close()
+          }}
         >
           Cancel
         </ButtonStyled>

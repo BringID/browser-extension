@@ -114,7 +114,6 @@ const Home: FC = () => {
     setPointsRequired('')
     setRequestHost('')
     setConfirmationOverlayShow(false)
-    window.close()
   };
 
   return <Container>

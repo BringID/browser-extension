@@ -28,6 +28,12 @@ import getStorage from '../popup/db-storage'
             dropAddress
           } = request
 
+          console.log({
+            host,
+            pointsRequired,
+            dropAddress
+          })
+
           chrome.storage.local.set({ request: `${host}__${pointsRequired}__${dropAddress}` }, () => {
             // @ts-ignore
             chrome.action.openPopup()
