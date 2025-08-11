@@ -1,5 +1,6 @@
 import React, { FC, useEffect } from 'react'
 import browser from 'webextension-polyfill'
+import { Button, Page } from '../components'
 
 const Popup: FC = () => {
   useEffect(() => {
@@ -15,11 +16,11 @@ const Popup: FC = () => {
   }, [])
 
   return (
-    <div>
+    <Page>
       <h1>
         Popup V23sss
 
-        <button onClick={async () => {
+        <Button onClick={async () => {
           const [tab] = await browser.tabs.query({
             active: true,
             currentWindow: true
@@ -30,17 +31,17 @@ const Popup: FC = () => {
           })
         }}>
           open sidebar
-        </button>
+        </Button>
 
-        <button onClick={async () => {
+        <Button onClick={async () => {
           const response = await browser.runtime.sendMessage({
             type: 'VERIFICATION_START'
           })
         }}>
           Send message to sidebar
-        </button>
+        </Button>
       </h1>
-    </div>
+    </Page>
   );
 }
 

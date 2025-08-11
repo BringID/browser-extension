@@ -54,6 +54,32 @@ const options = {
   module: {
     rules: [
       {
+        // look for .css or .scss files
+        test: /\.(css|scss)$/,
+        // in the `src` directory
+        use: [
+          {
+            loader: "style-loader",
+          },
+          {
+            loader: "css-loader",
+            options: { importLoaders: 1 },
+          },
+          {
+            loader: "postcss-loader",
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sourceMap: true,
+              sassOptions: {
+                silenceDeprecations: ["legacy-js-api"],
+              }
+            },
+          },
+        ],
+      },
+      {
         test: /\.html$/,
         loader: "html-loader",
         exclude: /node_modules/,
