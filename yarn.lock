@@ -1616,6 +1616,16 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.12.0.tgz#326a7b46f6d4cfa54ae25bb888551697873069b4"
   integrity sha512-5EwMtOqvJMMa3HbmxLlF74e+3/HhwBTMcvt3nqVJgGCozO6hzIPOBlwm8mGVNR9SN2IJpxSnlxczyDjcn7qIyw==
 
+"@semaphore-protocol/identity@^4.13.0-beta.1":
+  version "4.13.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@semaphore-protocol/identity/-/identity-4.13.0-beta.1.tgz#4e78391c6c65a568c4ff5dbc5dc025018f968fb1"
+  integrity sha512-w49jjqwYfPmFYDmOXhwDzCC3RIFNi8KwUiVhaHstFGXMhrZjM9PkQmEFZ6bHYI22qys3exSHDdsMjLwcLZ5bGQ==
+  dependencies:
+    "@zk-kit/baby-jubjub" "1.0.3"
+    "@zk-kit/eddsa-poseidon" "1.0.4"
+    "@zk-kit/utils" "1.3.0"
+    poseidon-lite "0.3.0"
+
 "@standard-schema/spec@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@standard-schema/spec/-/spec-1.0.0.tgz#f193b73dc316c4170f2e82a881da0f550d551b9c"
@@ -2218,6 +2228,37 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
+"@zk-kit/baby-jubjub@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@zk-kit/baby-jubjub/-/baby-jubjub-1.0.3.tgz#8d2eccd20d729f1dbd39203dbff9a245a61dea76"
+  integrity sha512-Wl+QfV6XGOMk1yU2JTqHXeKWfJVXp83is0+dtqfj9wx4wsAPpb+qzYvwAxW5PBx5/Nu71Bh7jp/5vM+6QgHSwA==
+  dependencies:
+    "@zk-kit/utils" "1.2.1"
+
+"@zk-kit/eddsa-poseidon@1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@zk-kit/eddsa-poseidon/-/eddsa-poseidon-1.0.4.tgz#80e20fd94eca610002e58a5dc8c1716458f0cb60"
+  integrity sha512-w0HrF5F+Kh+77+VK/p9qzB7wvitiZMAoWnqrmzPUM+MWlaNp0ipmtuO8KTLxnj8ACjt98GAK4voxl7XeWjC4XQ==
+  dependencies:
+    "@zk-kit/baby-jubjub" "1.0.3"
+    "@zk-kit/utils" "1.2.1"
+    buffer "6.0.3"
+    poseidon-lite "0.3.0"
+
+"@zk-kit/utils@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@zk-kit/utils/-/utils-1.2.1.tgz#6cb38120535c73ab68cd0f09684882af148f256d"
+  integrity sha512-H2nTsyWdicVOyvqC5AjgU7tsTgmR6PDrruFJNmlmdhKp7RxEia/E1B1swMZjaasYa2QMp4Zc6oB7cWchty7B2Q==
+  dependencies:
+    buffer "^6.0.3"
+
+"@zk-kit/utils@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@zk-kit/utils/-/utils-1.3.0.tgz#01afccc4dacc9a971686f41417c93778e119a966"
+  integrity sha512-Gqsq5KLDf2WPuZSsNc2KZy25XeK5d5UV9hwLaPEM5wq+GD2qCi1ZBFzNs0OptiJ9GRGtP2J/xptrszWri+pRqQ==
+  dependencies:
+    buffer "^6.0.3"
+
 abab@^2.0.5:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.6.tgz#41b80f2c871d19686216b82309231cfd3cb3d291"
@@ -2679,7 +2720,7 @@ buffer-from@^1.0.0:
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.2.tgz#2b146a6fd72e80b4f55d255f35ed59a3a9a41bd5"
   integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
 
-buffer@^6.0.3:
+buffer@6.0.3, buffer@^6.0.3:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-6.0.3.tgz#2ace578459cc8fbe2a70aaa8f52ee63b6a74c6c6"
   integrity sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==
@@ -5551,6 +5592,11 @@ pkg-dir@^7.0.0:
   integrity sha512-Ie9z/WINcxxLp27BKOCHGde4ITq9UklYKDzVo1nhk5sqGEXU3FpkwP5GM2voTGJkGd9B3Otl+Q4uwSOeSUtOBA==
   dependencies:
     find-up "^6.3.0"
+
+poseidon-lite@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/poseidon-lite/-/poseidon-lite-0.3.0.tgz#93c42f6f9b870f154f2722dfd686b909c4285765"
+  integrity sha512-ilJj4MIve4uBEG7SrtPqUUNkvpJ/pLVbndxa0WvebcQqeIhe+h72JR4g0EvwchUzm9sOQDlOjiDNmRAgxNZl4A==
 
 possible-typed-array-names@^1.0.0:
   version "1.1.0"

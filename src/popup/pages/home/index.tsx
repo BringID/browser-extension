@@ -15,7 +15,7 @@ import { TVerificationType } from "../../types"
 import { useNavigate } from 'react-router'
 import { useVerifications } from "../../store/reducers/verifications"
 import { VerificationsList } from "../../components"
-import { tasks } from "../../../common/task"
+import { tasks } from "../../../common/core/task"
 
 const Home: FC = () => {
   const user = useUser()

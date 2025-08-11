@@ -1,9 +1,6 @@
-import TVerificationType from './verification-type'
 import TVerificationStatus from './verification-status'
 
 type TVerification = {
-  verificationId: string
-  verificationType: TVerificationType
   status: TVerificationStatus
   scheduledTime: number
   credentialGroupId: string

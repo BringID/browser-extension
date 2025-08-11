@@ -1,12 +1,11 @@
+import api from '../../utils/api'
 import {
   TGetProof,
   TGetProofResponse
 } from './types'
-import config from '../../configs'
-import { api } from '../../utils'
 
 const getProof: TGetProof = (
-  apiUrl: string,
+  apiUrl,
   identityCommitment,
   semaphoreGroupId
 ) => api<TGetProofResponse>(
