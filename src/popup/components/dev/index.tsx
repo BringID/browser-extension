@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import browser from 'webextension-polyfill';
+import { sendMessage } from '../../../common/core';
 
 const DevDirectSidebarCallsComponent: FC = () => {
   return (
@@ -21,8 +22,9 @@ const DevDirectSidebarCallsComponent: FC = () => {
 
       <button
         onClick={async () => {
-          await browser.runtime.sendMessage({
-            type: 'VERIFICATION_START',
+          await sendMessage({
+            type: 'NOTARIZE',
+            task_id: 1,
           });
         }}
       >
