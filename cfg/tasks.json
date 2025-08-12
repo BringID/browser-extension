@@ -8,5 +8,10 @@
     "title": "Uber rides",
     "description": "Prove you used Uber for at least 5 rides",
     "points": 50
+  },
+  {
+    "title": "Strava Premium",
+    "description": "Prove you have a Strava Premium subscription",
+    "points": 50
   }
 ]

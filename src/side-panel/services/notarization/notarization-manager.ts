@@ -4,6 +4,7 @@ import {NotarizationXProfile} from "./handlers/x-profile";
 import {NotarizationUberRides} from "./handlers/uber-rides";
 import {State} from "../../common/helpers/progressive";
 import {Transcript} from "tlsn-js";
+import { NotarizationStravaPremium } from "./handlers/strava-premium";
 
 // NotarizationManager stores Notarization and handles Redux
 export class NotarizationManager {
@@ -47,4 +48,5 @@ const t: Task[] = tasks();
 export const notarizationManager = new NotarizationManager([
     new NotarizationXProfile(t[0]),
     new NotarizationUberRides(t[1]),
+    new NotarizationStravaPremium(t[2]),
 ]);
