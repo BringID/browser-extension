@@ -1,5 +1,5 @@
-import { TUser } from "../../types"
+import { TUser } from '../../types';
 
-type TGetUserId = () => Promise<TUser>
+type TGetUserId = () => Promise<TUser>;
 
-export default TGetUserId
+export default TGetUserId;

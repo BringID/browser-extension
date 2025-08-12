@@ -1,3 +1,3 @@
-type TInit = () => Promise<void>
+type TInit = () => Promise<void>;
 
-export default TInit
+export default TInit;

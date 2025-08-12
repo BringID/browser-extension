@@ -1,8 +1,8 @@
-import { TSemaphoreProof } from "../../types"
+import { TSemaphoreProof } from '../../types';
 
 type TGetProofs = (
   dropAddress: string,
-  pointsRequired: number
-) => Promise<TSemaphoreProof[]>
+  pointsRequired: number,
+) => Promise<TSemaphoreProof[]>;
 
-export default TGetProofs
+export default TGetProofs;

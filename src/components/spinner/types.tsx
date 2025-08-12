@@ -1,5 +1,5 @@
 type TProps = {
-  className?: string
-}
+  className?: string;
+};
 
-export default TProps
+export default TProps;

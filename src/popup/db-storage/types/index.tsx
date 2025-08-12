@@ -1,47 +1,46 @@
-import { Level } from 'level'
-import TAddInitialUser from './add-initial-user'
-import TAddInitialVerifications from './add-initial-verifications'
-import TGetUserId from './get-user-id'
-import TGetVerifications from './get-verifications'
-import TGetUserKey from './get-user-key'
-import TGetUser from './get-user'
-import TUpdateVerificationStatus from './update-verification-status'
-import TAddUserKey from './add-user-key'
-import TAddUserStatus from './add-user-status'
-import TAddVerification from './add-verification'
-import TSyncUser from './sync-user'
-import TSyncVerifications from './sync-verifications'
+import { Level } from 'level';
+import TAddInitialUser from './add-initial-user';
+import TAddInitialVerifications from './add-initial-verifications';
+import TGetUserId from './get-user-id';
+import TGetVerifications from './get-verifications';
+import TGetUserKey from './get-user-key';
+import TGetUser from './get-user';
+import TUpdateVerificationStatus from './update-verification-status';
+import TAddUserKey from './add-user-key';
+import TAddUserStatus from './add-user-status';
+import TAddVerification from './add-verification';
+import TSyncUser from './sync-user';
+import TSyncVerifications from './sync-verifications';
 
 interface TDBStorage {
-  db?: Level
+  db?: Level;
 
-  addInitialUser: TAddInitialUser
+  addInitialUser: TAddInitialUser;
 
-  addInitialVerifications: TAddInitialVerifications
+  addInitialVerifications: TAddInitialVerifications;
 
-  getUserId: TGetUserId
+  getUserId: TGetUserId;
 
-  getVerifications: TGetVerifications
+  getVerifications: TGetVerifications;
 
-  getUserKey: TGetUserKey
+  getUserKey: TGetUserKey;
 
-  getUser: TGetUser
+  getUser: TGetUser;
 
-  updateVerificationStatus: TUpdateVerificationStatus
+  updateVerificationStatus: TUpdateVerificationStatus;
 
-  addUserKey: TAddUserKey
+  addUserKey: TAddUserKey;
 
-  addUserStatus: TAddUserStatus
+  addUserStatus: TAddUserStatus;
 
-  addVerification: TAddVerification
+  addVerification: TAddVerification;
 
+  syncUser: TSyncUser;
 
-  syncUser: TSyncUser
-
-  syncVerifications: TSyncVerifications
+  syncVerifications: TSyncVerifications;
 }
 
-export default TDBStorage
+export default TDBStorage;
 
 export {
   TAddInitialUser,
@@ -55,5 +54,5 @@ export {
   TAddUserStatus,
   TAddVerification,
   TSyncUser,
-  TSyncVerifications
-}
+  TSyncVerifications,
+};

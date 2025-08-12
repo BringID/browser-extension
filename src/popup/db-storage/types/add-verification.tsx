@@ -1,7 +1,5 @@
-import { TVerification } from "../../types"
+import { TVerification } from '../../types';
 
-type TAddVerification = (
-  verification: TVerification,
-) => Promise<TVerification>
+type TAddVerification = (verification: TVerification) => Promise<TVerification>;
 
-export default TAddVerification
+export default TAddVerification;

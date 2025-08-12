@@ -1,17 +1,14 @@
-import { TSemaphoreProofServer } from "../../types"
+import { TSemaphoreProofServer } from '../../types';
 
 type TGetProofResponse = Promise<{
-  success: boolean
-  proof: TSemaphoreProofServer
-}>
+  success: boolean;
+  proof: TSemaphoreProofServer;
+}>;
 
 type TGetProof = (
   apiUrl: string,
   identityCommitment: string,
-  semaphoreGroupId: string
-) => Promise<TGetProofResponse>
+  semaphoreGroupId: string,
+) => Promise<TGetProofResponse>;
 
-export {
-  TGetProof,
-  TGetProofResponse
-}
+export { TGetProof, TGetProofResponse };

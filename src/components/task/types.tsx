@@ -1,8 +1,7 @@
 export type TProps = {
-  taskId: string
-  icon?: string
-  title: string
-  description?: string
-  points: number
-}
-
+  taskId: string;
+  icon?: string;
+  title: string;
+  description?: string;
+  points: number;
+};

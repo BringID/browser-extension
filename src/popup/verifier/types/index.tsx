@@ -1,11 +1,9 @@
-import TVerify from './verify'
+import TVerify from './verify';
 
 interface ITVerifier {
-  verify: TVerify
+  verify: TVerify;
 }
 
-export default ITVerifier
+export default ITVerifier;
 
-export {
-  TVerify
-}
+export { TVerify };

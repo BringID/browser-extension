@@ -1,3 +1,8 @@
-type TVerificationStatus = 'scheduled' | 'pending' | 'completed' | 'failed' | 'default'
+type TVerificationStatus =
+  | 'scheduled'
+  | 'pending'
+  | 'completed'
+  | 'failed'
+  | 'default';
 
-export default TVerificationStatus
+export default TVerificationStatus;

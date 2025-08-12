@@ -1,24 +1,28 @@
+import { JsonValue } from 'type-fest';
+
 function api<T>(
   url: string,
-  method: string = 'GET',
+  method = 'GET',
   headers: Record<string, string> = {},
-  body: Record<string, any> = {}
+  body: Record<string, any> = {},
 ): Promise<T> {
   return fetch(url, {
     method,
-    body: method === 'GET' || method === 'OPTIONS' ? undefined : JSON.stringify(body),
+    body:
+      method === 'GET' || method === 'OPTIONS'
+        ? undefined
+        : JSON.stringify(body),
     headers: {
       ...headers,
-      'content-type': 'application/json'
+      'content-type': 'application/json',
+    },
+  }).then(async (response) => {
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error);
     }
-  })
-    .then(async response => {
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error)
-      }
-      return response.json() as Promise<T>
-    })
+    return response.json() as Promise<T>;
+  });
 }
 
-export default api
+export default api;

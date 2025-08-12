@@ -1,3 +1,3 @@
-type TSyncVerifications = () => Promise<void>
+type TSyncVerifications = () => Promise<void>;
 
-export default TSyncVerifications
+export default TSyncVerifications;

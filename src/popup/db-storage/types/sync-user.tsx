@@ -1,3 +1,3 @@
-type TSyncUser = () => Promise<void>
+type TSyncUser = () => Promise<void>;
 
-export default TSyncUser
+export default TSyncUser;

@@ -1,3 +1,3 @@
-type TTaskType = 'claim' | 'verification'
+type TTaskType = 'claim' | 'verification';
 
-export default TTaskType
+export default TTaskType;

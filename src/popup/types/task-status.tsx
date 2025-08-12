@@ -1,3 +1,3 @@
-type TTaskStatus = 'scheduled' | 'pending' | 'completed' | 'failed'
+type TTaskStatus = 'scheduled' | 'pending' | 'completed' | 'failed';
 
-export default TTaskStatus
+export default TTaskStatus;

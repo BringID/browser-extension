@@ -1,5 +1,5 @@
-import { TVerification } from "../../types"
+import { TVerification } from '../../types';
 
-type TAddInitialVerifications = () => Promise<TVerification[]>
+type TAddInitialVerifications = () => Promise<TVerification[]>;
 
-export default TAddInitialVerifications
+export default TAddInitialVerifications;

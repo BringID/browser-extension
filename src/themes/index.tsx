@@ -1,5 +1,3 @@
-import light from './light'
+import light from './light';
 
-export {
-  light
-}
+export { light };

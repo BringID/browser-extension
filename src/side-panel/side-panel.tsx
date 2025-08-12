@@ -1,6 +1,6 @@
-import React, { FC, useEffect } from 'react'
-import browser from 'webextension-polyfill'
-import {notarizationManager} from "./services/notarization";
+import React, { FC, useEffect } from 'react';
+import browser from 'webextension-polyfill';
+import { notarizationManager } from './services/notarization';
 
 const SidePanel: FC = () => {
   useEffect(() => {
@@ -10,26 +10,27 @@ const SidePanel: FC = () => {
           void notarizationManager.run(0);
           break;
         default:
-          console.log({ request })
+          console.log({ request });
       }
-    })
-  }, [])
+    });
+  }, []);
 
   return (
     <div>
       <h1>
         Side Panel 1
-
-        <button onClick={async () => {
-          const response = await browser.runtime.sendMessage({
-            type: 'VERIFICATION_FINISHED'
-          })
-        }}>
+        <button
+          onClick={async () => {
+            const response = await browser.runtime.sendMessage({
+              type: 'VERIFICATION_FINISHED',
+            });
+          }}
+        >
           Send message to popup
         </button>
       </h1>
     </div>
   );
-}
+};
 
-export default SidePanel
+export default SidePanel;

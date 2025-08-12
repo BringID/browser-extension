@@ -1,24 +1,14 @@
-import React, {
-  FC,
-  useEffect,
-  useState
-} from "react"
-import { TProps } from './types'
-import {
-  Value
-} from './styled-components'
-import {
-  TVerificationStatus
-} from '../../popup/types'
-import {
-  TaskContainer
-} from "../../components"
-import Button from '../button'
-import manager from "../../popup/manager"
-import semaphore from "../../popup/semaphore"
-import configs from "../../popup/configs"
+import React, { FC, useEffect, useState } from 'react';
+import { TProps } from './types';
+import { Value } from './styled-components';
+import { TVerificationStatus } from '../../popup/types';
+import { TaskContainer } from '../../components';
+import Button from '../button';
+import manager from '../../popup/manager';
+import semaphore from '../../popup/semaphore';
+import configs from '../../popup/configs';
 
-import getStorage from "../../popup/db-storage"
+import getStorage from '../../popup/db-storage';
 
 // const definePluginContent = (
 //   status: TPluginStatus,
@@ -35,17 +25,17 @@ import getStorage from "../../popup/db-storage"
 //         {/* {msToTime(expiration || 0)} left */}
 //       </>
 
-//     case 'completed': 
+//     case 'completed':
 //       if (fetched) {
 //         return null
 //       }
 //       return <Button onClick={onCheckTransactionClick}>
 //         Check TX
 //       </Button>
-    
+
 //     default:
 //       return <Icons.Check />
-//   } 
+//   }
 // }
 
 // const defineVerificationStatus = (
@@ -78,19 +68,11 @@ import getStorage from "../../popup/db-storage"
 //   }
 // }
 
-
-const Task: FC<TProps> = ({
-  title,
-  taskId,
-  points,
-  icon,
-  description
-}) => {
-
-  const [ status, setStatus ] = useState<TVerificationStatus | null>('default')
-  const [ scheduledTime, setScheduledTime ] = useState<number | null>(null)
-  const [ expiration, setExpiration ] = useState<number | null>(null)
-  const [ fetched, setFetched ] = useState<boolean>(false)
+const Task: FC<TProps> = ({ title, taskId, points, icon, description }) => {
+  const [status, setStatus] = useState<TVerificationStatus | null>('default');
+  const [scheduledTime, setScheduledTime] = useState<number | null>(null);
+  const [expiration, setExpiration] = useState<number | null>(null);
+  const [fetched, setFetched] = useState<boolean>(false);
 
   // useEffect(() => {
   //   if (!tasks || tasks.length === 0) {
@@ -117,7 +99,6 @@ const Task: FC<TProps> = ({
   // }, [
   //   tasks
   // ])
-
 
   // if ((status !== 'scheduled' && status !== 'pending' && status !== 'completed')) {
   //   return null
@@ -146,53 +127,51 @@ const Task: FC<TProps> = ({
   //   }
   // )
 
-  return <TaskContainer
-    status='default'
-    selectable={false}
-    title={title}
-    description={description}
-    icon={icon}
-    id={taskId}
-  >
-    <Value>
-      <Button
-        appearance="action"
-        size='small'
-        onClick={async () => {
-          const storage = await getStorage()
-          const userKey = await storage.getUserKey()
+  return (
+    <TaskContainer
+      status="default"
+      selectable={false}
+      title={title}
+      description={description}
+      icon={icon}
+      id={taskId}
+    >
+      <Value>
+        <Button
+          appearance="action"
+          size="small"
+          onClick={async () => {
+            const storage = await getStorage();
+            const userKey = await storage.getUserKey();
 
-          if (!userKey) {
-             chrome.tabs.create({
-              url: configs.CONNECT_WALLET_URL
-            })
-            return
-          }
-          const data = await manager.runTask(taskId)
-          console.log({ data })
-          const verify = await manager.runVerify(
-            data,
-            taskId
-          )
-          console.log({ verify })
+            if (!userKey) {
+              chrome.tabs.create({
+                url: configs.CONNECT_WALLET_URL,
+              });
+              return;
+            }
+            const data = await manager.runTask(taskId);
+            console.log({ data });
+            const verify = await manager.runVerify(data, taskId);
+            console.log({ verify });
 
-          if (verify) {
-            const verification = await manager.saveVerification(
-              verify,
-              taskId
-            )
+            if (verify) {
+              const verification = await manager.saveVerification(
+                verify,
+                taskId,
+              );
 
-            console.log({
-              verification
-            })
-          }
+              console.log({
+                verification,
+              });
+            }
+          }}
+        >
+          Verify
+        </Button>
+      </Value>
+    </TaskContainer>
+  );
+};
 
-        }}
-      >
-        Verify
-      </Button>
-    </Value>
-  </TaskContainer>
-}
-
-export default Task
+export default Task;

@@ -1,8 +1,8 @@
-import TVerifyResult from "../../types/verify-result"
+import TVerifyResult from '../../types/verify-result';
 
 type TRunVerify = (
   presentationData: string,
-  credentialGroupId: string
-) => Promise<TVerifyResult | void>
+  credentialGroupId: string,
+) => Promise<TVerifyResult | void>;
 
-export default TRunVerify
+export default TRunVerify;

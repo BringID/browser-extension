@@ -1,12 +1,9 @@
-
-import TCreateVerification from './create-verification'
+import TCreateVerification from './create-verification';
 
 interface IRelayer {
-  createVerification: TCreateVerification
+  createVerification: TCreateVerification;
 }
 
-export default IRelayer
+export default IRelayer;
 
-export {
-  TCreateVerification
-}
+export { TCreateVerification };

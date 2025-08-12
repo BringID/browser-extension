@@ -1,1 +1,1 @@
-export {toHttpMethod} from "./http";
+export { toHttpMethod } from './http';

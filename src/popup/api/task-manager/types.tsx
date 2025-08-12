@@ -1,9 +1,9 @@
-import { TTaskServer } from "../../types"
+import { TTaskServer } from '../../types';
 
 type TAddVerificationResponse = {
-  success: boolean
-  task: TTaskServer
-}
+  success: boolean;
+  task: TTaskServer;
+};
 
 type TAddVerification = (
   apiUrl: string,
@@ -11,22 +11,19 @@ type TAddVerification = (
   credentialGroupId: string,
   idHash: string,
   identityCommitment: string,
-  verifierSignature: string
-) => Promise<TAddVerificationResponse>
+  verifierSignature: string,
+) => Promise<TAddVerificationResponse>;
 
 type TGetTaskResponse = Promise<{
-  status: boolean
-  task: TTaskServer
-}>
+  status: boolean;
+  task: TTaskServer;
+}>;
 
-type TGetTask = (
-  taskId: string
-) => Promise<TGetTaskResponse>
-
+type TGetTask = (taskId: string) => Promise<TGetTaskResponse>;
 
 export {
   TAddVerification,
   TGetTask,
   TGetTaskResponse,
-  TAddVerificationResponse
-}
+  TAddVerificationResponse,
+};

@@ -1,5 +1,5 @@
-import { TUser } from "../../types"
+import { TUser } from '../../types';
 
-type TAddInitialUser = () => Promise<TUser>
+type TAddInitialUser = () => Promise<TUser>;
 
-export default TAddInitialUser
+export default TAddInitialUser;

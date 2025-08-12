@@ -1,10 +1,8 @@
-import {
-  TVerificationStatus
-} from "../../types"
+import { TVerificationStatus } from '../../types';
 
 type TUpdateVerificationStatus = (
   credentialGroupId: string,
-  status: TVerificationStatus
-) => Promise<void>
+  status: TVerificationStatus,
+) => Promise<void>;
 
-export default TUpdateVerificationStatus
+export default TUpdateVerificationStatus;

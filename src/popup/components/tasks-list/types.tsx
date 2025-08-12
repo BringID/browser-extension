@@ -1,8 +1,8 @@
-import { Task } from "../../../common/core"
+import { Task } from '../../../common/core';
 
 type TProps = {
-  tasks: Task[]
-  className?: string
-}
+  tasks: Task[];
+  className?: string;
+};
 
-export default TProps
+export default TProps;

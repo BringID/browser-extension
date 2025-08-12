@@ -1,9 +1,9 @@
-import TUserStatus from "./user-status"
+import TUserStatus from './user-status';
 
 type TUser = {
-  key: string | null
-  status: TUserStatus
-  id: string | null
-}
+  key: string | null;
+  status: TUserStatus;
+  id: string | null;
+};
 
-export default TUser
+export default TUser;

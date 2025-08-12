@@ -1,8 +1,8 @@
-import { TUserStatus } from "../../types"
+import { TUserStatus } from '../../types';
 
 type TProps = {
-  status: TUserStatus
-  points: number
-}
+  status: TUserStatus;
+  points: number;
+};
 
-export default TProps
+export default TProps;

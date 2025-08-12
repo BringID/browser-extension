@@ -1,11 +1,11 @@
-import { combineReducers } from 'redux'
-import user from './user'
-import verifications from './verifications'
+import { combineReducers } from 'redux';
+import user from './user';
+import verifications from './verifications';
 
 const rootReducer = combineReducers({
   user,
-  verifications
-})
+  verifications,
+});
 
-export type AppRootState = ReturnType<typeof rootReducer>
-export default rootReducer
+export type AppRootState = ReturnType<typeof rootReducer>;
+export default rootReducer;

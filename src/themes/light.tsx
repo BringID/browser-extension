@@ -11,7 +11,6 @@ const themes = {
   primaryBorderColor: 'rgb(229, 229, 229)',
   secondaryBorderColor: 'rgb(229, 231, 235)',
 
-
   buttonActionBackgroundColor: 'rgb(23, 23, 23)',
   buttonActionBorderColor: 'transparent',
   buttonActionTextColor: '#FFF',
@@ -29,7 +28,6 @@ const themes = {
   pendingStatusBackgroundColor: 'rgb(254, 252, 232)',
   pendingStatusBorderColor: 'rgb(254, 240, 138)',
 
-
   defaultStatusBackgroundColor: 'rgb(255, 255, 255)',
   defaultStatusBorderColor: 'rgb(229, 231, 235)',
   messageBackgroundColor: 'rgba(244, 244, 245, 0.3)',
@@ -42,9 +40,7 @@ const themes = {
   warningStatusBorderColor: 'rgb(254, 215, 170)',
   warningStatusTextColor: 'rgb(194, 65, 12)',
 
-  spinnerColor: 'rgb(59, 130, 246)'
+  spinnerColor: 'rgb(59, 130, 246)',
+};
 
-
-}
-
-export default themes
+export default themes;

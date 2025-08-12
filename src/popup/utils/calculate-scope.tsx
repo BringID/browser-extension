@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { ethers } from 'ethers';
 
 function calculateScope(contractAddress: string): string {
   const cleanAddress = contractAddress.toLowerCase().replace('0x', '');

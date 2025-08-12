@@ -1,13 +1,18 @@
-import { Level } from 'level'
-import { TUser, TUserStatus, TVerification, TVerificationStatus } from '../types'
-import TDBStorage from './types'
-import { setId, setKey, setStatus } from '../store/reducers/user'
+import { Level } from 'level';
+import {
+  TUser,
+  TUserStatus,
+  TVerification,
+  TVerificationStatus,
+} from '../types';
+import TDBStorage from './types';
+import { setId, setKey, setStatus } from '../store/reducers/user';
 import {
   addVerification,
-  addVerifications
-} from '../store/reducers/verifications'
-import { setUser } from '../store/reducers/user'
-import store from '../store'
+  addVerifications,
+} from '../store/reducers/verifications';
+import { setUser } from '../store/reducers/user';
+import store from '../store';
 import {
   TAddInitialUser,
   TAddInitialVerifications,
@@ -20,58 +25,59 @@ import {
   TAddUserStatus,
   TAddVerification,
   TSyncUser,
-  TSyncVerifications
-} from './types'
-import { calculateAvailablePoints, defineUserStatus } from '../utils'
+  TSyncVerifications,
+} from './types';
+import { calculateAvailablePoints, defineUserStatus } from '../utils';
 
-const charwise = require('charwise')
+const charwise = require('charwise');
 
 export class DBStorage implements TDBStorage {
-  #verificationsDb?: any
-  #userDb?: any
+  #verificationsDb?: any;
+  #userDb?: any;
 
-  constructor () {
+  constructor() {
     const db = new Level('./ext-db', {
-      valueEncoding: 'json',
-    })
-
-    this.#verificationsDb = db.sublevel<string, TVerification>('verifications', {
       valueEncoding: 'json',
     });
 
+    this.#verificationsDb = db.sublevel<string, TVerification>(
+      'verifications',
+      {
+        valueEncoding: 'json',
+      },
+    );
+
     this.#userDb = db.sublevel<string, TUser>('user', {
       valueEncoding: 'json',
-    })
-
+    });
   }
 
   init = async () => {
-    await this.addInitialUser()
-  }
-
+    await this.addInitialUser();
+  };
 
   addInitialUser: TAddInitialUser = async () => {
-    const existingUserId = await this.getUserId()
-    console.log('RUNNING addInitialUser', existingUserId)
+    const existingUserId = await this.getUserId();
+    console.log('RUNNING addInitialUser', existingUserId);
     if (existingUserId) {
-      const user =  await this.#userDb.get(existingUserId)
-      store.dispatch(setId(user.id))
-      store.dispatch(setKey(user.key))
-      store.dispatch(setStatus(user.status))
-      return user
+      const user = await this.#userDb.get(existingUserId);
+      store.dispatch(setId(user.id));
+      store.dispatch(setKey(user.key));
+      store.dispatch(setStatus(user.status));
+      return user;
     }
-  
-    const userId = charwise.encode(Date.now()).toString('hex')
+
+    const userId = charwise.encode(Date.now()).toString('hex');
     const userNew = {
       status: 'basic' as TUserStatus,
       key: null,
-      id: userId
-    }
-    await this.#userDb.put(userId, userNew)
+      id: userId,
+    };
+    await this.#userDb.put(userId, userNew);
 
-    store.dispatch(setId(userId))
-    return userNew
-  }
+    store.dispatch(setId(userId));
+    return userNew;
+  };
 
   addInitialVerifications: TAddInitialVerifications = async () => {
     // const availableTasks = tasks()
@@ -106,158 +112,153 @@ export class DBStorage implements TDBStorage {
     // })
 
     // return verifications
-    const result = [{
-      status: 'scheduled' as TVerificationStatus,
-      scheduledTime: +new Date() + 30000,
-      credentialGroupId: '1',
-      fetched: true
-    }]
+    const result = [
+      {
+        status: 'scheduled' as TVerificationStatus,
+        scheduledTime: +new Date() + 30000,
+        credentialGroupId: '1',
+        fetched: true,
+      },
+    ];
 
-    const verificationAddedToDB = await this.addVerification(result[0])
-    console.log('verificationAddedToDB: ', { verificationAddedToDB })
+    const verificationAddedToDB = await this.addVerification(result[0]);
+    console.log('verificationAddedToDB: ', { verificationAddedToDB });
 
-    const actualPoints = calculateAvailablePoints(result)
-    const actualStatus = defineUserStatus(actualPoints)
-    await this.addUserStatus(actualStatus)
-    console.log('verifications after update of key:', { store: store.getState() })
-    return result
-  }
+    const actualPoints = calculateAvailablePoints(result);
+    const actualStatus = defineUserStatus(actualPoints);
+    await this.addUserStatus(actualStatus);
+    console.log('verifications after update of key:', {
+      store: store.getState(),
+    });
+    return result;
+  };
 
   getUserId: TGetUserId = async () => {
     // address is always single
     try {
-      let id = null
+      let id = null;
       for await (const [key, value] of this.#userDb.iterator()) {
-        id = value.id
+        id = value.id;
       }
-      console.log('RUNNING getUserId', id)
-      return id
+      console.log('RUNNING getUserId', id);
+      return id;
     } catch (err) {
-      return null
+      return null;
     }
-  }
+  };
 
   getVerifications: TGetVerifications = async () => {
-    const retVal: TVerification[] = []
+    const retVal: TVerification[] = [];
     for await (const [key, value] of this.#verificationsDb.iterator()) {
-      retVal.push(value as TVerification)
+      retVal.push(value as TVerification);
     }
-    return retVal
-  }
+    return retVal;
+  };
 
   updateVerificationStatus: TUpdateVerificationStatus = async (
     credentialGroupId: string,
-    status: TVerificationStatus
+    status: TVerificationStatus,
   ) => {
-    const verification: TVerification =  await this.#verificationsDb.get(credentialGroupId)
-    console.log({ verification })
+    const verification: TVerification =
+      await this.#verificationsDb.get(credentialGroupId);
+    console.log({ verification });
     await this.#verificationsDb.put(credentialGroupId, {
       ...verification,
-      status
-    })
+      status,
+    });
 
-    await this.syncVerifications()
-  }
+    await this.syncVerifications();
+  };
 
-  addUserKey: TAddUserKey = async (
-    key: string
-  ) => {
-    const existingUserId = await this.getUserId()
-    console.log('RUNNING addUserKey', existingUserId)
+  addUserKey: TAddUserKey = async (key: string) => {
+    const existingUserId = await this.getUserId();
+    console.log('RUNNING addUserKey', existingUserId);
     if (existingUserId) {
-      const user: TUser =  await this.#userDb.get(existingUserId);
+      const user: TUser = await this.#userDb.get(existingUserId);
 
       await this.#userDb.put(existingUserId, {
         ...user,
-        key
-      })
-      
-      store.dispatch(setKey(key))
-      console.log('addUserKey', { key })
+        key,
+      });
 
-      await this.addInitialVerifications()
+      store.dispatch(setKey(key));
+      console.log('addUserKey', { key });
 
-      return key
+      await this.addInitialVerifications();
+
+      return key;
     } else {
-      throw new Error('No user detected')
+      throw new Error('No user detected');
     }
-  }
+  };
 
-  addUserStatus: TAddUserStatus = async (
-    status: TUserStatus
-  ) => {
-    const existingUserId = await this.getUserId()
-    console.log('RUNNING addUserStatus', existingUserId)
+  addUserStatus: TAddUserStatus = async (status: TUserStatus) => {
+    const existingUserId = await this.getUserId();
+    console.log('RUNNING addUserStatus', existingUserId);
     if (existingUserId) {
-      const user: TUser =  await this.#userDb.get(existingUserId);
+      const user: TUser = await this.#userDb.get(existingUserId);
       await this.#userDb.put(existingUserId, {
         ...user,
-        status
-      })
-      
-      store.dispatch(setStatus(status))
-      return status
-    } else {
-      throw new Error('No user detected')
-    }
-  }
+        status,
+      });
 
+      store.dispatch(setStatus(status));
+      return status;
+    } else {
+      throw new Error('No user detected');
+    }
+  };
 
   getUserKey: TGetUserKey = async () => {
-    const existingUserId = await this.getUserId()
-    console.log('RUNNING getUserKey', existingUserId)
+    const existingUserId = await this.getUserId();
+    console.log('RUNNING getUserKey', existingUserId);
     if (existingUserId) {
-      return (await this.#userDb.get(existingUserId)).key
+      return (await this.#userDb.get(existingUserId)).key;
     }
-  }
+  };
 
   getUser: TGetUser = async () => {
-    const existingUserId = await this.getUserId()
+    const existingUserId = await this.getUserId();
     if (existingUserId) {
-      return (await this.#userDb.get(existingUserId))
+      return await this.#userDb.get(existingUserId);
     }
-  }
+  };
 
-  addVerification: TAddVerification = async (
-    verification
-  ) => {
-    console.log('RUNNING addVerification: ', verification)
-    await this.#verificationsDb.put(verification.credentialGroupId, verification)
-    store.dispatch(addVerification(verification))
-    return verification
-  }
+  addVerification: TAddVerification = async (verification) => {
+    console.log('RUNNING addVerification: ', verification);
+    await this.#verificationsDb.put(
+      verification.credentialGroupId,
+      verification,
+    );
+    store.dispatch(addVerification(verification));
+    return verification;
+  };
 
   syncUser: TSyncUser = async () => {
-    const user = await this.getUser()
-    store.dispatch(setUser(user))
-  }
+    const user = await this.getUser();
+    store.dispatch(setUser(user));
+  };
 
   syncVerifications: TSyncVerifications = async () => {
-    const verifications = await this.getVerifications()
-    store.dispatch(addVerifications(verifications))
-  }
+    const verifications = await this.getVerifications();
+    store.dispatch(addVerifications(verifications));
+  };
 }
 
 const getStorage = (() => {
-
-  let storage: null | DBStorage = null
+  let storage: null | DBStorage = null;
 
   return async () => {
-
     if (!storage) {
-      const dbStorage = new DBStorage()
-      await dbStorage.init()
-      storage = dbStorage
+      const dbStorage = new DBStorage();
+      await dbStorage.init();
+      storage = dbStorage;
 
-      return dbStorage
+      return dbStorage;
     }
 
-    return storage
-  }
+    return storage;
+  };
+})();
 
-})()
-
-
-
-export default getStorage
-
+export default getStorage;

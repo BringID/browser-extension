@@ -1,35 +1,30 @@
-import IRelayer, { TCreateVerification } from "./types"
-import taskManager from "../api/task-manager"
-import configs from "../configs"
+import IRelayer, { TCreateVerification } from './types';
+import taskManager from '../api/task-manager';
+import configs from '../configs';
 
 class Relayer implements IRelayer {
+  #apiUrl: string;
 
-  #apiUrl: string
-  
-  constructor (
-  
-  ) {
-    this.#apiUrl = configs.INDEXER_API
+  constructor() {
+    this.#apiUrl = configs.INDEXER_API;
   }
 
   createVerification: TCreateVerification = async (
     credentialGroupId,
     idHash,
     identityCommitment,
-    verifierSignature
+    verifierSignature,
   ) => {
-
     const { success, task } = await taskManager.addVerification(
       this.#apiUrl,
       configs.REGISTRY,
       credentialGroupId,
       idHash,
       identityCommitment,
-      verifierSignature
-    )
+      verifierSignature,
+    );
 
     if (success) {
-
       const verification = {
         scheduledTime: task.scheduled_time,
         taskId: task.id,
@@ -38,14 +33,13 @@ class Relayer implements IRelayer {
         batchId: task.batch_id,
         credentialGroupId: task.credential_group_id,
         fetched: false,
-      
-      }
+      };
 
-      return verification
+      return verification;
     }
-  }
+  };
 }
 
-const relayer = new Relayer()
+const relayer = new Relayer();
 
-export default relayer
+export default relayer;

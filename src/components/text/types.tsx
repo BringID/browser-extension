@@ -1,6 +1,6 @@
 type TProps = {
-  children: React.ReactNode | React.ReactNode[]
-  className?: string
-}
+  children: React.ReactNode | React.ReactNode[];
+  className?: string;
+};
 
-export default TProps
+export default TProps;

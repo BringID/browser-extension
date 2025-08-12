@@ -1,8 +1,8 @@
-import { TSemaphoreProofServer } from "../../types";
+import { TSemaphoreProofServer } from '../../types';
 
 type TGetProof = (
   identityCommitment: string,
-  semaphoreGroupId: string
-) => Promise<TSemaphoreProofServer | void>
+  semaphoreGroupId: string,
+) => Promise<TSemaphoreProofServer | void>;
 
-export default TGetProof
+export default TGetProof;

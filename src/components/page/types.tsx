@@ -1,5 +1,5 @@
 type TProps = {
-  children: React.ReactNode | React.ReactNode[]
-}
+  children: React.ReactNode | React.ReactNode[];
+};
 
-export default TProps
+export default TProps;

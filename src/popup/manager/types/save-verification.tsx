@@ -1,8 +1,8 @@
-import { TVerification, TVerifyResult } from "../../types"
+import { TVerification, TVerifyResult } from '../../types';
 
 type TSaveVerification = (
   verificationData: TVerifyResult,
-  credentialGroupId: string
-) => Promise<TVerification | void>
+  credentialGroupId: string,
+) => Promise<TVerification | void>;
 
-export default TSaveVerification
+export default TSaveVerification;

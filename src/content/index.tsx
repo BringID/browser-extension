@@ -1,24 +1,22 @@
-import browser from 'webextension-polyfill'
-import { TExtensionRequestType } from '../popup/types'
+import browser from 'webextension-polyfill';
+import { TExtensionRequestType } from '../popup/types';
 
 (async () => {
-  loadScript('content.bundle.js')
-  console.log('content/index loaded')
+  loadScript('content.bundle.js');
+  console.log('content/index loaded');
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-
     if (message.type === TExtensionRequestType.proofs_generated) {
       // goes to website, connected to extension
       window.postMessage(
         {
-          source: "bringID extension", 
+          source: 'bringID extension',
           data: message.payload,
-          type: TExtensionRequestType.claim
+          type: TExtensionRequestType.claim,
         },
-        "*"
-      )
+        '*',
+      );
     }
-  })
-
+  });
 })();
 
 function loadScript(filename: string) {
@@ -28,4 +26,3 @@ function loadScript(filename: string) {
   script.setAttribute('src', url);
   document.body.appendChild(script);
 }
-

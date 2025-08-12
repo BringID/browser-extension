@@ -1,7 +1,5 @@
-import { TUserStatus } from "../../types"
+import { TUserStatus } from '../../types';
 
-type TAddUserStatus = (
-  status: TUserStatus
-) => Promise<string | void>
+type TAddUserStatus = (status: TUserStatus) => Promise<string | void>;
 
-export default TAddUserStatus
+export default TAddUserStatus;

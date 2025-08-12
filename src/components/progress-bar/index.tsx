@@ -1,27 +1,23 @@
-import React, { FC } from 'react'
+import React, { FC } from 'react';
 import {
   ProgressBarContainer,
   Bar,
   Wrapper,
   Titles,
-  Title
-} from './styled-components'
-import { TProps } from  './types'
+  Title,
+} from './styled-components';
+import { TProps } from './types';
 
-const ProgressBar: FC<TProps> = ({
-  className,
-  current,
-  max,
-  title,
-  value
-}) => {
-  const barValue = (current / max) * 100
+const ProgressBar: FC<TProps> = ({ className, current, max, title, value }) => {
+  const barValue = (current / max) * 100;
   return (
     <Wrapper>
-      {title && value && <Titles>
-        <Title>{title}</Title>
-        <Title>{value}</Title>
-      </Titles>}
+      {title && value && (
+        <Titles>
+          <Title>{title}</Title>
+          <Title>{value}</Title>
+        </Titles>
+      )}
       <ProgressBarContainer className={className}>
         <Bar
           style={{
@@ -30,8 +26,7 @@ const ProgressBar: FC<TProps> = ({
         />
       </ProgressBarContainer>
     </Wrapper>
-    
-  )
-}
+  );
+};
 
-export default ProgressBar
+export default ProgressBar;

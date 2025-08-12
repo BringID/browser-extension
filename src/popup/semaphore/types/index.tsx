@@ -1,15 +1,12 @@
-import TGetProof from "./get-proof"
-import TCreateIdentity from './create-identity'
+import TGetProof from './get-proof';
+import TCreateIdentity from './create-identity';
 
 interface ISemaphore {
-  getProof: TGetProof,
+  getProof: TGetProof;
 
-  createIdentity: TCreateIdentity
+  createIdentity: TCreateIdentity;
 }
 
-export default ISemaphore
+export default ISemaphore;
 
-export {
-  TGetProof,
-  TCreateIdentity
-}
+export { TGetProof, TCreateIdentity };

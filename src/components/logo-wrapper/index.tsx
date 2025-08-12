@@ -1,30 +1,18 @@
-import React, {
-  FC
-} from 'react'
-import TProps from './types'
-import {
-  LogoWrapper,
-  Image
-} from './styled-components'
+import React, { FC } from 'react';
+import TProps from './types';
+import { LogoWrapper, Image } from './styled-components';
 
-const defineImage = (
-  icon?: string | React.ReactNode
-) => {
-  if (!icon) return null
+const defineImage = (icon?: string | React.ReactNode) => {
+  if (!icon) return null;
   if (typeof icon === 'string') {
-    return <Image src={icon} />
+    return <Image src={icon} />;
   }
 
-  return icon
-}
+  return icon;
+};
 
-const Component: FC<TProps> = ({
-  className,
-  icon
-}) => {
-  return <LogoWrapper className={className}>
-    {defineImage(icon)}
-  </LogoWrapper>
-}
+const Component: FC<TProps> = ({ className, icon }) => {
+  return <LogoWrapper className={className}>{defineImage(icon)}</LogoWrapper>;
+};
 
-export default Component
+export default Component;

@@ -1,3 +1,3 @@
-type TGetUserId = () => Promise<string>
+type TGetUserId = () => Promise<string>;
 
-export default TGetUserId
+export default TGetUserId;

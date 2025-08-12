@@ -1,5 +1,3 @@
-type TAddUserKey = (
-  key: string
-) => Promise<string | void>
+type TAddUserKey = (key: string) => Promise<string | void>;
 
-export default TAddUserKey
+export default TAddUserKey;

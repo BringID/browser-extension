@@ -1,21 +1,13 @@
-import React, {
-  FC
-} from 'react'
+import React, { FC } from 'react';
 
-import {
-  Container,
-  ButtonStyled
-} from './styled-components'
-import { Task } from '../../../components'
-import TProps from './types'
+import { Container, ButtonStyled } from './styled-components';
+import { Task } from '../../../components';
+import TProps from './types';
 
-const TasksList: FC<TProps> = ({
-  tasks,
-  className
-}) => {
+const TasksList: FC<TProps> = ({ tasks, className }) => {
   return (
     <Container className={className}>
-      {tasks.map((task, idx) => 
+      {tasks.map((task, idx) => (
         <Task
           key={task.credentialGroupId}
           title={task.title}
@@ -23,9 +15,9 @@ const TasksList: FC<TProps> = ({
           taskId={task.credentialGroupId}
           points={task.points}
         />
-      )}
+      ))}
     </Container>
   );
-}
+};
 
-export default TasksList
+export default TasksList;

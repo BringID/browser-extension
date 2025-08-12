@@ -1,6 +1,6 @@
-import styled, { css } from "styled-components"
-import TProps from "./types"
-import Spinner from '../spinner'
+import styled, { css } from 'styled-components';
+import TProps from './types';
+import Spinner from '../spinner';
 
 export const Button = styled.button<TProps>`
   font-family: inherit;
@@ -20,38 +20,42 @@ export const Button = styled.button<TProps>`
   line-height: 16px;
   font-weight: 500;
   border-radius: 6px;
-  border: 1px solid ${props => props.theme && props.theme.primaryBorderColor};
-  color: ${props => props.theme && props.theme.primaryTextColor};
-  background-color: ${props => props.theme.backgroundColor};
+  border: 1px solid ${(props) => props.theme && props.theme.primaryBorderColor};
+  color: ${(props) => props.theme && props.theme.primaryTextColor};
+  background-color: ${(props) => props.theme.backgroundColor};
 
-  ${props => props.appearance === 'action' && css`
-    background-color: ${props => props.theme.buttonActionBackgroundColor};
-    border-color: ${props => props.theme.buttonActionBorderColor};
-    color: ${props => props.theme.buttonActionTextColor};
-  `}
+  ${(props) =>
+    props.appearance === 'action' &&
+    css`
+      background-color: ${(props) => props.theme.buttonActionBackgroundColor};
+      border-color: ${(props) => props.theme.buttonActionBorderColor};
+      color: ${(props) => props.theme.buttonActionTextColor};
+    `}
 
-  ${props => props.size === 'small' && css`
-    height: 32px;
-    font-size: 12px;
-    padding: 4px 8px;
-    line-height: 12px;
-  `}
+  ${(props) =>
+    props.size === 'small' &&
+    css`
+      height: 32px;
+      font-size: 12px;
+      padding: 4px 8px;
+      line-height: 12px;
+    `}
 
-  ${props => props.disabled && css`
-    opacity: .5;
-    cursor: not-allowed;
-    color: ${props => props.theme.additionalTextColor};
-    background-color: ${props => props.theme.buttonDisabledBackgroundColor};
-  `}
+  ${(props) =>
+    props.disabled &&
+    css`
+      opacity: 0.5;
+      cursor: not-allowed;
+      color: ${(props) => props.theme.additionalTextColor};
+      background-color: ${(props) => props.theme.buttonDisabledBackgroundColor};
+    `}
 
 
   ${(props) =>
     props.loading &&
     css`
-
       cursor: not-allowed;
-      color: transparent!important;
-      
+      color: transparent !important;
 
       ${!props.disabled &&
       css`
@@ -64,11 +68,11 @@ export const Button = styled.button<TProps>`
         }
       `}
     `}
-`
+`;
 
 export const SpinnerStyled = styled(Spinner)`
   position: absolute;
   top: 50%;
   left: 50%;
   translate: -50% -50%;
-`
+`;

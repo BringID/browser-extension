@@ -1,3 +1,3 @@
-type TProps = {}
+type TProps = {};
 
-export default TProps
+export default TProps;
