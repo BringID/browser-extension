@@ -1,4 +1,5 @@
 import { JsonValue } from 'type-fest';
+import browser from 'webextension-polyfill';
 
 export type IPCRunTask = {
   type: 'RUN_TASK';
@@ -11,3 +12,7 @@ export type IPCPresentation = {
 };
 
 export type IPCMessage = IPCRunTask | IPCPresentation;
+
+export async function sendMessage(message: IPCMessage) {
+  await browser.runtime.sendMessage(message);
+}
