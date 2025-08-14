@@ -11,7 +11,7 @@ export type TProps = {
   selectable: boolean;
   selected?: boolean;
   onSelect?: (selected: boolean) => void;
-  credentialGroupId: string
+  credentialGroupId: string;
 
-  fetched: boolean
+  fetched: boolean;
 };

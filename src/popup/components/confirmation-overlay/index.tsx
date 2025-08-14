@@ -179,10 +179,10 @@ const ConfirmationOverlay: FC<TProps> = ({
               try {
                 const proofs = await manager.getProofs(
                   dropAddress,
-                  pointsRequired
-                )
+                  pointsRequired,
+                );
 
-                console.log({ proofs })
+                console.log({ proofs });
 
                 const [tab] = await chrome.tabs.query({
                   active: true,

@@ -12,32 +12,30 @@ import { IPCPresentation } from '../common/core';
 
 const Popup: FC = () => {
   useEffect(() => {
-    browser.runtime.onMessage.addListener(async (request: IPCPresentation, sender, sendResponse) => {
-      switch (request.type) {
-        case 'PRESENTATION': {
-            const {
-              presentationData,
-              credentialGroupId
-            } = request.data
+    browser.runtime.onMessage.addListener(
+      async (request: IPCPresentation, sender, sendResponse) => {
+        switch (request.type) {
+          case 'PRESENTATION':
+            {
+              const { presentationData, credentialGroupId } = request.data;
 
-            if (presentationData) {
-
-              const verify = await manager.runVerify(presentationData, credentialGroupId);
-
-              if (verify) {
-                await manager.saveVerification(
-                  verify,
-                  credentialGroupId
+              if (presentationData) {
+                const verify = await manager.runVerify(
+                  presentationData,
+                  credentialGroupId,
                 );
 
+                if (verify) {
+                  await manager.saveVerification(verify, credentialGroupId);
+                }
               }
             }
-          }
-          break
-        default:
-          console.log({ request });
-      }
-    });
+            break;
+          default:
+            console.log({ request });
+        }
+      },
+    );
   }, []);
   const dispatch = useDispatch();
 

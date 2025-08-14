@@ -4,10 +4,19 @@ import { notarizationManager } from './services/notarization';
 import { sendMessage } from '../common/core';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
-import { tasks } from '../common/core'
+import { tasks } from '../common/core';
+import {
+  Container,
+  LogoWrapperStyled,
+  Header,
+  TitleStyled,
+  Content,
+  Wrapper,
+  NoteStyled,
+} from './styled-components';
+import { Page } from '../components';
+
 const SidePanel: FC = () => {
-
-
   useEffect(() => {
     browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
       switch (request.type) {
@@ -24,48 +33,52 @@ const SidePanel: FC = () => {
     });
   }, []);
 
-  const { result, taskId } = useSelector((state: RootState) => {
-    return state.notarization
+  const { result, taskId, progress } = useSelector((state: RootState) => {
+    return state.notarization;
   });
 
-  const availableTasks = tasks()
+  const availableTasks = tasks();
+
+  const currentTask = availableTasks[taskId];
 
   useEffect(() => {
     if (!result) {
-      return
+      return;
     }
 
-    const credentialGroupId = availableTasks[taskId].credentialGroupId
-      
+    const credentialGroupId = currentTask.credentialGroupId;
+
     // @ts-ignore
     chrome.action.openPopup();
     window.setTimeout(() => {
-
       sendMessage({
         type: 'PRESENTATION',
         data: {
           presentationData: result,
-          credentialGroupId
-        }
-      })
+          credentialGroupId,
+        },
+      });
 
-      window.close()
-
-    }, 2000)
-      
-
-  }, [
-    result
-  ])
+      window.close();
+    }, 2000);
+  }, [result]);
 
   return (
-    <div>
-      <h1>
-        Side Panel 1
+    <Page>
+      <Container>
+        <Header>
+          <LogoWrapperStyled icon={currentTask?.icon} />
 
-        notarizationResult: {result}
-      </h1>
-    </div>
+          <TitleStyled>{currentTask?.description}</TitleStyled>
+        </Header>
+
+        <Content>
+          <NoteStyled title="Processing notarization. Please wait...">
+            progress: {progress}
+          </NoteStyled>
+        </Content>
+      </Container>
+    </Page>
   );
 };
 

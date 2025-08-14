@@ -1,7 +1,7 @@
 import { TVerification } from '../../types';
 
 type TGetVerification = (
- verificationId: string
+  verificationId: string,
 ) => Promise<TVerification | void>;
 
 export default TGetVerification;

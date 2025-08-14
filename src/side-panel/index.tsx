@@ -9,5 +9,5 @@ const root = createRoot(container!); // createRoot(container!) if you use TypeSc
 root.render(
   <Provider store={store}>
     <SidePanel />
-  </Provider>
+  </Provider>,
 );

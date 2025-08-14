@@ -20,7 +20,7 @@ const TaskContainer: FC<TProps> = ({
   selectable,
   selected,
   onSelect,
-  credentialGroupId
+  credentialGroupId,
 }) => {
   return (
     <Container status={status} selectable={selectable}>

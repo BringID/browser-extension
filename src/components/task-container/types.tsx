@@ -10,7 +10,7 @@ type TProps = {
   selectable: boolean;
   selected?: boolean;
   onSelect?: (selected: boolean) => void;
-  credentialGroupId: string
+  credentialGroupId: string;
 };
 
 export default TProps;

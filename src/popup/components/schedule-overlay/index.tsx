@@ -29,7 +29,7 @@ const ScheduleOverlay: FC<TProps> = ({ onClose, scheduledTime }) => {
       if (expiration <= 0) {
         clearInterval(interval);
 
-        setTimeout(onClose, 1000)
+        setTimeout(onClose, 1000);
       }
     }, 1000);
   }, []);

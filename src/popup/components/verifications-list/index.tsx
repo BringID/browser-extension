@@ -22,8 +22,7 @@ const VerificationsList: FC<TProps> = ({
       {verifications.length > 0 &&
         verifications.map((verification, idx) => {
           const relatedTask = tasks.find(
-            (task) =>
-              task.credentialGroupId === verification.credentialGroupId,
+            (task) => task.credentialGroupId === verification.credentialGroupId,
           );
           if (relatedTask) {
             return (

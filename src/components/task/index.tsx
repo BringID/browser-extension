@@ -14,54 +14,52 @@ import getStorage from '../../popup/db-storage';
 const definePluginContent = (
   status: TVerificationStatus,
   points: number,
-  credentialGroupId: string
+  credentialGroupId: string,
 ) => {
   switch (status) {
     case 'default':
-      return <>
-        <Tag status="info">+{points}</Tag>
-        <Button
-          appearance="action"
-          size="small"
-          onClick={async () => {
-            const [tab] = await browser.tabs.query({
-              active: true,
-              currentWindow: true,
-            });
-
-            const storage = await getStorage();
-            const userKey = await storage.getUserKey();
-            if (!userKey) {
-              chrome.tabs.create({
-                url: configs.CONNECT_WALLET_URL,
+      return (
+        <>
+          <Tag status="info">+{points}</Tag>
+          <Button
+            appearance="action"
+            size="small"
+            onClick={async () => {
+              const [tab] = await browser.tabs.query({
+                active: true,
+                currentWindow: true,
               });
 
-              
-              return;
-            }
-        
-            // @ts-ignore
-            chrome.sidePanel.open({
-              tabId: tab.id,
-            });
+              const storage = await getStorage();
+              const userKey = await storage.getUserKey();
+              if (!userKey) {
+                chrome.tabs.create({
+                  url: configs.CONNECT_WALLET_URL,
+                });
 
-            await manager.runTask(credentialGroupId);
-      
-          }}
-        >
-          Verify
-        </Button>
-      </>
+                return;
+              }
+
+              // @ts-ignore
+              chrome.sidePanel.open({
+                tabId: tab.id,
+              });
+
+              await manager.runTask(credentialGroupId);
+            }}
+          >
+            Verify
+          </Button>
+        </>
+      );
     case 'pending':
     case 'scheduled':
-      return <Icons.Clock />
+      return <Icons.Clock />;
 
     default:
-      return <Icons.Check />
+      return <Icons.Check />;
   }
-}
-
-
+};
 
 // const defineVerificationStatus = (
 //   task?: TTask
@@ -99,15 +97,9 @@ const Task: FC<TProps> = ({
   points,
   icon,
   description,
-  status
+  status,
 }) => {
-
-
-  const content = definePluginContent(
-    status,
-    points,
-    credentialGroupId
-  )
+  const content = definePluginContent(status, points, credentialGroupId);
 
   return (
     <TaskContainer
@@ -118,9 +110,7 @@ const Task: FC<TProps> = ({
       icon={icon}
       credentialGroupId={credentialGroupId}
     >
-      <Value>
-        {content}
-      </Value>
+      <Value>{content}</Value>
     </TaskContainer>
   );
 };

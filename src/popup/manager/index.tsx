@@ -24,8 +24,6 @@ class Manager implements IManager {
   constructor() {
     console.log('Manager initialized');
     this.init();
-
-    
   }
 
   init: TInit = async () => {
@@ -37,14 +35,15 @@ class Manager implements IManager {
   };
 
   runTask: TRunTask = async (credentialGroupId) => {
-    const taskIndex = tasks().findIndex(task => task.credentialGroupId === credentialGroupId)
+    const taskIndex = tasks().findIndex(
+      (task) => task.credentialGroupId === credentialGroupId,
+    );
     window.setTimeout(() => {
       sendMessage({
         type: 'NOTARIZE',
-        task_id: taskIndex
-      })
-    }, 1000)
-
+        task_id: taskIndex,
+      });
+    }, 1000);
   };
 
   runVerify: TRunVerify = async (presentationData, credentialGroupId) => {
@@ -55,12 +54,11 @@ class Manager implements IManager {
       const identity = semaphore.createIdentity(userKey, credentialGroupId);
 
       try {
-
         console.log({
           presentationData,
           credentialGroupId,
           identity: String(identity.commitment),
-        })
+        });
         const verification = await verifier.verify(
           '',
           presentationData,
@@ -155,7 +153,7 @@ class Manager implements IManager {
         );
 
         if (verification) {
-          await this.#db?.addVerification(verification)
+          await this.#db?.addVerification(verification);
         }
         return verification;
       } catch (err) {

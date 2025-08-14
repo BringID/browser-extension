@@ -9,9 +9,9 @@ export type IPCNotarize = {
 export type IPCPresentation = {
   type: 'PRESENTATION';
   data: {
-    presentationData: string,
-    credentialGroupId: string
-  }
+    presentationData: string;
+    credentialGroupId: string;
+  };
 };
 
 export type IPCMessage = IPCNotarize | IPCPresentation;

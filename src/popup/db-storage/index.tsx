@@ -81,40 +81,42 @@ export class DBStorage implements TDBStorage {
   };
 
   addInitialVerifications: TAddInitialVerifications = async () => {
-    const availableTasks = tasks()
-    const existingUserId = await this.getUserId()
+    const availableTasks = tasks();
+    const existingUserId = await this.getUserId();
     if (!existingUserId) {
-      return []
+      return [];
     }
-    const user: TUser =  await this.#userDb.get(existingUserId);
-    const verifications: TVerification[] = []
+    const user: TUser = await this.#userDb.get(existingUserId);
+    const verifications: TVerification[] = [];
     availableTasks.forEach(async (task, idx) => {
       const identity = semaphore.createIdentity(
         String(user.key),
-        task.credentialGroupId
-      )
-      const { commitment } = identity
+        task.credentialGroupId,
+      );
+      const { commitment } = identity;
 
       try {
-        const proof = await semaphore.getProof(String(commitment), task.semaphoreGroupId)
-        console.log('proof: ', { proof })
+        const proof = await semaphore.getProof(
+          String(commitment),
+          task.semaphoreGroupId,
+        );
+        console.log('proof: ', { proof });
         if (proof) {
           const verificationAdded = await this.addVerification({
             credentialGroupId: task.credentialGroupId,
             status: 'completed',
             scheduledTime: +new Date(),
-            fetched: true
-          })
-          store.dispatch(addVerification(verificationAdded))
-          verifications.push(verificationAdded)
+            fetched: true,
+          });
+          store.dispatch(addVerification(verificationAdded));
+          verifications.push(verificationAdded);
         }
       } catch (err) {
-        console.log(`proof for ${commitment} was not added before`)
+        console.log(`proof for ${commitment} was not added before`);
       }
-    })
+    });
 
-    return verifications
-    
+    return verifications;
   };
 
   getUserId: TGetUserId = async () => {
@@ -143,7 +145,8 @@ export class DBStorage implements TDBStorage {
     credentialGroupId: string,
     status: TVerificationStatus,
   ) => {
-    const verification: TVerification = await this.#verificationsDb.get(credentialGroupId);
+    const verification: TVerification =
+      await this.#verificationsDb.get(credentialGroupId);
     await this.#verificationsDb.put(credentialGroupId, {
       ...verification,
       status,

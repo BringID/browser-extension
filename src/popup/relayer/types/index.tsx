@@ -4,12 +4,9 @@ import TGetVerification from './get-verification';
 interface IRelayer {
   createVerification: TCreateVerification;
 
-  getVerification: TGetVerification
+  getVerification: TGetVerification;
 }
 
 export default IRelayer;
 
-export {
-  TCreateVerification,
-  TGetVerification
-};
+export { TCreateVerification, TGetVerification };

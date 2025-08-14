@@ -7,7 +7,6 @@ import { Transcript } from 'tlsn-js';
 import { notarizationSlice } from '../../store/notarization';
 import { store } from '../../store';
 
-
 // NotarizationManager stores Notarization and handles Redux
 export class NotarizationManager {
   readonly #notarizations: NotarizationHandler[] = [];
@@ -33,7 +32,7 @@ export class NotarizationManager {
           return;
         }
 
-        const presentation = await res.json()
+        const presentation = await res.json();
         const verifierOutput = await res.verify();
         const transcript = new Transcript({
           sent: verifierOutput.transcript?.sent || [],
@@ -45,9 +44,7 @@ export class NotarizationManager {
           recv: transcript.recv(),
         });
 
-        store.dispatch(notarizationSlice.actions.setResult(presentation.data))
-
-
+        // store.dispatch(notarizationSlice.actions.setResult(presentation.data))
       },
       this.notificationHandler.bind(this),
     );
@@ -55,6 +52,7 @@ export class NotarizationManager {
 
   notificationHandler(state: State<NotarizationStatus>) {
     console.log('State updated:', state);
+    store.dispatch(notarizationSlice.actions.setProgress(state.progress));
   }
 }
 

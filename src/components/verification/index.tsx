@@ -5,10 +5,7 @@ import { TVerificationStatus } from '../../popup/types';
 import { TaskContainer } from '../../components';
 import { Icons } from '../../components';
 import { Button } from '../../components';
-import {
-  msToTime,
-  defineExplorerURL
-} from '../../popup/utils';
+import { msToTime, defineExplorerURL } from '../../popup/utils';
 import { Tag } from '../../components';
 import { useDispatch } from 'react-redux';
 import getStorage from '../../popup/db-storage';
@@ -61,13 +58,12 @@ const Verification: FC<TProps> = ({
   selected,
   onSelect,
   credentialGroupId,
-  fetched
+  fetched,
 }) => {
   const [expiration, setExpiration] = useState<number | null>(null);
 
   useEffect(() => {
-
-    if (!taskId) return
+    if (!taskId) return;
 
     const interval = window.setInterval(async () => {
       const now = +new Date();
@@ -92,19 +88,16 @@ const Verification: FC<TProps> = ({
     fetched,
     async () => {
       if (!taskId) {
-        return alert('taskId not defined')
+        return alert('taskId not defined');
       }
-      const verification = await relayer.getVerification(taskId)
+      const verification = await relayer.getVerification(taskId);
 
       if (verification) {
-
-        const {
-          txHash
-        } = verification
+        const { txHash } = verification;
 
         chrome.tabs.create({
-          url: `${defineExplorerURL(84532)}/tx/${txHash}`
-        })
+          url: `${defineExplorerURL(84532)}/tx/${txHash}`,
+        });
       }
     },
   );

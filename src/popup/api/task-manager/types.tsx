@@ -19,7 +19,9 @@ type TGetVerificationResponse = Promise<{
   task: TTaskServer;
 }>;
 
-type TGetVerification = (verificationId: string) => Promise<TGetVerificationResponse>;
+type TGetVerification = (
+  verificationId: string,
+) => Promise<TGetVerificationResponse>;
 
 export {
   TAddVerification,

@@ -1,7 +1,4 @@
-import IRelayer, {
-  TCreateVerification,
-  TGetVerification
-} from './types';
+import IRelayer, { TCreateVerification, TGetVerification } from './types';
 import taskManager from '../api/task-manager';
 import configs from '../configs';
 
@@ -42,11 +39,8 @@ class Relayer implements IRelayer {
     }
   };
 
-
-  getVerification: TGetVerification = async (
-    verificationId
-  ) => {
-    const { success, task } = await taskManager.getVerification(verificationId)
+  getVerification: TGetVerification = async (verificationId) => {
+    const { success, task } = await taskManager.getVerification(verificationId);
     if (success) {
       const verification = {
         scheduledTime: task.scheduled_time,
@@ -56,12 +50,12 @@ class Relayer implements IRelayer {
         batchId: task.batch_id,
         credentialGroupId: task.credential_group_id,
         fetched: false,
-        txHash: task.tx_hash
+        txHash: task.tx_hash,
       };
 
       return verification;
     }
-  }
+  };
 }
 
 const relayer = new Relayer();

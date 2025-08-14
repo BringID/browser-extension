@@ -1,4 +1,4 @@
-import { TVerificationStatus } from "../../popup/types";
+import { TVerificationStatus } from '../../popup/types';
 
 export type TProps = {
   credentialGroupId: string;
@@ -6,5 +6,5 @@ export type TProps = {
   title: string;
   description?: string;
   points: number;
-  status: TVerificationStatus
+  status: TVerificationStatus;
 };

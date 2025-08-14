@@ -13,8 +13,7 @@ export interface NotarizationState {
   progress: number;
   error?: Error;
 
-  result?: string
-
+  result?: string;
 
   // message => UI
   // result => UI
@@ -51,7 +50,6 @@ export const notarizationSlice = createSlice({
     setResult: (state: NotarizationState, action: PayloadAction<string>) => {
       state.result = action.payload;
     },
-
 
     // setResult
   },

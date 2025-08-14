@@ -16,7 +16,6 @@ class Verifier implements IVerifier {
     semaphoreIdentityCommitment,
   ) => {
     try {
-
       const response = await verifierApi.verify(
         this.#apiUrl,
         apiKey,
@@ -41,7 +40,7 @@ class Verifier implements IVerifier {
         return result;
       }
     } catch (err) {
-      console.error(err)
+      console.error(err);
       console.error('Verify failed');
       return;
     }

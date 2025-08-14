@@ -1,6 +1,4 @@
-import {
-  Task
-} from '../../../common/core';
+import { Task } from '../../../common/core';
 import { TVerification } from '../../types';
 
 type TProps = {
