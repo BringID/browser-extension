@@ -1,3 +1,5 @@
+import React from 'react';
+
 type TProps = {
   onClick?: () => void;
   children: React.ReactNode | React.ReactNode[];

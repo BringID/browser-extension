@@ -1,3 +1,5 @@
+import React from 'react';
+
 export type TMessageStatus = 'error' | 'default' | 'warning';
 
 type TProps = {

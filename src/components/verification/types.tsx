@@ -1,7 +1,7 @@
 import { TVerificationStatus } from '../../popup/types';
 
 export type TProps = {
-  taskId: string;
+  taskId?: string;
   icon?: string;
   title: string;
   description?: string;
@@ -11,4 +11,7 @@ export type TProps = {
   selectable: boolean;
   selected?: boolean;
   onSelect?: (selected: boolean) => void;
+  credentialGroupId: string
+
+  fetched: boolean
 };

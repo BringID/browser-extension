@@ -4,6 +4,9 @@ import { NotarizationXProfile } from './handlers/x-profile';
 import { NotarizationUberRides } from './handlers/uber-rides';
 import { State } from '../../common/helpers/progressive';
 import { Transcript } from 'tlsn-js';
+import { notarizationSlice } from '../../store/notarization';
+import { store } from '../../store';
+
 
 // NotarizationManager stores Notarization and handles Redux
 export class NotarizationManager {
@@ -29,16 +32,22 @@ export class NotarizationManager {
           console.error(res);
           return;
         }
-        console.log('Presentation', await res.json());
+
+        const presentation = await res.json()
         const verifierOutput = await res.verify();
         const transcript = new Transcript({
           sent: verifierOutput.transcript?.sent || [],
           recv: verifierOutput.transcript?.recv || [],
         });
+
         console.log('Transcript', {
           sent: transcript.sent(),
           recv: transcript.recv(),
         });
+
+        store.dispatch(notarizationSlice.actions.setResult(presentation.data))
+
+
       },
       this.notificationHandler.bind(this),
     );

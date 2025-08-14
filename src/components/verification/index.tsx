@@ -5,10 +5,14 @@ import { TVerificationStatus } from '../../popup/types';
 import { TaskContainer } from '../../components';
 import { Icons } from '../../components';
 import { Button } from '../../components';
-import { msToTime } from '../../popup/utils';
+import {
+  msToTime,
+  defineExplorerURL
+} from '../../popup/utils';
 import { Tag } from '../../components';
 import { useDispatch } from 'react-redux';
 import getStorage from '../../popup/db-storage';
+import relayer from '../../popup/relayer';
 
 const definePluginContent = (
   status: TVerificationStatus,
@@ -45,37 +49,6 @@ const definePluginContent = (
   }
 };
 
-// const defineVerificationStatus = (
-//   config: PluginConfig | null,
-//   task?: TTask
-// ) => {
-//   if (!task || !config) {
-//     return {
-//       status: 'default',
-//       data: null
-//     }
-//   }
-
-//   if (task) {
-//     if (task.scheduledTime > +new Date()) {
-//       return {
-//         status: 'scheduled',
-//         data: task.scheduledTime
-//       }
-//     } else {
-//       return {
-//         status: 'completed',
-//         data: task.scheduledTime
-//       }
-//     }
-//   } else {
-//     return {
-//       status: "default",
-//       data: null
-//     }
-//   }
-// }
-
 const Verification: FC<TProps> = ({
   title,
   taskId,
@@ -87,20 +60,23 @@ const Verification: FC<TProps> = ({
   selectable,
   selected,
   onSelect,
+  credentialGroupId,
+  fetched
 }) => {
   const [expiration, setExpiration] = useState<number | null>(null);
-  const [fetched, setFetched] = useState<boolean>(false);
 
   useEffect(() => {
+
+    if (!taskId) return
+
     const interval = window.setInterval(async () => {
       const now = +new Date();
       const expiration = scheduledTime - now;
       setExpiration(expiration);
-      console.log({ expiration });
       if (expiration <= 0) {
         window.clearInterval(interval);
         const storage = await getStorage();
-        await storage.updateVerificationStatus(taskId, 'completed');
+        await storage.updateVerificationStatus(credentialGroupId, 'completed');
       }
     }, 1000);
 
@@ -115,11 +91,21 @@ const Verification: FC<TProps> = ({
     expiration,
     fetched,
     async () => {
-      alert('CHECK TXHASH');
+      if (!taskId) {
+        return alert('taskId not defined')
+      }
+      const verification = await relayer.getVerification(taskId)
 
-      // chrome.tabs.create({
-      //   url: `${defineExplorerURL(84532)}/tx/${tx_hash}`
-      // })
+      if (verification) {
+
+        const {
+          txHash
+        } = verification
+
+        chrome.tabs.create({
+          url: `${defineExplorerURL(84532)}/tx/${txHash}`
+        })
+      }
     },
   );
 
@@ -132,7 +118,7 @@ const Verification: FC<TProps> = ({
       icon={icon}
       selected={selected}
       onSelect={onSelect}
-      id={taskId}
+      credentialGroupId={credentialGroupId}
     >
       <Value>{content}</Value>
     </TaskContainer>

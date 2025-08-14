@@ -1,7 +1,10 @@
+import { TVerificationStatus } from "../../popup/types";
+
 export type TProps = {
-  taskId: string;
+  credentialGroupId: string;
   icon?: string;
   title: string;
   description?: string;
   points: number;
+  status: TVerificationStatus
 };

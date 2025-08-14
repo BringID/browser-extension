@@ -7,6 +7,7 @@ type TVerification = {
   batchId?: string | null;
   txHash?: string;
   fetched: boolean;
+  taskId?: string
 };
 
 export default TVerification;

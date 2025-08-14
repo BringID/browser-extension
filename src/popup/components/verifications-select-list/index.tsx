@@ -33,8 +33,10 @@ const VerificationsSelectList: FC<TProps> = ({
               points={relatedTask.points}
               scheduledTime={verification.scheduledTime}
               status="default"
+              fetched={verification.fetched}
               selectable={true}
               selected={isSelected}
+              credentialGroupId={verification.credentialGroupId}
               onSelect={(selected) => {
                 onSelect(relatedTask.credentialGroupId, selected);
               }}

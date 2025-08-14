@@ -14,16 +14,16 @@ type TAddVerification = (
   verifierSignature: string,
 ) => Promise<TAddVerificationResponse>;
 
-type TGetTaskResponse = Promise<{
-  status: boolean;
+type TGetVerificationResponse = Promise<{
+  success: boolean;
   task: TTaskServer;
 }>;
 
-type TGetTask = (taskId: string) => Promise<TGetTaskResponse>;
+type TGetVerification = (verificationId: string) => Promise<TGetVerificationResponse>;
 
 export {
   TAddVerification,
-  TGetTask,
-  TGetTaskResponse,
+  TGetVerification,
+  TGetVerificationResponse,
   TAddVerificationResponse,
 };

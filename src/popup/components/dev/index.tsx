@@ -24,7 +24,7 @@ const DevDirectSidebarCallsComponent: FC = () => {
         onClick={async () => {
           await sendMessage({
             type: 'NOTARIZE',
-            task_id: 1,
+            task_id: 0,
           });
         }}
       >

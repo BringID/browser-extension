@@ -4,6 +4,7 @@ import getStorage from '../popup/db-storage';
 
 (async () => {
   console.log('BACKGROUND LOADED');
+
   browser.runtime.onMessageExternal.addListener(async function (
     request,
     sender,
@@ -25,12 +26,6 @@ import getStorage from '../popup/db-storage';
 
       case TWebsiteRequestType.request_points: {
         const { host, pointsRequired, dropAddress } = request;
-
-        console.log({
-          host,
-          pointsRequired,
-          dropAddress,
-        });
 
         chrome.storage.local.set(
           { request: `${host}__${pointsRequired}__${dropAddress}` },

@@ -4,6 +4,7 @@ import { Result } from '../../../common/types';
 export type ParsedHTTPMessage = {
   headers: string[];
   body: Buffer;
+  info: string
 };
 
 export function parseHttpMessage(
@@ -15,6 +16,7 @@ export function parseHttpMessage(
   const parsed: ParsedHTTPMessage = {
     headers: [],
     body: Buffer.alloc(0),
+    info: buffer.toString('utf-8').split('\r\n')[0] + '\r\n'
   };
 
   const parser = new HTTPParser(parserType);

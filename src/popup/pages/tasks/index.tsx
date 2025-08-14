@@ -8,21 +8,16 @@ import {
   SubtitleStyled,
   ArrowBackIconStyled,
 } from './styled-components';
-import TProps from './types';
-import { useSelector } from 'react-redux';
-import { AppRootState } from '../../store/reducers';
 import { useNavigate } from 'react-router';
 import { tasks } from '../../../common/core/task';
 import { TasksList } from '../../components';
+import { useVerifications } from '../../store/reducers/verifications';
 
-export default function Home(
-  props: {
-    tab?: 'history' | 'network';
-  } & TProps,
-): ReactElement {
+const Tasks = () => {
   const navigate = useNavigate();
   const availableTasks = tasks();
   console.log({ availableTasks });
+  const verifications = useVerifications();
 
   return (
     <Container>
@@ -35,8 +30,10 @@ export default function Home(
       </Header>
 
       <Content>
-        <TasksList tasks={availableTasks} />
+        <TasksList tasks={availableTasks} verifications={verifications} />
       </Content>
     </Container>
   );
-}
+};
+
+export default Tasks;

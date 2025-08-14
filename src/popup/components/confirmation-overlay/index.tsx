@@ -177,12 +177,12 @@ const ConfirmationOverlay: FC<TProps> = ({
             onClick={async () => {
               setLoading(true);
               try {
-                // const proofs = await manager.getProofs(
-                //   dropAddress,
-                //   pointsRequired
-                // )
+                const proofs = await manager.getProofs(
+                  dropAddress,
+                  pointsRequired
+                )
 
-                // console.log({ proofs })
+                console.log({ proofs })
 
                 const [tab] = await chrome.tabs.query({
                   active: true,
@@ -195,7 +195,7 @@ const ConfirmationOverlay: FC<TProps> = ({
 
                 chrome.tabs.sendMessage(tab.id as number, {
                   type: TExtensionRequestType.proofs_generated,
-                  payload: [],
+                  payload: proofs,
                 });
               } catch (err) {
                 setLoading(false);

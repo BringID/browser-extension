@@ -66,6 +66,7 @@ export abstract class NotarizationBase
     }
   }
 
+
   abstract onStart(): Promise<void>;
   abstract onStop(): Promise<void>;
 }

@@ -20,7 +20,7 @@ const TaskContainer: FC<TProps> = ({
   selectable,
   selected,
   onSelect,
-  id,
+  credentialGroupId
 }) => {
   return (
     <Container status={status} selectable={selectable}>
@@ -28,7 +28,7 @@ const TaskContainer: FC<TProps> = ({
         <CheckboxStyled
           checked={Boolean(selected)}
           onClick={onSelect}
-          id={id}
+          id={credentialGroupId}
         />
       )}
       <ImageWrapper>

@@ -18,14 +18,13 @@ import { tasks } from '../../../common/core/task';
 import { ScheduleOverlay, ConfirmationOverlay } from '../../components';
 import { calculateAvailablePoints } from '../../utils';
 import configs from '../../configs';
-import DevDirectSidebarCallsComponent from "../../components/dev";
+import DevDirectSidebarCallsComponent from '../../components/dev';
 
 const Home: FC = () => {
   const user = useUser();
   const verifications = useVerifications();
   const availableTasks = tasks();
 
-  console.log('HOME: ', { verifications });
   const [confirmationOverlayShow, setConfirmationOverlayShow] =
     useState<boolean>(false);
   const [timerOverlayShow, setTimerOverlayShow] = useState<boolean>(false);
@@ -70,10 +69,7 @@ const Home: FC = () => {
     const findNotCompleted = verifications.find(
       (verification) => verification.status !== 'completed',
     );
-    console.log({
-      verifications,
-      findNotCompleted,
-    });
+
     if (findNotCompleted) {
       const now = +new Date();
       if (now >= findNotCompleted.scheduledTime) {

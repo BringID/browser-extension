@@ -1,3 +1,4 @@
+import React from 'react';
 import { TVerificationStatus } from '../../popup/types';
 
 type TProps = {
@@ -9,7 +10,7 @@ type TProps = {
   selectable: boolean;
   selected?: boolean;
   onSelect?: (selected: boolean) => void;
-  id: string;
+  credentialGroupId: string
 };
 
 export default TProps;

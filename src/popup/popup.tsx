@@ -7,12 +7,33 @@ import { Navigate, Route, Routes, useNavigate } from 'react-router';
 import getStorage from './db-storage';
 import { useDispatch } from 'react-redux';
 import { addVerifications } from './store/reducers/verifications';
+import manager from './manager';
+import { IPCPresentation } from '../common/core';
 
 const Popup: FC = () => {
   useEffect(() => {
-    browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    browser.runtime.onMessage.addListener(async (request: IPCPresentation, sender, sendResponse) => {
       switch (request.type) {
-        case 'VERIFICATION_FINISHED':
+        case 'PRESENTATION': {
+            const {
+              presentationData,
+              credentialGroupId
+            } = request.data
+
+            if (presentationData) {
+
+              const verify = await manager.runVerify(presentationData, credentialGroupId);
+
+              if (verify) {
+                await manager.saveVerification(
+                  verify,
+                  credentialGroupId
+                );
+
+              }
+            }
+          }
+          break
         default:
           console.log({ request });
       }

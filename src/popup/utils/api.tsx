@@ -6,6 +6,13 @@ function api<T>(
   headers: Record<string, string> = {},
   body: Record<string, any> = {},
 ): Promise<T> {
+
+  console.log({
+    url,
+    method,
+    headers,
+    body
+  })
   return fetch(url, {
     method,
     body:

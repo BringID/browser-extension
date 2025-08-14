@@ -39,15 +39,8 @@ export default function verifications(
   console.log('verifications store:', { action });
   switch (action.type) {
     case ActionType['/verifications/addVerification']:
-      console.log('adding to store addVerification: ', {
-        result: [action.payload, ...state],
-      });
       return [action.payload, ...state];
     case ActionType['/verifications/addVerifications']:
-      console.log('adding to store addVerifications: ', {
-        result: action.payload,
-      });
-
       return action.payload;
 
     default:
@@ -58,7 +51,6 @@ export default function verifications(
 
 export const useVerifications: () => State = () => {
   return useSelector((state: AppRootState) => {
-    console.log('useVerifications: ', { state });
     return state.verifications;
   });
 };

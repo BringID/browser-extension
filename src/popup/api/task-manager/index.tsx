@@ -2,12 +2,13 @@ import api from '../../utils/api';
 import {
   TAddVerification,
   TAddVerificationResponse,
-  TGetTask,
-  TGetTaskResponse,
+  TGetVerification,
+  TGetVerificationResponse,
 } from './types';
 import app from '../../configs';
 
 const addVerification: TAddVerification = (
+  apiUrl,
   registry,
   credentialGroupId,
   idHash,
@@ -15,7 +16,7 @@ const addVerification: TAddVerification = (
   verifierSignature,
 ) =>
   api<TAddVerificationResponse>(
-    `${app.TASK_MANAGER_API}/api/v1/verification/tasks`,
+    `${apiUrl}/api/v1/verification/tasks`,
     'POST',
     {},
     {
@@ -27,15 +28,15 @@ const addVerification: TAddVerification = (
     },
   );
 
-const getTask: TGetTask = (taskId) =>
-  api<TGetTaskResponse>(
+const getVerification: TGetVerification = (taskId) =>
+  api<TGetVerificationResponse>(
     `${app.TASK_MANAGER_API}/api/v1/verification/tasks/${taskId}`,
     'GET',
   );
 
 const taskManager = {
   addVerification,
-  getTask,
+  getVerification,
 };
 
 export default taskManager;

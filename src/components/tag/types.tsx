@@ -1,3 +1,5 @@
+import React from 'react';
+
 export type TStatus = 'success' | 'default' | 'info' | 'error';
 
 type TProps = {

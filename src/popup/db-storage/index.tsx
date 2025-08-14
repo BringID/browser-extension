@@ -27,7 +27,8 @@ import {
   TSyncUser,
   TSyncVerifications,
 } from './types';
-import { calculateAvailablePoints, defineUserStatus } from '../utils';
+import { tasks } from '../../common/core';
+import semaphore from '../semaphore';
 
 const charwise = require('charwise');
 
@@ -80,57 +81,40 @@ export class DBStorage implements TDBStorage {
   };
 
   addInitialVerifications: TAddInitialVerifications = async () => {
-    // const availableTasks = tasks()
-    // const existingUserId = await this.getUserId()
-    // if (!existingUserId) {
-    //   return []
-    // }
-    // const user: TUser =  await this.userDb.get(existingUserId);
-    // const verifications: TVerification[] = []
-    // availableTasks.forEach(async (task, idx) => {
-    //   const identity = semaphore.createIdentity(
-    //     String(user.key),
-    //     String(idx)
-    //   )
-    //   const { commitment } = identity
+    const availableTasks = tasks()
+    const existingUserId = await this.getUserId()
+    if (!existingUserId) {
+      return []
+    }
+    const user: TUser =  await this.#userDb.get(existingUserId);
+    const verifications: TVerification[] = []
+    availableTasks.forEach(async (task, idx) => {
+      const identity = semaphore.createIdentity(
+        String(user.key),
+        task.credentialGroupId
+      )
+      const { commitment } = identity
 
-    //   try {
-    //     const proof = await semaphore.getProof(String(commitment), task.semaphoreGroupId)
-    //     if (proof) {
-    //       const verificationAdded = await this.addVerification({
-    //         credentialGroupId: String(idx),
-    //         status: 'completed',
-    //         scheduledTime: +new Date(),
-    //         fetched: true
-    //       })
-    //       store.dispatch(addVerification(verificationAdded))
-    //       verifications.push(verificationAdded)
-    //     }
-    //   } catch (err) {
-    //     console.log(`proof for ${commitment} was not added before`)
-    //   }
-    // })
+      try {
+        const proof = await semaphore.getProof(String(commitment), task.semaphoreGroupId)
+        console.log('proof: ', { proof })
+        if (proof) {
+          const verificationAdded = await this.addVerification({
+            credentialGroupId: task.credentialGroupId,
+            status: 'completed',
+            scheduledTime: +new Date(),
+            fetched: true
+          })
+          store.dispatch(addVerification(verificationAdded))
+          verifications.push(verificationAdded)
+        }
+      } catch (err) {
+        console.log(`proof for ${commitment} was not added before`)
+      }
+    })
 
-    // return verifications
-    const result = [
-      {
-        status: 'scheduled' as TVerificationStatus,
-        scheduledTime: +new Date() + 30000,
-        credentialGroupId: '1',
-        fetched: true,
-      },
-    ];
-
-    const verificationAddedToDB = await this.addVerification(result[0]);
-    console.log('verificationAddedToDB: ', { verificationAddedToDB });
-
-    const actualPoints = calculateAvailablePoints(result);
-    const actualStatus = defineUserStatus(actualPoints);
-    await this.addUserStatus(actualStatus);
-    console.log('verifications after update of key:', {
-      store: store.getState(),
-    });
-    return result;
+    return verifications
+    
   };
 
   getUserId: TGetUserId = async () => {
@@ -159,9 +143,7 @@ export class DBStorage implements TDBStorage {
     credentialGroupId: string,
     status: TVerificationStatus,
   ) => {
-    const verification: TVerification =
-      await this.#verificationsDb.get(credentialGroupId);
-    console.log({ verification });
+    const verification: TVerification = await this.#verificationsDb.get(credentialGroupId);
     await this.#verificationsDb.put(credentialGroupId, {
       ...verification,
       status,
