@@ -1,4 +1,5 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
+import { TSpinnerSize } from './types'
 
 const rotationAnimation = keyframes`
   0% {
@@ -9,9 +10,16 @@ const rotationAnimation = keyframes`
   }
 `;
 
-export const SpinnerContainer = styled.span`
+export const SpinnerContainer = styled.span<{
+  size?: TSpinnerSize
+}>`
   width: 16px;
   height: 16px;
+
+  ${props => props.size === 'large' && css`
+    width: 32px;
+    height: 32px;
+  `}
   border-radius: 50%;
   display: inline-block;
   border-top: 2px solid #fff;

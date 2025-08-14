@@ -4,7 +4,8 @@
     "description": "Prove the ownership of an account on X",
     "points": 10,
     "semaphoreGroupId": "8",
-    "credentialGroupId": "1"
+    "credentialGroupId": "1",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg"
   },
   {
     "title": "Uber rides",

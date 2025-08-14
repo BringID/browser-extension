@@ -1,17 +1,15 @@
 html {
-  width: 400px;
+  width: 100%;
 }
 
 body {
-  width: 480px;
-  height: 600px;
+  width: 100%;
   margin: 0;
   font-family: Inter, "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
 }
-
 
 #app-container {
   width: 100vw;

@@ -12,9 +12,12 @@ import {
   TitleStyled,
   Content,
   Wrapper,
+  SpinnerStyled,
   NoteStyled,
+  NoteContent
 } from './styled-components';
 import { Page } from '../components';
+import './style.css'
 
 const SidePanel: FC = () => {
   useEffect(() => {
@@ -33,7 +36,7 @@ const SidePanel: FC = () => {
     });
   }, []);
 
-  const { result, taskId, progress } = useSelector((state: RootState) => {
+  const { result, taskId, progress, error } = useSelector((state: RootState) => {
     return state.notarization;
   });
 
@@ -64,21 +67,25 @@ const SidePanel: FC = () => {
   }, [result]);
 
   return (
-    <Page>
-      <Container>
-        <Header>
-          <LogoWrapperStyled icon={currentTask?.icon} />
+    <Wrapper>
+      <Page>
+        <Container>
+          <Header>
+            <LogoWrapperStyled icon={currentTask?.icon} />
 
-          <TitleStyled>{currentTask?.description}</TitleStyled>
-        </Header>
+            <TitleStyled>{currentTask?.description}</TitleStyled>
+          </Header>
 
-        <Content>
-          <NoteStyled title="Processing notarization. Please wait...">
-            progress: {progress}
-          </NoteStyled>
-        </Content>
-      </Container>
-    </Page>
+          <Content>
+            <NoteStyled title={`Notarization: ${progress}%`} status='warning'>
+              <NoteContent>
+                Please wait...
+              </NoteContent>
+            </NoteStyled>
+          </Content>
+        </Container>
+      </Page>
+    </Wrapper>
   );
 };
 
