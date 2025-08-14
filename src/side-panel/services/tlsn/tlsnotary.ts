@@ -40,6 +40,7 @@ export class TLSNotary extends Progressive<Status>{
         updatesCallback?: OnStateUpdated<Status>,
     ) {
         super({ progress: 0, status: Status.Idle }, updatesCallback);
+        console.log('start notary: ', this.#proxyURL, this.#notary)
         this.#prover = prover;
     }
 

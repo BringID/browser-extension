@@ -18,6 +18,7 @@
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+    
   },
   "content_scripts": [
     {
@@ -50,11 +51,12 @@
       ]
     }
   ],
-  "host_permissions": ["<all_urls>"],
+  "host_permissions": ["<all_urls>", "wss://*/*"],
   "permissions": [
     "offscreen",
     "storage",
     "webRequest",
+    "webRequestBlocking",
     "activeTab",
     "sidePanel",
     "scripting",

@@ -1,6 +1,5 @@
 import api from '../../utils/api';
 import { TVerify, TVerifyResponse } from './types';
-import app from '../../configs';
 
 const verify: TVerify = (
   apiUrl,
@@ -11,7 +10,7 @@ const verify: TVerify = (
   semaphoreIdentityCommitment,
 ) =>
   api<TVerifyResponse>(
-    `${app.VERIFIER_API}/verify `,
+    `${apiUrl}/verify `,
     'POST',
     {
       'x-api-key': apiKey,

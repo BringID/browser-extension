@@ -180,6 +180,7 @@ const ConfirmationOverlay: FC<TProps> = ({
                 const proofs = await manager.getProofs(
                   dropAddress,
                   pointsRequired,
+                  selected
                 );
 
                 console.log({ proofs });
@@ -197,6 +198,8 @@ const ConfirmationOverlay: FC<TProps> = ({
                   type: TExtensionRequestType.proofs_generated,
                   payload: proofs,
                 });
+                onClose();
+                window.close();
               } catch (err) {
                 setLoading(false);
                 console.log({ err });
