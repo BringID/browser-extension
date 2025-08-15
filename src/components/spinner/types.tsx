@@ -1,9 +1,9 @@
-export type TSpinnerSize = 'default' | 'large'
+export type TSpinnerSize = 'default' | 'large';
 
 type TProps = {
   className?: string;
 
-  size?: TSpinnerSize
+  size?: TSpinnerSize;
 };
 
 export default TProps;

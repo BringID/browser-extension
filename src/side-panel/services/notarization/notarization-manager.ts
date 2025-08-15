@@ -44,7 +44,7 @@ export class NotarizationManager {
           recv: transcript.recv(),
         });
 
-        store.dispatch(notarizationSlice.actions.setResult(presentation.data))
+        store.dispatch(notarizationSlice.actions.setResult(presentation.data));
       },
       this.notificationHandler.bind(this),
     );

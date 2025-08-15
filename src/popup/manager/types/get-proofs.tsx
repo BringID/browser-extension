@@ -3,7 +3,7 @@ import { TSemaphoreProof } from '../../types';
 type TGetProofs = (
   dropAddress: string,
   pointsRequired: number,
-  selectedVerifications: string[]
+  selectedVerifications: string[],
 ) => Promise<TSemaphoreProof[]>;
 
 export default TGetProofs;

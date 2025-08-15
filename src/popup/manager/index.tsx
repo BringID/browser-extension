@@ -78,7 +78,7 @@ class Manager implements IManager {
   getProofs: TGetProofs = async (
     dropAddress,
     pointsRequired,
-    selectedVerifications
+    selectedVerifications,
   ) => {
     const userKey = await this.#db?.getUserKey();
     console.log('running getProofs: ', { userKey });
@@ -96,8 +96,10 @@ class Manager implements IManager {
     }
     if (verifications) {
       for (let x = 0; x < verifications.length; x++) {
-        if (!selectedVerifications.includes(verifications[x].credentialGroupId)) {
-          continue
+        if (
+          !selectedVerifications.includes(verifications[x].credentialGroupId)
+        ) {
+          continue;
         }
         const { credentialGroupId, status } = verifications[x];
         if (totalScore >= pointsRequired) {

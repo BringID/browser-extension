@@ -180,7 +180,7 @@ const ConfirmationOverlay: FC<TProps> = ({
                 const proofs = await manager.getProofs(
                   dropAddress,
                   pointsRequired,
-                  selected
+                  selected,
                 );
 
                 console.log({ proofs });

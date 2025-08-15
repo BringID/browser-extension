@@ -36,11 +36,11 @@ export const LogoWrapperStyled = styled(LogoWrapper)`
 export const NoteStyled = styled(Note)``;
 
 export const SpinnerStyled = styled(Spinner)`
-  border-color: ${props => props.theme.primaryBorderColor};
-`
+  border-color: ${(props) => props.theme.primaryBorderColor};
+`;
 
 export const NoteContent = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
-`
+`;

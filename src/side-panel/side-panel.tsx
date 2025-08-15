@@ -14,10 +14,10 @@ import {
   Wrapper,
   SpinnerStyled,
   NoteStyled,
-  NoteContent
+  NoteContent,
 } from './styled-components';
 import { Page } from '../components';
-import './style.css'
+import './style.css';
 
 const SidePanel: FC = () => {
   useEffect(() => {
@@ -36,9 +36,11 @@ const SidePanel: FC = () => {
     });
   }, []);
 
-  const { result, taskId, progress, error } = useSelector((state: RootState) => {
-    return state.notarization;
-  });
+  const { result, taskId, progress, error } = useSelector(
+    (state: RootState) => {
+      return state.notarization;
+    },
+  );
 
   const availableTasks = tasks();
 
@@ -77,10 +79,8 @@ const SidePanel: FC = () => {
           </Header>
 
           <Content>
-            <NoteStyled title={`Notarization: ${progress}%`} status='warning'>
-              <NoteContent>
-                Please wait...
-              </NoteContent>
+            <NoteStyled title={`Notarization: ${progress}%`} status="warning">
+              <NoteContent>Please wait...</NoteContent>
             </NoteStyled>
           </Content>
         </Container>

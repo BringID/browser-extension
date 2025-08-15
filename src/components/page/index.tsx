@@ -8,7 +8,7 @@ import './styles.css';
 
 const Page: FC<TProps> = ({ children }) => {
   return (
-    <ThemeProvider theme={{...light, initialized: true}}>
+    <ThemeProvider theme={{ ...light, initialized: true }}>
       <PageContainer>{children}</PageContainer>
     </ThemeProvider>
   );
