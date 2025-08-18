@@ -62,24 +62,24 @@ const Verification: FC<TProps> = ({
 }) => {
   const [expiration, setExpiration] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (!taskId) return;
+  // useEffect(() => {
+  //   if (!taskId) return;
 
-    const interval = window.setInterval(async () => {
-      const now = +new Date();
-      const expiration = scheduledTime - now;
-      setExpiration(expiration);
-      if (expiration <= 0) {
-        window.clearInterval(interval);
-        const storage = await getStorage();
-        await storage.updateVerificationStatus(credentialGroupId, 'completed');
-      }
-    }, 1000);
+  //   const interval = window.setInterval(async () => {
+  //     const now = +new Date();
+  //     const expiration = scheduledTime - now;
+  //     setExpiration(expiration);
+  //     if (expiration <= 0) {
+  //       window.clearInterval(interval);
+  //       const storage = await getStorage();
+  //       await storage.updateVerificationStatus(credentialGroupId, 'completed');
+  //     }
+  //   }, 1000);
 
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, []);
+  //   return () => {
+  //     window.clearInterval(interval);
+  //   };
+  // }, []);
 
   const content = definePluginContent(
     status as TVerificationStatus,

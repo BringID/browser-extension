@@ -45,28 +45,7 @@ const SidePanel: FC = () => {
   const availableTasks = tasks();
 
   const currentTask = availableTasks[taskId];
-
-  useEffect(() => {
-    if (!result) {
-      return;
-    }
-
-    const credentialGroupId = currentTask.credentialGroupId;
-
-    // @ts-ignore
-    chrome.action.openPopup();
-    window.setTimeout(() => {
-      sendMessage({
-        type: 'PRESENTATION',
-        data: {
-          presentationData: result,
-          credentialGroupId,
-        },
-      });
-
-      window.close();
-    }, 2000);
-  }, [result]);
+  const credentialGroupId = currentTask.credentialGroupId;
 
   return (
     <Wrapper>
@@ -81,6 +60,36 @@ const SidePanel: FC = () => {
           <Content>
             <NoteStyled title={`Notarization: ${progress}%`} status="warning">
               <NoteContent>Please wait...</NoteContent>
+
+              <button
+                onClick={() => {
+                  if (!result) {
+                    return;
+                  }
+                  // @ts-ignore
+                  chrome.action.openPopup();
+
+                  window.setTimeout(() => {
+                    sendMessage({
+                      type: 'PRESENTATION',
+                      data: {
+                        presentationData: result,
+                        credentialGroupId,
+                      },
+                    });
+                  }, 3000);
+                }}
+              >
+                PROCEED
+              </button>
+
+              <button
+                onClick={() => {
+                  window.close();
+                }}
+              >
+                CLOSE
+              </button>
             </NoteStyled>
           </Content>
         </Container>

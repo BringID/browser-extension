@@ -4,8 +4,7 @@ const EXTENSION_ID = 'khmegmplfgkfcedomliajfjgkdafcdnh';
 const SEMAPHORE_SUBGRAPH_URL =
   'https://api.goldsky.com/api/public/project_cm8g2ca7b0ewq01uea1xl12vp/subgraphs/semaphore-base-sepolia/1.0.0/gn';
 const TASK_MANAGER_API = 'https://task-manager-production-4062.up.railway.app';
-const VERIFIER_API = 'https://verifier-production-93bb.up.railway.app';
-
+const VERIFIER_API = 'http://localhost:3006';
 const INDEXER_API = 'https://semaphor-indexer-production.up.railway.app';
 const CONNECT_WALLET_URL =
   'https://extension-verifications.vercel.app/get-started/connect';

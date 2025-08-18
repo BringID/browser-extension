@@ -56,10 +56,10 @@
     "offscreen",
     "storage",
     "webRequest",
-    "webRequestBlocking",
     "activeTab",
     "sidePanel",
     "scripting",
-    "tabs"
+    "tabs",
+    "runtime"
   ]
 }
