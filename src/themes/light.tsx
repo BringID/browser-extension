@@ -41,6 +41,8 @@ const themes = {
   warningStatusTextColor: 'rgb(194, 65, 12)',
 
   spinnerColor: 'rgb(59, 130, 246)',
+
+  overlayBackgroundColor: 'rgba(255, 255, 255, .9)',
 };
 
 export default themes;

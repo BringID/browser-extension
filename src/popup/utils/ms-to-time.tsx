@@ -1,7 +1,4 @@
-type TFormatTime = (time: string | number, showSeconds?: boolean) => string;
-
-function msToTime(duration: number) {
-  const milliseconds = Math.floor((duration % 1000) / 100);
+const msToTime = (duration: number) => {
   const seconds = Math.floor((duration / 1000) % 60);
   const minutes = Math.floor((duration / (1000 * 60)) % 60);
   const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
@@ -11,6 +8,6 @@ function msToTime(duration: number) {
   const secondsFormatted = seconds < 10 ? '0' + seconds : seconds;
 
   return hoursFormatted + ':' + minutesFormatted + ':' + secondsFormatted;
-}
+};
 
 export default msToTime;

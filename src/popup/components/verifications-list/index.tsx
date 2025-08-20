@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { Container, ButtonStyled } from './styled-components';
-import { Task, Verification } from '../../../components';
+import { Verification } from '../../../components';
 import TProps from './types';
 import NoVerificationsFound from '../no-verifications-found';
 
@@ -20,7 +20,7 @@ const VerificationsList: FC<TProps> = ({
         />
       )}
       {verifications.length > 0 &&
-        verifications.map((verification, idx) => {
+        verifications.map((verification) => {
           const relatedTask = tasks.find(
             (task) => task.credentialGroupId === verification.credentialGroupId,
           );

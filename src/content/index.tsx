@@ -3,8 +3,7 @@ import { TExtensionRequestType } from '../popup/types';
 
 (async () => {
   loadScript('content.bundle.js');
-  console.log('content/index loaded');
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  chrome.runtime.onMessage.addListener((message) => {
     if (message.type === TExtensionRequestType.proofs_generated) {
       // goes to website, connected to extension
       window.postMessage(

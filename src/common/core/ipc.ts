@@ -1,4 +1,3 @@
-import { JsonValue } from 'type-fest';
 import browser from 'webextension-polyfill';
 
 export type IPCNotarize = {

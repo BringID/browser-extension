@@ -4,7 +4,7 @@ import { TVerification } from '../types';
 function calculateAvailablePoints(verifications: TVerification[]): number {
   let points = 0;
   const availableTasks = tasks();
-  verifications.forEach((verification, idx) => {
+  verifications.forEach((verification) => {
     if (verification.status !== 'completed') {
       return;
     }

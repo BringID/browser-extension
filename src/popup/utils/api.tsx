@@ -1,5 +1,3 @@
-import { JsonValue } from 'type-fest';
-
 function api<T>(
   url: string,
   method = 'GET',

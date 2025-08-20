@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 
-import { Container, ButtonStyled } from './styled-components';
+import { Container } from './styled-components';
 import { Task } from '../../../components';
 import TProps from './types';
 
 const TasksList: FC<TProps> = ({ tasks, className, verifications }) => {
   return (
     <Container className={className}>
-      {tasks.map((task, idx) => {
+      {tasks.map((task) => {
         const relatedVerification = verifications.find(
           (verification) =>
             task.credentialGroupId === verification.credentialGroupId,

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useMemo } from 'react';
+import React, { FC, useState, useMemo } from 'react';
 import {
   Container,
   LogoWrapperStyled,
@@ -16,17 +16,11 @@ import {
   VerificationsSelectListStyled,
 } from './styled-components';
 import TProps from './types';
-import { useDispatch } from 'react-redux';
 import { useVerifications } from '../../store/reducers/verifications';
 import { defineUserStatus } from '../../utils';
 import { Tag } from '../../../components';
 import BringGif from './bring.gif';
-import {
-  TExtensionRequestType,
-  TUserStatus,
-  TWebsiteRequestType,
-} from '../../types';
-import browser from 'webextension-polyfill';
+import { TExtensionRequestType, TUserStatus } from '../../types';
 import manager from '../../manager';
 import { tasks } from '../../../common/core';
 
@@ -90,17 +84,16 @@ const ConfirmationOverlay: FC<TProps> = ({
   const isEnoughPoints = points >= pointsRequired;
   const requiredStatus = defineUserStatus(pointsRequired);
   const availableTasks = tasks();
-  const verifications = useVerifications();
+  const verificationsState = useVerifications();
   const [selected, setSelected] = useState<string[]>([]);
 
   const pointsSelected = useMemo(() => {
     let result = 0;
 
     {
-      verifications.forEach((verification, idx) => {
+      verificationsState.verifications.forEach((verification) => {
         const relatedTask = availableTasks.find(
-          (task, idx) =>
-            task.credentialGroupId === verification.credentialGroupId,
+          (task) => task.credentialGroupId === verification.credentialGroupId,
         );
         if (!relatedTask) {
           return;
@@ -151,7 +144,7 @@ const ConfirmationOverlay: FC<TProps> = ({
         {isEnoughPoints && (
           <VerificationsSelectListStyled
             tasks={availableTasks}
-            verifications={verifications}
+            verifications={verificationsState.verifications}
             selected={selected}
             onSelect={(id, isSelected) => {
               if (!isSelected) {
@@ -198,6 +191,7 @@ const ConfirmationOverlay: FC<TProps> = ({
                   type: TExtensionRequestType.proofs_generated,
                   payload: proofs,
                 });
+
                 onClose();
                 window.close();
               } catch (err) {

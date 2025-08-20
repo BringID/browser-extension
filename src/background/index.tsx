@@ -34,24 +34,26 @@ async function createOffscreenDocument() {
   const storage = await getStorage();
   await createOffscreenDocument();
 
-  chrome.runtime.onMessage.addListener(function (
-    request,
-    sender,
-    sendResponse: (data: any) => void,
-  ) {
-    switch (request.type) {
-      case 'UPDATE_COMPLETED_INDICATOR':
-        const { completedCount } = request;
-        console.log('UPDATE_COMPLETED_INDICATOR');
-        chrome.action.setBadgeBackgroundColor({ color: 'green' });
-        chrome.action.setBadgeText({ text: completedCount });
-        break;
+  chrome.runtime.onConnect.addListener((port) => {
+    if (port.name === 'offscreen') {
+      port.onMessage.addListener((msg) => {
+        console.log('[background] Message received via port', msg);
+
+        if (msg.type === 'UPDATE_COMPLETED_INDICATOR') {
+          chrome.action.setBadgeBackgroundColor({ color: 'green' });
+          chrome.action.setBadgeText({ text: msg.completedCount });
+        }
+      });
+
+      port.onDisconnect.addListener(() => {
+        console.warn('[background] Port disconnected');
+      });
     }
   });
 
   browser.runtime.onMessageExternal.addListener(async function (
     request,
-    sender,
+    _,
     sendResponse: (data: any) => void,
   ) {
     switch (request.type) {

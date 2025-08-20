@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import {
   Container,
   TitleStyled,
@@ -16,8 +16,7 @@ import { useVerifications } from '../../store/reducers/verifications';
 const Tasks = () => {
   const navigate = useNavigate();
   const availableTasks = tasks();
-  console.log({ availableTasks });
-  const verifications = useVerifications();
+  const { verifications } = useVerifications();
 
   return (
     <Container>

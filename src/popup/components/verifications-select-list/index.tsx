@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
 
 import { Container } from './styled-components';
-import { Task, Verification } from '../../../components';
+import { Verification } from '../../../components';
 import TProps from './types';
-import NoVerificationsFound from '../no-verifications-found';
 
 const VerificationsSelectList: FC<TProps> = ({
   tasks,
@@ -14,13 +13,12 @@ const VerificationsSelectList: FC<TProps> = ({
 }) => {
   return (
     <Container className={className}>
-      {verifications.map((verification, idx) => {
+      {verifications.map((verification) => {
         if (verification.status !== 'completed') {
           return;
         }
         const relatedTask = tasks.find(
-          (task, idx) =>
-            task.credentialGroupId === verification.credentialGroupId,
+          (task) => task.credentialGroupId === verification.credentialGroupId,
         );
         if (relatedTask) {
           const isSelected = selected.includes(relatedTask.credentialGroupId);

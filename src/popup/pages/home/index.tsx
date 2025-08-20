@@ -1,6 +1,4 @@
 import React, { FC, useState, useEffect } from 'react';
-import manager from '../../manager';
-import { useUser } from '../../store/reducers/user';
 import {
   Container,
   ProgressBarStyled,
@@ -11,18 +9,20 @@ import {
 } from './styled-components';
 import { Link } from '../../../components';
 import { Header } from '../../components';
-import browser from 'webextension-polyfill';
 import { useNavigate } from 'react-router';
 import { useVerifications } from '../../store/reducers/verifications';
 import { tasks } from '../../../common/core/task';
-import { ScheduleOverlay, ConfirmationOverlay } from '../../components';
-import { calculateAvailablePoints } from '../../utils';
+import {
+  ScheduleOverlay,
+  ConfirmationOverlay,
+  LoadingOverlay,
+} from '../../components';
+import { calculateAvailablePoints, defineUserStatus } from '../../utils';
 import configs from '../../configs';
-import DevDirectSidebarCallsComponent from '../../components/dev';
 
 const Home: FC = () => {
-  const user = useUser();
-  const verifications = useVerifications();
+  const verificationsStore = useVerifications();
+  const { verifications, loading } = verificationsStore;
   const availableTasks = tasks();
 
   const [confirmationOverlayShow, setConfirmationOverlayShow] =
@@ -38,6 +38,8 @@ const Home: FC = () => {
   const leftForAdvanced = configs.ADVANCED_STATUS_POINTS - availablePoints;
   const percentageFinished =
     (availablePoints / configs.ADVANCED_STATUS_POINTS) * 100;
+
+  const userStatus = defineUserStatus(availablePoints);
 
   const navigate = useNavigate();
 
@@ -93,9 +95,7 @@ const Home: FC = () => {
 
   return (
     <Container>
-      {process.env.NODE_ENV === 'development' && (
-        <DevDirectSidebarCallsComponent />
-      )}
+      {loading && <LoadingOverlay />}
       {confirmationOverlayShow && (
         <ConfirmationOverlay
           onClose={() => {
@@ -103,7 +103,7 @@ const Home: FC = () => {
           }}
           host={requestHost}
           points={availablePoints}
-          userStatus={user.status}
+          userStatus={userStatus}
           pointsRequired={Number(pointsRequired)}
           dropAddress={dropAddress}
         />
@@ -119,7 +119,7 @@ const Home: FC = () => {
         />
       )}
 
-      <Header status={user.status} points={availablePoints} />
+      <Header status={userStatus} points={availablePoints} />
 
       <ProgressBarStyled
         current={percentageFinished > 100 ? 100 : percentageFinished}

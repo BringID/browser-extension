@@ -11,12 +11,12 @@
     "build": "NODE_ENV=production webpack --config webpack.prod.js",
     "dev": "NODE_ENV=development webpack --config webpack.dev.js --watch",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "./node_modules/.bin/eslint --fix ."
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
-    "@semaphore-protocol/core": "^4.13.0-beta.1",
-    "@semaphore-protocol/identity": "^4.13.0-beta.1",
+    "@semaphore-protocol/core": "^4.11.1",
+    "@semaphore-protocol/identity": "^4.11.1",
     "buffer": "^6.0.3",
     "charwise": "^3.0.1",
     "comlink": "^4.4.2",

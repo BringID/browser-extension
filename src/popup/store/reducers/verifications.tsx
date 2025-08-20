@@ -1,11 +1,11 @@
 import { TVerification } from '../../types';
 import { AppRootState } from './index';
 import { useSelector } from 'react-redux';
-import deepEqual from 'fast-deep-equal';
 
 enum ActionType {
   '/verifications/addVerification' = '/verifications/addVerification',
   '/verifications/addVerifications' = '/verifications/addVerifications',
+  '/verifications/setLoading' = '/verifications/setLoading',
 }
 
 type Action<payload> = {
@@ -14,9 +14,15 @@ type Action<payload> = {
   error?: boolean;
 };
 
-type State = TVerification[];
+type State = {
+  verifications: TVerification[];
+  loading: boolean;
+};
 
-const initState: State = [];
+const initState: State = {
+  verifications: [],
+  loading: false,
+};
 
 export const addVerification = (
   verification: TVerification,
@@ -32,19 +38,53 @@ export const addVerifications = (
   payload: verifications,
 });
 
+export const setLoading = (loading: boolean): Action<boolean> => ({
+  type: ActionType['/verifications/setLoading'],
+  payload: loading,
+});
+
 export default function verifications(
   state = initState,
   action: Action<any>,
 ): State {
-  console.log('verifications store:', { action });
   switch (action.type) {
-    case ActionType['/verifications/addVerification']:
-      return [action.payload, ...state];
+    case ActionType['/verifications/addVerification']: {
+      const exists = state.verifications.find(
+        (verification) => verification.credentialGroupId,
+      );
+      if (exists) {
+        const verifications = state.verifications.map((verification) => {
+          if (
+            verification.credentialGroupId === action.payload.credentialGroupId
+          ) {
+            return action.payload;
+          }
+          return verification;
+        });
+        return {
+          ...state,
+          verifications,
+        };
+      } else {
+        return {
+          ...state,
+          verifications: [action.payload, ...state.verifications],
+        };
+      }
+    }
     case ActionType['/verifications/addVerifications']:
-      return action.payload;
+      return {
+        ...state,
+        verifications: action.payload,
+      };
+
+    case ActionType['/verifications/setLoading']:
+      return {
+        ...state,
+        loading: action.payload,
+      };
 
     default:
-      console.log('default: ', { state });
       return state;
   }
 }

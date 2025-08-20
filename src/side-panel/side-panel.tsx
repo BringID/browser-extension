@@ -12,22 +12,23 @@ import {
   TitleStyled,
   Content,
   Wrapper,
-  SpinnerStyled,
   NoteStyled,
   NoteContent,
+  ButtonStyled,
 } from './styled-components';
 import { Page } from '../components';
 import './style.css';
 
 const SidePanel: FC = () => {
   useEffect(() => {
-    browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    browser.runtime.onMessage.addListener((request) => {
       switch (request.type) {
-        case 'VERIFICATION_START':
-          void notarizationManager.run(0);
-          break;
         case 'NOTARIZE':
           void notarizationManager.run(request.task_id);
+          break;
+
+        case 'SIDE_PANEL_CLOSE':
+          window.close();
           break;
 
         default:
@@ -36,17 +37,15 @@ const SidePanel: FC = () => {
     });
   }, []);
 
-  const { result, taskId, progress, error } = useSelector(
-    (state: RootState) => {
-      return state.notarization;
-    },
-  );
+  const { result, taskId, progress } = useSelector((state: RootState) => {
+    return state.notarization;
+  });
 
   const availableTasks = tasks();
-
+  console.log({ taskId });
   const currentTask = availableTasks[taskId];
   const credentialGroupId = currentTask.credentialGroupId;
-
+  console.log('SIDE PANEL: ', { credentialGroupId });
   return (
     <Wrapper>
       <Page>
@@ -61,7 +60,10 @@ const SidePanel: FC = () => {
             <NoteStyled title={`Notarization: ${progress}%`} status="warning">
               <NoteContent>Please wait...</NoteContent>
 
-              <button
+              <ButtonStyled
+                appearance="action"
+                size="small"
+                disabled={progress !== 100}
                 onClick={() => {
                   if (!result) {
                     return;
@@ -77,19 +79,11 @@ const SidePanel: FC = () => {
                         credentialGroupId,
                       },
                     });
-                  }, 3000);
+                  }, 1500);
                 }}
               >
-                PROCEED
-              </button>
-
-              <button
-                onClick={() => {
-                  window.close();
-                }}
-              >
-                CLOSE
-              </button>
+                Continue
+              </ButtonStyled>
             </NoteStyled>
           </Content>
         </Container>

@@ -1,6 +1,22 @@
 import React, { useEffect } from 'react';
 import getStorage from '../popup/db-storage';
 
+function sendMessageToBackground(data: any) {
+  const port = chrome.runtime.connect({ name: 'offscreen' });
+
+  port.onDisconnect.addListener(() => {
+    console.warn('[offscreen] Port disconnected. Retrying...');
+    // Retry after small delay
+    setTimeout(() => sendMessageToBackground(data), 200);
+  });
+
+  try {
+    port.postMessage(data);
+  } catch (err) {
+    console.error('[offscreen] Failed to post message:', err);
+  }
+}
+
 const Offscreen = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -19,10 +35,17 @@ const Offscreen = () => {
               'completed',
             );
 
-            chrome.runtime.sendMessage({
+            console.log('UPDATED TO COMPLETED');
+
+            sendMessageToBackground({
               type: 'UPDATE_COMPLETED_INDICATOR',
-              completedCount: '1',
+              completedCount: '✓',
             });
+
+            // chrome.runtime.sendMessage({
+            //   type: 'UPDATE_COMPLETED_INDICATOR',
+            //   completedCount: '✓',
+            // });
           }
         }
       });

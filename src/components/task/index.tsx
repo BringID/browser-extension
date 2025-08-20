@@ -1,11 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { TProps } from './types';
 import { Value } from './styled-components';
 import { TVerificationStatus } from '../../popup/types';
 import { TaskContainer } from '../../components';
 import Button from '../button';
 import manager from '../../popup/manager';
-import semaphore from '../../popup/semaphore';
 import configs from '../../popup/configs';
 import browser from 'webextension-polyfill';
 import { Icons, Tag } from '../../components';
@@ -60,36 +59,6 @@ const definePluginContent = (
       return <Icons.Check />;
   }
 };
-
-// const defineVerificationStatus = (
-//   task?: TTask
-// ) => {
-//   if (!task || !config) {
-//     return {
-//       status: 'default',
-//       data: null
-//     }
-//   }
-
-//   if (task) {
-//     if (task.scheduledTime > +new Date()) {
-//       return {
-//         status: 'scheduled',
-//         data: task.scheduledTime
-//       }
-//     } else {
-//       return {
-//         status: 'completed',
-//         data: task.scheduledTime
-//       }
-//     }
-//   } else {
-//     return {
-//       status: "default",
-//       data: null
-//     }
-//   }
-// }
 
 const Task: FC<TProps> = ({
   title,

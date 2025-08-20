@@ -45,7 +45,6 @@ export const setUser = (user: TUser): Action<TUser> => ({
 });
 
 export default function user(state = initState, action: Action<any>): State {
-  console.log({ action });
   switch (action.type) {
     case ActionType['/user/setKey']:
       return { ...state, key: action.payload };

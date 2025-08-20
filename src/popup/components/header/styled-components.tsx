@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Title, ProgressBar, Subtitle, Button } from '../../../components';
+import { Title } from '../../../components';
 
 export const TitleStyled = styled(Title)``;
 

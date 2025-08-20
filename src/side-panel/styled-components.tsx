@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Note, Title, LogoWrapper, Spinner } from '../components';
+import { Note, Title, LogoWrapper, Spinner, Button } from '../components';
 
 export const Container = styled.div`
   border: 1px solid ${(props) => props.theme.secondaryBorderColor};
@@ -43,4 +43,8 @@ export const NoteContent = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
+`;
+
+export const ButtonStyled = styled(Button)`
+  margin-top: 10px;
 `;

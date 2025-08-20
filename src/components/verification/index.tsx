@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { TProps } from './types';
 import { Value } from './styled-components';
 import { TVerificationStatus } from '../../popup/types';
@@ -7,8 +7,6 @@ import { Icons } from '../../components';
 import { Button } from '../../components';
 import { msToTime, defineExplorerURL } from '../../popup/utils';
 import { Tag } from '../../components';
-import { useDispatch } from 'react-redux';
-import getStorage from '../../popup/db-storage';
 import relayer from '../../popup/relayer';
 
 const definePluginContent = (
@@ -62,24 +60,11 @@ const Verification: FC<TProps> = ({
 }) => {
   const [expiration, setExpiration] = useState<number | null>(null);
 
-  // useEffect(() => {
-  //   if (!taskId) return;
-
-  //   const interval = window.setInterval(async () => {
-  //     const now = +new Date();
-  //     const expiration = scheduledTime - now;
-  //     setExpiration(expiration);
-  //     if (expiration <= 0) {
-  //       window.clearInterval(interval);
-  //       const storage = await getStorage();
-  //       await storage.updateVerificationStatus(credentialGroupId, 'completed');
-  //     }
-  //   }, 1000);
-
-  //   return () => {
-  //     window.clearInterval(interval);
-  //   };
-  // }, []);
+  useEffect(() => {
+    const now = +new Date();
+    const expiration = scheduledTime - now;
+    setExpiration(expiration);
+  }, []);
 
   const content = definePluginContent(
     status as TVerificationStatus,
