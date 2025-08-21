@@ -44,6 +44,7 @@ export const notarizationSlice = createSlice({
     },
 
     setError: (state: NotarizationState, action: PayloadAction<Error>) => {
+      console.log(3)
       state.error = action.payload;
     },
 

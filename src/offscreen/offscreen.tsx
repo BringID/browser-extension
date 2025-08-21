@@ -1,20 +1,54 @@
 import React, { useEffect } from 'react';
 import getStorage from '../popup/db-storage';
 
-function sendMessageToBackground(data: any) {
-  const port = chrome.runtime.connect({ name: 'offscreen' });
+function sendMessageToBackground(data: any): Promise<void> {
+  return new Promise((resolve, reject) => {
+    let retryTimeout: number | null = null;
+    let messageSent = false;
 
-  port.onDisconnect.addListener(() => {
-    console.warn('[offscreen] Port disconnected. Retrying...');
-    // Retry after small delay
-    setTimeout(() => sendMessageToBackground(data), 200);
+    if (messageSent) {
+      resolve()
+      return
+    }
+
+    const attemptSend = () => {
+      const port = chrome.runtime.connect({ name: 'offscreen' });
+
+
+      // Listen for a response (assuming background sends ack)
+      port.onMessage.addListener((msg) => {
+        console.log('port.onMessage', {
+          messageSent,
+          msg
+        })
+        if (msg && msg.status === 'ok') {
+          messageSent = true;
+          if (retryTimeout) clearTimeout(retryTimeout);
+          port.disconnect();
+          resolve();
+        }
+      });
+
+      port.onDisconnect.addListener(() => {
+        if (!messageSent) {
+          console.warn('[offscreen] Port disconnected. Retrying...');
+
+          retryTimeout = window.setTimeout(() => {
+            attemptSend();
+          }, 200);
+        }
+      });
+
+      try {
+        port.postMessage(data);
+      } catch (err) {
+        console.error('[offscreen] Failed to post message:', err);
+        reject(err);
+      }
+    };
+
+    attemptSend();
   });
-
-  try {
-    port.postMessage(data);
-  } catch (err) {
-    console.error('[offscreen] Failed to post message:', err);
-  }
 }
 
 const Offscreen = () => {
@@ -25,7 +59,11 @@ const Offscreen = () => {
 
       const verifications = await storage.getVerifications();
       console.log('background check verifications: ', { verifications });
-      verifications.forEach(async (item) => {
+      const notCompletedVerifications = verifications.filter(verification => verification.status !== 'completed')
+      if (notCompletedVerifications.length === 0) {
+        return
+      }
+      notCompletedVerifications.forEach(async (item) => {
         if (item.status !== 'completed') {
           const now = +new Date();
           const expiration = item.scheduledTime - now;
@@ -41,15 +79,10 @@ const Offscreen = () => {
               type: 'UPDATE_COMPLETED_INDICATOR',
               completedCount: '✓',
             });
-
-            // chrome.runtime.sendMessage({
-            //   type: 'UPDATE_COMPLETED_INDICATOR',
-            //   completedCount: '✓',
-            // });
           }
         }
       });
-    }, 3000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);

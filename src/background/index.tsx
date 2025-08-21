@@ -48,6 +48,8 @@ async function createOffscreenDocument() {
       port.onDisconnect.addListener(() => {
         console.warn('[background] Port disconnected');
       });
+
+      port.postMessage({ status: 'ok' });
     }
   });
 

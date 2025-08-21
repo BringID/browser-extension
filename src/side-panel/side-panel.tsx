@@ -58,12 +58,12 @@ const SidePanel: FC = () => {
 
           <Content>
             <NoteStyled title={`Notarization: ${progress}%`} status="warning">
-              <NoteContent>Please wait...</NoteContent>
+              <NoteContent>{progress < 100 ? 'Please wait...' : 'Press button to continue'}</NoteContent>
 
               <ButtonStyled
                 appearance="action"
                 size="small"
-                disabled={progress !== 100}
+                disabled={progress < 100}
                 onClick={() => {
                   if (!result) {
                     return;

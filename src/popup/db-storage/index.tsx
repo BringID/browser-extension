@@ -6,7 +6,7 @@ import {
   TVerificationStatus,
 } from '../types';
 import TDBStorage from './types';
-import { setId, setKey, setStatus } from '../store/reducers/user';
+import { setId, setKey } from '../store/reducers/user';
 import {
   addVerification,
   addVerifications,
@@ -22,7 +22,6 @@ import {
   TGetUser,
   TUpdateVerificationStatus,
   TAddUserKey,
-  TAddUserStatus,
   TAddVerification,
   TSyncUser,
   TSyncVerifications,
@@ -63,7 +62,6 @@ export class DBStorage implements TDBStorage {
       const user = await this.#userDb.get(existingUserId);
       store.dispatch(setId(user.id));
       store.dispatch(setKey(user.key));
-      store.dispatch(setStatus(user.status));
       return user;
     }
 
@@ -167,22 +165,6 @@ export class DBStorage implements TDBStorage {
       await this.addInitialVerifications();
 
       return key;
-    } else {
-      throw new Error('No user detected');
-    }
-  };
-
-  addUserStatus: TAddUserStatus = async (status: TUserStatus) => {
-    const existingUserId = await this.getUserId();
-    if (existingUserId) {
-      const user: TUser = await this.#userDb.get(existingUserId);
-      await this.#userDb.put(existingUserId, {
-        ...user,
-        status,
-      });
-
-      store.dispatch(setStatus(status));
-      return status;
     } else {
       throw new Error('No user detected');
     }

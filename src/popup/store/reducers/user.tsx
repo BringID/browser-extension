@@ -5,7 +5,6 @@ import deepEqual from 'fast-deep-equal';
 
 enum ActionType {
   '/user/setKey' = '/user/setKey',
-  '/user/setStatus' = '/user/setStatus',
   '/user/setId' = '/user/setId',
   '/user/setUser' = '/user/setUser',
 }
@@ -20,7 +19,6 @@ type State = TUser;
 
 const initState: State = {
   key: null,
-  status: 'basic',
   id: null,
 };
 
@@ -32,11 +30,6 @@ export const setKey = (key: string): Action<string> => ({
 export const setId = (id: string): Action<string> => ({
   type: ActionType['/user/setId'],
   payload: id,
-});
-
-export const setStatus = (status: TUserStatus): Action<string> => ({
-  type: ActionType['/user/setStatus'],
-  payload: status,
 });
 
 export const setUser = (user: TUser): Action<TUser> => ({
@@ -52,8 +45,6 @@ export default function user(state = initState, action: Action<any>): State {
       return action.payload;
     case ActionType['/user/setId']:
       return { ...state, id: action.payload };
-    case ActionType['/user/setStatus']:
-      return { ...state, status: action.payload };
     default:
       return state;
   }

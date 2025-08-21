@@ -7,7 +7,6 @@ import TGetUserKey from './get-user-key';
 import TGetUser from './get-user';
 import TUpdateVerificationStatus from './update-verification-status';
 import TAddUserKey from './add-user-key';
-import TAddUserStatus from './add-user-status';
 import TAddVerification from './add-verification';
 import TSyncUser from './sync-user';
 import TSyncVerifications from './sync-verifications';
@@ -31,8 +30,6 @@ interface TDBStorage {
 
   addUserKey: TAddUserKey;
 
-  addUserStatus: TAddUserStatus;
-
   addVerification: TAddVerification;
 
   syncUser: TSyncUser;
@@ -51,7 +48,6 @@ export {
   TGetUser,
   TUpdateVerificationStatus,
   TAddUserKey,
-  TAddUserStatus,
   TAddVerification,
   TSyncUser,
   TSyncVerifications,

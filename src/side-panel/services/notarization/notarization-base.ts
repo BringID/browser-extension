@@ -49,6 +49,7 @@ export abstract class NotarizationBase
 
   protected result(res: Result<Presentation>) {
     if (res instanceof Error) {
+      console.log(1)
       this.state = {
         progress: this.state.progress,
         status: NotarizationStatus.Stopped,
