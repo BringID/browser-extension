@@ -1,5 +1,10 @@
 [
   {
+    "title": "Apple Devices",
+    "description": "Prove you have at least two Apple devices",
+    "points": 10
+  },
+  {
     "title": "X Account",
     "description": "Prove the ownership of an account on X",
     "points": 10

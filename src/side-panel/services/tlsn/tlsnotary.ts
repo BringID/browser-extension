@@ -29,8 +29,8 @@ export class TLSNotary extends Progressive<Status>{
     ): Promise<TLSNotary> {
         const prover = (await new Prover({
             serverDns: hostname,
-            maxSentData: 4096,
-            maxRecvData: 4096,
+            maxSentData: 65536,
+            maxRecvData: 65536,
         })) as TProver;
         return new TLSNotary(prover, updatesCallback);
     }
@@ -47,9 +47,7 @@ export class TLSNotary extends Progressive<Status>{
         request: Request
     ): Promise<Result<[Transcript, ParsedHTTPMessage]>> {
         if (this.state.status === Status.InProgress) return new Error("Notarization is in progress");
-
         await this.#prover.setup(await this.#notary.sessionUrl());
-
         const resp = await this.#prover.sendRequest(this.#proxyURL, {
             url: request.url,
             method: request.method,
@@ -57,7 +55,6 @@ export class TLSNotary extends Progressive<Status>{
             body: request.body,
         });
         if(resp.status !== 200) return new Error(`Notarization failed with status ${resp.status}`);
-
         const transcript = await this.#prover.transcript();
         const parsedHttpMessage = parseHttpMessage(Buffer.from(transcript.recv), "RESPONSE");
         if(parsedHttpMessage instanceof Error) return parsedHttpMessage;
