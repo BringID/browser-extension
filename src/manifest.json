@@ -2,7 +2,6 @@
   "manifest_version": 3,
   "name": "BringID Extension",
   "description": "A chrome extension for BringID verification",
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxviVSPgScIV9iKRCJ2NOg05oVZaIaZyKpf/iXRrknKXwLInd0eTsUoofmspsgXoO3VJQrgJM7q4gTZquv0Al3eE0z8QstEOClOTT6VthREnW64EMxOiFxfvAmwyPbUgmtB0Ivd4ddi+/qBgTI/9BPLJgO2cIGDkZ6x+Z5NFliFe0HkF6tNOM/6mf9lG1hmBXqfTDUWqO4r651I4PK9403bedsG4Yc25rVaU1Av2x50eX+4mkId1f8OZpSqs1mLQJ1qmI0JXQ78XHB2mg8ecbTyRfCl87XiQOn3tldwezGXQFrP2oCPiCBnEu/pAYSRxcx9gZVSuW8h1So2F0j6woBwIDAQAB",
   "background": {
     "service_worker": "background.bundle.js"
   },

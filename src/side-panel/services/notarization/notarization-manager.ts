@@ -28,6 +28,7 @@ export class NotarizationManager {
       // TODO Presentation should be passed to popup
       async (res) => {
         if (res instanceof Error) {
+          console.log(5)
           console.error(res);
           return;
         }

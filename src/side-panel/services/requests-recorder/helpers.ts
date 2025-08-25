@@ -45,7 +45,10 @@ export function toRequest(requestLog: RequestLog): Result<Request> {
   if (!toHttpMethod(requestLog.method)) return new Error('Invalid HTTP method');
 
   const bodyParsed = webRequestBodyToJson(requestLog.body);
-  if (bodyParsed instanceof Error) return bodyParsed;
+  if (bodyParsed instanceof Error) {
+    console.log(6)
+    return bodyParsed;
+  }
 
   return {
     url: requestLog.url,
