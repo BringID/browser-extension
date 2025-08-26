@@ -23,26 +23,28 @@ export class TLSNotary extends Progressive<Status>{
     readonly #proxyURL = process.env.PROXY_URL || "";
     readonly #prover: TProver;
 
-    static async new(
-        hostname: string,
-        updatesCallback?: OnStateUpdated<Status>,
-    ): Promise<TLSNotary> {
-        const prover = (await new Prover({
-            serverDns: hostname,
-            maxSentData: 4096,
-            maxRecvData: 4096,
-        })) as TProver;
-        return new TLSNotary(prover, updatesCallback);
-    }
+   static async new(
+    hostname: string,
+    updatesCallback?: OnStateUpdated<Status>,
+  ): Promise<TLSNotary> {
+    const prover = (await new Prover({
+      serverDns: hostname,
+      maxSentData: 4096,
+      maxRecvData: 4096,
+    })) as TProver;
+    return new TLSNotary(hostname, prover, updatesCallback);
+  }
 
     private constructor(
-        prover: TProver,
-        updatesCallback?: OnStateUpdated<Status>,
-    ) {
-        super({ progress: 0, status: Status.Idle }, updatesCallback);
-
-        this.#prover = prover;
-    }
+    hostname: string,
+    prover: TProver,
+    updatesCallback?: OnStateUpdated<Status>,
+  ) {
+    super({ progress: 0, status: Status.Idle }, updatesCallback);
+    this.#proxyURL = `${this.#proxyURL}?token=${hostname}`;
+    this.#prover = prover;
+    console.log('start notary: ', this.#proxyURL, this.#notary);
+  }
 
     async transcript(
         request: Request

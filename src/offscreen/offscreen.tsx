@@ -7,20 +7,19 @@ function sendMessageToBackground(data: any): Promise<void> {
     let messageSent = false;
 
     if (messageSent) {
-      resolve()
-      return
+      resolve();
+      return;
     }
 
     const attemptSend = () => {
       const port = chrome.runtime.connect({ name: 'offscreen' });
 
-
       // Listen for a response (assuming background sends ack)
       port.onMessage.addListener((msg) => {
         console.log('port.onMessage', {
           messageSent,
-          msg
-        })
+          msg,
+        });
         if (msg && msg.status === 'ok') {
           messageSent = true;
           if (retryTimeout) clearTimeout(retryTimeout);
@@ -59,9 +58,11 @@ const Offscreen = () => {
 
       const verifications = await storage.getVerifications();
       console.log('background check verifications: ', { verifications });
-      const notCompletedVerifications = verifications.filter(verification => verification.status !== 'completed')
+      const notCompletedVerifications = verifications.filter(
+        (verification) => verification.status !== 'completed',
+      );
       if (notCompletedVerifications.length === 0) {
-        return
+        return;
       }
       notCompletedVerifications.forEach(async (item) => {
         if (item.status !== 'completed') {

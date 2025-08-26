@@ -47,7 +47,7 @@ export class Progressive<T extends StateStatus> {
   }
 
   protected setError(error: Error) {
-    console.log(2)
+    console.log(2);
     this.#state.error = error;
     this.notify();
   }
