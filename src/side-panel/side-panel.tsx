@@ -18,23 +18,34 @@ import {
 } from './styled-components';
 import { Page } from '../components';
 import './style.css';
+import { TMessage } from '../common/core/messages';
 
 const SidePanel: FC = () => {
   useEffect(() => {
-    browser.runtime.onMessage.addListener((request) => {
+    const listener = (request: TMessage) => {
       switch (request.type) {
         case 'NOTARIZE':
-          void notarizationManager.run(request.task_id);
+          if ('task_id' in request) {
+            void notarizationManager.run(request.task_id);
+          }
           break;
 
         case 'SIDE_PANEL_CLOSE':
-          window.close();
+          if (window.location.href.includes('sidePanel.html')) {
+            window.close();
+          }
           break;
 
         default:
           console.log({ request });
       }
-    });
+    }
+
+    browser.runtime.onMessage.addListener(listener)
+
+    return () => {
+      browser.runtime.onMessage.removeListener(listener)
+    }
   }, []);
 
   const { result, taskId, progress } = useSelector((state: RootState) => {
