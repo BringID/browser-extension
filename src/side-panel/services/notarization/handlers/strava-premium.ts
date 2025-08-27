@@ -41,7 +41,7 @@ export class NotarizationStravaPremium extends NotarizationBase {
             recv: []
         };
 
-        if (isSubscriber) {
+        if (isSubscriber && isSubscriber.index !== undefined) {
         const start = isSubscriber.index;
         if (start >= 0) {
             commit.recv.push({
