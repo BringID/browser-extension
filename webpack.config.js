@@ -1,6 +1,5 @@
 const webpack = require("webpack")
 const path = require("path")
-const fileSystem = require("fs-extra")
 
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
@@ -42,9 +41,11 @@ const options = {
     sidePanel: path.join(__dirname, "src", "side-panel", "index.tsx"),
     background: path.join(__dirname, "src", "background", "index.tsx"),
 
+    offscreen: path.join(__dirname, "src", "offscreen", "index.tsx"),
+
     // should be injected to webpage
     contentScript: path.join(__dirname, "src", "content", "index.tsx"),
-    content: path.join(__dirname, "src", "content", "script.tsx")
+    content: path.join(__dirname, "src", "content", "content.tsx")
   },
   output: {
     filename: "[name].bundle.js",
@@ -55,9 +56,42 @@ const options = {
   module: {
     rules: [
       {
+        // look for .css or .scss files
+        test: /\.(css|scss)$/,
+        // in the `src` directory
+        use: [
+          {
+            loader: "style-loader",
+          },
+          {
+            loader: "css-loader",
+            options: { importLoaders: 1 },
+          },
+          {
+            loader: "postcss-loader",
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sourceMap: true,
+              sassOptions: {
+                silenceDeprecations: ["legacy-js-api"],
+              }
+            },
+          },
+        ],
+      },
+      {
         test: /\.html$/,
         loader: "html-loader",
         exclude: /node_modules/,
+      },
+      {
+        test: /\.png|gif$/,
+        loader: "file-loader",
+        exclude: /node_modules/,
+   
+
       },
       {
         test: /\.(ts|tsx)$/,
@@ -94,14 +128,14 @@ const options = {
     alias: alias,
     extensions: fileExtensions
       .map((extension) => "." + extension)
-      .concat([".js", ".jsx", ".ts", ".tsx", ".css"]),
+      .concat([".js", ".jsx", ".ts", ".tsx", ".css", ".png", ".gif"]),
   },
   plugins: [
     isDevelopment && new ReactRefreshWebpackPlugin(),
     new CleanWebpackPlugin({ verbose: false }),
     new webpack.ProgressPlugin(),
     // expose and write the allowed env vars on the compiled bundle
-    new webpack.EnvironmentPlugin(["NODE_ENV"]),
+    new webpack.EnvironmentPlugin(["NODE_ENV", "NOTARY_URL", "PROXY_URL"]),
     // new ExtReloader({
     //   manifest: path.resolve(__dirname, "src/manifest.json")
     // }),
@@ -111,7 +145,7 @@ const options = {
           from: "src/manifest.json",
           to: path.join(__dirname, "build"),
           force: true,
-          transform: function (content, path) {
+          transform: function (content) {
             // generates the manifest file using the package.json informations
             return Buffer.from(
               JSON.stringify({
@@ -142,10 +176,26 @@ const options = {
         },
       ],
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "node_modules/tlsn-js/build",
+          to: path.join(__dirname, "build"),
+          force: true,
+        }
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "popup", "index.html"),
       filename: "popup.html",
       chunks: ["popup"],
+      cache: false,
+    }),
+
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src", "offscreen", "index.html"),
+      filename: "offscreen.html",
+      chunks: ["offscreen"],
       cache: false,
     }),
 
