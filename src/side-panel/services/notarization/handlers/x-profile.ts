@@ -30,6 +30,7 @@ export class NotarizationXProfile extends NotarizationBase {
     delete log[0].headers['Accept-Encoding'];
     const result = await notary.transcript(log[0]);
     if (result instanceof Error) {
+      console.log(4);
       this.result(result);
       return;
     }

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "BringID Extension",
   "description": "A chrome extension for BringID verification",
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyNZXxnJXxmmzs30AQwiyF7Ub7EEpICmjlTt12I3cxlzWAgT/uQHFJm6jWMZ8eGEcwNZNIbFiTG++iWVydpkwZ290RNVvvxcJL4PtkXRhb99LSLn9kTNZQw1ii3ond68KOA3NFGp86V85bQ+PKDipdehyhXzML+RgS0VPkcdBKHqBUIOeXuy5pOk49nd+vRuatmoaQ226mPvU6l775vLLmoa0fuvkyrRDLtMp8JlYXWdkM0X879GSXFz9C5hvg8r1DSSZPnhzDznzMQPN8fvRB9MKvoOMFlIkXczMU+rbfggamwkTK0fBZ3HAfkG8TEvPZAz6XsMaR6SGzxyFk7KttQIDAQAB",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp76Uaolss4JYjXK1xc/5jG94VR3+5yLVvd0KV/mrtHWybG1eXXu384DHyJh0I3OSEjZgmnHqZR261b7zaOhDBzjeXLfQhHGBLJsE1I2QXTe5DNYQr91iDI3Tvd9fr8ScJ01gqJZjWC9YurXUYiOpJoQ6pandTAqP7s3nX6HTNDoVdZwjGiZHUN20pU6hU0I+d8wZH53CtkDPXRG9FkhlsliUaXaFIeCVp4m+O1xpxeYAv6Sb5UfXvM+9jRIhrnSw+aiwbDRhOqXPgkhIQdI0Bsan/9s78OEqvm4ats5mpCpwch0SAs9A6ysdQ28dmkyoj4V1lGKoIXOpsH/E/rw0PQIDAQAB",
   "background": {
     "service_worker": "background.bundle.js"
   },
@@ -18,14 +18,12 @@
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+    
   },
   "content_scripts": [
     {
       "matches": [
-        "https://extension-verifications.vercel.app/*",
-        "*://localhost/*",
-        "https://x.com/*",
-        "https://api.x.com/*"
+        "<all_urls>"
       ],
       "js": ["contentScript.bundle.js"],
       "css": []
@@ -33,11 +31,10 @@
   ],
   "externally_connectable": {
     "matches": [
-      "http://*/*",
-      "https://*/*",
-      "*://localhost/*",
-      "https://*.zkbring.com/*",
-      "https://extension-verifications.vercel.app/*",
+      "http://localhost/*",
+      "http://localhost:*/*",
+      "http://127.0.0.1/*",
+      "http://127.0.0.1:*/*",
       "<all_urls>"
     ]
   },
@@ -49,16 +46,12 @@
         "icon-32.png",
         "content.bundle.js"
       ],
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"]
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
-  "host_permissions": [
-    "https://x.com/*",
-    "https://api.x.com/*",
-    "https://extension-verifications.vercel.app/*",
-    "*://localhost/*",
-    "<all_urls>"
-  ],
+  "host_permissions": ["<all_urls>", "wss://*/*"],
   "permissions": [
     "offscreen",
     "storage",
@@ -66,7 +59,6 @@
     "activeTab",
     "sidePanel",
     "scripting",
-    "tabs",
-    "*://localhost/*"
+    "tabs"
   ]
 }

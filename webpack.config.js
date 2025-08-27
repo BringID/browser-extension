@@ -41,9 +41,11 @@ const options = {
     sidePanel: path.join(__dirname, "src", "side-panel", "index.tsx"),
     background: path.join(__dirname, "src", "background", "index.tsx"),
 
+    offscreen: path.join(__dirname, "src", "offscreen", "index.tsx"),
+
     // should be injected to webpage
     contentScript: path.join(__dirname, "src", "content", "index.tsx"),
-    content: path.join(__dirname, "src", "content", "script.tsx")
+    content: path.join(__dirname, "src", "content", "content.tsx")
   },
   output: {
     filename: "[name].bundle.js",
@@ -54,9 +56,42 @@ const options = {
   module: {
     rules: [
       {
+        // look for .css or .scss files
+        test: /\.(css|scss)$/,
+        // in the `src` directory
+        use: [
+          {
+            loader: "style-loader",
+          },
+          {
+            loader: "css-loader",
+            options: { importLoaders: 1 },
+          },
+          {
+            loader: "postcss-loader",
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sourceMap: true,
+              sassOptions: {
+                silenceDeprecations: ["legacy-js-api"],
+              }
+            },
+          },
+        ],
+      },
+      {
         test: /\.html$/,
         loader: "html-loader",
         exclude: /node_modules/,
+      },
+      {
+        test: /\.png|gif$/,
+        loader: "file-loader",
+        exclude: /node_modules/,
+   
+
       },
       {
         test: /\.(ts|tsx)$/,
@@ -93,7 +128,7 @@ const options = {
     alias: alias,
     extensions: fileExtensions
       .map((extension) => "." + extension)
-      .concat([".js", ".jsx", ".ts", ".tsx", ".css"]),
+      .concat([".js", ".jsx", ".ts", ".tsx", ".css", ".png", ".gif"]),
   },
   plugins: [
     isDevelopment && new ReactRefreshWebpackPlugin(),
@@ -154,6 +189,13 @@ const options = {
       template: path.join(__dirname, "src", "popup", "index.html"),
       filename: "popup.html",
       chunks: ["popup"],
+      cache: false,
+    }),
+
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src", "offscreen", "index.html"),
+      filename: "offscreen.html",
+      chunks: ["offscreen"],
       cache: false,
     }),
 
