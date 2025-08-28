@@ -72,7 +72,7 @@ async function createOffscreenDocument() {
         break;
       }
 
-      case TWebsiteRequestType.request_points: {
+      case TWebsiteRequestType.request_proofs: {
         const { host, pointsRequired, dropAddress } = request;
 
         chrome.storage.local.set(

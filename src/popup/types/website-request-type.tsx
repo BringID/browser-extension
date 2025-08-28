@@ -1,5 +1,5 @@
 enum TWebsiteRequestType {
-  request_points = 'REQUEST_POINTS',
+  request_proofs = 'REQUEST_PROOFS',
   open_extension = 'OPEN_EXTENSION',
   set_private_key = 'SET_PRIVATE_KEY',
 }

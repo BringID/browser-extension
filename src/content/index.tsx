@@ -10,7 +10,20 @@ import { TExtensionRequestType } from '../popup/types';
         {
           source: 'bringID extension',
           data: message.payload,
-          type: TExtensionRequestType.claim,
+          type: TExtensionRequestType.receive_proofs,
+        },
+        '*',
+      );
+
+      return
+    }
+
+
+    if (message.type === TExtensionRequestType.proofs_rejected) {
+      window.postMessage(
+        {
+          source: 'bringID extension',
+          type: TExtensionRequestType.proofs_rejected,
         },
         '*',
       );
