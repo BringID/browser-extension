@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo } from 'react';
+import React, { FC, useState, useMemo, useEffect } from 'react';
 import {
   Container,
   LogoWrapperStyled,
@@ -17,7 +17,7 @@ import {
 } from './styled-components';
 import TProps from './types';
 import { useVerifications } from '../../store/reducers/verifications';
-import { defineUserStatus } from '../../utils';
+import { defineUserStatus, getCurrentTab } from '../../utils';
 import { Tag } from '../../../components';
 import BringGif from './bring.gif';
 import { TExtensionRequestType, TUserStatus } from '../../types';
@@ -48,7 +48,18 @@ const showInsufficientPointsNote = (
     <NoteStyled title="Insufficient trust level" status="warning">
       You need {pointsRequired - points} more points to reach {requiredStatus}{' '}
       level.{' '}
-      <OpenPopupButton onClick={onClose}>
+      <OpenPopupButton onClick={async () => {
+        onClose()
+        const tab = await getCurrentTab()
+
+        if (tab) {
+          chrome.tabs.sendMessage(tab.id as number, {
+            type: TExtensionRequestType.proofs_rejected
+          });
+        } else {
+          alert('NO TAB DETECTED')
+        }
+      }}>
         Complete verifications
       </OpenPopupButton>{' '}
       to increase your trust score.
@@ -178,19 +189,15 @@ const ConfirmationOverlay: FC<TProps> = ({
 
                 console.log({ proofs });
 
-                const [tab] = await chrome.tabs.query({
-                  active: true,
-                  currentWindow: true,
-                });
-
-                if (!tab || !tab.id) {
-                  return;
+                const tab = await getCurrentTab()
+                if (tab) {
+                  chrome.tabs.sendMessage(tab.id as number, {
+                    type: TExtensionRequestType.proofs_generated,
+                    payload: proofs,
+                  });
+                } else {
+                  alert('NO TAB DETECTED')
                 }
-
-                chrome.tabs.sendMessage(tab.id as number, {
-                  type: TExtensionRequestType.proofs_generated,
-                  payload: proofs,
-                });
 
                 onClose();
                 window.close();
@@ -206,9 +213,20 @@ const ConfirmationOverlay: FC<TProps> = ({
 
           <ButtonStyled
             size="default"
-            onClick={() => {
+            onClick={async () => {
               onClose();
               window.close();
+
+              const tab = await getCurrentTab()
+
+              if (tab) {
+                chrome.tabs.sendMessage(tab.id as number, {
+                  type: TExtensionRequestType.proofs_rejected
+                });
+              } else {
+                alert('NO TAB DETECTED')
+              }
+              
             }}
           >
             Cancel

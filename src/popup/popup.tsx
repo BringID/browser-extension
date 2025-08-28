@@ -9,12 +9,14 @@ import manager from './manager';
 import { IPCPresentation } from '../common/core';
 import store from './store';
 import { setLoading } from './store/reducers/verifications';
+import { sendMessage } from '../common/core/messages';
 
 const Popup: FC = () => {
   useEffect(() => {
     chrome.action.setBadgeText({ text: '' });
+    // to cleanup all notifications after open
 
-    browser.runtime.onMessage.addListener(async (request: IPCPresentation) => {
+    const listener = async (request: IPCPresentation) => {
       switch (request.type) {
         case 'PRESENTATION':
           {
@@ -31,6 +33,10 @@ const Popup: FC = () => {
 
                 if (verify) {
                   await manager.saveVerification(verify, credentialGroupId);
+              
+                  sendMessage({
+                    type: 'SIDE_PANEL_CLOSE'
+                  })
                 }
               }
             } catch (err) {
@@ -39,15 +45,18 @@ const Popup: FC = () => {
             }
             store.dispatch(setLoading(false));
 
-            // browser.runtime.sendMessage({
-            //   type: 'SIDE_PANEL_CLOSE'
-            // })
           }
           break;
         default:
           console.log({ request });
       }
-    });
+    }
+
+    browser.runtime.onMessage.addListener(listener);
+
+    return () => {
+      browser.runtime.onMessage.removeListener(listener);
+    }
   }, []);
 
   useEffect(() => {

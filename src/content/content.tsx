@@ -33,7 +33,7 @@ window.addEventListener('message', (event) => {
       break;
     }
 
-    case TWebsiteRequestType.request_points: {
+    case TWebsiteRequestType.request_proofs: {
       console.log(event.data);
       chrome.runtime.sendMessage(configs.EXTENSION_ID, event.data);
       break;
