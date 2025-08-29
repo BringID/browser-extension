@@ -48,9 +48,11 @@ const showInsufficientPointsNote = (
     <NoteStyled title="Insufficient trust level" status="warning">
       You need {pointsRequired - points} more points to reach {requiredStatus}{' '}
       level.{' '}
-      <OpenPopupButton onClick={async () => {
-        onClose()
-      }}>
+      <OpenPopupButton
+        onClick={async () => {
+          onClose();
+        }}
+      >
         Complete verifications
       </OpenPopupButton>{' '}
       to increase your trust score.
@@ -58,19 +60,17 @@ const showInsufficientPointsNote = (
   );
 };
 
-const defineInitialVerifications = (
-  verifications: TVerification[]
-) => {
+const defineInitialVerifications = (verifications: TVerification[]) => {
   const verificationsCompleted = verifications.reduce<string[]>((res, item) => {
     if (item.status === 'completed') {
-      return [...res, item.credentialGroupId]
+      return [...res, item.credentialGroupId];
     }
 
-    return res
-  }, [])
+    return res;
+  }, []);
 
-  return verificationsCompleted
-}
+  return verificationsCompleted;
+};
 
 const showInsufficientPointsMessage = (
   isEnoughPoints: boolean,
@@ -101,10 +101,7 @@ const ConfirmationOverlay: FC<TProps> = ({
   const requiredStatus = defineUserStatus(pointsRequired);
   const availableTasks = tasks();
   const verificationsState = useVerifications();
-  const [selected, setSelected] = useState<string[]>(
-    []
-  );
-
+  const [selected, setSelected] = useState<string[]>([]);
 
   const pointsSelected = useMemo(() => {
     let result = 0;
@@ -114,8 +111,8 @@ const ConfirmationOverlay: FC<TProps> = ({
         (task) => task.credentialGroupId === verification.credentialGroupId,
       );
       console.log({
-        relatedTask
-      })
+        relatedTask,
+      });
       if (!relatedTask) {
         return;
       }
@@ -131,23 +128,15 @@ const ConfirmationOverlay: FC<TProps> = ({
     });
 
     return result;
-  }, [
-    selected
-  ]);
+  }, [selected]);
 
   useEffect(() => {
     if (!verificationsState.verifications) {
-      return
+      return;
     }
 
-    setSelected(
-      defineInitialVerifications(verificationsState.verifications)
-    )
-
-  }, [
-    verificationsState.verifications
-  ])
-
+    setSelected(defineInitialVerifications(verificationsState.verifications));
+  }, [verificationsState.verifications]);
 
   return (
     <Container>
@@ -214,14 +203,14 @@ const ConfirmationOverlay: FC<TProps> = ({
 
                 console.log({ proofs });
 
-                const tab = await getCurrentTab()
+                const tab = await getCurrentTab();
                 if (tab) {
                   chrome.tabs.sendMessage(tab.id as number, {
                     type: TExtensionRequestType.proofs_generated,
                     payload: proofs,
                   });
                 } else {
-                  alert('NO TAB DETECTED')
+                  alert('NO TAB DETECTED');
                 }
 
                 onClose();
@@ -242,16 +231,15 @@ const ConfirmationOverlay: FC<TProps> = ({
               onClose();
               window.close();
 
-              const tab = await getCurrentTab()
+              const tab = await getCurrentTab();
 
               if (tab) {
                 chrome.tabs.sendMessage(tab.id as number, {
-                  type: TExtensionRequestType.proofs_rejected
+                  type: TExtensionRequestType.proofs_rejected,
                 });
               } else {
-                alert('NO TAB DETECTED')
+                alert('NO TAB DETECTED');
               }
-              
             }}
           >
             Cancel

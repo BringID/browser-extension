@@ -6,13 +6,11 @@ export type TSidepanelCloseRequest = {
 
 export type TSidepanelNotarizeRequest = {
   type: string;
-  task_id: number
+  task_id: number;
 };
 
-
-export type TMessage = TSidepanelCloseRequest | TSidepanelNotarizeRequest
+export type TMessage = TSidepanelCloseRequest | TSidepanelNotarizeRequest;
 
 export async function sendMessage(message: TMessage) {
   await browser.runtime.sendMessage(message);
 }
- 

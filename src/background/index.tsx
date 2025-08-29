@@ -52,23 +52,21 @@ async function createOffscreenDocument() {
       port.postMessage({ status: 'ok' });
     }
 
-    if (port.name === "popup") {
-      port.onDisconnect.addListener(async function() {
-        console.log('CLOSING POPUP')
-        const tab = await getCurrentTab()
-      
+    if (port.name === 'popup') {
+      port.onDisconnect.addListener(async function () {
+        console.log('CLOSING POPUP');
+        const tab = await getCurrentTab();
+
         if (tab) {
           chrome.tabs.sendMessage(tab.id as number, {
-            type: TExtensionRequestType.proofs_rejected
+            type: TExtensionRequestType.proofs_rejected,
           });
         } else {
-          alert('NO TAB DETECTED')
+          alert('NO TAB DETECTED');
         }
       });
     }
-    
   });
-
 
   browser.runtime.onMessageExternal.addListener(async function (
     request,
@@ -86,7 +84,7 @@ async function createOffscreenDocument() {
         chrome.action.openPopup();
 
         sendResponse({ status: 'opened' });
-        return true
+        return true;
       }
 
       case TWebsiteRequestType.request_proofs: {
@@ -100,11 +98,11 @@ async function createOffscreenDocument() {
           },
         );
 
-        return true
+        return true;
       }
 
       case TWebsiteRequestType.ping: {
-        return true
+        return true;
       }
     }
   });

@@ -18,9 +18,8 @@ const Popup: FC = () => {
     chrome.action.setBadgeText({ text: '' });
     // to cleanup all notifications after open
 
-    chrome.runtime.connect({ name: "popup" });
+    chrome.runtime.connect({ name: 'popup' });
     // connecting port
-
 
     const listener = async (request: IPCPresentation) => {
       switch (request.type) {
@@ -39,10 +38,10 @@ const Popup: FC = () => {
 
                 if (verify) {
                   await manager.saveVerification(verify, credentialGroupId);
-              
+
                   sendMessage({
-                    type: 'SIDE_PANEL_CLOSE'
-                  })
+                    type: 'SIDE_PANEL_CLOSE',
+                  });
                 }
               }
             } catch (err) {
@@ -50,21 +49,18 @@ const Popup: FC = () => {
               console.log('ERROR: ', err);
             }
             store.dispatch(setLoading(false));
-
           }
           break;
         default:
           console.log({ request });
       }
-    }
+    };
 
     browser.runtime.onMessage.addListener(listener);
 
     return () => {
-
       browser.runtime.onMessage.removeListener(listener);
-
-    }
+    };
   }, []);
 
   useEffect(() => {

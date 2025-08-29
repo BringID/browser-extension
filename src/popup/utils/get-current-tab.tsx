@@ -5,10 +5,10 @@ const getCurrentTab = async () => {
   });
 
   if (!tab || !tab.id) {
-    return null
+    return null;
   }
 
-  return tab
-}
+  return tab;
+};
 
-export default getCurrentTab
+export default getCurrentTab;

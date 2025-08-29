@@ -15,9 +15,8 @@ import { TExtensionRequestType } from '../popup/types';
         '*',
       );
 
-      return
+      return;
     }
-
 
     if (message.type === TExtensionRequestType.proofs_rejected) {
       window.postMessage(

@@ -6,8 +6,7 @@ const SEMAPHORE_SUBGRAPH_URL =
 const TASK_MANAGER_API = 'https://task-manager-production-4062.up.railway.app';
 const VERIFIER_API = 'https://verifier-production-93bb.up.railway.app';
 const INDEXER_API = 'https://semaphor-indexer-production.up.railway.app';
-const CONNECT_WALLET_URL =
-  'https://app.bringid.org/get-started/connect';
+const CONNECT_WALLET_URL = 'https://app.bringid.org/get-started/connect';
 
 export default {
   ADVANCED_STATUS_POINTS,

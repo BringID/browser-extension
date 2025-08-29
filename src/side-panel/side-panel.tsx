@@ -1,4 +1,3 @@
-
 import React, { FC, useEffect } from 'react';
 import browser from 'webextension-polyfill';
 import { notarizationManager } from './services/notarization';
@@ -25,7 +24,6 @@ const SidePanel: FC = () => {
   useEffect(() => {
     const listener = (request: TMessage) => {
       switch (request.type) {
-
         case 'NOTARIZE':
           if ('task_id' in request) {
             void notarizationManager.run(request.task_id);
@@ -41,13 +39,13 @@ const SidePanel: FC = () => {
         default:
           console.log({ request });
       }
-    }
+    };
 
-    browser.runtime.onMessage.addListener(listener)
+    browser.runtime.onMessage.addListener(listener);
 
     return () => {
-      browser.runtime.onMessage.removeListener(listener)
-    }
+      browser.runtime.onMessage.removeListener(listener);
+    };
   }, []);
 
   const { result, taskId, progress } = useSelector((state: RootState) => {
