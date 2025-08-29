@@ -20,7 +20,7 @@ import { useVerifications } from '../../store/reducers/verifications';
 import { defineUserStatus, getCurrentTab } from '../../utils';
 import { Tag } from '../../../components';
 import BringGif from './bring.gif';
-import { TExtensionRequestType, TUserStatus } from '../../types';
+import { TExtensionRequestType, TUserStatus, TVerification } from '../../types';
 import manager from '../../manager';
 import { tasks } from '../../../common/core';
 
@@ -50,15 +50,6 @@ const showInsufficientPointsNote = (
       level.{' '}
       <OpenPopupButton onClick={async () => {
         onClose()
-        const tab = await getCurrentTab()
-
-        if (tab) {
-          chrome.tabs.sendMessage(tab.id as number, {
-            type: TExtensionRequestType.proofs_rejected
-          });
-        } else {
-          alert('NO TAB DETECTED')
-        }
       }}>
         Complete verifications
       </OpenPopupButton>{' '}
@@ -66,6 +57,20 @@ const showInsufficientPointsNote = (
     </NoteStyled>
   );
 };
+
+const defineInitialVerifications = (
+  verifications: TVerification[]
+) => {
+  const verificationsCompleted = verifications.reduce<string[]>((res, item) => {
+    if (item.status === 'completed') {
+      return [...res, item.credentialGroupId]
+    }
+
+    return res
+  }, [])
+
+  return verificationsCompleted
+}
 
 const showInsufficientPointsMessage = (
   isEnoughPoints: boolean,
@@ -96,33 +101,53 @@ const ConfirmationOverlay: FC<TProps> = ({
   const requiredStatus = defineUserStatus(pointsRequired);
   const availableTasks = tasks();
   const verificationsState = useVerifications();
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>(
+    []
+  );
+
 
   const pointsSelected = useMemo(() => {
     let result = 0;
 
-    {
-      verificationsState.verifications.forEach((verification) => {
-        const relatedTask = availableTasks.find(
-          (task) => task.credentialGroupId === verification.credentialGroupId,
-        );
-        if (!relatedTask) {
-          return;
-        }
-        if (verification.status !== 'completed') {
-          return;
-        }
-        if (!selected.includes(relatedTask?.credentialGroupId)) {
-          return;
-        }
-        if (relatedTask) {
-          result = result + relatedTask?.points;
-        }
-      });
-    }
+    verificationsState.verifications.forEach((verification) => {
+      const relatedTask = availableTasks.find(
+        (task) => task.credentialGroupId === verification.credentialGroupId,
+      );
+      console.log({
+        relatedTask
+      })
+      if (!relatedTask) {
+        return;
+      }
+      if (verification.status !== 'completed') {
+        return;
+      }
+      if (!selected.includes(relatedTask?.credentialGroupId)) {
+        return;
+      }
+      if (relatedTask) {
+        result = result + relatedTask?.points;
+      }
+    });
 
     return result;
-  }, [selected]);
+  }, [
+    selected
+  ]);
+
+  useEffect(() => {
+    if (!verificationsState.verifications) {
+      return
+    }
+
+    setSelected(
+      defineInitialVerifications(verificationsState.verifications)
+    )
+
+  }, [
+    verificationsState.verifications
+  ])
+
 
   return (
     <Container>

@@ -1,7 +1,7 @@
 import browser from 'webextension-polyfill';
-import { TWebsiteRequestType } from '../popup/types';
+import { TWebsiteRequestType, TExtensionRequestType } from '../popup/types';
 import getStorage from '../popup/db-storage';
-
+import { getCurrentTab } from '../popup/utils';
 let creatingOffscreen: any;
 
 async function createOffscreenDocument() {
@@ -51,7 +51,24 @@ async function createOffscreenDocument() {
 
       port.postMessage({ status: 'ok' });
     }
+
+    if (port.name === "popup") {
+      port.onDisconnect.addListener(async function() {
+        console.log('CLOSING POPUP')
+        const tab = await getCurrentTab()
+      
+        if (tab) {
+          chrome.tabs.sendMessage(tab.id as number, {
+            type: TExtensionRequestType.proofs_rejected
+          });
+        } else {
+          alert('NO TAB DETECTED')
+        }
+      });
+    }
+    
   });
+
 
   browser.runtime.onMessageExternal.addListener(async function (
     request,
@@ -69,7 +86,7 @@ async function createOffscreenDocument() {
         chrome.action.openPopup();
 
         sendResponse({ status: 'opened' });
-        break;
+        return true
       }
 
       case TWebsiteRequestType.request_proofs: {
@@ -83,7 +100,11 @@ async function createOffscreenDocument() {
           },
         );
 
-        break;
+        return true
+      }
+
+      case TWebsiteRequestType.ping: {
+        return true
       }
     }
   });

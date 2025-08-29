@@ -52,6 +52,9 @@ function sendMessageToBackground(data: any): Promise<void> {
 
 const Offscreen = () => {
   useEffect(() => {
+    
+    
+    
     const interval = setInterval(async () => {
       const storage = await getStorage();
       await storage.syncVerifications();

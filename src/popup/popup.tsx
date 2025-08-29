@@ -10,11 +10,17 @@ import { IPCPresentation } from '../common/core';
 import store from './store';
 import { setLoading } from './store/reducers/verifications';
 import { sendMessage } from '../common/core/messages';
+import { getCurrentTab } from './utils';
+import { TExtensionRequestType } from './types';
 
 const Popup: FC = () => {
   useEffect(() => {
     chrome.action.setBadgeText({ text: '' });
     // to cleanup all notifications after open
+
+    chrome.runtime.connect({ name: "popup" });
+    // connecting port
+
 
     const listener = async (request: IPCPresentation) => {
       switch (request.type) {
@@ -55,7 +61,9 @@ const Popup: FC = () => {
     browser.runtime.onMessage.addListener(listener);
 
     return () => {
+
       browser.runtime.onMessage.removeListener(listener);
+
     }
   }, []);
 

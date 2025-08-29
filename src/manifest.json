@@ -59,6 +59,7 @@
     "activeTab",
     "sidePanel",
     "scripting",
-    "tabs"
+    "tabs",
+    "alarms"
   ]
 }
