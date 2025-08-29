@@ -52,6 +52,10 @@ export const notarizationSlice = createSlice({
       state.result = action.payload;
     },
 
+    setTaskId: (state: NotarizationState, action: PayloadAction<number>) => {
+      state.taskId = action.payload;
+    },
+
     // setResult
   },
 });
