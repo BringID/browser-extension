@@ -1,10 +1,15 @@
-import { NotarizationStatus, NotarizationHandler } from "./types";
-import { tasks, Task } from "../../../common/core";
-import { NotarizationXProfile } from "./handlers/x-profile";
-import { NotarizationUberRides } from "./handlers/uber-rides";
+
+import { NotarizationStatus, NotarizationHandler } from './types';
+import { tasks, Task } from '../../../common/core';
+import { NotarizationXProfile } from './handlers/x-profile';
+import { NotarizationUberRides } from './handlers/uber-rides';
+import { State } from '../../common/helpers/progressive';
+import { Transcript } from 'tlsn-js';
+import { notarizationSlice } from '../../store/notarization';
+import { store } from '../../store';
+import { NotarizationStravaPremium } from './handlers/strava-premium';
+import { NotarizationAppleDevices } from './handlers/apple-devices';
 import { NotarizationXVerifiedFollowers } from "./handlers/x-verified-followers";
-import { State } from "../../common/helpers/progressive";
-import { Transcript } from "tlsn-js";
 
 // NotarizationManager stores Notarization and handles Redux
 export class NotarizationManager {
@@ -16,37 +21,53 @@ export class NotarizationManager {
   }
 
   async run(id: number): Promise<void> {
-    if (this.#currentNotarization && this.#currentNotarization.state.status === NotarizationStatus.InProgress) {
+
+    if (
+      this.#currentNotarization &&
+      this.#currentNotarization.state.status === NotarizationStatus.InProgress
+    ) {
       await this.#currentNotarization.stop();
     }
+    store.dispatch(notarizationSlice.actions.setTaskId(id));
     this.#currentNotarization = this.#notarizations[id];
     await this.#currentNotarization.start(
       // TODO Presentation should be passed to popup
       async (res) => {
         if (res instanceof Error) {
+
+          console.log(5);
           console.error(res);
-          return
+          return;
         }
-        console.log("Presentation", await res.json());
+
+        const presentation = await res.json();
         const verifierOutput = await res.verify();
         const transcript = new Transcript({
           sent: verifierOutput.transcript?.sent || [],
           recv: verifierOutput.transcript?.recv || [],
         });
-        console.log("Transcript", { sent: transcript.sent(), recv: transcript.recv() });
+
+        console.log('Transcript', {
+          sent: transcript.sent(),
+          recv: transcript.recv(),
+        });
+
+        store.dispatch(notarizationSlice.actions.setResult(presentation.data));
       },
-      this.notificationHandler.bind(this)
+      this.notificationHandler.bind(this),
     );
   }
 
   notificationHandler(state: State<NotarizationStatus>) {
-    console.log("State updated:", state);
+    console.log('State updated:', state);
+    store.dispatch(notarizationSlice.actions.setProgress(state.progress));
   }
 }
 
 const t: Task[] = tasks();
 export const notarizationManager = new NotarizationManager([
   new NotarizationXProfile(t[0]),
-  new NotarizationUberRides(t[1]),
-  new NotarizationXVerifiedFollowers(t[2]),
+  new NotarizationXVerifiedFollowers(t[1]),
+  new NotarizationStravaPremium(t[2]),
+  new NotarizationAppleDevices(t[3]),
 ]);

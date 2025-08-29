@@ -23,33 +23,34 @@ export class TLSNotary extends Progressive<Status>{
     readonly #proxyURL = process.env.PROXY_URL || "";
     readonly #prover: TProver;
 
-    static async new(
-        hostname: string,
-        updatesCallback?: OnStateUpdated<Status>,
-    ): Promise<TLSNotary> {
-        const prover = (await new Prover({
-            serverDns: hostname,
-            maxSentData: 4096,
-            maxRecvData: 4096,
-        })) as TProver;
-        return new TLSNotary(prover, updatesCallback);
-    }
+   static async new(
+    hostname: string,
+    updatesCallback?: OnStateUpdated<Status>,
+  ): Promise<TLSNotary> {
+    const prover = (await new Prover({
+      serverDns: hostname,
+      maxSentData: 65536,
+      maxRecvData: 65536,
+    })) as TProver;
+    return new TLSNotary(hostname, prover, updatesCallback);
+  }
 
     private constructor(
-        prover: TProver,
-        updatesCallback?: OnStateUpdated<Status>,
-    ) {
-        super({ progress: 0, status: Status.Idle }, updatesCallback);
-        this.#prover = prover;
-    }
+    hostname: string,
+    prover: TProver,
+    updatesCallback?: OnStateUpdated<Status>,
+  ) {
+    super({ progress: 0, status: Status.Idle }, updatesCallback);
+    this.#proxyURL = `${this.#proxyURL}?token=${hostname}`;
+    this.#prover = prover;
+    console.log('start notary: ', this.#proxyURL, this.#notary);
+  }
 
     async transcript(
         request: Request
     ): Promise<Result<[Transcript, ParsedHTTPMessage]>> {
         if (this.state.status === Status.InProgress) return new Error("Notarization is in progress");
-
         await this.#prover.setup(await this.#notary.sessionUrl());
-
         const resp = await this.#prover.sendRequest(this.#proxyURL, {
             url: request.url,
             method: request.method,
@@ -57,7 +58,6 @@ export class TLSNotary extends Progressive<Status>{
             body: request.body,
         });
         if(resp.status !== 200) return new Error(`Notarization failed with status ${resp.status}`);
-
         const transcript = await this.#prover.transcript();
         const parsedHttpMessage = parseHttpMessage(Buffer.from(transcript.recv), "RESPONSE");
         if(parsedHttpMessage instanceof Error) return parsedHttpMessage;

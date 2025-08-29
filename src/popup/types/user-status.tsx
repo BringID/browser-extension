@@ -1,3 +1,3 @@
-type TUserStatus = 'basic' | 'advanced'
+type TUserStatus = 'basic' | 'advanced';
 
-export default TUserStatus
+export default TUserStatus;

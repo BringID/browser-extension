@@ -2,16 +2,30 @@
   {
     "title": "X Account",
     "description": "Prove the ownership of an account on X",
-    "points": 10
-  },
-  {
-    "title": "Uber rides",
-    "description": "Prove you used Uber for at least 5 rides",
-    "points": 50
+    "points": 10,
+    "semaphoreGroupId": "8",
+    "credentialGroupId": "1",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg"
   },
   {
     "title": "X Verified Followers",
     "description": "Prove verified followers on X",
-    "points": 30
+    "points": 10,
+    "semaphoreGroupId": "9",
+    "credentialGroupId": "2"
+  },
+  {
+    "title": "Strava Premium",
+    "description": "Prove you have a Strava Premium subscription",
+    "points": 10,
+    "semaphoreGroupId": "10",
+    "credentialGroupId": "3"
+  },
+  {
+    "title": "Apple Devices",
+    "description": "Prove you have at least two Apple devices",
+    "points": 10,
+    "semaphoreGroupId": "11",
+    "credentialGroupId": "4"
   }
 ]
