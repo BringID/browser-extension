@@ -25,6 +25,7 @@ export class NotarizationManager {
     ) {
       await this.#currentNotarization.stop();
     }
+    store.dispatch(notarizationSlice.actions.setTaskId(id));
     this.#currentNotarization = this.#notarizations[id];
     await this.#currentNotarization.start(
       // TODO Presentation should be passed to popup
