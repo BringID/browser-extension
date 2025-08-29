@@ -8,8 +8,8 @@
     "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg"
   },
   {
-    "title": "Uber rides",
-    "description": "Prove you used Uber for at least 5 rides",
+    "title": "X Verified Followers",
+    "description": "Prove verified followers on X",
     "points": 10,
     "semaphoreGroupId": "9",
     "credentialGroupId": "2"
