@@ -197,7 +197,7 @@ const ConfirmationOverlay: FC<TProps> = ({
               try {
                 const proofs = await manager.getProofs(
                   dropAddress,
-                  pointsRequired,
+                  pointsSelected,
                   selected,
                 );
 
@@ -207,7 +207,10 @@ const ConfirmationOverlay: FC<TProps> = ({
                 if (tab) {
                   chrome.tabs.sendMessage(tab.id as number, {
                     type: TExtensionRequestType.proofs_generated,
-                    payload: proofs,
+                    payload: {
+                      proofs,
+                      points: pointsSelected
+                    },
                   });
                 } else {
                   alert('NO TAB DETECTED');
