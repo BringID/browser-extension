@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import {
   Container,
-  ProgressBarStyled,
   SubtitleStyled,
   ButtonStyled,
   MessageStyled,
@@ -19,6 +18,7 @@ import {
 } from '../../components';
 import { calculateAvailablePoints, defineUserStatus } from '../../utils';
 import configs from '../../configs';
+import { useUser } from '../../store/reducers/user';
 
 const Home: FC = () => {
   const verificationsStore = useVerifications();
@@ -34,6 +34,7 @@ const Home: FC = () => {
 
   const [scheduledTime, setScheduledTime] = useState<number | null>(null);
 
+
   const availablePoints = calculateAvailablePoints(verifications);
   const leftForAdvanced = configs.ADVANCED_STATUS_POINTS - availablePoints;
   const percentageFinished =
@@ -42,6 +43,7 @@ const Home: FC = () => {
   const userStatus = defineUserStatus(availablePoints);
 
   const navigate = useNavigate();
+  const user = useUser()
 
   useEffect(() => {
     chrome.storage.local.get('request', (data) => {
@@ -119,17 +121,20 @@ const Home: FC = () => {
         />
       )}
 
-      <Header status={userStatus} points={availablePoints} />
+      <Header
+        status={userStatus}
+        points={availablePoints}
+        address={user.address}
+      />
 
-      <ProgressBarStyled
+      {/* <ProgressBarStyled
         current={percentageFinished > 100 ? 100 : percentageFinished}
         max={100}
         title={`${leftForAdvanced < 0 ? 0 : leftForAdvanced} points more to Advanced`}
         value={`${Math.round(percentageFinished > 100 ? 100 : percentageFinished)}%`}
-      />
+      /> */}
 
       <SubtitleStyled>
-        Your verifications
         {verifications && verifications.length > 0 && (
           <ButtonStyled
             size="small"
@@ -156,43 +161,6 @@ const Home: FC = () => {
           navigate('/tasks');
         }}
       />
-
-      {/* {user.key} */}
-
-      {/* <ButtonStyled onClick={async () => {
-      const [tab] = await browser.tabs.query({
-        active: true,
-        currentWindow: true
-      })
-      // @ts-ignore
-      chrome.sidePanel.open({
-        tabId: tab.id
-      })
-    }}>
-      open sidebar
-    </ButtonStyled>
-
-    <ButtonStyled onClick={async () => {
-      const response = await browser.runtime.sendMessage({
-        type: 'VERIFICATION_START'
-      })
-    }}>
-      Send message to sidebar
-    </ButtonStyled>
-
-    <ButtonStyled appearance='action'
-      onClick={() => {
-        if (user.id) {
-          manager.addUserKey(
-            user.id,
-            String(+new Date())
-          )
-        }
-
-      }}
-    >
-      AddKey
-    </ButtonStyled> */}
     </Container>
   );
 };

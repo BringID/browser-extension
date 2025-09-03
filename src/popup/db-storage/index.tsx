@@ -6,7 +6,7 @@ import {
   TVerificationStatus,
 } from '../types';
 import TDBStorage from './types';
-import { setId, setKey } from '../store/reducers/user';
+import { setId, setKey, setAddress } from '../store/reducers/user';
 import {
   addVerification,
   addVerifications,
@@ -25,6 +25,7 @@ import {
   TAddVerification,
   TSyncUser,
   TSyncVerifications,
+  TDestroyUser
 } from './types';
 import { tasks } from '../../common/core';
 import semaphore from '../semaphore';
@@ -59,9 +60,13 @@ export class DBStorage implements TDBStorage {
   addInitialUser: TAddInitialUser = async () => {
     const existingUserId = await this.getUserId();
     if (existingUserId) {
-      const user = await this.#userDb.get(existingUserId);
-      store.dispatch(setId(user.id));
-      store.dispatch(setKey(user.key));
+      const user: TUser = await this.#userDb.get(existingUserId);
+      if (user) {
+        user.id && store.dispatch(setId(user.id));
+        user.key && store.dispatch(setKey(user.key));
+        user.address && store.dispatch(setAddress(user.address));
+      }
+
       return user;
     }
 
@@ -70,6 +75,7 @@ export class DBStorage implements TDBStorage {
       status: 'basic' as TUserStatus,
       key: null,
       id: userId,
+      address: null
     };
     await this.#userDb.put(userId, userNew);
 
@@ -150,7 +156,10 @@ export class DBStorage implements TDBStorage {
     await this.syncVerifications();
   };
 
-  addUserKey: TAddUserKey = async (key: string) => {
+  addUserKey: TAddUserKey = async (
+    key: string,
+    address: string
+  ) => {
     const existingUserId = await this.getUserId();
     if (existingUserId) {
       const user: TUser = await this.#userDb.get(existingUserId);
@@ -158,6 +167,7 @@ export class DBStorage implements TDBStorage {
       await this.#userDb.put(existingUserId, {
         ...user,
         key,
+        address
       });
 
       store.dispatch(setKey(key));
@@ -169,6 +179,14 @@ export class DBStorage implements TDBStorage {
       throw new Error('No user detected');
     }
   };
+
+  destroyUser: TDestroyUser = async () => {
+    await this.#userDb.clear()
+    await this.#verificationsDb.clear()
+    await this.addInitialUser()
+
+    return true
+  }
 
   getUserKey: TGetUserKey = async () => {
     const existingUserId = await this.getUserId();

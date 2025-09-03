@@ -1,3 +1,6 @@
-type TAddUserKey = (key: string) => Promise<void>;
+type TAddUserKey = (
+  key: string,
+  address: string
+) => Promise<void>;
 
 export default TAddUserKey;

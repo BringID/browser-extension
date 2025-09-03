@@ -27,8 +27,14 @@ class Manager implements IManager {
     this.#db = await getStorage();
   };
 
-  addUserKey: TAddUserKey = async (key: string) => {
-    await this.#db?.addUserKey(key);
+  addUserKey: TAddUserKey = async (
+    key,
+    address
+  ) => {
+    await this.#db?.addUserKey(
+      key,
+      address
+    );
   };
 
   runTask: TRunTask = async (credentialGroupId) => {

@@ -1,15 +1,50 @@
 import React, { FC } from 'react';
-import { Header, TitleStyled, UserStatus } from './styled-components';
+import { Header, TextStyled, ButtonStyled, AddressText, TitleStyled, Content, Texts, Address } from './styled-components';
 import TProps from './types';
-import { Tag } from '../../../components';
+import getStorage from '../../db-storage';
+import { shortenString } from '../../utils';
+import AddressIcon from '../../../components/icons/address';
 
-const HeaderComponent: FC<TProps> = ({ status, points }) => {
+const defineContent = (
+  address: string | null,
+  points: number
+) => {
+  if (!address) {
+    return <TitleStyled>
+      BringID
+    </TitleStyled>
+  }
+
+  return <Content>
+    <Texts>
+      <Address>
+        <AddressIcon /> <AddressText>{shortenString(address)}</AddressText>
+      </Address>
+      <TextStyled>
+        Total Bring Score: {points}
+      </TextStyled>
+    </Texts>
+    <ButtonStyled
+      onClick={async () => {
+        const storage = await getStorage()
+        await storage.destroyUser()
+      }}
+    >
+      Logout
+    </ButtonStyled>
+  </Content>
+}
+
+const HeaderComponent: FC<TProps> = ({
+  points,
+  address
+}) => {
   return (
     <Header>
-      <TitleStyled>
-        Trust level: <UserStatus>{status}</UserStatus>
-      </TitleStyled>
-      <Tag status="info">{points} points</Tag>
+      {defineContent(
+        address,
+        points
+      )}
     </Header>
   );
 };
