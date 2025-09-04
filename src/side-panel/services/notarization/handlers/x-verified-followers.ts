@@ -38,8 +38,9 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
     const url = new URL(originalUrl);
     const variablesParam = url.searchParams.get('variables');
 
-
-    const originalVariables = JSON.parse(decodeURIComponent(variablesParam || ''));
+    const originalVariables = JSON.parse(
+      decodeURIComponent(variablesParam || ''),
+    );
 
     // Extract only the required parameters
     const minimalVariables = {

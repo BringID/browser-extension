@@ -1,7 +1,7 @@
 [
   {
-    "title": "X Account",
-    "description": "Prove the ownership of an account on X",
+    "title": "Uber Rides",
+    "description": "Prove the amount of Uber rides you took",
     "points": 10,
     "semaphoreGroupId": "8",
     "credentialGroupId": "1",
@@ -15,17 +15,10 @@
     "credentialGroupId": "2"
   },
   {
-    "title": "Strava Premium",
-    "description": "Prove you have a Strava Premium subscription",
-    "points": 10,
-    "semaphoreGroupId": "10",
-    "credentialGroupId": "3"
-  },
-  {
     "title": "Apple Devices",
     "description": "Prove you have at least two Apple devices",
     "points": 10,
     "semaphoreGroupId": "11",
-    "credentialGroupId": "4"
+    "credentialGroupId": "5"
   }
 ]

@@ -63,7 +63,7 @@ export class NotarizationManager {
 
 const t: Task[] = tasks();
 export const notarizationManager = new NotarizationManager([
-  new NotarizationXProfile(t[0]),
+  new NotarizationUberRides(t[0]),
   new NotarizationXVerifiedFollowers(t[1]),
   new NotarizationStravaPremium(t[2]),
   new NotarizationAppleDevices(t[3]),

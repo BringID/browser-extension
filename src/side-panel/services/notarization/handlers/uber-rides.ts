@@ -2,13 +2,15 @@ import { NotarizationBase } from '../notarization-base';
 import { RequestRecorder } from '../../requests-recorder';
 import { Request } from '../../../common/types';
 import { TLSNotary } from '../../tlsn';
+import { Commit } from 'tlsn-js';
+import { Mapping, parse, Pointers } from 'json-source-map';
 
 export class NotarizationUberRides extends NotarizationBase {
   requestRecorder: RequestRecorder = new RequestRecorder(
     [
       {
-        method: 'GET',
-        urlPattern: 'https://api.x.com/1.1/account/settings.json?*',
+        method: 'POST',
+        urlPattern: 'https://riders.uber.com/graphql',
       },
     ],
     this.onRequestsCaptured.bind(this),
@@ -16,28 +18,71 @@ export class NotarizationUberRides extends NotarizationBase {
 
   public async onStart(): Promise<void> {
     this.requestRecorder.start();
-    await chrome.tabs.create({ url: 'https://x.com' });
+    await chrome.tabs.create({ url: 'https://riders.uber.com/trips' });
     this.setProgress(30);
   }
 
   private async onRequestsCaptured(log: Array<Request>) {
     this.setProgress(60);
-    console.log(log);
     this.result(new Error('Notarization is not implemented'));
 
-    const notary = await TLSNotary.new('x.com');
+    const notary = await TLSNotary.new('riders.uber.com');
+    this.setProgress(65);
     const result = await notary.transcript({
       url: log[0].url,
       method: log[0].method,
-      headers: log[0].headers,
-      body: log[0].body,
+      headers: {
+        'content-type': 'application/json',
+        'x-csrf-token': 'x',
+        Cookie: [...log[0].headers['Cookie'].matchAll(/(sid|csid)=([^;]*)/g)]
+          .map((res) => res[0])
+          .join(';'),
+      },
+      body: {
+        query:
+          '{ currentUser { uuid } activities { past(limit: 1) { activities { uuid } } } }',
+      },
     });
     if (result instanceof Error) {
       this.result(result);
       return;
     }
-    const [, message] = result;
-    console.log(message);
+    const [transcript, message] = result;
+
+    this.setProgress(75);
+
+    const commit: Commit = {
+      sent: [{ start: 0, end: transcript.sent.length }],
+      recv: [],
+    };
+    console.log('Transcript: ', Buffer.from(transcript.recv).toString('utf-8'));
+    const jsonStarts: number =
+      Buffer.from(transcript.recv).toString('utf-8').indexOf('\n{') + 1;
+
+    const pointers: Pointers = parse(message.body.toString()).pointers;
+
+    const uuid: Mapping = pointers['/data/currentUser/uuid'];
+    const activities: Mapping = pointers['/data/activities/past/activities'];
+
+    if (!activities.key?.pos || !uuid.key?.pos) {
+      this.result(new Error('required data not found'));
+      return;
+    }
+
+    commit.recv = [
+      {
+        start: jsonStarts + uuid.key?.pos,
+        end: jsonStarts + uuid.valueEnd.pos,
+      },
+      {
+        start: jsonStarts + activities.key?.pos,
+        end: jsonStarts + activities.valueEnd.pos,
+      },
+    ];
+
+    this.setProgress(85);
+
+    this.result(await notary.notarize(commit));
   }
 
   public async onStop(): Promise<void> {
