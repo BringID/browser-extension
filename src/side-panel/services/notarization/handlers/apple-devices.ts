@@ -86,15 +86,13 @@ export class NotarizationAppleDevices extends NotarizationBase {
 
     const result = await notary.transcript(reqLog);
     console.log('[AppleDevices] Transcript result:', result);
-
+    
     if (result instanceof Error) {
       console.error('[AppleDevices] Error in transcript:', result);
       this.result(result);
       return;
     }
     const [transcript, message] = result;
-    console.log('[AppleDevices] Transcript length:', transcript.recv.length);
-    console.log('[AppleDevices] Message body length:', message.body.length);
 
     const commit: Commit = {
       sent: [{ start: 0, end: transcript.sent.length }],
@@ -111,7 +109,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
     console.log('[AppleDevices] JSON starts at position:', jsonStarts);
 
     try {
-      // Parse JSON response and extract first device ID
+      // Parse JSON response and find the entire devices array
       const messageBodyStr = message.body.toString();
       console.log(
         '[AppleDevices] Message body preview:',
@@ -124,32 +122,33 @@ export class NotarizationAppleDevices extends NotarizationBase {
         Array.isArray(jsonData.devices) &&
         jsonData.devices.length > 0
       ) {
-        const firstDeviceId = jsonData.devices[0].id;
-        if (firstDeviceId) {
-          console.log('[AppleDevices] Found first device ID:', firstDeviceId);
+        console.log('[AppleDevices] Found devices array with', jsonData.devices.length, 'devices');
+        console.log('[AppleDevices] Devices data:', jsonData.devices);
 
-          const responseText = Buffer.from(transcript.recv).toString('utf-8');
-          const idStart = responseText.indexOf(`"id" : "${firstDeviceId}"`);
-          const idEnd = idStart + `"id" : "${firstDeviceId}"`.length;
+        // Find the entire devices field using simple regex
+        const devicesRegex = /"devices"\s*:\s*\[.*?\]/s;
+        const devicesMatch = responseText.match(devicesRegex);
+        
+        if (devicesMatch) {
+          const devicesArrayStart = devicesMatch.index!;
+          const devicesArrayEnd = devicesArrayStart + devicesMatch[0].length;
+          
+          console.log(
+            '[AppleDevices] Found devices array position:',
+            devicesArrayStart,
+            devicesArrayEnd,
+          );
 
-          if (idStart !== -1) {
-            console.log(
-              '[AppleDevices] Found device ID position:',
-              idStart,
-              idEnd,
-            );
+          const devicesArrayCommitRange = {
+            start: devicesArrayStart,
+            end: devicesArrayEnd,
+          };
+          commit.recv.push(devicesArrayCommitRange);
 
-            const deviceIdCommitRange = {
-              start: idStart,
-              end: idEnd,
-            };
-            commit.recv.push(deviceIdCommitRange);
-
-            console.log(
-              '[AppleDevices] Added device ID to commit range:',
-              deviceIdCommitRange,
-            );
-          }
+          console.log(
+            '[AppleDevices] Added devices array to commit range:',
+            devicesArrayCommitRange,
+          );
         }
       }
     } catch (error) {
@@ -159,6 +158,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
     console.log('[AppleDevices] Starting notarization...');
     const notarizationResult = await notary.notarize(commit);
     console.log('[AppleDevices] Notarization completed:', notarizationResult);
+    
     this.result(notarizationResult);
   }
 
