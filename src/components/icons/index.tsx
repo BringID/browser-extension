@@ -9,6 +9,7 @@ import Spinner from './spinner';
 import PlusIcon from './plus';
 import ArrowBackIcon from './arrow-back';
 import ExclimationIcon from './exclimation-icon';
+import AddressIcon from './address'
 
 const Icons = {
   VehicleIcon,
@@ -22,6 +23,7 @@ const Icons = {
   PlusIcon,
   ArrowBackIcon,
   ExclimationIcon,
+  AddressIcon
 };
 
 export default Icons;

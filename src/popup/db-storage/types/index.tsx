@@ -10,6 +10,7 @@ import TAddUserKey from './add-user-key';
 import TAddVerification from './add-verification';
 import TSyncUser from './sync-user';
 import TSyncVerifications from './sync-verifications';
+import TDestroyUser from './destroy-user'
 
 interface TDBStorage {
   db?: Level;
@@ -35,6 +36,8 @@ interface TDBStorage {
   syncUser: TSyncUser;
 
   syncVerifications: TSyncVerifications;
+
+  destroyUser: TDestroyUser;
 }
 
 export default TDBStorage;
@@ -42,6 +45,7 @@ export default TDBStorage;
 export {
   TAddInitialUser,
   TAddInitialVerifications,
+  TDestroyUser,
   TGetUserId,
   TGetVerifications,
   TGetUserKey,

@@ -16,7 +16,6 @@ const VerificationsList: FC<TProps> = ({
       {verifications.length === 0 && (
         <NoVerificationsFound
           title="No verifications yet"
-          text="Add verifications to prove your identity"
         />
       )}
       {verifications.length > 0 &&

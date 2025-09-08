@@ -10,6 +10,7 @@ const themes = {
 
   primaryBorderColor: 'rgb(229, 229, 229)',
   secondaryBorderColor: 'rgb(229, 231, 235)',
+  additionalBorderColor: 'rgb(115, 115, 115)',
 
   buttonActionBackgroundColor: 'rgb(23, 23, 23)',
   buttonActionBorderColor: 'transparent',

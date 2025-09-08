@@ -1,17 +1,11 @@
 import React, { FC } from 'react';
 import TProps from './types';
-import { Container, Title, Text, ImageContainer } from './styled-components';
-import { Icons } from '../../../components';
+import { Container, Title } from './styled-components';
 
-const NoVerificationsFound: FC<TProps> = ({ className, title, text }) => {
+const NoVerificationsFound: FC<TProps> = ({ className, title }) => {
   return (
     <Container className={className}>
-      <ImageContainer>
-        <Icons.PlusIcon />
-      </ImageContainer>
-
       <Title>{title}</Title>
-      <Text>{text}</Text>
     </Container>
   );
 };

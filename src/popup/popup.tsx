@@ -12,8 +12,11 @@ import { setLoading } from './store/reducers/verifications';
 import { sendMessage } from '../common/core/messages';
 import { getCurrentTab } from './utils';
 import { TExtensionRequestType } from './types';
+import { useUser } from './store/reducers/user';
 
 const Popup: FC = () => {
+
+  const user = useUser()
   useEffect(() => {
     chrome.action.setBadgeText({ text: '' });
     // to cleanup all notifications after open
@@ -69,7 +72,9 @@ const Popup: FC = () => {
       await dbStorage.syncUser();
       await dbStorage.syncVerifications();
     })();
-  }, []);
+  }, [
+    user.id
+  ]);
 
   return (
     <Page>
