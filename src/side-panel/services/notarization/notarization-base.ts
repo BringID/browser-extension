@@ -17,17 +17,15 @@ export abstract class NotarizationBase
 
   #resultCallback?: ResultCallback;
 
-  currentStepUpdateCallback?: (currentStep: number) => void
+  currentStepUpdateCallback?: (currentStep: number) => void;
 
-  constructor(
-    task: Task
-  ) {
+  constructor(task: Task) {
     super({
       progress: 0,
       status: NotarizationStatus.NotStarted,
     });
     this.task = task;
-    this.currentStep = 0
+    this.currentStep = 0;
   }
 
   public async start(
@@ -63,17 +61,18 @@ export abstract class NotarizationBase
       this.state = {
         progress: this.state.progress,
         status: NotarizationStatus.Stopped,
-        error: res
+        error: res,
       };
       return;
     }
     this.state = {
       progress: 100,
       status: NotarizationStatus.Completed,
-      error: undefined
+      error: undefined,
     };
-    this.currentStep = 2
-    if (this.currentStepUpdateCallback) this.currentStepUpdateCallback(this.currentStep)
+    this.currentStep = 2;
+    if (this.currentStepUpdateCallback)
+      this.currentStepUpdateCallback(this.currentStep);
     if (this.#resultCallback) {
       void this.#resultCallback(res);
     }

@@ -53,14 +53,14 @@ export class NotarizationManager {
         store.dispatch(notarizationSlice.actions.setResult(presentation.data));
       },
       this.notificationHandler.bind(this),
-      this.currentStepUpdateHandler.bind(this)
+      this.currentStepUpdateHandler.bind(this),
     );
   }
 
   notificationHandler(state: State<NotarizationStatus>) {
     console.log('State updated:', state);
     store.dispatch(notarizationSlice.actions.setProgress(state.progress));
-    // 
+    //
   }
 
   currentStepUpdateHandler(currentStep: number) {
@@ -71,7 +71,7 @@ export class NotarizationManager {
 const t: Task[] = tasks();
 
 export const notarizationManager = new NotarizationManager([
-  new NotarizationXProfile(t[0])
+  new NotarizationXProfile(t[0]),
   // new NotarizationUberRides(t[0]),
   // new NotarizationXVerifiedFollowers(t[1]),
   // new NotarizationAppleDevices(t[2]),

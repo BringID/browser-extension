@@ -1,1 +1,1 @@
-export type TNotarizationStatus = 'completed' | 'current' | 'disabled'
+export type TNotarizationStatus = 'completed' | 'current' | 'disabled';

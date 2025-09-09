@@ -33,12 +33,9 @@ export const LogoWrapperStyled = styled(LogoWrapper)`
   margin-bottom: 12px;
 `;
 
-
 export const SpinnerStyled = styled(Spinner)`
   border-color: ${(props) => props.theme.primaryBorderColor};
 `;
-
-
 
 export const ButtonStyled = styled(Button)`
   margin-top: 10px;

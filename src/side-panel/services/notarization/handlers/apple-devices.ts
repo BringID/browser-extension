@@ -86,7 +86,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
 
     const result = await notary.transcript(reqLog);
     console.log('[AppleDevices] Transcript result:', result);
-    
+
     if (result instanceof Error) {
       console.error('[AppleDevices] Error in transcript:', result);
       this.result(result);
@@ -122,17 +122,21 @@ export class NotarizationAppleDevices extends NotarizationBase {
         Array.isArray(jsonData.devices) &&
         jsonData.devices.length > 0
       ) {
-        console.log('[AppleDevices] Found devices array with', jsonData.devices.length, 'devices');
+        console.log(
+          '[AppleDevices] Found devices array with',
+          jsonData.devices.length,
+          'devices',
+        );
         console.log('[AppleDevices] Devices data:', jsonData.devices);
 
         // Find the entire devices field using simple regex
         const devicesRegex = /"devices"\s*:\s*\[.*?\]/s;
         const devicesMatch = responseText.match(devicesRegex);
-        
+
         if (devicesMatch) {
           const devicesArrayStart = devicesMatch.index!;
           const devicesArrayEnd = devicesArrayStart + devicesMatch[0].length;
-          
+
           console.log(
             '[AppleDevices] Found devices array position:',
             devicesArrayStart,
@@ -158,7 +162,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
     console.log('[AppleDevices] Starting notarization...');
     const notarizationResult = await notary.notarize(commit);
     console.log('[AppleDevices] Notarization completed:', notarizationResult);
-    
+
     this.result(notarizationResult);
   }
 

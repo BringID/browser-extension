@@ -1,4 +1,4 @@
-import { TNotarizationStep } from "../types";
+import { TNotarizationStep } from '../types';
 
 export type Task = {
   title: string;
@@ -7,7 +7,7 @@ export type Task = {
   points: number;
   semaphoreGroupId: string;
   credentialGroupId: string;
-  steps: TNotarizationStep[]
+  steps: TNotarizationStep[];
 };
 
 function loadTasks(): Task[] {
@@ -35,7 +35,7 @@ function loadTasks(): Task[] {
         points: task.points,
         semaphoreGroupId: task.semaphoreGroupId,
         credentialGroupId: task.credentialGroupId,
-        steps: task.steps
+        steps: task.steps,
       };
     });
   } catch (error) {

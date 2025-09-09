@@ -35,5 +35,5 @@ export {
   Verification,
   LogoWrapper,
   Checkbox,
-  Step
+  Step,
 };

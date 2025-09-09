@@ -23,14 +23,16 @@ export class NotarizationXProfile extends NotarizationBase {
 
     // check if on login page => this.setMessage('...')
     // this.setProgress(30);
-    this.currentStep = 0
-    if (this.currentStepUpdateCallback) this.currentStepUpdateCallback(this.currentStep)
+    this.currentStep = 0;
+    if (this.currentStepUpdateCallback)
+      this.currentStepUpdateCallback(this.currentStep);
   }
 
   private async onRequestsCaptured(log: Array<Request>) {
     // this.setProgress(60);
-    this.currentStep = 1
-    if (this.currentStepUpdateCallback) this.currentStepUpdateCallback(this.currentStep)
+    this.currentStep = 1;
+    if (this.currentStepUpdateCallback)
+      this.currentStepUpdateCallback(this.currentStep);
 
     const notary = await TLSNotary.new('api.x.com');
     delete log[0].headers['Accept-Encoding'];

@@ -14,9 +14,7 @@ const VerificationsList: FC<TProps> = ({
   return (
     <Container className={className}>
       {verifications.length === 0 && (
-        <NoVerificationsFound
-          title="No verifications yet"
-        />
+        <NoVerificationsFound title="No verifications yet" />
       )}
       {verifications.length > 0 &&
         verifications.map((verification) => {

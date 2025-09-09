@@ -15,8 +15,7 @@ import { TExtensionRequestType } from './types';
 import { useUser } from './store/reducers/user';
 
 const Popup: FC = () => {
-
-  const user = useUser()
+  const user = useUser();
   useEffect(() => {
     chrome.action.setBadgeText({ text: '' });
     // to cleanup all notifications after open
@@ -31,10 +30,7 @@ const Popup: FC = () => {
             store.dispatch(setLoading(true));
 
             try {
-              const {
-                presentationData,
-                credentialGroupId
-              } = request.data;
+              const { presentationData, credentialGroupId } = request.data;
 
               if (presentationData) {
                 const verify = await manager.runVerify(
@@ -75,9 +71,7 @@ const Popup: FC = () => {
       await dbStorage.syncUser();
       await dbStorage.syncVerifications();
     })();
-  }, [
-    user.id
-  ]);
+  }, [user.id]);
 
   return (
     <Page>

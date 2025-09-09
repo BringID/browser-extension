@@ -11,7 +11,7 @@ import {
   Header,
   TitleStyled,
   Content,
-  Wrapper
+  Wrapper,
 } from './styled-components';
 import { Page, Step } from '../components';
 import './style.css';
@@ -45,9 +45,11 @@ const SidePanel: FC = () => {
     };
   }, []);
 
-  const { result, taskId, progress, currentStep } = useSelector((state: RootState) => {
-    return state.notarization;
-  });
+  const { result, taskId, progress, currentStep } = useSelector(
+    (state: RootState) => {
+      return state.notarization;
+    },
+  );
 
   const availableTasks = tasks();
   console.log({ taskId });
@@ -67,32 +69,36 @@ const SidePanel: FC = () => {
 
           <Content>
             {currentTask.steps.map((step, idx) => {
-              return <Step
-                {...step}
-                idx={idx}
-                key={step.text}
-                currentStep={currentStep}
-                progress={progress}
-                onClick={
-                  step.notarization ? () => {
-                    if (!result) {
-                      return;
-                    }
-                    // @ts-ignore
-                    chrome.action.openPopup();
+              return (
+                <Step
+                  {...step}
+                  idx={idx}
+                  key={step.text}
+                  currentStep={currentStep}
+                  progress={progress}
+                  onClick={
+                    step.notarization
+                      ? () => {
+                          if (!result) {
+                            return;
+                          }
+                          // @ts-ignore
+                          chrome.action.openPopup();
 
-                    window.setTimeout(() => {
-                      sendMessage({
-                        type: 'PRESENTATION',
-                        data: {
-                          presentationData: result,
-                          credentialGroupId,
-                        },
-                      });
-                    }, 1500);
-                  } : undefined
-                }
-              />
+                          window.setTimeout(() => {
+                            sendMessage({
+                              type: 'PRESENTATION',
+                              data: {
+                                presentationData: result,
+                                credentialGroupId,
+                              },
+                            });
+                          }, 1500);
+                        }
+                      : undefined
+                  }
+                />
+              );
             })}
           </Content>
         </Container>

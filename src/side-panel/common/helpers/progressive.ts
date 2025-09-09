@@ -1,6 +1,5 @@
 export type StateStatus = string | number | symbol;
 
-
 export type State<T extends StateStatus> = {
   status: T;
   progress: number;

@@ -1,8 +1,7 @@
-
-import { TNotarizationStatus } from './notarization-status'
+import { TNotarizationStatus } from './notarization-status';
 
 export type TNotarizationStep = {
-  status: TNotarizationStatus,
-  text: string
-  notarization?: boolean
-}
+  status: TNotarizationStatus;
+  text: string;
+  notarization?: boolean;
+};

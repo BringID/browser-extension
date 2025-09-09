@@ -21,7 +21,7 @@ type State = TUser;
 const initState: State = {
   key: null,
   id: null,
-  address: null
+  address: null,
 };
 
 export const setKey = (key: string): Action<string> => ({

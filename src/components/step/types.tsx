@@ -1,9 +1,9 @@
 type TProps = {
-  text: string
-  idx: number
-  currentStep: number
-  onClick?: () => void
-  progress?: number
-}
+  text: string;
+  idx: number;
+  currentStep: number;
+  onClick?: () => void;
+  progress?: number;
+};
 
-export default TProps
+export default TProps;

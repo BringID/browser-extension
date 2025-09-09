@@ -25,7 +25,7 @@ import {
   TAddVerification,
   TSyncUser,
   TSyncVerifications,
-  TDestroyUser
+  TDestroyUser,
 } from './types';
 import { tasks } from '../../common/core';
 import semaphore from '../semaphore';
@@ -75,7 +75,7 @@ export class DBStorage implements TDBStorage {
       status: 'basic' as TUserStatus,
       key: null,
       id: userId,
-      address: null
+      address: null,
     };
     await this.#userDb.put(userId, userNew);
 
@@ -156,10 +156,7 @@ export class DBStorage implements TDBStorage {
     await this.syncVerifications();
   };
 
-  addUserKey: TAddUserKey = async (
-    key: string,
-    address: string
-  ) => {
+  addUserKey: TAddUserKey = async (key: string, address: string) => {
     const existingUserId = await this.getUserId();
     if (existingUserId) {
       const user: TUser = await this.#userDb.get(existingUserId);
@@ -167,7 +164,7 @@ export class DBStorage implements TDBStorage {
       await this.#userDb.put(existingUserId, {
         ...user,
         key,
-        address
+        address,
       });
 
       store.dispatch(setKey(key));
@@ -181,12 +178,12 @@ export class DBStorage implements TDBStorage {
   };
 
   destroyUser: TDestroyUser = async () => {
-    await this.#userDb.clear()
-    await this.#verificationsDb.clear()
-    await this.addInitialUser()
+    await this.#userDb.clear();
+    await this.#verificationsDb.clear();
+    await this.addInitialUser();
 
-    return true
-  }
+    return true;
+  };
 
   getUserKey: TGetUserKey = async () => {
     const existingUserId = await this.getUserId();
