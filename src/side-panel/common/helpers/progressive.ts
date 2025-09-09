@@ -1,5 +1,6 @@
 export type StateStatus = string | number | symbol;
 
+
 export type State<T extends StateStatus> = {
   status: T;
   progress: number;
@@ -47,7 +48,6 @@ export class Progressive<T extends StateStatus> {
   }
 
   protected setError(error: Error) {
-    console.log(2);
     this.#state.error = error;
     this.notify();
   }

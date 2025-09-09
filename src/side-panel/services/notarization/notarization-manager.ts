@@ -27,12 +27,13 @@ export class NotarizationManager {
       await this.#currentNotarization.stop();
     }
     store.dispatch(notarizationSlice.actions.setTaskId(id));
+
     this.#currentNotarization = this.#notarizations[id];
+
     await this.#currentNotarization.start(
       // TODO Presentation should be passed to popup
       async (res) => {
         if (res instanceof Error) {
-          console.log(5);
           console.error(res);
           return;
         }
@@ -52,18 +53,26 @@ export class NotarizationManager {
         store.dispatch(notarizationSlice.actions.setResult(presentation.data));
       },
       this.notificationHandler.bind(this),
+      this.currentStepUpdateHandler.bind(this)
     );
   }
 
   notificationHandler(state: State<NotarizationStatus>) {
     console.log('State updated:', state);
     store.dispatch(notarizationSlice.actions.setProgress(state.progress));
+    // 
+  }
+
+  currentStepUpdateHandler(currentStep: number) {
+    store.dispatch(notarizationSlice.actions.setCurrentStep(currentStep));
   }
 }
 
 const t: Task[] = tasks();
+
 export const notarizationManager = new NotarizationManager([
-  new NotarizationUberRides(t[0]),
-  new NotarizationXVerifiedFollowers(t[1]),
-  new NotarizationAppleDevices(t[2]),
+  new NotarizationXProfile(t[0])
+  // new NotarizationUberRides(t[0]),
+  // new NotarizationXVerifiedFollowers(t[1]),
+  // new NotarizationAppleDevices(t[2]),
 ]);

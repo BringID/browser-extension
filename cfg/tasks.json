@@ -1,24 +1,22 @@
 [
   {
-    "title": "Uber Rides",
-    "description": "Prove the amount of Uber rides you took",
+    "title": "X Account",
+    "description": "Prove the ownership of an account on X",
     "points": 10,
     "semaphoreGroupId": "8",
     "credentialGroupId": "1",
-    "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg"
-  },
-  {
-    "title": "X Verified Followers",
-    "description": "Prove verified followers on X",
-    "points": 10,
-    "semaphoreGroupId": "9",
-    "credentialGroupId": "2"
-  },
-  {
-    "title": "Apple Devices",
-    "description": "Prove you have at least two Apple devices",
-    "points": 10,
-    "semaphoreGroupId": "11",
-    "credentialGroupId": "5"
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
+    "steps": [
+      {
+        "text": "Visit website"
+      },
+      {
+        "text": "Wait for request capure"
+      },
+      {
+        "text": "Notarize",
+        "notarization": true
+      }
+    ]
   }
 ]

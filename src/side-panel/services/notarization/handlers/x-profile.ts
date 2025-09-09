@@ -18,14 +18,20 @@ export class NotarizationXProfile extends NotarizationBase {
 
   public async onStart(): Promise<void> {
     this.requestRecorder.start();
+
     await chrome.tabs.create({ url: 'https://x.com' });
 
     // check if on login page => this.setMessage('...')
-    this.setProgress(30);
+    // this.setProgress(30);
+    this.currentStep = 0
+    if (this.currentStepUpdateCallback) this.currentStepUpdateCallback(this.currentStep)
   }
 
   private async onRequestsCaptured(log: Array<Request>) {
-    this.setProgress(60);
+    // this.setProgress(60);
+    this.currentStep = 1
+    if (this.currentStepUpdateCallback) this.currentStepUpdateCallback(this.currentStep)
+
     const notary = await TLSNotary.new('api.x.com');
     delete log[0].headers['Accept-Encoding'];
     const result = await notary.transcript(log[0]);

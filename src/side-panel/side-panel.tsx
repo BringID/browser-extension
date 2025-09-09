@@ -11,12 +11,9 @@ import {
   Header,
   TitleStyled,
   Content,
-  Wrapper,
-  NoteStyled,
-  NoteContent,
-  ButtonStyled,
+  Wrapper
 } from './styled-components';
-import { Page } from '../components';
+import { Page, Step } from '../components';
 import './style.css';
 import { TMessage } from '../common/core/messages';
 
@@ -48,7 +45,7 @@ const SidePanel: FC = () => {
     };
   }, []);
 
-  const { result, taskId, progress } = useSelector((state: RootState) => {
+  const { result, taskId, progress, currentStep } = useSelector((state: RootState) => {
     return state.notarization;
   });
 
@@ -56,7 +53,8 @@ const SidePanel: FC = () => {
   console.log({ taskId });
   const currentTask = availableTasks[taskId];
   const credentialGroupId = currentTask.credentialGroupId;
-  console.log('SIDE PANEL: ', { credentialGroupId });
+  console.log('SIDE PANEL steps: ', { currentStep });
+
   return (
     <Wrapper>
       <Page>
@@ -68,36 +66,34 @@ const SidePanel: FC = () => {
           </Header>
 
           <Content>
-            <NoteStyled title={`Notarization: ${progress}%`} status="warning">
-              <NoteContent>
-                {progress < 100 ? 'Please wait...' : 'Press button to continue'}
-              </NoteContent>
+            {currentTask.steps.map((step, idx) => {
+              return <Step
+                {...step}
+                idx={idx}
+                key={step.text}
+                currentStep={currentStep}
+                progress={progress}
+                onClick={
+                  step.notarization ? () => {
+                    if (!result) {
+                      return;
+                    }
+                    // @ts-ignore
+                    chrome.action.openPopup();
 
-              <ButtonStyled
-                appearance="action"
-                size="small"
-                disabled={progress < 100}
-                onClick={() => {
-                  if (!result) {
-                    return;
-                  }
-                  // @ts-ignore
-                  chrome.action.openPopup();
-
-                  window.setTimeout(() => {
-                    sendMessage({
-                      type: 'PRESENTATION',
-                      data: {
-                        presentationData: result,
-                        credentialGroupId,
-                      },
-                    });
-                  }, 1500);
-                }}
-              >
-                Continue
-              </ButtonStyled>
-            </NoteStyled>
+                    window.setTimeout(() => {
+                      sendMessage({
+                        type: 'PRESENTATION',
+                        data: {
+                          presentationData: result,
+                          credentialGroupId,
+                        },
+                      });
+                    }, 1500);
+                  } : undefined
+                }
+              />
+            })}
           </Content>
         </Container>
       </Page>

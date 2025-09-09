@@ -31,7 +31,10 @@ const Popup: FC = () => {
             store.dispatch(setLoading(true));
 
             try {
-              const { presentationData, credentialGroupId } = request.data;
+              const {
+                presentationData,
+                credentialGroupId
+              } = request.data;
 
               if (presentationData) {
                 const verify = await manager.runVerify(

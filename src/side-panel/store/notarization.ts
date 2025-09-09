@@ -12,7 +12,7 @@ export interface NotarizationState {
   status: NotarizationStatus;
   progress: number;
   error?: Error;
-
+  currentStep: number
   result?: string;
 
   // message => UI
@@ -26,6 +26,7 @@ export const notarizationSlice = createSlice({
     status: NotarizationStatus.pending,
     progress: 0,
     error: undefined,
+    currentStep: 0
   },
   reducers: {
     set: (_: NotarizationState, action: PayloadAction<NotarizationState>) => {
@@ -44,8 +45,11 @@ export const notarizationSlice = createSlice({
     },
 
     setError: (state: NotarizationState, action: PayloadAction<Error>) => {
-      console.log(3);
       state.error = action.payload;
+    },
+
+    setCurrentStep: (state: NotarizationState, action: PayloadAction<number>) => {
+      state.currentStep = action.payload;
     },
 
     setResult: (state: NotarizationState, action: PayloadAction<string>) => {

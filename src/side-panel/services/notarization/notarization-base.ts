@@ -13,19 +13,27 @@ export abstract class NotarizationBase
   implements NotarizationHandler
 {
   public readonly task: Task;
+  public currentStep: number;
+
   #resultCallback?: ResultCallback;
 
-  constructor(task: Task) {
+  currentStepUpdateCallback?: (currentStep: number) => void
+
+  constructor(
+    task: Task
+  ) {
     super({
       progress: 0,
       status: NotarizationStatus.NotStarted,
     });
     this.task = task;
+    this.currentStep = 0
   }
 
   public async start(
     resultCallback: ResultCallback,
     updatesCallback?: OnStateUpdated<NotarizationStatus>,
+    currentStepUpdateCallback?: (currentStep: number) => void,
   ): Promise<void> {
     if (this.state.status === NotarizationStatus.InProgress) {
       resultCallback(new Error('Notarization is already running'));
@@ -33,6 +41,9 @@ export abstract class NotarizationBase
     this.#resultCallback = resultCallback;
     if (updatesCallback) {
       this.onStateUpdated = updatesCallback;
+    }
+    if (currentStepUpdateCallback) {
+      this.currentStepUpdateCallback = currentStepUpdateCallback;
     }
     this.state = {
       progress: 0,
@@ -49,19 +60,20 @@ export abstract class NotarizationBase
 
   protected result(res: Result<Presentation>) {
     if (res instanceof Error) {
-      console.log(1);
       this.state = {
         progress: this.state.progress,
         status: NotarizationStatus.Stopped,
-        error: res,
+        error: res
       };
       return;
     }
     this.state = {
       progress: 100,
       status: NotarizationStatus.Completed,
-      error: undefined,
+      error: undefined
     };
+    this.currentStep = 2
+    if (this.currentStepUpdateCallback) this.currentStepUpdateCallback(this.currentStep)
     if (this.#resultCallback) {
       void this.#resultCallback(res);
     }
