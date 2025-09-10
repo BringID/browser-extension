@@ -75,10 +75,7 @@ async function createOffscreenDocument() {
   ) {
     switch (request.type) {
       case TWebsiteRequestType.set_private_key: {
-        await storage.addUserKey(
-          request.privateKey,
-          request.address
-        );
+        await storage.addUserKey(request.privateKey, request.address);
         return true; // Important for async response
       }
 

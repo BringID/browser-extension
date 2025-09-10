@@ -21,6 +21,7 @@ export interface NotarizationHandler {
   start: (
     resultCallback: ResultCallback,
     updatesCallback?: OnStateUpdated<NotarizationStatus>,
+    currentStepUpdateCallback?: (currentStep: number) => void,
   ) => Promise<void>;
   stop: () => Promise<void>;
 }

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Note, Title, LogoWrapper, Spinner, Button } from '../components';
+import { Title, LogoWrapper, Spinner, Button } from '../components';
 
 export const Container = styled.div`
   border: 1px solid ${(props) => props.theme.secondaryBorderColor};
@@ -33,16 +33,8 @@ export const LogoWrapperStyled = styled(LogoWrapper)`
   margin-bottom: 12px;
 `;
 
-export const NoteStyled = styled(Note)``;
-
 export const SpinnerStyled = styled(Spinner)`
   border-color: ${(props) => props.theme.primaryBorderColor};
-`;
-
-export const NoteContent = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
 `;
 
 export const ButtonStyled = styled(Button)`

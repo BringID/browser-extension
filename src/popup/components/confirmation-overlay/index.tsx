@@ -209,7 +209,7 @@ const ConfirmationOverlay: FC<TProps> = ({
                     type: TExtensionRequestType.proofs_generated,
                     payload: {
                       proofs,
-                      points: pointsSelected
+                      points: pointsSelected,
                     },
                   });
                 } else {

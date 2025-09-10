@@ -34,7 +34,6 @@ const Home: FC = () => {
 
   const [scheduledTime, setScheduledTime] = useState<number | null>(null);
 
-
   const availablePoints = calculateAvailablePoints(verifications);
   const leftForAdvanced = configs.ADVANCED_STATUS_POINTS - availablePoints;
   const percentageFinished =
@@ -43,7 +42,7 @@ const Home: FC = () => {
   const userStatus = defineUserStatus(availablePoints);
 
   const navigate = useNavigate();
-  const user = useUser()
+  const user = useUser();
 
   useEffect(() => {
     chrome.storage.local.get('request', (data) => {

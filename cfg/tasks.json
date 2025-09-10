@@ -1,24 +1,82 @@
 [
   {
+    "title": "X Account",
+    "description": "Prove the ownership of an account on X",
+    "points": 10,
+    "semaphoreGroupId": "8",
+    "credentialGroupId": "99",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
+    "steps": [
+      {
+        "text": "Visit website"
+      },
+      {
+        "text": "Wait for request capture"
+      },
+      {
+        "text": "Notarization",
+        "notarization": true
+      }
+    ]
+  },
+  {
     "title": "Uber Rides",
     "description": "Prove the amount of Uber rides you took",
     "points": 10,
     "semaphoreGroupId": "8",
     "credentialGroupId": "1",
-    "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg"
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
+    "steps": [
+      {
+        "text": "Visit website"
+      },
+      {
+        "text": "Wait for request capture"
+      },
+      {
+        "text": "Notarization",
+        "notarization": true
+      }
+    ]
   },
   {
     "title": "X Verified Followers",
     "description": "Prove verified followers on X",
     "points": 10,
     "semaphoreGroupId": "9",
-    "credentialGroupId": "2"
+    "credentialGroupId": "2",
+    "steps": [
+      {
+        "text": "Visit website"
+      },
+      {
+        "text": "Wait for request capture"
+      },
+      {
+        "text": "Notarization",
+        "notarization": true
+      }
+    ]
   },
   {
     "title": "Apple Devices",
     "description": "Prove you have at least two Apple devices",
     "points": 10,
     "semaphoreGroupId": "11",
-    "credentialGroupId": "5"
+    "credentialGroupId": "5",
+    "steps": [
+      {
+        "text": "Visit website"
+      },
+      {
+        "text": "Wait for request capture"
+      },
+      {
+        "text": "Notarization",
+        "notarization": true
+      }
+    ]
   }
 ]
+
+
