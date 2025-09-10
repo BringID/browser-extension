@@ -23,22 +23,22 @@ export class NotarizationXProfile extends NotarizationBase {
 
     // check if on login page => this.setMessage('...')
     // this.setProgress(30);
-    this.currentStep = 0;
+    this.currentStep = 1;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
   }
 
   private async onRequestsCaptured(log: Array<Request>) {
     // this.setProgress(60);
-    this.currentStep = 1;
+    this.currentStep = 2;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
 
     const notary = await TLSNotary.new('api.x.com');
+    this.setProgress(33)
     delete log[0].headers['Accept-Encoding'];
     const result = await notary.transcript(log[0]);
     if (result instanceof Error) {
-      console.log(4);
       this.result(result);
       return;
     }
@@ -48,6 +48,7 @@ export class NotarizationXProfile extends NotarizationBase {
       sent: [{ start: 0, end: transcript.sent.length }],
       recv: [{ start: 0, end: message.info.length }],
     };
+    this.setProgress(66)
     const jsonStarts: number = Buffer.from(transcript.recv)
       .toString('utf-8')
       .indexOf('{');
@@ -64,6 +65,7 @@ export class NotarizationXProfile extends NotarizationBase {
       start: jsonStarts + screenName.key?.pos,
       end: jsonStarts + screenName.valueEnd.pos,
     });
+    this.setProgress(99)
 
     this.result(await notary.notarize(commit));
   }

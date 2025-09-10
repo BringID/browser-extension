@@ -70,7 +70,7 @@ export abstract class NotarizationBase
       status: NotarizationStatus.Completed,
       error: undefined,
     };
-    this.currentStep = 2;
+    this.currentStep = 3;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
     if (this.#resultCallback) {
