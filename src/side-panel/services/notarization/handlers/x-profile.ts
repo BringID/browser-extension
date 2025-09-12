@@ -22,14 +22,12 @@ export class NotarizationXProfile extends NotarizationBase {
     await chrome.tabs.create({ url: 'https://x.com' });
 
     // check if on login page => this.setMessage('...')
-    // this.setProgress(30);
     this.currentStep = 1;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
   }
 
   private async onRequestsCaptured(log: Array<Request>) {
-    // this.setProgress(60);
     this.currentStep = 2;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);

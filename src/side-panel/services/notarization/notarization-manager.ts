@@ -76,7 +76,7 @@ const t: Task[] = tasks();
 
 export const notarizationManager = new NotarizationManager([
   new NotarizationXProfile(t[0]),
-  // new NotarizationUberRides(t[0]),
-  // new NotarizationXVerifiedFollowers(t[1]),
-  // new NotarizationAppleDevices(t[2]),
+  new NotarizationUberRides(t[1]),
+  new NotarizationXVerifiedFollowers(t[2]),
+  new NotarizationAppleDevices(t[3]),
 ]);

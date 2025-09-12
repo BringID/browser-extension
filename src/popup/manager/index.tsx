@@ -32,7 +32,6 @@ class Manager implements IManager {
   };
 
   runTask: TRunTask = async (taskIndex) => {
-    
     window.setTimeout(() => {
       sendMessage({
         type: 'NOTARIZE',

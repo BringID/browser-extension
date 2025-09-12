@@ -70,8 +70,8 @@
       },
       {
         "points": 10,
-        "semaphoreGroupId": "9",
-        "credentialGroupId": "2",
+        "semaphoreGroupId": "10",
+        "credentialGroupId": "3",
         "checks": [
           {
             "key": "verified_follower_count",
@@ -82,8 +82,8 @@
       },
       {
         "points": 5,
-        "semaphoreGroupId": "9",
-        "credentialGroupId": "2",
+        "semaphoreGroupId": "11",
+        "credentialGroupId": "4",
         "checks": [
           {
             "key": "verified_follower_count",
@@ -131,3 +131,4 @@
     ]
   }
 ]
+
