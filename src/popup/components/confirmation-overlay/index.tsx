@@ -17,7 +17,7 @@ import {
 } from './styled-components';
 import TProps from './types';
 import { useVerifications } from '../../store/reducers/verifications';
-import { defineUserStatus, getCurrentTab } from '../../utils';
+import { defineTaskByCredentialGroupId, defineUserStatus, getCurrentTab } from '../../utils';
 import { Tag } from '../../../components';
 import BringGif from './bring.gif';
 import { TExtensionRequestType, TUserStatus, TVerification } from '../../types';
@@ -107,23 +107,21 @@ const ConfirmationOverlay: FC<TProps> = ({
     let result = 0;
 
     verificationsState.verifications.forEach((verification) => {
-      const relatedTask = availableTasks.find(
-        (task) => task.credentialGroupId === verification.credentialGroupId,
-      );
-      console.log({
-        relatedTask,
-      });
+      const relatedTask = defineTaskByCredentialGroupId(verification.credentialGroupId)
+
       if (!relatedTask) {
         return;
       }
       if (verification.status !== 'completed') {
         return;
       }
-      if (!selected.includes(relatedTask?.credentialGroupId)) {
+
+      if (!selected.includes(relatedTask.group.credentialGroupId)) {
         return;
       }
+
       if (relatedTask) {
-        result = result + relatedTask?.points;
+        result = result + relatedTask.group.points;
       }
     });
 

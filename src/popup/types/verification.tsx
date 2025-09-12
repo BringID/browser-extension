@@ -7,7 +7,7 @@ type TVerification = {
   batchId?: string | null;
   txHash?: string;
   fetched: boolean;
-  taskId?: string;
+  taskId: string; // id of task saved in DB
 };
 
 export default TVerification;

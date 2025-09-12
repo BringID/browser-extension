@@ -96,7 +96,7 @@ const Verification: FC<TProps> = ({
       icon={icon}
       selected={selected}
       onSelect={onSelect}
-      credentialGroupId={credentialGroupId}
+      id={credentialGroupId}
     >
       <Value>{content}</Value>
     </TaskContainer>

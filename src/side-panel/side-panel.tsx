@@ -45,7 +45,7 @@ const SidePanel: FC = () => {
     };
   }, []);
 
-  const { result, taskId, progress, currentStep } = useSelector(
+  const { result, taskId, progress, currentStep, transcriptRecv } = useSelector(
     (state: RootState) => {
       return state.notarization;
     },
@@ -54,7 +54,8 @@ const SidePanel: FC = () => {
   const availableTasks = tasks();
   console.log({ taskId });
   const currentTask = availableTasks[taskId];
-  const credentialGroupId = currentTask.credentialGroupId;
+
+  // const credentialGroupId = currentTask.credentialGroupId;
   console.log('SIDE PANEL steps: ', { currentStep });
 
   return (
@@ -79,8 +80,8 @@ const SidePanel: FC = () => {
                   onClick={
                     step.notarization
                       ? () => {
-                          if (!result) {
-                            return;
+                          if (!result || !transcriptRecv) {
+                            return alert('Presentation data or transcriptRecv not defined')
                           }
                           // @ts-ignore
                           chrome.action.openPopup();
@@ -90,7 +91,8 @@ const SidePanel: FC = () => {
                               type: 'PRESENTATION',
                               data: {
                                 presentationData: result,
-                                credentialGroupId,
+                                transcriptRecv,
+                                taskIndex: taskId
                               },
                             });
                           }, 1500);

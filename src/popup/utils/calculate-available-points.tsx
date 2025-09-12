@@ -1,18 +1,19 @@
-import { tasks } from '../../common/core';
 import { TVerification } from '../types';
+import defineTaskByCredentialGroupId from './define-task-by-credential-group-id';
 
 function calculateAvailablePoints(verifications: TVerification[]): number {
   let points = 0;
-  const availableTasks = tasks();
   verifications.forEach((verification) => {
     if (verification.status !== 'completed') {
       return;
     }
-    const taskId = verification.credentialGroupId;
-    const relatedTask = availableTasks.find(
-      (task) => task.credentialGroupId === taskId,
-    );
-    points = points + (relatedTask?.points || 0);
+    const relatedTask = defineTaskByCredentialGroupId(verification.credentialGroupId)
+
+    if (!relatedTask) { return }
+
+    const { group } = relatedTask
+
+    points = points + (group.points || 0);
   });
   return points;
 }

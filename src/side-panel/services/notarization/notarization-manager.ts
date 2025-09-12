@@ -40,6 +40,7 @@ export class NotarizationManager {
 
         const presentation = await res.json();
         const verifierOutput = await res.verify();
+
         const transcript = new Transcript({
           sent: verifierOutput.transcript?.sent || [],
           recv: verifierOutput.transcript?.recv || [],
@@ -50,7 +51,10 @@ export class NotarizationManager {
           recv: transcript.recv(),
         });
 
+
         store.dispatch(notarizationSlice.actions.setResult(presentation.data));
+        store.dispatch(notarizationSlice.actions.setTranscriptRecv(transcript.recv()));
+
       },
       this.notificationHandler.bind(this),
       this.currentStepUpdateHandler.bind(this),

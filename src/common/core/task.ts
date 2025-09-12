@@ -1,12 +1,11 @@
-import { TNotarizationStep } from '../types';
+import { TNotarizationStep, TNotarizationGroup } from '../types';
 
 export type Task = {
+  id: string;
   title: string;
   description?: string;
   icon?: string;
-  points: number;
-  semaphoreGroupId: string;
-  credentialGroupId: string;
+  groups: TNotarizationGroup[]
   steps: TNotarizationStep[];
 };
 
@@ -23,18 +22,17 @@ function loadTasks(): Task[] {
     // Parse and validate each task
     return tasksConfig.map((task): Task => {
       // Ensure required fields are present
-      if (typeof task.title !== 'string' || typeof task.points !== 'number') {
+      if (typeof task.title !== 'string' || !task.groups) {
         console.warn('Invalid task format:', task);
         throw new Error('Invalid task format');
       }
 
       return {
         title: task.title,
+        id: task.id,
         description: task.description,
         icon: task.icon,
-        points: task.points,
-        semaphoreGroupId: task.semaphoreGroupId,
-        credentialGroupId: task.credentialGroupId,
+        groups: task.groups,
         steps: task.steps,
       };
     });

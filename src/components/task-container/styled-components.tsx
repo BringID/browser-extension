@@ -4,23 +4,13 @@ import Checkbox from '../checkbox';
 
 export const Container = styled.div<{
   status: TVerificationStatus;
-  selectable: boolean;
 }>`
   padding: 12px;
   border-radius: 8px;
-  display: grid;
-  grid-template-columns: 30px 1fr max-content;
-  gap: 10px;
-  align-items: center;
+  
   min-height: 72px;
   background-color: ${(props) => props.theme.defaultStatusBackgroundColor};
   border: 1px solid ${(props) => props.theme.defaultStatusBorderColor};
-
-  ${(props) =>
-    props.selectable &&
-    css`
-      grid-template-columns: min-content 30px 1fr max-content;
-    `}
 
   ${(props) =>
     props.status === 'completed' &&
@@ -73,3 +63,36 @@ export const ImageWrapper = styled.div`
 `;
 
 export const Content = styled.div``;
+
+
+export const Tiers = styled.ul`
+  margin: 4px 0 0;
+  padding: 0 0 0 10px;
+`
+
+export const Tier = styled.li`
+  
+`
+
+export const Body = styled.div<{
+  selectable: boolean;
+}>`
+  display: grid;
+  grid-template-columns: 30px 1fr max-content;
+  gap: 10px;
+  align-items: center;
+
+  ${(props) =>
+    props.selectable &&
+    css`
+      grid-template-columns: min-content 30px 1fr max-content;
+    `}
+
+`
+
+export const Footer = styled.div`
+  color: ${(props) => props.theme.secondaryTextColor};
+  padding-top: 10px;
+  padding-left: 40px;
+
+`

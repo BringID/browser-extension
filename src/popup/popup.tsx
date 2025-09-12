@@ -6,11 +6,11 @@ import './styles.css';
 import { Navigate, Route, Routes } from 'react-router';
 import getStorage from './db-storage';
 import manager from './manager';
-import { IPCPresentation } from '../common/core';
+import { IPCPresentation, tasks } from '../common/core';
 import store from './store';
 import { setLoading } from './store/reducers/verifications';
 import { sendMessage } from '../common/core/messages';
-import { getCurrentTab } from './utils';
+import { defineGroup, getCurrentTab } from './utils';
 import { TExtensionRequestType } from './types';
 import { useUser } from './store/reducers/user';
 
@@ -30,9 +30,27 @@ const Popup: FC = () => {
             store.dispatch(setLoading(true));
 
             try {
-              const { presentationData, credentialGroupId } = request.data;
+              const { presentationData, transcriptRecv, taskIndex } = request.data;
 
-              if (presentationData) {
+              const availableTasks = tasks()
+              const currentTask = availableTasks[taskIndex]
+
+              const groupData = defineGroup(
+                transcriptRecv,
+                currentTask.groups
+              )
+
+              console.log({
+                groupData
+              })
+
+              if (groupData) {
+
+                const {
+                  credentialGroupId,
+                  semaphoreGroupId
+                } = groupData
+
                 const verify = await manager.runVerify(
                   presentationData,
                   credentialGroupId,

@@ -56,7 +56,7 @@ export class NotarizationXProfile extends NotarizationBase {
     const pointers: Pointers = parse(message.body.toString()).pointers;
 
     const screenName: Mapping = pointers['/screen_name'];
-
+    console.log({ pointers })
     if (!screenName.key?.pos) {
       this.result(new Error('screen_name not found'));
       return;
@@ -65,6 +65,8 @@ export class NotarizationXProfile extends NotarizationBase {
       start: jsonStarts + screenName.key?.pos,
       end: jsonStarts + screenName.valueEnd.pos,
     });
+    console.log({ commit })
+
     this.setProgress(99)
 
     this.result(await notary.notarize(commit));
