@@ -91,31 +91,38 @@ export class DBStorage implements TDBStorage {
     }
     const user: TUser = await this.#userDb.get(existingUserId);
     const verifications: TVerification[] = [];
-    availableTasks.forEach(async (task) => {
-      const identity = semaphore.createIdentity(
-        String(user.key),
-        task.credentialGroupId,
-      );
-      const { commitment } = identity;
 
-      try {
-        const proof = await semaphore.getProof(
-          String(commitment),
-          task.semaphoreGroupId,
+    availableTasks.forEach(async (task) => {
+
+      task.groups.forEach(async group => {
+        const identity = semaphore.createIdentity(
+          String(user.key),
+          group.credentialGroupId,
         );
-        if (proof) {
-          const verificationAdded = await this.addVerification({
-            credentialGroupId: task.credentialGroupId,
-            status: 'completed',
-            scheduledTime: +new Date(),
-            fetched: true,
-          });
-          store.dispatch(addVerification(verificationAdded));
-          verifications.push(verificationAdded);
+        const { commitment } = identity;
+
+        try {
+          const proof = await semaphore.getProof(
+            String(commitment),
+            group.semaphoreGroupId,
+          );
+          if (proof) {
+
+            const verificationAdded = await this.addVerification({
+              credentialGroupId: group.credentialGroupId,
+              status: 'completed',
+              scheduledTime: +new Date(),
+              fetched: true,
+              taskId: task.id
+            });
+            store.dispatch(addVerification(verificationAdded));
+            verifications.push(verificationAdded);
+          }
+        } catch (err) {
+          console.log(`proof for ${commitment} was not added before`);
         }
-      } catch (err) {
-        console.log(`proof for ${commitment} was not added before`);
-      }
+      })
+      
     });
 
     return verifications;

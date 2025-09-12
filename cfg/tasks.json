@@ -1,11 +1,16 @@
 [
   {
+    "id": "1",
     "title": "X Account",
     "description": "Prove the ownership of an account on X",
-    "points": 10,
-    "semaphoreGroupId": "8",
-    "credentialGroupId": "99",
     "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
+    "groups": [
+      {
+        "points": 10,
+        "semaphoreGroupId": "8",
+        "credentialGroupId": "99"
+      }
+    ],
     "steps": [
       {
         "text": "Visit website"
@@ -21,11 +26,18 @@
   },
   {
     "title": "Uber Rides",
+    "id": "2",
     "description": "Prove the amount of Uber rides you took",
-    "points": 10,
-    "semaphoreGroupId": "8",
-    "credentialGroupId": "1",
     "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
+
+    "groups": [
+      {
+        "points": 10,
+        "semaphoreGroupId": "8",
+        "credentialGroupId": "1"
+      }
+    ],
+   
     "steps": [
       {
         "text": "Visit website"
@@ -41,10 +53,46 @@
   },
   {
     "title": "X Verified Followers",
+    "id": "3",
     "description": "Prove verified followers on X",
-    "points": 10,
-    "semaphoreGroupId": "9",
-    "credentialGroupId": "2",
+    "groups": [
+      {
+        "points": 20,
+        "semaphoreGroupId": "9",
+        "credentialGroupId": "2",
+        "checks": [
+          {
+            "key": "verified_follower_count",
+            "type": "gte",
+            "value": "1000"
+          }
+        ]
+      },
+      {
+        "points": 10,
+        "semaphoreGroupId": "10",
+        "credentialGroupId": "3",
+        "checks": [
+          {
+            "key": "verified_follower_count",
+            "type": "gte",
+            "value": "100"
+          }
+        ]
+      },
+      {
+        "points": 5,
+        "semaphoreGroupId": "11",
+        "credentialGroupId": "4",
+        "checks": [
+          {
+            "key": "verified_follower_count",
+            "type": "gte",
+            "value": "10"
+          }
+        ]
+      }
+    ],
     "steps": [
       {
         "text": "Visit website"
@@ -59,11 +107,16 @@
     ]
   },
   {
+    "id": "4",
     "title": "Apple Devices",
     "description": "Prove you have at least two Apple devices",
-    "points": 10,
-    "semaphoreGroupId": "11",
-    "credentialGroupId": "5",
+    "groups": [
+      {
+        "points": 11,
+        "semaphoreGroupId": "12",
+        "credentialGroupId": "5"
+      }
+    ],
     "steps": [
       {
         "text": "Visit website"
@@ -78,5 +131,4 @@
     ]
   }
 ]
-
 

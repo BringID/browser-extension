@@ -9,7 +9,8 @@ export type IPCPresentation = {
   type: 'PRESENTATION';
   data: {
     presentationData: string;
-    credentialGroupId: string;
+    transcriptRecv: string;
+    taskIndex: number;
   };
 };
 

@@ -22,14 +22,19 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
     await chrome.tabs.create({
       url: 'https://x.com/i/account_analytics/overview',
     });
-    this.setProgress(30);
+        this.currentStep = 1;
+    if (this.currentStepUpdateCallback)
+      this.currentStepUpdateCallback(this.currentStep);
   }
 
   private async onRequestsCaptured(log: Array<Request>) {
     console.log('onRequestsCaptured');
-    this.setProgress(60);
+    this.currentStep = 2;
+    if (this.currentStepUpdateCallback)
+      this.currentStepUpdateCallback(this.currentStep);
     const notary = await TLSNotary.new('x.com');
     console.log('LOG:', log[0]);
+    this.setProgress(33)
 
     const reqLog = log[0];
 
@@ -84,7 +89,7 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
       sent: [{ start: 0, end: transcript.sent.length }],
       recv: [],
     };
-
+    this.setProgress(66)
     // Add verified followers if found
     // Add verified followers if found
     if (verifiedFollowersMatch) {
@@ -107,6 +112,7 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
         });
       }
     }
+    this.setProgress(99)
 
     this.result(await notary.notarize(commit));
   }

@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { Container } from './styled-components';
 import { Verification } from '../../../components';
 import TProps from './types';
+import { defineTaskByCredentialGroupId } from '../../utils';
 
 const VerificationsSelectList: FC<TProps> = ({
   tasks,
@@ -17,18 +18,20 @@ const VerificationsSelectList: FC<TProps> = ({
         if (verification.status !== 'completed') {
           return;
         }
-        const relatedTask = tasks.find(
-          (task) => task.credentialGroupId === verification.credentialGroupId,
-        );
-        if (relatedTask) {
-          const isSelected = selected.includes(relatedTask.credentialGroupId);
+
+        const relatedTaskData = defineTaskByCredentialGroupId(verification.credentialGroupId)
+
+        if (relatedTaskData) {
+          const { credentialGroupId, points } = relatedTaskData.group
+          const isSelected = selected.includes(credentialGroupId);
+
           return (
             <Verification
-              key={relatedTask.credentialGroupId}
-              title={relatedTask.title}
-              description={relatedTask.description}
-              taskId={relatedTask.credentialGroupId}
-              points={relatedTask.points}
+              key={credentialGroupId}
+              title={relatedTaskData.title}
+              description={relatedTaskData.description}
+              taskId={verification.taskId}
+              points={points}
               scheduledTime={verification.scheduledTime}
               status="default"
               fetched={verification.fetched}
@@ -36,7 +39,7 @@ const VerificationsSelectList: FC<TProps> = ({
               selected={isSelected}
               credentialGroupId={verification.credentialGroupId}
               onSelect={(selected) => {
-                onSelect(relatedTask.credentialGroupId, selected);
+                onSelect(credentialGroupId, selected);
               }}
             />
           );

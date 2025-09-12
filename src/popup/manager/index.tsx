@@ -12,7 +12,7 @@ import verifier from '../verifier';
 import relayer from '../relayer';
 import { TSemaphoreProof } from '../types';
 import { tasks } from '../../common/core';
-import { calculateScope } from '../utils';
+import { calculateScope, defineTaskByCredentialGroupId } from '../utils';
 import { generateProof } from '@semaphore-protocol/core';
 import { sendMessage } from '../../common/core';
 
@@ -31,10 +31,7 @@ class Manager implements IManager {
     await this.#db?.addUserKey(key, address);
   };
 
-  runTask: TRunTask = async (credentialGroupId) => {
-    const taskIndex = tasks().findIndex(
-      (task) => task.credentialGroupId === credentialGroupId,
-    );
+  runTask: TRunTask = async (taskIndex) => {
     window.setTimeout(() => {
       sendMessage({
         type: 'NOTARIZE',
@@ -106,7 +103,16 @@ class Manager implements IManager {
         if (status !== 'completed') {
           continue;
         }
-        totalScore = totalScore + availableTasks[x].points;
+
+        const relatedTask = defineTaskByCredentialGroupId(credentialGroupId)
+
+        if (!relatedTask) {
+          continue
+        }
+
+        const { group } = relatedTask
+
+        totalScore = totalScore + group.points;
         const identity = semaphore.createIdentity(userKey, credentialGroupId);
 
         console.log('getProofs 2: ', {
@@ -119,7 +125,7 @@ class Manager implements IManager {
 
         const data = await semaphore.getProof(
           String(commitment),
-          availableTasks[x].semaphoreGroupId,
+          group.semaphoreGroupId,
         );
 
         console.log('getProofs 3: ', {

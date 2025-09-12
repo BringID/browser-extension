@@ -9,14 +9,17 @@ import configs from '../../popup/configs';
 import browser from 'webextension-polyfill';
 import { Icons, Tag } from '../../components';
 import getStorage from '../../popup/db-storage';
+import { TNotarizationGroup } from '../../common/types';
+import { defineTaskPointsRange } from '../../popup/utils';
 
-const definePluginContent = (
+const defineTaskContent = (
   status: TVerificationStatus,
-  points: number,
-  credentialGroupId: string,
+  groups: TNotarizationGroup[],
+  taskIndex: number,
 ) => {
   switch (status) {
     case 'default':
+      const points = defineTaskPointsRange(groups)
       return (
         <>
           <Tag status="info">+{points}</Tag>
@@ -44,7 +47,7 @@ const definePluginContent = (
                 tabId: tab.id,
               });
 
-              await manager.runTask(credentialGroupId);
+              await manager.runTask(taskIndex);
             }}
           >
             Verify
@@ -62,13 +65,14 @@ const definePluginContent = (
 
 const Task: FC<TProps> = ({
   title,
-  credentialGroupId,
-  points,
+  groups,
   icon,
   description,
   status,
+  id,
+  taskIndex
 }) => {
-  const content = definePluginContent(status, points, credentialGroupId);
+  const content = defineTaskContent(status, groups, taskIndex);
 
   return (
     <TaskContainer
@@ -77,7 +81,8 @@ const Task: FC<TProps> = ({
       title={title}
       description={description}
       icon={icon}
-      credentialGroupId={credentialGroupId}
+      id={id}
+      groups={groups}
     >
       <Value>{content}</Value>
     </TaskContainer>

@@ -4,6 +4,7 @@ import { Container, ButtonStyled } from './styled-components';
 import { Verification } from '../../../components';
 import TProps from './types';
 import NoVerificationsFound from '../no-verifications-found';
+import { defineTaskByCredentialGroupId } from '../../utils';
 
 const VerificationsList: FC<TProps> = ({
   tasks,
@@ -18,18 +19,18 @@ const VerificationsList: FC<TProps> = ({
       )}
       {verifications.length > 0 &&
         verifications.map((verification) => {
-          const relatedTask = tasks.find(
-            (task) => task.credentialGroupId === verification.credentialGroupId,
-          );
-          if (relatedTask) {
+
+          const relatedTaskData = defineTaskByCredentialGroupId(verification.credentialGroupId)
+          if (relatedTaskData) {
+
             return (
               <Verification
                 fetched={verification.fetched}
-                key={relatedTask.credentialGroupId}
-                title={relatedTask.title}
-                description={relatedTask.description}
+                key={relatedTaskData.taskId}
+                title={relatedTaskData.title}
+                description={relatedTaskData.description}
                 taskId={verification.taskId}
-                points={relatedTask.points}
+                points={relatedTaskData.group.points}
                 scheduledTime={verification.scheduledTime}
                 status={verification.status}
                 selectable={false}
@@ -37,6 +38,7 @@ const VerificationsList: FC<TProps> = ({
               />
             );
           }
+          
         })}
 
       <ButtonStyled onClick={onAddVerifications} appearance="action">

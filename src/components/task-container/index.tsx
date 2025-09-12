@@ -8,8 +8,26 @@ import {
   ImageWrapper,
   Icon,
   CheckboxStyled,
+  Tiers,
+  Tier,
+  Body,
+  Footer
 } from './styled-components';
 import DefaultPluginIcon from '../../assets/img/default-plugin-icon.png';
+import { TNotarizationGroup } from '../../common/types';
+
+const defineTiers = (
+  groups?: TNotarizationGroup[]
+) => {
+  if (!groups || groups.length === 1) return null
+
+  return groups.map(group => {
+    const checks = group.checks
+    if (!checks) { return '' }
+
+    return `${checks[0].value}+: ${group.points} pts.`
+  }).filter(item => item)
+}
 
 const TaskContainer: FC<TProps> = ({
   status,
@@ -20,25 +38,37 @@ const TaskContainer: FC<TProps> = ({
   selectable,
   selected,
   onSelect,
-  credentialGroupId,
+  groups,
+  id
 }) => {
+
+  const tiers = defineTiers(groups)
+  console.log({ groups })
   return (
-    <Container status={status} selectable={selectable}>
-      {selectable && (
-        <CheckboxStyled
-          checked={Boolean(selected)}
-          onClick={onSelect}
-          id={credentialGroupId}
-        />
-      )}
-      <ImageWrapper>
-        <Icon src={icon || DefaultPluginIcon} />
-      </ImageWrapper>
-      <Content>
-        <Title>{title}</Title>
-        <Subtitle>{description}</Subtitle>
-      </Content>
-      {children}
+    <Container status={status}>
+      <Body selectable={selectable}>
+        {selectable && (
+          <CheckboxStyled
+            checked={Boolean(selected)}
+            onClick={onSelect}
+            id={id}
+          />
+        )}
+        <ImageWrapper>
+          <Icon src={icon || DefaultPluginIcon} />
+        </ImageWrapper>
+        <Content>
+          <Title>{title}</Title>
+          <Subtitle>{description}</Subtitle>
+        </Content>
+        {children}
+      </Body>
+      {tiers && <Footer>
+        Tiers:
+        <Tiers>
+          {tiers.map(tier => <Tier>{tier}</Tier>)}
+        </Tiers>
+      </Footer>}
     </Container>
   );
 };

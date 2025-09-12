@@ -40,6 +40,7 @@ export class NotarizationManager {
 
         const presentation = await res.json();
         const verifierOutput = await res.verify();
+
         const transcript = new Transcript({
           sent: verifierOutput.transcript?.sent || [],
           recv: verifierOutput.transcript?.recv || [],
@@ -50,7 +51,10 @@ export class NotarizationManager {
           recv: transcript.recv(),
         });
 
+
         store.dispatch(notarizationSlice.actions.setResult(presentation.data));
+        store.dispatch(notarizationSlice.actions.setTranscriptRecv(transcript.recv()));
+
       },
       this.notificationHandler.bind(this),
       this.currentStepUpdateHandler.bind(this),
@@ -72,7 +76,7 @@ const t: Task[] = tasks();
 
 export const notarizationManager = new NotarizationManager([
   new NotarizationXProfile(t[0]),
-  // new NotarizationUberRides(t[0]),
-  // new NotarizationXVerifiedFollowers(t[1]),
-  // new NotarizationAppleDevices(t[2]),
+  new NotarizationUberRides(t[1]),
+  new NotarizationXVerifiedFollowers(t[2]),
+  new NotarizationAppleDevices(t[3]),
 ]);

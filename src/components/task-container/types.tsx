@@ -1,5 +1,6 @@
 import React from 'react';
 import { TVerificationStatus } from '../../popup/types';
+import { TNotarizationGroup } from '../../common/types';
 
 type TProps = {
   status: TVerificationStatus;
@@ -10,7 +11,8 @@ type TProps = {
   selectable: boolean;
   selected?: boolean;
   onSelect?: (selected: boolean) => void;
-  credentialGroupId: string;
+  id: string
+  groups?: TNotarizationGroup[]
 };
 
 export default TProps;

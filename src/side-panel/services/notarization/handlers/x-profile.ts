@@ -22,14 +22,12 @@ export class NotarizationXProfile extends NotarizationBase {
     await chrome.tabs.create({ url: 'https://x.com' });
 
     // check if on login page => this.setMessage('...')
-    // this.setProgress(30);
     this.currentStep = 1;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
   }
 
   private async onRequestsCaptured(log: Array<Request>) {
-    // this.setProgress(60);
     this.currentStep = 2;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
@@ -56,7 +54,7 @@ export class NotarizationXProfile extends NotarizationBase {
     const pointers: Pointers = parse(message.body.toString()).pointers;
 
     const screenName: Mapping = pointers['/screen_name'];
-
+    console.log({ pointers })
     if (!screenName.key?.pos) {
       this.result(new Error('screen_name not found'));
       return;
@@ -65,6 +63,8 @@ export class NotarizationXProfile extends NotarizationBase {
       start: jsonStarts + screenName.key?.pos,
       end: jsonStarts + screenName.valueEnd.pos,
     });
+    console.log({ commit })
+
     this.setProgress(99)
 
     this.result(await notary.notarize(commit));

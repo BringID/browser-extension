@@ -1,3 +1,3 @@
-type TRunTask = (credentialGroupId: string) => Promise<void>;
+type TRunTask = (taskId: number) => Promise<void>;
 
 export default TRunTask;
