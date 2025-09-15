@@ -33,8 +33,8 @@
     "groups": [
       {
         "points": 10,
-        "semaphoreGroupId": "8",
-        "credentialGroupId": "1"
+        "semaphoreGroupId": "10",
+        "credentialGroupId": "3"
       }
     ],
    
@@ -58,8 +58,8 @@
     "groups": [
       {
         "points": 20,
-        "semaphoreGroupId": "9",
-        "credentialGroupId": "2",
+        "semaphoreGroupId": "11",
+        "credentialGroupId": "4",
         "checks": [
           {
             "key": "verified_follower_count",
@@ -70,8 +70,8 @@
       },
       {
         "points": 10,
-        "semaphoreGroupId": "10",
-        "credentialGroupId": "3",
+        "semaphoreGroupId": "12",
+        "credentialGroupId": "5",
         "checks": [
           {
             "key": "verified_follower_count",
@@ -82,8 +82,8 @@
       },
       {
         "points": 5,
-        "semaphoreGroupId": "11",
-        "credentialGroupId": "4",
+        "semaphoreGroupId": "13",
+        "credentialGroupId": "6",
         "checks": [
           {
             "key": "verified_follower_count",
@@ -112,9 +112,9 @@
     "description": "Prove you have at least two Apple devices",
     "groups": [
       {
-        "points": 11,
-        "semaphoreGroupId": "12",
-        "credentialGroupId": "5"
+        "points": 10,
+        "semaphoreGroupId": "14",
+        "credentialGroupId": "7"
       }
     ],
     "steps": [
