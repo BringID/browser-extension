@@ -3,7 +3,6 @@ import { RequestRecorder } from '../../requests-recorder';
 import { Request } from '../../../common/types';
 import { TLSNotary } from '../../tlsn';
 import { Commit } from 'tlsn-js';
-import { Mapping, parse, Pointers } from 'json-source-map';
 
 export class NotarizationAppleDevices extends NotarizationBase {
   requestRecorder: RequestRecorder = new RequestRecorder(
@@ -18,11 +17,10 @@ export class NotarizationAppleDevices extends NotarizationBase {
 
   public async onStart(): Promise<void> {
     this.requestRecorder.start();
-    console.log("Hallo I'm under the water. Please help me.");
     await chrome.tabs.create({
       url: 'https://account.apple.com/account/manage/section/devices',
     });
-    this.currentStep = 1;
+        this.currentStep = 1;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
   }
@@ -88,7 +86,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
     console.log('[AppleDevices] Cleaned request headers:', reqLog.headers);
 
     const notary = await TLSNotary.new('account.apple.com');
-    this.setProgress(33);
+    this.setProgress(33)
     console.log('[AppleDevices] TLSNotary instance created');
 
     const result = await notary.transcript(reqLog);
@@ -105,7 +103,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
       sent: [{ start: 0, end: transcript.sent.length }],
       recv: [],
     };
-    this.setProgress(66);
+this.setProgress(66)
     // Find JSON start position in the response
     const responseText = Buffer.from(transcript.recv).toString('utf-8');
     const jsonStarts: number = responseText.indexOf('{');
@@ -115,44 +113,61 @@ export class NotarizationAppleDevices extends NotarizationBase {
     );
     console.log('[AppleDevices] JSON starts at position:', jsonStarts);
 
-    const pointers: Pointers = parse(message.body.toString()).pointers;
-    const devices: Mapping = pointers['/devices'];
-    if (!devices || !devices.key?.pos) {
-      this.result(new Error('required data not found'));
-      return;
+    try {
+      // Parse JSON response and find the entire devices array
+      const messageBodyStr = message.body.toString();
+      console.log(
+        '[AppleDevices] Message body preview:',
+        messageBodyStr.substring(0, 300),
+      );
+
+      const jsonData = JSON.parse(messageBodyStr);
+      if (
+        jsonData.devices &&
+        Array.isArray(jsonData.devices) &&
+        jsonData.devices.length > 0
+      ) {
+        console.log(
+          '[AppleDevices] Found devices array with',
+          jsonData.devices.length,
+          'devices',
+        );
+        console.log('[AppleDevices] Devices data:', jsonData.devices);
+
+        // Find the entire devices field using simple regex
+        const devicesRegex = /"devices"\s*:\s*\[.*?\]/s;
+        const devicesMatch = responseText.match(devicesRegex);
+
+        if (devicesMatch) {
+          const devicesArrayStart = devicesMatch.index!;
+          const devicesArrayEnd = devicesArrayStart + devicesMatch[0].length;
+
+          console.log(
+            '[AppleDevices] Found devices array position:',
+            devicesArrayStart,
+            devicesArrayEnd,
+          );
+
+          const devicesArrayCommitRange = {
+            start: devicesArrayStart,
+            end: devicesArrayEnd,
+          };
+          commit.recv.push(devicesArrayCommitRange);
+
+          console.log(
+            '[AppleDevices] Added devices array to commit range:',
+            devicesArrayCommitRange,
+          );
+        }
+      }
+    } catch (error) {
+      console.error('[AppleDevices] Error parsing JSON:', error);
     }
-
-    const dataLength = Buffer.from(
-      message.body.toString().substring(devices.key?.pos, devices.valueEnd.pos),
-      'utf-8',
-    ).length;
-
-    console.log('DONE');
-
-    commit.recv = [
-      {
-        start: jsonStarts + devices.key?.pos,
-        end: jsonStarts + devices.key?.pos + dataLength,
-      },
-    ];
-
-    console.log('Commit Length:', commit.recv[0].end - commit.recv[0].start);
-    console.log(
-      'Commit Data:',
-      message.body.toString().substring(devices.key?.pos, devices.valueEnd.pos),
-    );
-
-    if (commit.recv[0].end - commit.recv[0].start < 10) {
-      this.result(new Error('not enough devices'));
-      return;
-    }
-
-    this.setProgress(75);
 
     console.log('[AppleDevices] Starting notarization...');
     const notarizationResult = await notary.notarize(commit);
     console.log('[AppleDevices] Notarization completed:', notarizationResult);
-    this.setProgress(99);
+    this.setProgress(99)
 
     this.result(notarizationResult);
   }
