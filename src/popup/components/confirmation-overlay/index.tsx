@@ -25,11 +25,9 @@ import manager from '../../manager';
 import { tasks } from '../../../common/core';
 
 const defineIfButtonIsDisabled = (
-  isEnoughPoints: boolean,
   pointsRequired: number,
   pointsSelected: number,
 ) => {
-  if (!isEnoughPoints) return true;
   if (pointsRequired > pointsSelected) {
     return true;
   }
@@ -87,6 +85,73 @@ const showInsufficientPointsMessage = (
     </MessageStyled>
   );
 };
+
+const defineButton = (
+  isEnoughPoints: boolean,
+  pointsRequired: number,
+  pointsSelected: number,
+  dropAddress: string,
+  loading: boolean,
+  setLoading: (
+    loading: boolean
+  ) => void,
+  selected: string[],
+  onClose: () => void,
+) => {
+  if (isEnoughPoints) {
+    return <ButtonStyled
+      loading={loading}
+      size="default"
+      disabled={defineIfButtonIsDisabled(
+        pointsRequired,
+        pointsSelected,
+      )}
+      appearance="action"
+      onClick={async () => {
+        setLoading(true);
+        try {
+          const proofs = await manager.getProofs(
+            dropAddress,
+            pointsSelected,
+            selected,
+          );
+
+          console.log({ proofs });
+
+          const tab = await getCurrentTab();
+          if (tab) {
+            chrome.tabs.sendMessage(tab.id as number, {
+              type: TExtensionRequestType.proofs_generated,
+              payload: {
+                proofs,
+                points: pointsSelected,
+              },
+            });
+          } else {
+            alert('NO TAB DETECTED');
+          }
+
+          onClose();
+          window.close();
+        } catch (err) {
+          setLoading(false);
+          console.log({ err });
+        }
+        setLoading(false);
+      }}
+    >
+      Confirm ({pointsSelected} pts)
+    </ButtonStyled>
+  }
+
+  return <ButtonStyled
+    onClick={onClose}
+    appearance="action"
+  >
+    Verify
+  </ButtonStyled>
+}
+
 
 const ConfirmationOverlay: FC<TProps> = ({
   onClose,
@@ -181,50 +246,16 @@ const ConfirmationOverlay: FC<TProps> = ({
           />
         )}
         <ButtonsContainer>
-          <ButtonStyled
-            loading={loading}
-            size="default"
-            disabled={defineIfButtonIsDisabled(
-              isEnoughPoints,
-              pointsRequired,
-              pointsSelected,
-            )}
-            appearance="action"
-            onClick={async () => {
-              setLoading(true);
-              try {
-                const proofs = await manager.getProofs(
-                  dropAddress,
-                  pointsSelected,
-                  selected,
-                );
-
-                console.log({ proofs });
-
-                const tab = await getCurrentTab();
-                if (tab) {
-                  chrome.tabs.sendMessage(tab.id as number, {
-                    type: TExtensionRequestType.proofs_generated,
-                    payload: {
-                      proofs,
-                      points: pointsSelected,
-                    },
-                  });
-                } else {
-                  alert('NO TAB DETECTED');
-                }
-
-                onClose();
-                window.close();
-              } catch (err) {
-                setLoading(false);
-                console.log({ err });
-              }
-              setLoading(false);
-            }}
-          >
-            Confirm ({pointsSelected} pts)
-          </ButtonStyled>
+          {defineButton(
+            isEnoughPoints,
+            pointsRequired,
+            pointsSelected,
+            dropAddress,
+            loading,
+            setLoading,
+            selected,
+            onClose
+          )}
 
           <ButtonStyled
             size="default"

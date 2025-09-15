@@ -12,6 +12,7 @@ import {
   TitleStyled,
   Content,
   Wrapper,
+  NoteStyled
 } from './styled-components';
 import { Page, Step } from '../components';
 import './style.css';
@@ -45,7 +46,7 @@ const SidePanel: FC = () => {
     };
   }, []);
 
-  const { result, taskId, progress, currentStep, transcriptRecv } = useSelector(
+  const { result, taskId, progress, currentStep, transcriptRecv, error } = useSelector(
     (state: RootState) => {
       return state.notarization;
     },
@@ -102,6 +103,8 @@ const SidePanel: FC = () => {
                 />
               );
             })}
+
+            {error && <NoteStyled status='error'>{error.message}</NoteStyled>}
           </Content>
         </Container>
       </Page>

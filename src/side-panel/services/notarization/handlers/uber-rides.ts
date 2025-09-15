@@ -53,8 +53,6 @@ export class NotarizationUberRides extends NotarizationBase {
     }
     const [transcript, message] = result;
 
-    this.setProgress(75);
-
     const commit: Commit = {
       sent: [{ start: 0, end: transcript.sent.length }],
       recv: [],
