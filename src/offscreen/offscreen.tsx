@@ -80,6 +80,11 @@ const Offscreen = () => {
               type: 'UPDATE_COMPLETED_INDICATOR',
               completedCount: '✓',
             });
+          } else {
+            sendMessageToBackground({
+              type: 'UPDATE_PENDING_INDICATOR',
+              completedCount: '⧗',
+            });
           }
         }
       });

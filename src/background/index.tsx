@@ -42,6 +42,9 @@ async function createOffscreenDocument() {
         if (msg.type === 'UPDATE_COMPLETED_INDICATOR') {
           chrome.action.setBadgeBackgroundColor({ color: 'green' });
           chrome.action.setBadgeText({ text: msg.completedCount });
+        } else if (msg.type === 'UPDATE_PENDING_INDICATOR') {
+          chrome.action.setBadgeBackgroundColor({ color: 'yellow' });
+          chrome.action.setBadgeText({ text: msg.completedCount });
         }
       });
 

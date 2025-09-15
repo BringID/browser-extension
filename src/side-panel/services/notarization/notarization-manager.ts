@@ -35,6 +35,7 @@ export class NotarizationManager {
       async (res) => {
         if (res instanceof Error) {
           console.error(res);
+          store.dispatch(notarizationSlice.actions.setError(res));
           return;
         }
 

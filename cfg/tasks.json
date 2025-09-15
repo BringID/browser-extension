@@ -28,7 +28,7 @@
     "title": "Uber Rides",
     "id": "2",
     "description": "Prove the amount of Uber rides you took",
-    "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png",
 
     "groups": [
       {
@@ -55,6 +55,7 @@
     "title": "X Verified Followers",
     "id": "3",
     "description": "Prove verified followers on X",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
     "groups": [
       {
         "points": 20,
@@ -110,6 +111,7 @@
     "id": "4",
     "title": "Apple Devices",
     "description": "Prove you have at least two Apple devices",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
     "groups": [
       {
         "points": 10,

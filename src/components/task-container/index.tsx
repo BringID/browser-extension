@@ -66,7 +66,7 @@ const TaskContainer: FC<TProps> = ({
       {tiers && <Footer>
         Tiers:
         <Tiers>
-          {tiers.map(tier => <Tier>{tier}</Tier>)}
+          {tiers.reverse().map(tier => <Tier>{tier}</Tier>)}
         </Tiers>
       </Footer>}
     </Container>
