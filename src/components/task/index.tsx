@@ -72,6 +72,7 @@ const Task: FC<TProps> = ({
   id,
   taskIndex
 }) => {
+  
   const content = defineTaskContent(status, groups, taskIndex);
 
   return (

@@ -3,6 +3,7 @@
     "id": "1",
     "title": "X Account",
     "description": "Prove the ownership of an account on X",
+    "dev": true,
     "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
     "groups": [
       {

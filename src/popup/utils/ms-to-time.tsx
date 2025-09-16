@@ -1,4 +1,9 @@
 const msToTime = (duration: number) => {
+
+  if (duration <= 0) {
+    return '00:00:00'
+  }
+
   const seconds = Math.floor((duration / 1000) % 60);
   const minutes = Math.floor((duration / (1000 * 60)) % 60);
   const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);

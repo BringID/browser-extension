@@ -8,6 +8,7 @@ import { Button } from '../../components';
 import { msToTime, defineExplorerURL } from '../../popup/utils';
 import { Tag } from '../../components';
 import relayer from '../../popup/relayer';
+import getStorage from '../../popup/db-storage';
 
 const definePluginContent = (
   status: TVerificationStatus,
@@ -61,9 +62,28 @@ const Verification: FC<TProps> = ({
   const [expiration, setExpiration] = useState<number | null>(null);
 
   useEffect(() => {
-    const now = +new Date();
-    const expiration = scheduledTime - now;
-    setExpiration(expiration);
+
+    const interval = window.setInterval(async () => {
+      const now = +new Date();
+      const currentExpiration = (scheduledTime - now);
+      const updatedExpiration = currentExpiration <= 0 ? 0 : currentExpiration
+      setExpiration(updatedExpiration);
+
+      if (updatedExpiration === 0) {
+        const storage = await getStorage();
+        await storage.updateVerificationStatus(
+          credentialGroupId,
+          'completed',
+        );
+
+        window.clearInterval(interval)
+      }
+    }, 1000)
+
+    return () => {
+      window.clearInterval(interval)
+    }
+    
   }, []);
 
   const content = definePluginContent(

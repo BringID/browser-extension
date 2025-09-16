@@ -85,7 +85,9 @@ const SidePanel: FC = () => {
                             return alert('Presentation data or transcriptRecv not defined')
                           }
                           // @ts-ignore
-                          chrome.action.openPopup();
+                          // chrome.action.openPopup();
+
+                          chrome.runtime.sendMessage({ action: "openPopup" });
 
                           window.setTimeout(() => {
                             sendMessage({
