@@ -62,28 +62,23 @@ const Verification: FC<TProps> = ({
   const [expiration, setExpiration] = useState<number | null>(null);
 
   useEffect(() => {
-
     const interval = window.setInterval(async () => {
       const now = +new Date();
-      const currentExpiration = (scheduledTime - now);
-      const updatedExpiration = currentExpiration <= 0 ? 0 : currentExpiration
+      const currentExpiration = scheduledTime - now;
+      const updatedExpiration = currentExpiration <= 0 ? 0 : currentExpiration;
       setExpiration(updatedExpiration);
 
       if (updatedExpiration === 0) {
         const storage = await getStorage();
-        await storage.updateVerificationStatus(
-          credentialGroupId,
-          'completed',
-        );
+        await storage.updateVerificationStatus(credentialGroupId, 'completed');
 
-        window.clearInterval(interval)
+        window.clearInterval(interval);
       }
-    }, 1000)
+    }, 1000);
 
     return () => {
-      window.clearInterval(interval)
-    }
-    
+      window.clearInterval(interval);
+    };
   }, []);
 
   const content = definePluginContent(

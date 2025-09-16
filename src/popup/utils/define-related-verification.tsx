@@ -1,12 +1,16 @@
-import { Task } from "../../common/core";
-import { TVerification } from "../types";
+import { Task } from '../../common/core';
+import { TVerification } from '../types';
 
-const defineRelatedVerification = (task: Task, verifications: TVerification[]) => {
+const defineRelatedVerification = (
+  task: Task,
+  verifications: TVerification[],
+) => {
   if (!task?.groups || !Array.isArray(verifications)) return null;
 
   for (const group of task.groups) {
     const matchingVerification = verifications.find(
-      (verification) => verification.credentialGroupId === group.credentialGroupId
+      (verification) =>
+        verification.credentialGroupId === group.credentialGroupId,
     );
     if (matchingVerification) {
       return matchingVerification;
@@ -16,4 +20,4 @@ const defineRelatedVerification = (task: Task, verifications: TVerification[]) =
   return null; // No related verification found
 };
 
-export default defineRelatedVerification
+export default defineRelatedVerification;

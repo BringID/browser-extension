@@ -104,13 +104,13 @@ class Manager implements IManager {
           continue;
         }
 
-        const relatedTask = defineTaskByCredentialGroupId(credentialGroupId)
+        const relatedTask = defineTaskByCredentialGroupId(credentialGroupId);
 
         if (!relatedTask) {
-          continue
+          continue;
         }
 
-        const { group } = relatedTask
+        const { group } = relatedTask;
 
         totalScore = totalScore + group.points;
         const identity = semaphore.createIdentity(userKey, credentialGroupId);

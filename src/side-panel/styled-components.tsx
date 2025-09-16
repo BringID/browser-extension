@@ -44,4 +44,4 @@ export const ButtonStyled = styled(Button)`
   margin-top: 10px;
 `;
 
-export const NoteStyled = styled(Note)``
+export const NoteStyled = styled(Note)``;

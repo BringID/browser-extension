@@ -75,9 +75,7 @@ const showInsufficientPointsMessage = (
   if (isEnoughPoints) return null;
   return (
     <MessageStyled status="error">
-      <span>
-        Required:
-      </span>
+      <span>Required:</span>
       <Tag status="error">{pointsRequired} pts</Tag>
     </MessageStyled>
   );
@@ -89,66 +87,61 @@ const defineButton = (
   pointsSelected: number,
   dropAddress: string,
   loading: boolean,
-  setLoading: (
-    loading: boolean
-  ) => void,
+  setLoading: (loading: boolean) => void,
   selected: string[],
   onClose: () => void,
 ) => {
   if (isEnoughPoints) {
-    return <ButtonStyled
-      loading={loading}
-      size="default"
-      disabled={defineIfButtonIsDisabled(
-        pointsRequired,
-        pointsSelected,
-      )}
-      appearance="action"
-      onClick={async () => {
-        setLoading(true);
-        try {
-          const proofs = await manager.getProofs(
-            dropAddress,
-            pointsSelected,
-            selected,
-          );
+    return (
+      <ButtonStyled
+        loading={loading}
+        size="default"
+        disabled={defineIfButtonIsDisabled(pointsRequired, pointsSelected)}
+        appearance="action"
+        onClick={async () => {
+          setLoading(true);
+          try {
+            const proofs = await manager.getProofs(
+              dropAddress,
+              pointsSelected,
+              selected,
+            );
 
-          console.log({ proofs });
+            console.log({ proofs });
 
-          const tab = await getCurrentTab();
-          if (tab) {
-            chrome.tabs.sendMessage(tab.id as number, {
-              type: TExtensionRequestType.proofs_generated,
-              payload: {
-                proofs,
-                points: pointsSelected,
-              },
-            });
-          } else {
-            alert('NO TAB DETECTED');
+            const tab = await getCurrentTab();
+            if (tab) {
+              chrome.tabs.sendMessage(tab.id as number, {
+                type: TExtensionRequestType.proofs_generated,
+                payload: {
+                  proofs,
+                  points: pointsSelected,
+                },
+              });
+            } else {
+              alert('NO TAB DETECTED');
+            }
+
+            onClose();
+            window.close();
+          } catch (err) {
+            setLoading(false);
+            console.log({ err });
           }
-
-          onClose();
-          window.close();
-        } catch (err) {
           setLoading(false);
-          console.log({ err });
-        }
-        setLoading(false);
-      }}
-    >
-      Confirm ({pointsSelected} pts)
-    </ButtonStyled>
+        }}
+      >
+        Confirm ({pointsSelected} pts)
+      </ButtonStyled>
+    );
   }
 
-  return <ButtonStyled
-    onClick={onClose}
-    appearance="action"
-  >
-    Verify
-  </ButtonStyled>
-}
-
+  return (
+    <ButtonStyled onClick={onClose} appearance="action">
+      Verify
+    </ButtonStyled>
+  );
+};
 
 const ConfirmationOverlay: FC<TProps> = ({
   onClose,
@@ -167,7 +160,9 @@ const ConfirmationOverlay: FC<TProps> = ({
     let result = 0;
 
     verificationsState.verifications.forEach((verification) => {
-      const relatedTask = defineTaskByCredentialGroupId(verification.credentialGroupId)
+      const relatedTask = defineTaskByCredentialGroupId(
+        verification.credentialGroupId,
+      );
 
       if (!relatedTask) {
         return;
@@ -212,14 +207,9 @@ const ConfirmationOverlay: FC<TProps> = ({
           points,
           onClose,
         )}
-        {showInsufficientPointsMessage(
-          isEnoughPoints,
-          pointsRequired,
-        )}
+        {showInsufficientPointsMessage(isEnoughPoints, pointsRequired)}
         <MessageStyled>
-          <span>
-            Current:
-          </span>
+          <span>Current:</span>
           <Tag status="info">{points} pts</Tag>
         </MessageStyled>
         {isEnoughPoints && (
@@ -247,7 +237,7 @@ const ConfirmationOverlay: FC<TProps> = ({
             loading,
             setLoading,
             selected,
-            onClose
+            onClose,
           )}
 
           <ButtonStyled

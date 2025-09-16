@@ -14,7 +14,7 @@ export interface NotarizationState {
   error?: Error;
   currentStep: number;
   result?: string;
-  transcriptRecv?: string
+  transcriptRecv?: string;
 
   // message => UI
   // result => UI
@@ -60,7 +60,10 @@ export const notarizationSlice = createSlice({
       state.result = action.payload;
     },
 
-    setTranscriptRecv: (state: NotarizationState, action: PayloadAction<string>) => {
+    setTranscriptRecv: (
+      state: NotarizationState,
+      action: PayloadAction<string>,
+    ) => {
       state.transcriptRecv = action.payload;
     },
 

@@ -12,7 +12,7 @@ import {
   TitleStyled,
   Content,
   Wrapper,
-  NoteStyled
+  NoteStyled,
 } from './styled-components';
 import { Page, Step } from '../components';
 import './style.css';
@@ -46,11 +46,10 @@ const SidePanel: FC = () => {
     };
   }, []);
 
-  const { result, taskId, progress, currentStep, transcriptRecv, error } = useSelector(
-    (state: RootState) => {
+  const { result, taskId, progress, currentStep, transcriptRecv, error } =
+    useSelector((state: RootState) => {
       return state.notarization;
-    },
-  );
+    });
 
   const availableTasks = tasks();
   console.log({ taskId });
@@ -82,12 +81,14 @@ const SidePanel: FC = () => {
                     step.notarization
                       ? () => {
                           if (!result || !transcriptRecv) {
-                            return alert('Presentation data or transcriptRecv not defined')
+                            return alert(
+                              'Presentation data or transcriptRecv not defined',
+                            );
                           }
                           // @ts-ignore
                           // chrome.action.openPopup();
 
-                          chrome.runtime.sendMessage({ action: "openPopup" });
+                          chrome.runtime.sendMessage({ action: 'openPopup' });
 
                           window.setTimeout(() => {
                             sendMessage({
@@ -95,7 +96,7 @@ const SidePanel: FC = () => {
                               data: {
                                 presentationData: result,
                                 transcriptRecv,
-                                taskIndex: taskId
+                                taskIndex: taskId,
                               },
                             });
                           }, 1500);
@@ -106,7 +107,7 @@ const SidePanel: FC = () => {
               );
             })}
 
-            {error && <NoteStyled status='error'>{error.message}</NoteStyled>}
+            {error && <NoteStyled status="error">{error.message}</NoteStyled>}
           </Content>
         </Container>
       </Page>

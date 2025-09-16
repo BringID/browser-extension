@@ -19,7 +19,7 @@ const defineTaskContent = (
 ) => {
   switch (status) {
     case 'default':
-      const points = defineTaskPointsRange(groups)
+      const points = defineTaskPointsRange(groups);
       return (
         <>
           <Tag status="info">+{points}</Tag>
@@ -70,9 +70,8 @@ const Task: FC<TProps> = ({
   description,
   status,
   id,
-  taskIndex
+  taskIndex,
 }) => {
-  
   const content = defineTaskContent(status, groups, taskIndex);
 
   return (

@@ -20,7 +20,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
     await chrome.tabs.create({
       url: 'https://account.apple.com/account/manage/section/devices',
     });
-        this.currentStep = 1;
+    this.currentStep = 1;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
   }
@@ -86,7 +86,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
     console.log('[AppleDevices] Cleaned request headers:', reqLog.headers);
 
     const notary = await TLSNotary.new('account.apple.com');
-    this.setProgress(33)
+    this.setProgress(33);
     console.log('[AppleDevices] TLSNotary instance created');
 
     const result = await notary.transcript(reqLog);
@@ -103,7 +103,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
       sent: [{ start: 0, end: transcript.sent.length }],
       recv: [],
     };
-this.setProgress(66)
+    this.setProgress(66);
     // Find JSON start position in the response
     const responseText = Buffer.from(transcript.recv).toString('utf-8');
     const jsonStarts: number = responseText.indexOf('{');
@@ -167,7 +167,7 @@ this.setProgress(66)
     console.log('[AppleDevices] Starting notarization...');
     const notarizationResult = await notary.notarize(commit);
     console.log('[AppleDevices] Notarization completed:', notarizationResult);
-    this.setProgress(99)
+    this.setProgress(99);
 
     this.result(notarizationResult);
   }

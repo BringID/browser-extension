@@ -39,7 +39,6 @@ const Home: FC = () => {
   const percentageFinished =
     (availablePoints / configs.ADVANCED_STATUS_POINTS) * 100;
 
-
   const navigate = useNavigate();
   const user = useUser();
 
@@ -118,10 +117,7 @@ const Home: FC = () => {
         />
       )}
 
-      <Header
-        points={availablePoints}
-        address={user.address}
-      />
+      <Header points={availablePoints} address={user.address} />
 
       {/* <ProgressBarStyled
         current={percentageFinished > 100 ? 100 : percentageFinished}

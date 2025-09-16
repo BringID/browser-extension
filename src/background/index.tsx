@@ -72,10 +72,10 @@ async function createOffscreenDocument() {
   });
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === "openPopup") {
+    if (message.action === 'openPopup') {
       // @ts-ignore
       chrome.action.openPopup().catch((err) => {
-        console.error("Failed to open popup:", err);
+        console.error('Failed to open popup:', err);
       });
     }
   });

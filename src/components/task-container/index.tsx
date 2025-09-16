@@ -11,23 +11,25 @@ import {
   Tiers,
   Tier,
   Body,
-  Footer
+  Footer,
 } from './styled-components';
 import DefaultPluginIcon from '../../assets/img/default-plugin-icon.png';
 import { TNotarizationGroup } from '../../common/types';
 
-const defineTiers = (
-  groups?: TNotarizationGroup[]
-) => {
-  if (!groups || groups.length === 1) return null
+const defineTiers = (groups?: TNotarizationGroup[]) => {
+  if (!groups || groups.length === 1) return null;
 
-  return groups.map(group => {
-    const checks = group.checks
-    if (!checks) { return '' }
+  return groups
+    .map((group) => {
+      const checks = group.checks;
+      if (!checks) {
+        return '';
+      }
 
-    return `${checks[0].value}+: ${group.points} pts.`
-  }).filter(item => item)
-}
+      return `${checks[0].value}+: ${group.points} pts.`;
+    })
+    .filter((item) => item);
+};
 
 const TaskContainer: FC<TProps> = ({
   status,
@@ -39,11 +41,10 @@ const TaskContainer: FC<TProps> = ({
   selected,
   onSelect,
   groups,
-  id
+  id,
 }) => {
-
-  const tiers = defineTiers(groups)
-  console.log({ groups })
+  const tiers = defineTiers(groups);
+  console.log({ groups });
   return (
     <Container status={status}>
       <Body selectable={selectable}>
@@ -63,12 +64,16 @@ const TaskContainer: FC<TProps> = ({
         </Content>
         {children}
       </Body>
-      {tiers && <Footer>
-        Tiers:
-        <Tiers>
-          {tiers.reverse().map(tier => <Tier>{tier}</Tier>)}
-        </Tiers>
-      </Footer>}
+      {tiers && (
+        <Footer>
+          Tiers:
+          <Tiers>
+            {tiers.reverse().map((tier) => (
+              <Tier>{tier}</Tier>
+            ))}
+          </Tiers>
+        </Footer>
+      )}
     </Container>
   );
 };

@@ -4,7 +4,7 @@ import { Container } from './styled-components';
 import { Task } from '../../../components';
 import TProps from './types';
 import { defineRelatedVerification } from '../../utils';
-const { NODE_ENV } = process.env
+const { NODE_ENV } = process.env;
 
 const TasksList: FC<TProps> = ({ tasks, className, verifications }) => {
   return (
@@ -12,12 +12,12 @@ const TasksList: FC<TProps> = ({ tasks, className, verifications }) => {
       {tasks.map((task, idx) => {
         const relatedVerification = defineRelatedVerification(
           task,
-          verifications
-        )
+          verifications,
+        );
 
         if (task.dev && NODE_ENV !== 'development') {
-          return null
-        } 
+          return null;
+        }
 
         return (
           <Task

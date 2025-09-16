@@ -30,28 +30,22 @@ const Popup: FC = () => {
             store.dispatch(setLoading(true));
 
             try {
-              const { presentationData, transcriptRecv, taskIndex } = request.data;
+              const { presentationData, transcriptRecv, taskIndex } =
+                request.data;
 
-              const availableTasks = tasks()
-              const currentTask = availableTasks[taskIndex]
+              const availableTasks = tasks();
+              const currentTask = availableTasks[taskIndex];
 
-              const groupData = defineGroup(
-                transcriptRecv,
-                currentTask.groups
-              )
+              const groupData = defineGroup(transcriptRecv, currentTask.groups);
 
               console.log({
                 groupData,
                 presentationData,
-                transcriptRecv
-              })
+                transcriptRecv,
+              });
 
               if (groupData) {
-                
-                const {
-                  credentialGroupId,
-                  semaphoreGroupId
-                } = groupData
+                const { credentialGroupId, semaphoreGroupId } = groupData;
 
                 const verify = await manager.runVerify(
                   presentationData,

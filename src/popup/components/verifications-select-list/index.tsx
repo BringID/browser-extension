@@ -19,10 +19,12 @@ const VerificationsSelectList: FC<TProps> = ({
           return;
         }
 
-        const relatedTaskData = defineTaskByCredentialGroupId(verification.credentialGroupId)
+        const relatedTaskData = defineTaskByCredentialGroupId(
+          verification.credentialGroupId,
+        );
 
         if (relatedTaskData) {
-          const { credentialGroupId, points } = relatedTaskData.group
+          const { credentialGroupId, points } = relatedTaskData.group;
           const isSelected = selected.includes(credentialGroupId);
 
           return (
