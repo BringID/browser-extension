@@ -127,8 +127,6 @@ export class NotarizationAppleDevices extends NotarizationBase {
       'utf-8',
     ).length;
 
-    console.log('DONE');
-
     commit.recv = [
       {
         start: jsonStarts + devices.key?.pos,
