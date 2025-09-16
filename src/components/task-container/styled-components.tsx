@@ -8,7 +8,6 @@ export const Container = styled.div<{
   padding: 12px;
   border-radius: 8px;
   
-  min-height: 72px;
   background-color: ${(props) => props.theme.defaultStatusBackgroundColor};
   border: 1px solid ${(props) => props.theme.defaultStatusBorderColor};
 

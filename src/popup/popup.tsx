@@ -41,28 +41,30 @@ const Popup: FC = () => {
               )
 
               console.log({
-                groupData
+                groupData,
+                presentationData,
+                transcriptRecv
               })
 
               if (groupData) {
+                
+                // const {
+                //   credentialGroupId,
+                //   semaphoreGroupId
+                // } = groupData
 
-                const {
-                  credentialGroupId,
-                  semaphoreGroupId
-                } = groupData
+                // const verify = await manager.runVerify(
+                //   presentationData,
+                //   credentialGroupId,
+                // );
 
-                const verify = await manager.runVerify(
-                  presentationData,
-                  credentialGroupId,
-                );
+                // if (verify) {
+                //   await manager.saveVerification(verify, credentialGroupId);
 
-                if (verify) {
-                  await manager.saveVerification(verify, credentialGroupId);
-
-                  sendMessage({
-                    type: 'SIDE_PANEL_CLOSE',
-                  });
-                }
+                //   sendMessage({
+                //     type: 'SIDE_PANEL_CLOSE',
+                //   });
+                // }
               }
             } catch (err) {
               store.dispatch(setLoading(false));

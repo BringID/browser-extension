@@ -17,7 +17,7 @@ import {
 } from './styled-components';
 import TProps from './types';
 import { useVerifications } from '../../store/reducers/verifications';
-import { defineTaskByCredentialGroupId, defineUserStatus, getCurrentTab } from '../../utils';
+import { defineTaskByCredentialGroupId, getCurrentTab } from '../../utils';
 import { Tag } from '../../../components';
 import BringGif from './bring.gif';
 import { TExtensionRequestType, TUserStatus, TVerification } from '../../types';
@@ -37,15 +37,13 @@ const showInsufficientPointsNote = (
   isEnoughPoints: boolean,
   pointsRequired: number,
   points: number,
-  requiredStatus: TUserStatus,
   onClose: () => void,
 ) => {
   if (isEnoughPoints) return null;
 
   return (
     <NoteStyled title="Insufficient trust level" status="warning">
-      You need {pointsRequired - points} more points to reach {requiredStatus}{' '}
-      level.{' '}
+      You need {pointsRequired - points} more points
       <OpenPopupButton
         onClick={async () => {
           onClose();
@@ -73,13 +71,12 @@ const defineInitialVerifications = (verifications: TVerification[]) => {
 const showInsufficientPointsMessage = (
   isEnoughPoints: boolean,
   pointsRequired: number,
-  requiredStatus: TUserStatus,
 ) => {
   if (isEnoughPoints) return null;
   return (
     <MessageStyled status="error">
       <span>
-        Required: <UserStatusRequired>{requiredStatus}</UserStatusRequired>
+        Required:
       </span>
       <Tag status="error">{pointsRequired} pts</Tag>
     </MessageStyled>
@@ -159,11 +156,9 @@ const ConfirmationOverlay: FC<TProps> = ({
   pointsRequired, // points required
   host,
   points, // all points available
-  userStatus,
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const isEnoughPoints = points >= pointsRequired;
-  const requiredStatus = defineUserStatus(pointsRequired);
   const availableTasks = tasks();
   const verificationsState = useVerifications();
   const [selected, setSelected] = useState<string[]>([]);
@@ -215,17 +210,15 @@ const ConfirmationOverlay: FC<TProps> = ({
           isEnoughPoints,
           pointsRequired,
           points,
-          requiredStatus,
           onClose,
         )}
         {showInsufficientPointsMessage(
           isEnoughPoints,
           pointsRequired,
-          requiredStatus,
         )}
         <MessageStyled>
           <span>
-            Current: <UserStatus>{userStatus}</UserStatus>
+            Current:
           </span>
           <Tag status="info">{points} pts</Tag>
         </MessageStyled>

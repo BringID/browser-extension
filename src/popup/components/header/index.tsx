@@ -16,7 +16,7 @@ import AddressIcon from '../../../components/icons/address';
 
 const defineContent = (address: string | null, points: number) => {
   if (!address) {
-    return <TitleStyled>BringID</TitleStyled>;
+    return <TitleStyled>BringID</TitleStyled>
   }
 
   return (
