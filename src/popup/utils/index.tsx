@@ -9,6 +9,7 @@ import defineTaskPointsRange from './define-task-points-range';
 import defineGroup from './define-group';
 import defineTaskByCredentialGroupId from './define-task-by-credential-group-id';
 import defineRelatedVerification from './define-related-verification';
+import getTabsByHost from './get-tabs-by-host'
 
 export {
   msToTime,
@@ -22,4 +23,5 @@ export {
   defineGroup,
   defineTaskByCredentialGroupId,
   defineRelatedVerification,
+  getTabsByHost
 };
