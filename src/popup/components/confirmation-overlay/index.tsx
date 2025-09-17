@@ -17,7 +17,7 @@ import {
 } from './styled-components';
 import TProps from './types';
 import { useVerifications } from '../../store/reducers/verifications';
-import { defineTaskByCredentialGroupId, defineUserStatus, getCurrentTab } from '../../utils';
+import { defineTaskByCredentialGroupId, getCurrentTab } from '../../utils';
 import { Tag } from '../../../components';
 import BringGif from './bring.gif';
 import { TExtensionRequestType, TUserStatus, TVerification } from '../../types';
@@ -37,15 +37,13 @@ const showInsufficientPointsNote = (
   isEnoughPoints: boolean,
   pointsRequired: number,
   points: number,
-  requiredStatus: TUserStatus,
   onClose: () => void,
 ) => {
   if (isEnoughPoints) return null;
 
   return (
     <NoteStyled title="Insufficient trust level" status="warning">
-      You need {pointsRequired - points} more points to reach {requiredStatus}{' '}
-      level.{' '}
+      You need {pointsRequired - points} more points
       <OpenPopupButton
         onClick={async () => {
           onClose();
@@ -73,14 +71,11 @@ const defineInitialVerifications = (verifications: TVerification[]) => {
 const showInsufficientPointsMessage = (
   isEnoughPoints: boolean,
   pointsRequired: number,
-  requiredStatus: TUserStatus,
 ) => {
   if (isEnoughPoints) return null;
   return (
     <MessageStyled status="error">
-      <span>
-        Required: <UserStatusRequired>{requiredStatus}</UserStatusRequired>
-      </span>
+      <span>Required:</span>
       <Tag status="error">{pointsRequired} pts</Tag>
     </MessageStyled>
   );
@@ -92,66 +87,61 @@ const defineButton = (
   pointsSelected: number,
   dropAddress: string,
   loading: boolean,
-  setLoading: (
-    loading: boolean
-  ) => void,
+  setLoading: (loading: boolean) => void,
   selected: string[],
   onClose: () => void,
 ) => {
   if (isEnoughPoints) {
-    return <ButtonStyled
-      loading={loading}
-      size="default"
-      disabled={defineIfButtonIsDisabled(
-        pointsRequired,
-        pointsSelected,
-      )}
-      appearance="action"
-      onClick={async () => {
-        setLoading(true);
-        try {
-          const proofs = await manager.getProofs(
-            dropAddress,
-            pointsSelected,
-            selected,
-          );
+    return (
+      <ButtonStyled
+        loading={loading}
+        size="default"
+        disabled={defineIfButtonIsDisabled(pointsRequired, pointsSelected)}
+        appearance="action"
+        onClick={async () => {
+          setLoading(true);
+          try {
+            const proofs = await manager.getProofs(
+              dropAddress,
+              pointsSelected,
+              selected,
+            );
 
-          console.log({ proofs });
+            console.log({ proofs });
 
-          const tab = await getCurrentTab();
-          if (tab) {
-            chrome.tabs.sendMessage(tab.id as number, {
-              type: TExtensionRequestType.proofs_generated,
-              payload: {
-                proofs,
-                points: pointsSelected,
-              },
-            });
-          } else {
-            alert('NO TAB DETECTED');
+            const tab = await getCurrentTab();
+            if (tab) {
+              chrome.tabs.sendMessage(tab.id as number, {
+                type: TExtensionRequestType.proofs_generated,
+                payload: {
+                  proofs,
+                  points: pointsSelected,
+                },
+              });
+            } else {
+              alert('NO TAB DETECTED');
+            }
+
+            onClose();
+            window.close();
+          } catch (err) {
+            setLoading(false);
+            console.log({ err });
           }
-
-          onClose();
-          window.close();
-        } catch (err) {
           setLoading(false);
-          console.log({ err });
-        }
-        setLoading(false);
-      }}
-    >
-      Confirm ({pointsSelected} pts)
-    </ButtonStyled>
+        }}
+      >
+        Confirm ({pointsSelected} pts)
+      </ButtonStyled>
+    );
   }
 
-  return <ButtonStyled
-    onClick={onClose}
-    appearance="action"
-  >
-    Verify
-  </ButtonStyled>
-}
-
+  return (
+    <ButtonStyled onClick={onClose} appearance="action">
+      Verify
+    </ButtonStyled>
+  );
+};
 
 const ConfirmationOverlay: FC<TProps> = ({
   onClose,
@@ -159,11 +149,9 @@ const ConfirmationOverlay: FC<TProps> = ({
   pointsRequired, // points required
   host,
   points, // all points available
-  userStatus,
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const isEnoughPoints = points >= pointsRequired;
-  const requiredStatus = defineUserStatus(pointsRequired);
   const availableTasks = tasks();
   const verificationsState = useVerifications();
   const [selected, setSelected] = useState<string[]>([]);
@@ -172,7 +160,9 @@ const ConfirmationOverlay: FC<TProps> = ({
     let result = 0;
 
     verificationsState.verifications.forEach((verification) => {
-      const relatedTask = defineTaskByCredentialGroupId(verification.credentialGroupId)
+      const relatedTask = defineTaskByCredentialGroupId(
+        verification.credentialGroupId,
+      );
 
       if (!relatedTask) {
         return;
@@ -215,18 +205,11 @@ const ConfirmationOverlay: FC<TProps> = ({
           isEnoughPoints,
           pointsRequired,
           points,
-          requiredStatus,
           onClose,
         )}
-        {showInsufficientPointsMessage(
-          isEnoughPoints,
-          pointsRequired,
-          requiredStatus,
-        )}
+        {showInsufficientPointsMessage(isEnoughPoints, pointsRequired)}
         <MessageStyled>
-          <span>
-            Current: <UserStatus>{userStatus}</UserStatus>
-          </span>
+          <span>Current:</span>
           <Tag status="info">{points} pts</Tag>
         </MessageStyled>
         {isEnoughPoints && (
@@ -254,7 +237,7 @@ const ConfirmationOverlay: FC<TProps> = ({
             loading,
             setLoading,
             selected,
-            onClose
+            onClose,
           )}
 
           <ButtonStyled

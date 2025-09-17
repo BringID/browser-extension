@@ -1,4 +1,4 @@
-import { TNotarizationGroup } from "../../common/types";
+import { TNotarizationGroup } from '../../common/types';
 
 type GroupMatchResult = {
   semaphoreGroupId: string;
@@ -6,7 +6,10 @@ type GroupMatchResult = {
   points: number;
 } | null;
 
-function defineGroup (rawData: string, groups: TNotarizationGroup[]): GroupMatchResult {
+function defineGroup(
+  rawData: string,
+  groups: TNotarizationGroup[],
+): GroupMatchResult {
   // ✅ 1. Shortcut: If only one group, return it without checks
   if (groups.length === 1) {
     const group = groups[0];
@@ -22,10 +25,8 @@ function defineGroup (rawData: string, groups: TNotarizationGroup[]): GroupMatch
   // ✅ 2. Collect all keys needed for checks across groups
   const keysToExtract = Array.from(
     new Set(
-      groups.flatMap(group =>
-        group.checks?.map(check => check.key) ?? []
-      )
-    )
+      groups.flatMap((group) => group.checks?.map((check) => check.key) ?? []),
+    ),
   );
 
   // ✅ 3. Extract values from raw string using RegExp
@@ -65,19 +66,19 @@ function defineGroup (rawData: string, groups: TNotarizationGroup[]): GroupMatch
       }
 
       switch (check.type) {
-        case "gte":
+        case 'gte':
           if (!(actual >= expected)) allChecksPass = false;
           break;
-        case "gt":
+        case 'gt':
           if (!(actual > expected)) allChecksPass = false;
           break;
-        case "lte":
+        case 'lte':
           if (!(actual <= expected)) allChecksPass = false;
           break;
-        case "lt":
+        case 'lt':
           if (!(actual < expected)) allChecksPass = false;
           break;
-        case "eq":
+        case 'eq':
           if (!(actual === expected)) allChecksPass = false;
           break;
         default:
@@ -100,4 +101,4 @@ function defineGroup (rawData: string, groups: TNotarizationGroup[]): GroupMatch
   return null;
 }
 
-export default defineGroup
+export default defineGroup;

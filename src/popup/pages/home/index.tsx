@@ -16,7 +16,7 @@ import {
   ConfirmationOverlay,
   LoadingOverlay,
 } from '../../components';
-import { calculateAvailablePoints, defineUserStatus } from '../../utils';
+import { calculateAvailablePoints } from '../../utils';
 import configs from '../../configs';
 import { useUser } from '../../store/reducers/user';
 
@@ -38,8 +38,6 @@ const Home: FC = () => {
   const leftForAdvanced = configs.ADVANCED_STATUS_POINTS - availablePoints;
   const percentageFinished =
     (availablePoints / configs.ADVANCED_STATUS_POINTS) * 100;
-
-  const userStatus = defineUserStatus(availablePoints);
 
   const navigate = useNavigate();
   const user = useUser();
@@ -104,7 +102,6 @@ const Home: FC = () => {
           }}
           host={requestHost}
           points={availablePoints}
-          userStatus={userStatus}
           pointsRequired={Number(pointsRequired)}
           dropAddress={dropAddress}
         />
@@ -120,11 +117,7 @@ const Home: FC = () => {
         />
       )}
 
-      <Header
-        status={userStatus}
-        points={availablePoints}
-        address={user.address}
-      />
+      <Header points={availablePoints} address={user.address} />
 
       {/* <ProgressBarStyled
         current={percentageFinished > 100 ? 100 : percentageFinished}

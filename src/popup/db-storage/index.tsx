@@ -93,8 +93,7 @@ export class DBStorage implements TDBStorage {
     const verifications: TVerification[] = [];
 
     availableTasks.forEach(async (task) => {
-
-      task.groups.forEach(async group => {
+      task.groups.forEach(async (group) => {
         const identity = semaphore.createIdentity(
           String(user.key),
           group.credentialGroupId,
@@ -107,13 +106,12 @@ export class DBStorage implements TDBStorage {
             group.semaphoreGroupId,
           );
           if (proof) {
-
             const verificationAdded = await this.addVerification({
               credentialGroupId: group.credentialGroupId,
               status: 'completed',
               scheduledTime: +new Date(),
               fetched: true,
-              taskId: task.id
+              taskId: task.id,
             });
             store.dispatch(addVerification(verificationAdded));
             verifications.push(verificationAdded);
@@ -121,8 +119,7 @@ export class DBStorage implements TDBStorage {
         } catch (err) {
           console.log(`proof for ${commitment} was not added before`);
         }
-      })
-      
+      });
     });
 
     return verifications;

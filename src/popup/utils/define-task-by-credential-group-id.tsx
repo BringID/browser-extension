@@ -1,16 +1,20 @@
 import { Task, tasks } from '../../common/core';
 import { TNotarizationGroup } from '../../common/types';
 
-type TDefineTaskByCredentialGroupId = (credentialGroupId: string) => {
-  taskId: string
-  title: string
-  description?: string
-  icon?: string
-  group: TNotarizationGroup
-} | undefined
+type TDefineTaskByCredentialGroupId = (credentialGroupId: string) =>
+  | {
+      taskId: string;
+      title: string;
+      description?: string;
+      icon?: string;
+      group: TNotarizationGroup;
+    }
+  | undefined;
 
-const defineTaskByCredentialGroupId: TDefineTaskByCredentialGroupId = (credentialGroupId) => {
-  const availableTasks = tasks()
+const defineTaskByCredentialGroupId: TDefineTaskByCredentialGroupId = (
+  credentialGroupId,
+) => {
+  const availableTasks = tasks();
   for (const task of availableTasks) {
     for (const group of task.groups) {
       if (group.credentialGroupId === credentialGroupId) {
@@ -19,11 +23,11 @@ const defineTaskByCredentialGroupId: TDefineTaskByCredentialGroupId = (credentia
           title: task.title,
           description: task.description,
           icon: task.icon,
-          group: group
+          group: group,
         };
       }
     }
   }
-}
+};
 
-export default defineTaskByCredentialGroupId
+export default defineTaskByCredentialGroupId;

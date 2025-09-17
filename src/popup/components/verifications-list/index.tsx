@@ -19,10 +19,10 @@ const VerificationsList: FC<TProps> = ({
       )}
       {verifications.length > 0 &&
         verifications.map((verification) => {
-
-          const relatedTaskData = defineTaskByCredentialGroupId(verification.credentialGroupId)
+          const relatedTaskData = defineTaskByCredentialGroupId(
+            verification.credentialGroupId,
+          );
           if (relatedTaskData) {
-
             return (
               <Verification
                 fetched={verification.fetched}
@@ -38,7 +38,6 @@ const VerificationsList: FC<TProps> = ({
               />
             );
           }
-          
         })}
 
       <ButtonStyled onClick={onAddVerifications} appearance="action">

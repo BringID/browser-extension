@@ -11,8 +11,8 @@ type TProps = {
   selectable: boolean;
   selected?: boolean;
   onSelect?: (selected: boolean) => void;
-  id: string
-  groups?: TNotarizationGroup[]
+  id: string;
+  groups?: TNotarizationGroup[];
 };
 
 export default TProps;

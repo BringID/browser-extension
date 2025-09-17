@@ -19,7 +19,7 @@ export class NotarizationUberRides extends NotarizationBase {
   public async onStart(): Promise<void> {
     this.requestRecorder.start();
     await chrome.tabs.create({ url: 'https://riders.uber.com/trips' });
-        this.currentStep = 1;
+    this.currentStep = 1;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
   }
@@ -31,7 +31,7 @@ export class NotarizationUberRides extends NotarizationBase {
     this.result(new Error('Notarization is not implemented'));
 
     const notary = await TLSNotary.new('riders.uber.com');
-    this.setProgress(33)
+    this.setProgress(33);
     const result = await notary.transcript({
       url: log[0].url,
       method: log[0].method,
@@ -57,7 +57,7 @@ export class NotarizationUberRides extends NotarizationBase {
       sent: [{ start: 0, end: transcript.sent.length }],
       recv: [],
     };
-    this.setProgress(66)
+    this.setProgress(66);
     console.log('Transcript: ', Buffer.from(transcript.recv).toString('utf-8'));
     const jsonStarts: number =
       Buffer.from(transcript.recv).toString('utf-8').indexOf('\n{') + 1;
@@ -83,7 +83,7 @@ export class NotarizationUberRides extends NotarizationBase {
       },
     ];
 
-    this.setProgress(99)
+    this.setProgress(99);
 
     this.result(await notary.notarize(commit));
   }

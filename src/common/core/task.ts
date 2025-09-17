@@ -5,8 +5,9 @@ export type Task = {
   title: string;
   description?: string;
   icon?: string;
-  groups: TNotarizationGroup[]
+  groups: TNotarizationGroup[];
   steps: TNotarizationStep[];
+  dev?: boolean;
 };
 
 function loadTasks(): Task[] {
@@ -34,6 +35,7 @@ function loadTasks(): Task[] {
         icon: task.icon,
         groups: task.groups,
         steps: task.steps,
+        dev: task.dev,
       };
     });
   } catch (error) {

@@ -7,11 +7,15 @@ function calculateAvailablePoints(verifications: TVerification[]): number {
     if (verification.status !== 'completed') {
       return;
     }
-    const relatedTask = defineTaskByCredentialGroupId(verification.credentialGroupId)
+    const relatedTask = defineTaskByCredentialGroupId(
+      verification.credentialGroupId,
+    );
 
-    if (!relatedTask) { return }
+    if (!relatedTask) {
+      return;
+    }
 
-    const { group } = relatedTask
+    const { group } = relatedTask;
 
     points = points + (group.points || 0);
   });
