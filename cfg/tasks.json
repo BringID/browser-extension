@@ -8,7 +8,7 @@
     "groups": [
       {
         "points": 10,
-        "semaphoreGroupId": "20",
+        "semaphoreGroupId": "26",
         "credentialGroupId": "99"
       }
     ],
@@ -34,7 +34,7 @@
     "groups": [
       {
         "points": 10,
-        "semaphoreGroupId": "8",
+        "semaphoreGroupId": "21",
         "credentialGroupId": "1"
       }
     ],
@@ -60,7 +60,7 @@
     "groups": [
       {
         "points": 20,
-        "semaphoreGroupId": "9",
+        "semaphoreGroupId": "22",
         "credentialGroupId": "2",
         "checks": [
           {
@@ -72,7 +72,7 @@
       },
       {
         "points": 10,
-        "semaphoreGroupId": "10",
+        "semaphoreGroupId": "23",
         "credentialGroupId": "3",
         "checks": [
           {
@@ -84,7 +84,7 @@
       },
       {
         "points": 5,
-        "semaphoreGroupId": "11",
+        "semaphoreGroupId": "24",
         "credentialGroupId": "4",
         "checks": [
           {
@@ -116,7 +116,7 @@
     "groups": [
       {
         "points": 10,
-        "semaphoreGroupId": "12",
+        "semaphoreGroupId": "25",
         "credentialGroupId": "5"
       }
     ],

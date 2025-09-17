@@ -1,5 +1,5 @@
 const ADVANCED_STATUS_POINTS = 10;
-const REGISTRY = '0xe6912badd4bf0194986c11cbb67876c4bfc0215f';
+const REGISTRY = '0x4d82D612c0070a3BFce1EB2B8d6c78aF93d921Fe';
 const EXTENSION_ID = 'fjlmbkpfjmbjokokgmfcijlliceljbeh';
 const SEMAPHORE_SUBGRAPH_URL =
   'https://api.goldsky.com/api/public/project_cm8g2ca7b0ewq01uea1xl12vp/subgraphs/semaphore-base-sepolia/1.0.0/gn';
