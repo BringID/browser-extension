@@ -13,7 +13,7 @@ import TProps from './types';
 import getStorage from '../../db-storage';
 import { getTabsByHost, shortenString } from '../../utils';
 import AddressIcon from '../../../components/icons/address';
-import configs from '../../configs'
+import configs from '../../configs';
 import { TExtensionRequestType } from '../../types';
 
 const defineContent = (address: string | null, points: number) => {
@@ -33,14 +33,13 @@ const defineContent = (address: string | null, points: number) => {
         onClick={async () => {
           const storage = await getStorage();
           await storage.destroyUser();
-          const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOST)
-          connectorTabs.forEach(tab => {
-
-            console.log({ tab })
+          const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOST);
+          connectorTabs.forEach((tab) => {
+            console.log({ tab });
             chrome.tabs.sendMessage(tab.id as number, {
-              type: TExtensionRequestType.logout
+              type: TExtensionRequestType.logout,
             });
-          })
+          });
         }}
       >
         Logout

@@ -15,4 +15,4 @@ function getTabsByHost(targetHost: string): Promise<chrome.tabs.Tab[]> {
   });
 }
 
-export default getTabsByHost
+export default getTabsByHost;

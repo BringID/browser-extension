@@ -4,7 +4,6 @@ import { TExtensionRequestType } from '../popup/types';
 (async () => {
   loadScript('content.bundle.js');
   chrome.runtime.onMessage.addListener((message) => {
-
     switch (message.type) {
       case TExtensionRequestType.logout: {
         window.postMessage(
@@ -14,7 +13,7 @@ import { TExtensionRequestType } from '../popup/types';
           },
           '*',
         );
-        break
+        break;
       }
 
       case TExtensionRequestType.proofs_generated: {
@@ -26,7 +25,7 @@ import { TExtensionRequestType } from '../popup/types';
           },
           '*',
         );
-        break
+        break;
       }
 
       case TExtensionRequestType.proofs_rejected: {
@@ -38,7 +37,7 @@ import { TExtensionRequestType } from '../popup/types';
           '*',
         );
 
-        break
+        break;
       }
     }
   });
