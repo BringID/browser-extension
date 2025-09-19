@@ -6,7 +6,7 @@ import {
   TVerificationStatus,
 } from '../types';
 import TDBStorage from './types';
-import { setId, setKey, setAddress } from '../store/reducers/user';
+import { setId, setKey, setAddress, setLoading } from '../store/reducers/user';
 import {
   addVerification,
   addVerifications,
@@ -26,6 +26,7 @@ import {
   TSyncUser,
   TSyncVerifications,
   TDestroyUser,
+  TSetUserLoading
 } from './types';
 import { tasks } from '../../common/core';
 import semaphore from '../semaphore';
@@ -72,10 +73,10 @@ export class DBStorage implements TDBStorage {
 
     const userId = charwise.encode(Date.now()).toString('hex');
     const userNew = {
-      status: 'basic' as TUserStatus,
       key: null,
       id: userId,
       address: null,
+      loading: false
     };
     await this.#userDb.put(userId, userNew);
 
@@ -84,16 +85,19 @@ export class DBStorage implements TDBStorage {
   };
 
   addInitialVerifications: TAddInitialVerifications = async () => {
+
     const availableTasks = tasks();
     const existingUserId = await this.getUserId();
     if (!existingUserId) {
       return [];
     }
+
     const user: TUser = await this.#userDb.get(existingUserId);
     const verifications: TVerification[] = [];
+    this.setUserLoading(true);
 
-    availableTasks.forEach(async (task) => {
-      task.groups.forEach(async (group) => {
+    for (const task of availableTasks) {
+      for (const group of task.groups) {
         const identity = semaphore.createIdentity(
           String(user.key),
           group.credentialGroupId,
@@ -119,8 +123,10 @@ export class DBStorage implements TDBStorage {
         } catch (err) {
           console.log(`proof for ${commitment} was not added before`);
         }
-      });
-    });
+      }
+    }
+
+    this.setUserLoading(false);
 
     return verifications;
   };
@@ -160,9 +166,12 @@ export class DBStorage implements TDBStorage {
     await this.syncVerifications();
   };
 
+
+
   addUserKey: TAddUserKey = async (key: string, address: string) => {
     const existingUserId = await this.getUserId();
     if (existingUserId) {
+
       const user: TUser = await this.#userDb.get(existingUserId);
 
       await this.#userDb.put(existingUserId, {
@@ -176,6 +185,25 @@ export class DBStorage implements TDBStorage {
       await this.addInitialVerifications();
 
       return key;
+    } else {
+      throw new Error('No user detected');
+    }
+  };
+
+  setUserLoading: TSetUserLoading = async (loading) => {
+    const existingUserId = await this.getUserId();
+    if (existingUserId) {
+
+      const user: TUser = await this.#userDb.get(existingUserId);
+
+      await this.#userDb.put(existingUserId, {
+        ...user,
+        loading
+      });
+
+      store.dispatch(setLoading(loading));
+
+      return loading;
     } else {
       throw new Error('No user detected');
     }
@@ -204,6 +232,7 @@ export class DBStorage implements TDBStorage {
   };
 
   addVerification: TAddVerification = async (verification) => {
+
     await this.#verificationsDb.put(
       verification.credentialGroupId,
       verification,

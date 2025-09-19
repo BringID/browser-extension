@@ -53,41 +53,47 @@ function sendMessageToBackground(data: any): Promise<void> {
 const Offscreen = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
-      const storage = await getStorage();
-      await storage.syncVerifications();
 
-      const verifications = await storage.getVerifications();
-      console.log('background check verifications: ', { verifications });
-      const notCompletedVerifications = verifications.filter(
-        (verification) => verification.status !== 'completed',
-      );
-      if (notCompletedVerifications.length === 0) {
-        return;
-      }
-      notCompletedVerifications.forEach(async (item) => {
-        if (item.status !== 'completed') {
-          const now = +new Date();
-          const expiration = item.scheduledTime - now;
-          if (expiration <= 0) {
-            await storage.updateVerificationStatus(
-              item.credentialGroupId,
-              'completed',
-            );
+      try {
+        const storage = await getStorage();
+        await storage.syncVerifications();
 
-            console.log('UPDATED TO COMPLETED');
-
-            sendMessageToBackground({
-              type: 'UPDATE_COMPLETED_INDICATOR',
-              completedCount: '✓',
-            });
-          } else {
-            sendMessageToBackground({
-              type: 'UPDATE_PENDING_INDICATOR',
-              completedCount: '⧗',
-            });
-          }
+        const verifications = await storage.getVerifications();
+        console.log('background check verifications: ', { verifications });
+        const notCompletedVerifications = verifications.filter(
+          (verification) => verification.status !== 'completed',
+        );
+        if (notCompletedVerifications.length === 0) {
+          return;
         }
-      });
+        notCompletedVerifications.forEach(async (item) => {
+          if (item.status !== 'completed') {
+            const now = +new Date();
+            const expiration = item.scheduledTime - now;
+            if (expiration <= 0) {
+              await storage.updateVerificationStatus(
+                item.credentialGroupId,
+                'completed',
+              );
+
+              console.log('UPDATED TO COMPLETED');
+
+              sendMessageToBackground({
+                type: 'UPDATE_COMPLETED_INDICATOR',
+                completedCount: '✓',
+              });
+            } else {
+              sendMessageToBackground({
+                type: 'UPDATE_PENDING_INDICATOR',
+                completedCount: '⧗',
+              });
+            }
+          }
+        });
+      } catch (err) {
+        console.log({ err })
+      }
+      
     }, 10000);
 
     return () => clearInterval(interval);

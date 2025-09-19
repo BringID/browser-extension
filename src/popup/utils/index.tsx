@@ -10,6 +10,8 @@ import defineGroup from './define-group';
 import defineTaskByCredentialGroupId from './define-task-by-credential-group-id';
 import defineRelatedVerification from './define-related-verification';
 import getTabsByHost from './get-tabs-by-host';
+import areArraysEqual from './are-arrays-equal'
+import areObjectsEqual from './are-objects-equal'
 
 export {
   msToTime,
@@ -24,4 +26,6 @@ export {
   defineTaskByCredentialGroupId,
   defineRelatedVerification,
   getTabsByHost,
+  areArraysEqual,
+  areObjectsEqual
 };

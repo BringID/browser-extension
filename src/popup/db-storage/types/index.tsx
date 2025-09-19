@@ -11,6 +11,7 @@ import TAddVerification from './add-verification';
 import TSyncUser from './sync-user';
 import TSyncVerifications from './sync-verifications';
 import TDestroyUser from './destroy-user';
+import TSetUserLoading from './set-user-loading'
 
 interface TDBStorage {
   db?: Level;
@@ -38,12 +39,15 @@ interface TDBStorage {
   syncVerifications: TSyncVerifications;
 
   destroyUser: TDestroyUser;
+
+  setUserLoading: TSetUserLoading;
 }
 
 export default TDBStorage;
 
 export {
   TAddInitialUser,
+  TSetUserLoading,
   TAddInitialVerifications,
   TDestroyUser,
   TGetUserId,

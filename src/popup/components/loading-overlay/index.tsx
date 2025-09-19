@@ -10,7 +10,7 @@ const LoadingOverlay: FC = () => {
   return (
     <Container>
       <Content>
-        <TitleStyled>Processing verification...</TitleStyled>
+        <TitleStyled>Processing...</TitleStyled>
         <SpinnerStyled size="large" />
       </Content>
     </Container>
