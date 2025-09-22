@@ -1,7 +1,7 @@
 import ISemaphore, { TGetProof, TCreateIdentity } from './types';
 import { indexer } from '../api';
 
-import config from '../configs';
+import config from '../../configs';
 import { keccak256, AbiCoder } from 'ethers';
 import { Identity } from '@semaphore-protocol/identity';
 

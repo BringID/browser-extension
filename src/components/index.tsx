@@ -16,6 +16,7 @@ import Message from './message';
 import LogoWrapper from './logo-wrapper';
 import Checkbox from './checkbox';
 import Step from './step';
+import List from './list';
 
 export {
   Spinner,
@@ -36,4 +37,5 @@ export {
   LogoWrapper,
   Checkbox,
   Step,
+  List
 };

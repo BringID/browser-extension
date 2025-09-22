@@ -11,8 +11,8 @@ const defineImage = (icon?: string | React.ReactNode) => {
   return icon;
 };
 
-const Component: FC<TProps> = ({ className, icon }) => {
-  return <LogoWrapper className={className}>{defineImage(icon)}</LogoWrapper>;
+const Component: FC<TProps> = ({ className, icon, status = 'default' }) => {
+  return <LogoWrapper status={status} className={className}>{defineImage(icon)}</LogoWrapper>;
 };
 
 export default Component;

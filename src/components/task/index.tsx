@@ -5,7 +5,7 @@ import { TVerificationStatus } from '../../popup/types';
 import { TaskContainer } from '../../components';
 import Button from '../button';
 import manager from '../../popup/manager';
-import configs from '../../popup/configs';
+import configs from '../../configs';
 import browser from 'webextension-polyfill';
 import { Icons, Tag } from '../../components';
 import getStorage from '../../popup/db-storage';

@@ -3,8 +3,7 @@ import React, { FC } from 'react';
 import {
   Container,
   Content,
-  Title,
-  ExclimationIcon,
+  Title
 } from './styled-components';
 
 const Note: FC<TProps> = ({
@@ -15,7 +14,6 @@ const Note: FC<TProps> = ({
 }) => {
   return (
     <Container className={className} status={status}>
-      <ExclimationIcon />
       <Content>
         {title && <Title>{title}</Title>}
         {children}

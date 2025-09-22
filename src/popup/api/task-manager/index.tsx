@@ -5,7 +5,7 @@ import {
   TGetVerification,
   TGetVerificationResponse,
 } from './types';
-import app from '../../configs';
+import app from '../../../configs';
 
 const addVerification: TAddVerification = (
   apiUrl,

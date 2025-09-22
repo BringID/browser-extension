@@ -1,6 +1,6 @@
 import IRelayer, { TCreateVerification, TGetVerification } from './types';
 import taskManager from '../api/task-manager';
-import configs from '../configs';
+import configs from '../../configs';
 
 class Relayer implements IRelayer {
   #apiUrl: string;

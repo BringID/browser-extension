@@ -63,8 +63,10 @@ export abstract class NotarizationBase
         status: NotarizationStatus.Stopped,
         error: res,
       };
+      if (this.#resultCallback) this.#resultCallback(res);
       return;
     }
+
     this.state = {
       progress: 100,
       status: NotarizationStatus.Completed,
