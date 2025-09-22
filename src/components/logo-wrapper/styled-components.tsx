@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { TStatus } from './types';
 
 export const LogoWrapper = styled.div<{
-  status: TStatus
+  status: TStatus;
 }>`
   width: 58px;
   min-height: 58px;
@@ -13,11 +13,12 @@ export const LogoWrapper = styled.div<{
   justify-content: center;
   overflow: hidden;
 
-
-  ${props => props.status === 'error' && css`
+  ${(props) =>
+    props.status === 'error' &&
+    css`
       border: 1px solid ${(props) => props.theme.errorStatusBorderColor};
       background-color: ${(props) => props.theme.errorStatusBackgroundColor};
-  `}
+    `}
 `;
 
 export const Image = styled.img`

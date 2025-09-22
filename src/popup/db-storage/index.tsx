@@ -26,7 +26,7 @@ import {
   TSyncUser,
   TSyncVerifications,
   TDestroyUser,
-  TSetUserLoading
+  TSetUserLoading,
 } from './types';
 import { tasks } from '../../common/core';
 import semaphore from '../semaphore';
@@ -76,7 +76,7 @@ export class DBStorage implements TDBStorage {
       key: null,
       id: userId,
       address: null,
-      loading: false
+      loading: false,
     };
     await this.#userDb.put(userId, userNew);
 
@@ -85,7 +85,6 @@ export class DBStorage implements TDBStorage {
   };
 
   addInitialVerifications: TAddInitialVerifications = async () => {
-
     const availableTasks = tasks();
     const existingUserId = await this.getUserId();
     if (!existingUserId) {
@@ -166,12 +165,9 @@ export class DBStorage implements TDBStorage {
     await this.syncVerifications();
   };
 
-
-
   addUserKey: TAddUserKey = async (key: string, address: string) => {
     const existingUserId = await this.getUserId();
     if (existingUserId) {
-
       const user: TUser = await this.#userDb.get(existingUserId);
 
       await this.#userDb.put(existingUserId, {
@@ -193,12 +189,11 @@ export class DBStorage implements TDBStorage {
   setUserLoading: TSetUserLoading = async (loading) => {
     const existingUserId = await this.getUserId();
     if (existingUserId) {
-
       const user: TUser = await this.#userDb.get(existingUserId);
 
       await this.#userDb.put(existingUserId, {
         ...user,
-        loading
+        loading,
       });
 
       store.dispatch(setLoading(loading));
@@ -232,7 +227,6 @@ export class DBStorage implements TDBStorage {
   };
 
   addVerification: TAddVerification = async (verification) => {
-
     await this.#verificationsDb.put(
       verification.credentialGroupId,
       verification,

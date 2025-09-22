@@ -37,5 +37,5 @@ export {
   LogoWrapper,
   Checkbox,
   Step,
-  List
+  List,
 };

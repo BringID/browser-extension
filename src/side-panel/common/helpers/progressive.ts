@@ -46,7 +46,7 @@ export class Progressive<T extends StateStatus> {
     this.notify();
   }
 
-  protected (error: Error) {
+  protected setError(error: Error) {
     this.#state.error = error;
     this.notify();
   }

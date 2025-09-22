@@ -70,7 +70,7 @@ export class NotarizationXProfile extends NotarizationBase {
 
       this.result(await notary.notarize(commit));
     } catch (err) {
-      this.result(err as Error)
+      this.result(err as Error);
     }
   }
 

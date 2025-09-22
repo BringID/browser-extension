@@ -1,6 +1,5 @@
 type TProps = {
-  items: string[]
-}
+  items: string[];
+};
 
-
-export default TProps
+export default TProps;

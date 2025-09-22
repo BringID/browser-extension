@@ -5,7 +5,7 @@ const VERIFIER_API = 'https://verifier-production-93bb.up.railway.app';
 const INDEXER_API = 'https://semaphor-indexer-production.up.railway.app';
 const CONNECTOR_HOST = 'app.bringid.org';
 const CONNECT_WALLET_URL = `https://${CONNECTOR_HOST}?stage=connect`;
-const TELEGRAM_URL = 'https://t.me/bringid_chat'
+const TELEGRAM_URL = 'https://t.me/bringid_chat';
 
 export default {
   REGISTRY,
@@ -15,5 +15,5 @@ export default {
   INDEXER_API,
   CONNECT_WALLET_URL,
   CONNECTOR_HOST,
-  TELEGRAM_URL
+  TELEGRAM_URL,
 };

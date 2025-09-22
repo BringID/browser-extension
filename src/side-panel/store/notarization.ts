@@ -20,14 +20,13 @@ export interface NotarizationState {
   // result => UI
 }
 
-
 const initialState: NotarizationState = {
   taskId: 0,
   status: NotarizationStatus.pending,
   progress: 0,
   error: '',
   currentStep: 0,
-}
+};
 
 export const notarizationSlice = createSlice({
   name: 'notarization',
@@ -48,9 +47,11 @@ export const notarizationSlice = createSlice({
       state.progress = action.payload;
     },
 
-    setError: (state: NotarizationState, action: PayloadAction<string | undefined>) => {
-
-      console.log('ERROR SET: ', action.payload)
+    setError: (
+      state: NotarizationState,
+      action: PayloadAction<string | undefined>,
+    ) => {
+      console.log('ERROR SET: ', action.payload);
       state.error = action.payload;
     },
 
@@ -67,9 +68,9 @@ export const notarizationSlice = createSlice({
 
     clear: (state: NotarizationState) => {
       console.log({
-        initialState
-      })
-      state = {...initialState}
+        initialState,
+      });
+      state = { ...initialState };
     },
 
     setTranscriptRecv: (

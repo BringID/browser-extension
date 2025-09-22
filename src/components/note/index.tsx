@@ -1,10 +1,6 @@
 import TProps from './types';
 import React, { FC } from 'react';
-import {
-  Container,
-  Content,
-  Title
-} from './styled-components';
+import { Container, Content, Title } from './styled-components';
 
 const Note: FC<TProps> = ({
   children,

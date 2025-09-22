@@ -17,39 +17,41 @@ import {
   ListStyled,
   ButtonStyled,
   Buttons,
-  LinkStyled
+  LinkStyled,
 } from './styled-components';
 import { useDispatch } from 'react-redux';
 import { notarizationSlice } from './store/notarization';
 import { Page, Step } from '../components';
 import './style.css';
 import { TMessage } from '../common/core/messages';
-import config from '../configs'
-
+import config from '../configs';
 
 const renderButtons = (
   retryTask: () => Promise<void>,
   error?: string | null,
 ) => {
   if (!error) {
-    return <ButtonStyled
-      onClick={() => {
-        window.close()
-      }}
-    >
-      Cancel verification
-    </ButtonStyled>
+    return (
+      <ButtonStyled
+        onClick={() => {
+          window.close();
+        }}
+      >
+        Cancel verification
+      </ButtonStyled>
+    );
   }
 
-  return <Buttons>
-    <ButtonStyled
-      onClick={() => {
-        window.close()
-      }}
-    >
-      Close
-    </ButtonStyled>
-    {/* <ButtonStyled
+  return (
+    <Buttons>
+      <ButtonStyled
+        onClick={() => {
+          window.close();
+        }}
+      >
+        Close
+      </ButtonStyled>
+      {/* <ButtonStyled
       appearance='action'
       onClick={retryTask}
     >
@@ -63,32 +65,33 @@ const renderButtons = (
     >
       Back to verifications
     </ButtonStyled> */}
-  </Buttons>
-}
+    </Buttons>
+  );
+};
 
-const renderHeader = (
-  currentTask: Task,
-  error?: string | null,
-) => {
+const renderHeader = (currentTask: Task, error?: string | null) => {
   if (error) {
-    return <Header>
-      <LogoWrapperStyled icon={currentTask?.icon} status='error' />
+    return (
+      <Header>
+        <LogoWrapperStyled icon={currentTask?.icon} status="error" />
 
-      <TitleStyled>Verification Failed</TitleStyled>
+        <TitleStyled>Verification Failed</TitleStyled>
 
-      <TextStyled>
-        Something went wrong during the MPC-TLS verification
-      </TextStyled>
-    </Header>
+        <TextStyled>
+          Something went wrong during the MPC-TLS verification
+        </TextStyled>
+      </Header>
+    );
   }
 
-  return <Header>
-    <LogoWrapperStyled icon={currentTask?.icon} />
+  return (
+    <Header>
+      <LogoWrapperStyled icon={currentTask?.icon} />
 
-    <TitleStyled>{currentTask?.description}</TitleStyled>
-  </Header>
-}
-
+      <TitleStyled>{currentTask?.description}</TitleStyled>
+    </Header>
+  );
+};
 
 const renderContent = (
   taskId: number,
@@ -97,31 +100,29 @@ const renderContent = (
   progress: number,
   error?: string | null,
   result?: string,
-  transcriptRecv?: string
+  transcriptRecv?: string,
 ) => {
-
   if (error) {
-    return <>
-      <NoteStyled
-        status='error'
-        title='Common issues:'
-      >
-        <ListStyled
-          items={[
-            'Network connection problems',
-            'Service temporarily unavailable',
-            "Account doesn't meet verification requirements"
-          ]}
-        />
-      </NoteStyled>
+    return (
+      <>
+        <NoteStyled status="error" title="Common issues:">
+          <ListStyled
+            items={[
+              'Network connection problems',
+              'Service temporarily unavailable',
+              "Account doesn't meet verification requirements",
+            ]}
+          />
+        </NoteStyled>
 
-      <NoteStyled
-        status='info'
-        title='Need help?'
-      >
-        If the error persists, ask for help in our <LinkStyled href={config.TELEGRAM_URL} target='_blank'>Telegram community</LinkStyled>
-      </NoteStyled>
-    </>
+        <NoteStyled status="info" title="Need help?">
+          If the error persists, ask for help in our{' '}
+          <LinkStyled href={config.TELEGRAM_URL} target="_blank">
+            Telegram community
+          </LinkStyled>
+        </NoteStyled>
+      </>
+    );
   }
   return currentTask.steps.map((step, idx) => {
     return (
@@ -159,19 +160,17 @@ const renderContent = (
         }
       />
     );
-  })
-}
+  });
+};
 
 const SidePanel: FC = () => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     const listener = (request: TMessage) => {
       switch (request.type) {
         case 'NOTARIZE':
-
           if ('task_id' in request) {
-            dispatch(notarizationSlice.actions.clear())
+            dispatch(notarizationSlice.actions.clear());
             void notarizationManager.run(request.task_id);
           }
           break;
@@ -199,7 +198,14 @@ const SidePanel: FC = () => {
       return state.notarization;
     });
 
-  console.log('DATA: ', { result, taskId, progress, currentStep, transcriptRecv, error })
+  console.log('DATA: ', {
+    result,
+    taskId,
+    progress,
+    currentStep,
+    transcriptRecv,
+    error,
+  });
 
   const availableTasks = tasks();
   console.log({ taskId });
@@ -212,31 +218,23 @@ const SidePanel: FC = () => {
     <Wrapper>
       <Page>
         <Container>
-          {renderHeader(
-            currentTask,
-            error
-          )}
+          {renderHeader(currentTask, error)}
 
           <Content>
-            {
-              renderContent(
-                taskId,
-                currentTask,
-                currentStep,
-                progress,
-                error,
-                result,
-                transcriptRecv
-              )
-            }
+            {renderContent(
+              taskId,
+              currentTask,
+              currentStep,
+              progress,
+              error,
+              result,
+              transcriptRecv,
+            )}
 
-            {renderButtons(
-                async () => {
-                  dispatch(notarizationSlice.actions.clear())
-                  void notarizationManager.run(taskId);
-                },
-                error
-              )}
+            {renderButtons(async () => {
+              dispatch(notarizationSlice.actions.clear());
+              void notarizationManager.run(taskId);
+            }, error)}
           </Content>
         </Container>
       </Page>
