@@ -1,4 +1,4 @@
-import chains from '../configs/chains';
+import chains from '../../configs/chains';
 
 const defineExplorerURL = (chainId: number): string | null => {
   const chainConfig = chains[chainId];

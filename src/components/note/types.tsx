@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type TNoteStatus = 'error' | 'default' | 'warning';
+export type TNoteStatus = 'error' | 'default' | 'warning' | 'info';
 
 type TProps = {
   className?: string;

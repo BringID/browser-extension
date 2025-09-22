@@ -23,7 +23,7 @@ const initState: State = {
   key: null,
   id: null,
   address: null,
-  loading: false
+  loading: false,
 };
 
 export const setKey = (key: string): Action<string> => ({

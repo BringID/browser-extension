@@ -1,6 +1,6 @@
 import IVerifier, { TVerify } from './types';
 import verifierApi from '../api/verify-service';
-import config from '../configs';
+import config from '../../configs';
 
 class Verifier implements IVerifier {
   #apiUrl: string;

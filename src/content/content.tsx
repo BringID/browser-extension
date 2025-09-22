@@ -1,4 +1,4 @@
-import configs from '../popup/configs';
+import configs from '../configs';
 
 // @ts-ignore
 window.bringID = true;

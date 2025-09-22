@@ -1,5 +1,14 @@
 import styled from 'styled-components';
-import { Title, LogoWrapper, Spinner, Button, Note } from '../components';
+import {
+  Title,
+  LogoWrapper,
+  Spinner,
+  Button,
+  Note,
+  Text,
+  List,
+  Link,
+} from '../components';
 
 export const Container = styled.div`
   border: 1px solid ${(props) => props.theme.secondaryBorderColor};
@@ -30,7 +39,7 @@ export const Wrapper = styled.div`
 `;
 
 export const LogoWrapperStyled = styled(LogoWrapper)`
-  margin-bottom: 12px;
+  margin-bottom: 20px;
   img {
     object-fit: contain;
   }
@@ -45,3 +54,19 @@ export const ButtonStyled = styled(Button)`
 `;
 
 export const NoteStyled = styled(Note)``;
+
+export const TextStyled = styled(Text)`
+  text-align: center;
+  margin-top: 10px;
+`;
+
+export const ListStyled = styled(List)``;
+
+export const LinkStyled = styled(Link)`
+  color: ${(props) => props.theme.infoStatusTextColor};
+`;
+
+export const Buttons = styled.div`
+  display: flex;
+  flex-direction: column;
+`;

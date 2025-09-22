@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import browser from 'webextension-polyfill';
 import { notarizationManager } from './services/notarization';
-import { sendMessage } from '../common/core';
+import { sendMessage, Task } from '../common/core';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
 import { tasks } from '../common/core';
@@ -13,17 +13,164 @@ import {
   Content,
   Wrapper,
   NoteStyled,
+  TextStyled,
+  ListStyled,
+  ButtonStyled,
+  Buttons,
+  LinkStyled,
 } from './styled-components';
+import { useDispatch } from 'react-redux';
+import { notarizationSlice } from './store/notarization';
 import { Page, Step } from '../components';
 import './style.css';
 import { TMessage } from '../common/core/messages';
+import config from '../configs';
+
+const renderButtons = (
+  retryTask: () => Promise<void>,
+  error?: string | null,
+) => {
+  if (!error) {
+    return (
+      <ButtonStyled
+        onClick={() => {
+          window.close();
+        }}
+      >
+        Cancel verification
+      </ButtonStyled>
+    );
+  }
+
+  return (
+    <Buttons>
+      <ButtonStyled
+        onClick={() => {
+          window.close();
+        }}
+      >
+        Close
+      </ButtonStyled>
+      {/* <ButtonStyled
+      appearance='action'
+      onClick={retryTask}
+    >
+      Try again
+    </ButtonStyled>
+
+    <ButtonStyled
+      onClick={() => {
+        chrome.runtime.sendMessage({ action: 'openPopup' });
+      }}
+    >
+      Back to verifications
+    </ButtonStyled> */}
+    </Buttons>
+  );
+};
+
+const renderHeader = (currentTask: Task, error?: string | null) => {
+  if (error) {
+    return (
+      <Header>
+        <LogoWrapperStyled icon={currentTask?.icon} status="error" />
+
+        <TitleStyled>Verification Failed</TitleStyled>
+
+        <TextStyled>
+          Something went wrong during the MPC-TLS verification
+        </TextStyled>
+      </Header>
+    );
+  }
+
+  return (
+    <Header>
+      <LogoWrapperStyled icon={currentTask?.icon} />
+
+      <TitleStyled>{currentTask?.description}</TitleStyled>
+    </Header>
+  );
+};
+
+const renderContent = (
+  taskId: number,
+  currentTask: Task,
+  currentStep: number,
+  progress: number,
+  error?: string | null,
+  result?: string,
+  transcriptRecv?: string,
+) => {
+  if (error) {
+    return (
+      <>
+        <NoteStyled status="error" title="Common issues:">
+          <ListStyled
+            items={[
+              'Network connection problems',
+              'Service temporarily unavailable',
+              "Account doesn't meet verification requirements",
+            ]}
+          />
+        </NoteStyled>
+
+        <NoteStyled status="info" title="Need help?">
+          If the error persists, ask for help in our{' '}
+          <LinkStyled href={config.TELEGRAM_URL} target="_blank">
+            Telegram community
+          </LinkStyled>
+        </NoteStyled>
+      </>
+    );
+  }
+  return currentTask.steps.map((step, idx) => {
+    return (
+      <Step
+        {...step}
+        idx={idx}
+        key={step.text}
+        currentStep={currentStep}
+        progress={progress}
+        onClick={
+          step.notarization
+            ? () => {
+                if (!result || !transcriptRecv) {
+                  return alert(
+                    'Presentation data or transcriptRecv not defined',
+                  );
+                }
+                // @ts-ignore
+                // chrome.action.openPopup();
+
+                chrome.runtime.sendMessage({ action: 'openPopup' });
+
+                window.setTimeout(() => {
+                  sendMessage({
+                    type: 'PRESENTATION',
+                    data: {
+                      presentationData: result,
+                      transcriptRecv,
+                      taskIndex: taskId,
+                    },
+                  });
+                }, 1500);
+              }
+            : undefined
+        }
+      />
+    );
+  });
+};
 
 const SidePanel: FC = () => {
+  const dispatch = useDispatch();
   useEffect(() => {
     const listener = (request: TMessage) => {
       switch (request.type) {
         case 'NOTARIZE':
           if ('task_id' in request) {
+            dispatch(notarizationSlice.actions.clear());
             void notarizationManager.run(request.task_id);
           }
           break;
@@ -51,6 +198,15 @@ const SidePanel: FC = () => {
       return state.notarization;
     });
 
+  console.log('DATA: ', {
+    result,
+    taskId,
+    progress,
+    currentStep,
+    transcriptRecv,
+    error,
+  });
+
   const availableTasks = tasks();
   console.log({ taskId });
   const currentTask = availableTasks[taskId];
@@ -62,52 +218,23 @@ const SidePanel: FC = () => {
     <Wrapper>
       <Page>
         <Container>
-          <Header>
-            <LogoWrapperStyled icon={currentTask?.icon} />
-
-            <TitleStyled>{currentTask?.description}</TitleStyled>
-          </Header>
+          {renderHeader(currentTask, error)}
 
           <Content>
-            {currentTask.steps.map((step, idx) => {
-              return (
-                <Step
-                  {...step}
-                  idx={idx}
-                  key={step.text}
-                  currentStep={currentStep}
-                  progress={progress}
-                  onClick={
-                    step.notarization
-                      ? () => {
-                          if (!result || !transcriptRecv) {
-                            return alert(
-                              'Presentation data or transcriptRecv not defined',
-                            );
-                          }
-                          // @ts-ignore
-                          // chrome.action.openPopup();
+            {renderContent(
+              taskId,
+              currentTask,
+              currentStep,
+              progress,
+              error,
+              result,
+              transcriptRecv,
+            )}
 
-                          chrome.runtime.sendMessage({ action: 'openPopup' });
-
-                          window.setTimeout(() => {
-                            sendMessage({
-                              type: 'PRESENTATION',
-                              data: {
-                                presentationData: result,
-                                transcriptRecv,
-                                taskIndex: taskId,
-                              },
-                            });
-                          }, 1500);
-                        }
-                      : undefined
-                  }
-                />
-              );
-            })}
-
-            {error && <NoteStyled status="error">{error.message}</NoteStyled>}
+            {renderButtons(async () => {
+              dispatch(notarizationSlice.actions.clear());
+              void notarizationManager.run(taskId);
+            }, error)}
           </Content>
         </Container>
       </Page>

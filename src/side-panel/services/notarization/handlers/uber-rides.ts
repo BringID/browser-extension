@@ -29,63 +29,66 @@ export class NotarizationUberRides extends NotarizationBase {
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
     this.result(new Error('Notarization is not implemented'));
+    try {
+      const notary = await TLSNotary.new('riders.uber.com');
+      this.setProgress(33);
+      const result = await notary.transcript({
+        url: log[0].url,
+        method: log[0].method,
+        headers: {
+          'content-type': 'application/json',
+          'x-csrf-token': 'x',
+          Cookie: [...log[0].headers['Cookie'].matchAll(/(sid|csid)=([^;]*)/g)]
+            .map((res) => res[0])
+            .join(';'),
+        },
+        body: {
+          query:
+            '{ currentUser { uuid } activities { past(limit: 1) { activities { uuid } } } }',
+        },
+      });
+      if (result instanceof Error) {
+        this.result(result);
+        return;
+      }
+      const [transcript, message] = result;
 
-    const notary = await TLSNotary.new('riders.uber.com');
-    this.setProgress(33);
-    const result = await notary.transcript({
-      url: log[0].url,
-      method: log[0].method,
-      headers: {
-        'content-type': 'application/json',
-        'x-csrf-token': 'x',
-        Cookie: [...log[0].headers['Cookie'].matchAll(/(sid|csid)=([^;]*)/g)]
-          .map((res) => res[0])
-          .join(';'),
-      },
-      body: {
-        query:
-          '{ currentUser { uuid } activities { past(limit: 1) { activities { uuid } } } }',
-      },
-    });
-    if (result instanceof Error) {
-      this.result(result);
-      return;
+      const commit: Commit = {
+        sent: [{ start: 0, end: transcript.sent.length }],
+        recv: [],
+      };
+      this.setProgress(66);
+      console.log('Transcript: ', Buffer.from(transcript.recv).toString('utf-8'));
+      const jsonStarts: number =
+        Buffer.from(transcript.recv).toString('utf-8').indexOf('\n{') + 1;
+
+      const pointers: Pointers = parse(message.body.toString()).pointers;
+
+      const uuid: Mapping = pointers['/data/currentUser/uuid'];
+      const activities: Mapping = pointers['/data/activities/past/activities'];
+
+      if (!activities.key?.pos || !uuid.key?.pos) {
+        this.result(new Error('required data not found'));
+        return;
+      }
+
+      commit.recv = [
+        {
+          start: jsonStarts + uuid.key?.pos,
+          end: jsonStarts + uuid.valueEnd.pos,
+        },
+        {
+          start: jsonStarts + activities.key?.pos,
+          end: jsonStarts + activities.valueEnd.pos,
+        },
+      ];
+
+      this.setProgress(99);
+
+      this.result(await notary.notarize(commit));
+    } catch (err) {
+      this.result(err as Error);
     }
-    const [transcript, message] = result;
-
-    const commit: Commit = {
-      sent: [{ start: 0, end: transcript.sent.length }],
-      recv: [],
-    };
-    this.setProgress(66);
-    console.log('Transcript: ', Buffer.from(transcript.recv).toString('utf-8'));
-    const jsonStarts: number =
-      Buffer.from(transcript.recv).toString('utf-8').indexOf('\n{') + 1;
-
-    const pointers: Pointers = parse(message.body.toString()).pointers;
-
-    const uuid: Mapping = pointers['/data/currentUser/uuid'];
-    const activities: Mapping = pointers['/data/activities/past/activities'];
-
-    if (!activities.key?.pos || !uuid.key?.pos) {
-      this.result(new Error('required data not found'));
-      return;
-    }
-
-    commit.recv = [
-      {
-        start: jsonStarts + uuid.key?.pos,
-        end: jsonStarts + uuid.valueEnd.pos,
-      },
-      {
-        start: jsonStarts + activities.key?.pos,
-        end: jsonStarts + activities.valueEnd.pos,
-      },
-    ];
-
-    this.setProgress(99);
-
-    this.result(await notary.notarize(commit));
   }
 
   public async onStop(): Promise<void> {
