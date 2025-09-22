@@ -23,40 +23,45 @@ export class NotarizationStravaPremium extends NotarizationBase {
 
   private async onRequestsCaptured(log: Array<Request>) {
     this.setProgress(60);
-    const notary = await TLSNotary.new('strava.com');
 
-    const reqLog = log[0];
-    reqLog.headers = { ...log[0].headers };
-    delete reqLog.headers['Accept-Encoding'];
-    const result = await notary.transcript(log[0]);
-    if (result instanceof Error) {
-      this.result(result);
-      return;
-    }
-    const [transcript] = result;
+    try {
+      const notary = await TLSNotary.new('strava.com');
 
-    const responseBody = String.fromCharCode(...transcript.recv);
-
-    const isSubscriber = responseBody.match(/"is_subscriber":true/);
-
-    console.log({ responseBody, isSubscriber });
-
-    const commit: Commit = {
-      sent: [{ start: 0, end: transcript.sent.length }],
-      recv: [],
-    };
-
-    if (isSubscriber && isSubscriber.index !== undefined) {
-      const start = isSubscriber.index;
-      if (start >= 0) {
-        commit.recv.push({
-          start: start,
-          end: start + isSubscriber[0].length,
-        });
+      const reqLog = log[0];
+      reqLog.headers = { ...log[0].headers };
+      delete reqLog.headers['Accept-Encoding'];
+      const result = await notary.transcript(log[0]);
+      if (result instanceof Error) {
+        this.result(result);
+        return;
       }
-    }
+      const [transcript] = result;
 
-    this.result(await notary.notarize(commit));
+      const responseBody = String.fromCharCode(...transcript.recv);
+
+      const isSubscriber = responseBody.match(/"is_subscriber":true/);
+
+      console.log({ responseBody, isSubscriber });
+
+      const commit: Commit = {
+        sent: [{ start: 0, end: transcript.sent.length }],
+        recv: [],
+      };
+
+      if (isSubscriber && isSubscriber.index !== undefined) {
+        const start = isSubscriber.index;
+        if (start >= 0) {
+          commit.recv.push({
+            start: start,
+            end: start + isSubscriber[0].length,
+          });
+        }
+      }
+
+      this.result(await notary.notarize(commit));
+    } catch (err) {
+      this.result(err as Error);
+    }
   }
 
   public async onStop(): Promise<void> {
