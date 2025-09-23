@@ -5,12 +5,13 @@ import {
   TitleStyled,
   Content,
 } from './styled-components';
+import TProps from './types';
 
-const LoadingOverlay: FC = () => {
+const LoadingOverlay: FC<TProps> = ({ title }) => {
   return (
     <Container>
       <Content>
-        <TitleStyled>Processing...</TitleStyled>
+        <TitleStyled>{title}</TitleStyled>
         <SpinnerStyled size="large" />
       </Content>
     </Container>

@@ -35,9 +35,12 @@ const definePluginContent = (
         return null;
       }
       return (
-        <Button onClick={onCheckTransactionClick} size="small">
-          Check TX
-        </Button>
+        <>
+          <Tag status="info">+{points}</Tag>
+          <Button onClick={onCheckTransactionClick} size="small">
+            Check TX
+          </Button>
+        </>
       );
 
     default:

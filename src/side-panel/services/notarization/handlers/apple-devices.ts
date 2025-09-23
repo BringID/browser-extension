@@ -123,7 +123,9 @@ export class NotarizationAppleDevices extends NotarizationBase {
       }
 
       const dataLength = Buffer.from(
-        message.body.toString().substring(devices.key?.pos, devices.valueEnd.pos),
+        message.body
+          .toString()
+          .substring(devices.key?.pos, devices.valueEnd.pos),
         'utf-8',
       ).length;
 
@@ -137,7 +139,9 @@ export class NotarizationAppleDevices extends NotarizationBase {
       console.log('Commit Length:', commit.recv[0].end - commit.recv[0].start);
       console.log(
         'Commit Data:',
-        message.body.toString().substring(devices.key?.pos, devices.valueEnd.pos),
+        message.body
+          .toString()
+          .substring(devices.key?.pos, devices.valueEnd.pos),
       );
 
       if (commit.recv[0].end - commit.recv[0].start < 10) {

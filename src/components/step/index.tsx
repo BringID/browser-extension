@@ -36,7 +36,12 @@ const Step: FC<TProps> = ({ text, currentStep, idx, progress, onClick }) => {
       </NoteContent>
 
       {onClick && progress !== undefined && (
-        <ButtonStyled size="small" onClick={onClick} disabled={progress < 100}>
+        <ButtonStyled
+          size="small"
+          appearance="action"
+          onClick={onClick}
+          disabled={progress < 100}
+        >
           Continue ({progress}%)
         </ButtonStyled>
       )}
