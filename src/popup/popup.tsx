@@ -119,7 +119,7 @@ const Popup: FC = () => {
 
   return (
     <Page>
-      {user.loading && <LoadingOverlay />}
+      {user.loading && <LoadingOverlay title="Loading verifications..." />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/tasks" element={<Tasks />} />

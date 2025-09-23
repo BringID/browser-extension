@@ -29,11 +29,22 @@ import config from '../configs';
 const renderButtons = (
   retryTask: () => Promise<void>,
   error?: string | null,
+  result?: string,
 ) => {
-  if (!error) {
+  if (!error && !result) {
     return (
       <ButtonStyled
         onClick={() => {
+          chrome.tabs.query(
+            { active: true, currentWindow: true },
+            function (tabs) {
+              if (tabs.length > 0) {
+                if (tabs[0].id) {
+                  chrome.tabs.remove(tabs[0].id);
+                }
+              }
+            },
+          );
           window.close();
         }}
       >
@@ -231,10 +242,14 @@ const SidePanel: FC = () => {
               transcriptRecv,
             )}
 
-            {renderButtons(async () => {
-              dispatch(notarizationSlice.actions.clear());
-              void notarizationManager.run(taskId);
-            }, error)}
+            {renderButtons(
+              async () => {
+                dispatch(notarizationSlice.actions.clear());
+                void notarizationManager.run(taskId);
+              },
+              error,
+              result,
+            )}
           </Content>
         </Container>
       </Page>

@@ -58,7 +58,10 @@ export class NotarizationUberRides extends NotarizationBase {
         recv: [],
       };
       this.setProgress(66);
-      console.log('Transcript: ', Buffer.from(transcript.recv).toString('utf-8'));
+      console.log(
+        'Transcript: ',
+        Buffer.from(transcript.recv).toString('utf-8'),
+      );
       const jsonStarts: number =
         Buffer.from(transcript.recv).toString('utf-8').indexOf('\n{') + 1;
 

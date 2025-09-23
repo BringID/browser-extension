@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Button } from '../../../components';
 
 export const Container = styled.div`
   padding: 0;
@@ -14,4 +15,9 @@ export const Title = styled.h3`
   margin: 0;
   color: ${(props) => props.theme.secondaryTextColor};
   text-align: center;
+`;
+
+export const ButtonsStyled = styled(Button)`
+  width: max-content;
+  margin: 10px auto;
 `;
