@@ -15,6 +15,8 @@ export const Container = styled.div`
   border-radius: 8px;
   padding: 24px;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const TitleStyled = styled(Title)`
@@ -32,6 +34,7 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  flex: 1;
 `;
 
 export const Wrapper = styled.div`
@@ -69,4 +72,5 @@ export const LinkStyled = styled(Link)`
 export const Buttons = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: auto;
 `;

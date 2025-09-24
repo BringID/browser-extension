@@ -1,0 +1,31 @@
+import React from 'react';
+import { Icons } from '../../components';
+import chains from '../../configs/chains';
+
+import styled from 'styled-components';
+import { TConnectionQuality } from '../types';
+
+const GoodConnectionQuality = styled(Icons.ConnectionIcon)`
+  color: ${props => props.theme.successStatusTextColor}
+`;
+
+const MediumConnectionQuality = styled(Icons.ConnectionIcon)`
+  color: ${props => props.theme.warningStatusTextColor}
+`;
+
+const PoorConnectionQuality = styled(Icons.ConnectionIcon)`
+  color: ${props => props.theme.errorStatusTextColor}
+`
+
+const defineConnectionQualityIcon = (connectionQuality: TConnectionQuality) => {
+  switch(connectionQuality) {
+    case 'good':
+      return <GoodConnectionQuality />
+    case 'medium':
+      return <MediumConnectionQuality />
+    case 'poor':
+      return <PoorConnectionQuality />
+  }
+};
+
+export default defineConnectionQualityIcon;

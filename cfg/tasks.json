@@ -20,7 +20,7 @@
         "text": "Wait for request capture"
       },
       {
-        "text": "Notarization",
+        "text": "MPC-TLS verification progress",
         "notarization": true
       }
     ]
@@ -47,7 +47,7 @@
         "text": "Wait for request capture"
       },
       {
-        "text": "Notarization",
+        "text": "MPC-TLS verification progress",
         "notarization": true
       }
     ]
@@ -103,7 +103,7 @@
         "text": "Wait for request capture"
       },
       {
-        "text": "Notarization",
+        "text": "MPC-TLS verification progress",
         "notarization": true
       }
     ]
@@ -128,7 +128,7 @@
         "text": "Wait for request capture"
       },
       {
-        "text": "Notarization",
+        "text": "MPC-TLS verification progress",
         "notarization": true
       }
     ]

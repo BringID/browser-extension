@@ -15,6 +15,7 @@ import Verification from './verification';
 import Message from './message';
 import LogoWrapper from './logo-wrapper';
 import Checkbox from './checkbox';
+import TimeLeftProgress from './time-left-progress';
 import Step from './step';
 import List from './list';
 
@@ -36,6 +37,7 @@ export {
   Verification,
   LogoWrapper,
   Checkbox,
+  TimeLeftProgress,
   Step,
   List,
 };
