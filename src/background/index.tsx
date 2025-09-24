@@ -1,7 +1,9 @@
 import browser from 'webextension-polyfill';
 import { TWebsiteRequestType, TExtensionRequestType } from '../popup/types';
 import getStorage from '../popup/db-storage';
-import { getCurrentTab } from '../popup/utils';
+import { getCurrentTab, getTabsByHost } from '../popup/utils';
+import configs from '../configs';
+
 let creatingOffscreen: any;
 
 async function createOffscreenDocument() {
@@ -86,9 +88,27 @@ async function createOffscreenDocument() {
     sendResponse: (data: any) => void,
   ) {
     switch (request.type) {
-      case TWebsiteRequestType.set_private_key: {
+      case TWebsiteRequestType.set_user_key: {
         await storage.addUserKey(request.privateKey, request.address);
         return true; // Important for async response
+      }
+
+      case TWebsiteRequestType.has_user_key: {
+        const userKey = await storage.getUserKey()
+        console.log({ userKey })
+        const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOST);
+        console.log({ connectorTabs })
+
+        connectorTabs.forEach((tab) => {
+          console.log({ tab });
+          chrome.tabs.sendMessage(tab.id as number, {
+            type: TExtensionRequestType.has_user_key_response,
+            hasUserKey: Boolean(userKey)
+          });
+        });
+        
+        break
+
       }
 
       case TWebsiteRequestType.open_extension: {

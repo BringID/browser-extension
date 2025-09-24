@@ -2,8 +2,9 @@ enum TExtensionRequestType {
   proofs_generated = 'PROOFS_GENERATED',
   receive_proofs = 'RECEIVE_PROOFS',
   proofs_rejected = 'PROOFS_REJECTED',
-  set_private_key = 'SET_PRIVATE_KEY',
+  set_user_key = 'SET_USER_KEY',
   logout = 'LOGOUT',
+  has_user_key_response = 'HAS_USER_KEY_RESPONSE'
 }
 
 export default TExtensionRequestType;

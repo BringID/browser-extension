@@ -1,3 +1,3 @@
-type TGetUserKey = () => Promise<string>;
+type TGetUserKey = () => Promise<string | void>;
 
 export default TGetUserKey;
