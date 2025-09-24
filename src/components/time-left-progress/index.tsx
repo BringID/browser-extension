@@ -6,7 +6,7 @@ import {
   Title,
 } from './styled-components'
 import { TProps } from './types'
-import { msToMinutes } from '../../popup/utils'
+import { msToMinutes } from '../../side-panel/utils'
 
 const TimeLeftProgress: FC<TProps> = ({ className, current, max, timeLeft }) => {
   const barValue = (current / max) * 100;

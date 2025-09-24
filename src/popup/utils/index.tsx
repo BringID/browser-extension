@@ -12,9 +12,7 @@ import defineRelatedVerification from './define-related-verification';
 import getTabsByHost from './get-tabs-by-host';
 import areArraysEqual from './are-arrays-equal';
 import areObjectsEqual from './are-objects-equal';
-import msToMinutes from './ms-to-minutes';
-import formatBandwidth from './format-bandwidth'
-import defineConnectionQualityIcon from './define-connection-quality-icon';
+
 
 export {
   msToTime,
@@ -30,8 +28,5 @@ export {
   defineRelatedVerification,
   getTabsByHost,
   areArraysEqual,
-  areObjectsEqual,
-  msToMinutes,
-  formatBandwidth,
-  defineConnectionQualityIcon
+  areObjectsEqual
 };

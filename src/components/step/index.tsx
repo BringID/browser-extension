@@ -11,7 +11,7 @@ import {
 } from './styled-components';
 import { TNotarizationStatus } from '../../common/types';
 import Icons from '../icons';
-import { defineConnectionQualityIcon, formatBandwidth } from '../../popup/utils';
+import { defineConnectionQualityIcon, formatBandwidth } from '../../side-panel/utils';
 
 const defineCurrentStep = (
   idx: number,

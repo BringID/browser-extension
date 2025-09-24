@@ -3,7 +3,7 @@ import { Icons } from '../../components';
 import chains from '../../configs/chains';
 
 import styled from 'styled-components';
-import { TConnectionQuality } from '../types';
+import { TConnectionQuality } from '../../popup/types';
 
 const GoodConnectionQuality = styled(Icons.ConnectionIcon)`
   color: ${props => props.theme.successStatusTextColor}
