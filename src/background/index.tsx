@@ -95,12 +95,9 @@ async function createOffscreenDocument() {
 
       case TWebsiteRequestType.has_user_key: {
         const userKey = await storage.getUserKey()
-        console.log({ userKey })
         const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOST);
-        console.log({ connectorTabs })
 
         connectorTabs.forEach((tab) => {
-          console.log({ tab });
           chrome.tabs.sendMessage(tab.id as number, {
             type: TExtensionRequestType.has_user_key_response,
             hasUserKey: Boolean(userKey)
