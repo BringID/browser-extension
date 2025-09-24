@@ -16,6 +16,20 @@ import { TExtensionRequestType } from '../popup/types';
         break;
       }
 
+      case TExtensionRequestType.has_user_key_response: {
+        window.postMessage(
+          {
+            source: 'bringID extension',
+            data: {
+              hasUserKey: message.hasUserKey
+            },
+            type: TExtensionRequestType.has_user_key_response,
+          },
+          '*',
+        );
+        break;
+      }
+
       case TExtensionRequestType.proofs_generated: {
         window.postMessage(
           {
