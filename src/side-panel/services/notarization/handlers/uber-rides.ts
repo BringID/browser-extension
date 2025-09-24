@@ -28,7 +28,6 @@ export class NotarizationUberRides extends NotarizationBase {
     this.currentStep = 2;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
-    this.result(new Error('Notarization is not implemented'));
     try {
       const notary = await TLSNotary.new('riders.uber.com');
       this.setProgress(33);
