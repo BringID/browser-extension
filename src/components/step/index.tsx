@@ -1,12 +1,17 @@
 import React, { FC } from 'react';
 import TProps from './types';
 import {
-  ButtonStyled,
   NoteStyled,
   NoteContent,
   TagStyled,
+  TimeLeftProgressStyled,
+  Progress,
+  Divider,
+  Connection
 } from './styled-components';
 import { TNotarizationStatus } from '../../common/types';
+import Icons from '../icons';
+import { defineConnectionQualityIcon, formatBandwidth } from '../../side-panel/utils';
 
 const defineCurrentStep = (
   idx: number,
@@ -23,7 +28,16 @@ const defineCurrentStep = (
   return 'disabled';
 };
 
-const Step: FC<TProps> = ({ text, currentStep, idx, progress, onClick }) => {
+
+const Step: FC<TProps> = ({
+  text,
+  currentStep,
+  idx,
+  progress,
+  latency,
+  bandwidth,
+  connectionQuality
+ }) => {
   const status: TNotarizationStatus = defineCurrentStep(idx, currentStep);
 
   return (
@@ -35,16 +49,23 @@ const Step: FC<TProps> = ({ text, currentStep, idx, progress, onClick }) => {
         )}
       </NoteContent>
 
-      {onClick && progress !== undefined && (
-        <ButtonStyled
-          size="small"
-          appearance="action"
-          onClick={onClick}
-          disabled={progress < 100}
-        >
-          Continue ({progress}%)
-        </ButtonStyled>
-      )}
+      {progress !== undefined && <Progress>
+        <TimeLeftProgressStyled
+          max={100}
+          current={progress}
+          timeLeft={180000}
+        />
+
+
+        <Connection>
+          {defineConnectionQualityIcon(connectionQuality)}
+          {' '}
+          {latency}ms
+          <Divider>●</Divider>
+          {formatBandwidth(bandwidth)}
+        </Connection>
+
+      </Progress>}
     </NoteStyled>
   );
 };

@@ -28,11 +28,20 @@ import config from '../configs';
 
 const renderButtons = (
   retryTask: () => Promise<void>,
+  sendResult: () => void,
+  progress: number,
   error?: string | null,
   result?: string,
 ) => {
   if (!error && !result) {
-    return (
+    return <Buttons>
+      <ButtonStyled
+        disabled={Boolean(!result || error)}
+        onClick={sendResult}
+        appearance='action'
+      >
+        Continue ({progress}%)
+      </ButtonStyled>
       <ButtonStyled
         onClick={() => {
           chrome.tabs.query(
@@ -50,11 +59,18 @@ const renderButtons = (
       >
         Cancel verification
       </ButtonStyled>
-    );
+
+    </Buttons>      
   }
 
   return (
     <Buttons>
+      <ButtonStyled
+        onClick={sendResult}
+        appearance='action'
+      >
+        Continue
+      </ButtonStyled>
       <ButtonStyled
         onClick={() => {
           window.close();
@@ -105,13 +121,10 @@ const renderHeader = (currentTask: Task, error?: string | null) => {
 };
 
 const renderContent = (
-  taskId: number,
   currentTask: Task,
   currentStep: number,
   progress: number,
-  error?: string | null,
-  result?: string,
-  transcriptRecv?: string,
+  error?: string | null
 ) => {
   if (error) {
     return (
@@ -142,33 +155,10 @@ const renderContent = (
         idx={idx}
         key={step.text}
         currentStep={currentStep}
-        progress={progress}
-        onClick={
-          step.notarization
-            ? () => {
-                if (!result || !transcriptRecv) {
-                  return alert(
-                    'Presentation data or transcriptRecv not defined',
-                  );
-                }
-                // @ts-ignore
-                // chrome.action.openPopup();
-
-                chrome.runtime.sendMessage({ action: 'openPopup' });
-
-                window.setTimeout(() => {
-                  sendMessage({
-                    type: 'PRESENTATION',
-                    data: {
-                      presentationData: result,
-                      transcriptRecv,
-                      taskIndex: taskId,
-                    },
-                  });
-                }, 1500);
-              }
-            : undefined
-        }
+        progress={step.notarization ? progress : undefined}
+        connectionQuality='poor'
+        bandwidth={1000000}
+        latency={35}
       />
     );
   });
@@ -233,13 +223,10 @@ const SidePanel: FC = () => {
 
           <Content>
             {renderContent(
-              taskId,
               currentTask,
               currentStep,
               progress,
-              error,
-              result,
-              transcriptRecv,
+              error
             )}
 
             {renderButtons(
@@ -247,6 +234,30 @@ const SidePanel: FC = () => {
                 dispatch(notarizationSlice.actions.clear());
                 void notarizationManager.run(taskId);
               },
+
+              () => {
+                if (!result || !transcriptRecv) {
+                  return alert(
+                    'Presentation data or transcriptRecv not defined',
+                  );
+                }
+                // @ts-ignore
+                // chrome.action.openPopup();
+
+                chrome.runtime.sendMessage({ action: 'openPopup' });
+
+                window.setTimeout(() => {
+                  sendMessage({
+                    type: 'PRESENTATION',
+                    data: {
+                      presentationData: result,
+                      transcriptRecv,
+                      taskIndex: taskId,
+                    },
+                  });
+                }, 1500);
+              },
+              progress,
               error,
               result,
             )}

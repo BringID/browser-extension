@@ -10,6 +10,7 @@ import PlusIcon from './plus';
 import ArrowBackIcon from './arrow-back';
 import ExclimationIcon from './exclimation-icon';
 import AddressIcon from './address';
+import ConnectionIcon from './connection'
 
 const Icons = {
   VehicleIcon,
@@ -24,6 +25,7 @@ const Icons = {
   ArrowBackIcon,
   ExclimationIcon,
   AddressIcon,
+  ConnectionIcon
 };
 
 export default Icons;
