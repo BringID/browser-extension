@@ -23,7 +23,12 @@
   "content_scripts": [
     {
       "matches": [
-        "<all_urls>"
+          "https://task-manager-production-4062.up.railway.app/*",
+          "https://verifier-production-93bb.up.railway.app/*",
+          "https://semaphor-indexer-production.up.railway.app/*",
+          "https://app.bringid.org/*",
+          "http://localhost/*",
+          "https://localhost/*"
       ],
       "js": ["contentScript.bundle.js"],
       "css": []
@@ -31,11 +36,13 @@
   ],
   "externally_connectable": {
     "matches": [
+      "https://task-manager-production-4062.up.railway.app/*",
+      "https://verifier-production-93bb.up.railway.app/*",
+      "https://semaphor-indexer-production.up.railway.app/*",
+      "https://app.bringid.org/*",
+      "https://localhost/*",
       "http://localhost/*",
-      "http://localhost:*/*",
-      "http://127.0.0.1/*",
-      "http://127.0.0.1:*/*",
-      "<all_urls>"
+      "wss://*/*"
     ]
   },
   "web_accessible_resources": [
@@ -47,11 +54,30 @@
         "content.bundle.js"
       ],
       "matches": [
-        "<all_urls>"
+        "https://task-manager-production-4062.up.railway.app/*",
+        "https://verifier-production-93bb.up.railway.app/*",
+        "https://semaphor-indexer-production.up.railway.app/*",
+        "https://app.bringid.org/*",
+        "https://localhost/*",
+        "http://localhost/*",
+        "wss://*/*"
       ]
     }
   ],
-  "host_permissions": ["<all_urls>", "wss://*/*"],
+  "optional_host_permissions": [
+    "https://x.com/*",
+    "https://appleid.apple.com/*",
+    "https://riders.uber.com/*"
+  ],
+  "host_permissions": [
+    "https://task-manager-production-4062.up.railway.app/*",
+    "https://verifier-production-93bb.up.railway.app/*",
+    "https://semaphor-indexer-production.up.railway.app/*",
+    "https://app.bringid.org/*",
+    "https://localhost/*",
+    "http://localhost/*",
+    "wss://*/*"
+  ],
   "permissions": [
     "offscreen",
     "storage",
