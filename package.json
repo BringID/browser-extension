@@ -34,7 +34,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
     "styled-components": "^6.1.18",
-    "tlsn-js": "^0.1.0-alpha.12.0"
+    "tlsn-js": "/Users/ian/git/tlsn-js"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",

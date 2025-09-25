@@ -14,9 +14,15 @@ import {ParsedHTTPMessage, parseHttpMessage} from "../../common/helpers/httpPars
 // tlsn-js doesn't provide a valid Comlink API type
 // @ts-ignore
 const { init, Prover, Presentation }: any = Comlink.wrap(
-    new Worker(new URL('./worker.ts', import.meta.url)),
+  new Worker(new URL('./worker.ts', import.meta.url)),
 );
-void init({loggingLevel: "Debug"});
+
+await init({
+  loggingLevel: "Debug",
+  logCallback: async (msg: string) => {
+    console.log(msg);
+  }
+});
 
 export class TLSNotary extends Progressive<Status>{
     readonly #notary = new NotaryServer(process.env.NOTARY_URL || "");

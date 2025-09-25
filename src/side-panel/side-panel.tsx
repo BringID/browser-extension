@@ -35,7 +35,7 @@ const SidePanel: FC = () => {
           break;
 
         default:
-          console.log({ request });
+          console.log('THE UNKNOWN ORIGIN', { request });
       }
     };
 

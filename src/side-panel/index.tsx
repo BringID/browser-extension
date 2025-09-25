@@ -6,6 +6,13 @@ import { store } from './store';
 const container = document.getElementById('app-container');
 const root = createRoot(container!); // createRoot(container!) if you use TypeScript
 
+const originalLog = console.log;
+console.log = function (...args: never[]) {
+  originalLog('[Sidebar Log] ', ...args, '');
+};
+
+console.log('Hello from the webpage!');
+
 root.render(
   <Provider store={store}>
     <SidePanel />
