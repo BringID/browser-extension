@@ -43,7 +43,7 @@ const showInsufficientPointsNote = (
 
   return (
     <NoteStyled title="Insufficient trust level" status="warning">
-      You need {pointsRequired - points} more points
+      You need {pointsRequired - points} more points.{' '}
       <OpenPopupButton
         onClick={async () => {
           onClose();

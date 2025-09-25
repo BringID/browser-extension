@@ -16,8 +16,8 @@ import { LoadingOverlay } from './components';
 
 const Popup: FC = () => {
   const user = useUser();
-  const verifications = useVerifications()
-  
+  const verifications = useVerifications();
+
   useEffect(() => {
     chrome.action.setBadgeText({ text: '' });
     // to cleanup all notifications after open
@@ -82,51 +82,44 @@ const Popup: FC = () => {
   }, []);
 
   useEffect(() => {
-
-    let interval: number = 0;
+    let interval = 0;
 
     (async () => {
       const dbStorage = await getStorage();
-      const verificationsFromStorage = await dbStorage.getVerifications()
-      const userFromStorage = await dbStorage.getUser()
+      const verificationsFromStorage = await dbStorage.getVerifications();
+      const userFromStorage = await dbStorage.getUser();
 
       if (!areObjectsEqual(user, userFromStorage)) {
-        await dbStorage.syncUser()
+        await dbStorage.syncUser();
       }
 
-      if (!areArraysEqual(
-        verifications.verifications,
-        verificationsFromStorage
-      )) {
-        await dbStorage.syncVerifications()
+      if (
+        !areArraysEqual(verifications.verifications, verificationsFromStorage)
+      ) {
+        await dbStorage.syncVerifications();
       }
-      
+
       interval = window.setInterval(async () => {
-        const verificationsFromStorage = await dbStorage.getVerifications()
-        const userFromStorage = await dbStorage.getUser()
+        const verificationsFromStorage = await dbStorage.getVerifications();
+        const userFromStorage = await dbStorage.getUser();
         if (!areObjectsEqual(user, userFromStorage)) {
-          await dbStorage.syncUser()
+          await dbStorage.syncUser();
         }
 
-        if (!areArraysEqual(
-          verifications.verifications,
-          verificationsFromStorage
-        )) {
-          await dbStorage.syncVerifications()
+        if (
+          !areArraysEqual(verifications.verifications, verificationsFromStorage)
+        ) {
+          await dbStorage.syncVerifications();
         }
-      }, 2000)
-    })()
+      }, 2000);
+    })();
 
-    return () => window.clearInterval(interval)
-  }, [
-    verifications,
-    user
-  ]);
+    return () => window.clearInterval(interval);
+  }, [verifications, user]);
 
   return (
     <Page>
-      
-      {user.loading && <LoadingOverlay />}
+      {user.loading && <LoadingOverlay title="Loading verifications..." />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/tasks" element={<Tasks />} />

@@ -1,11 +1,6 @@
 import TProps from './types';
 import React, { FC } from 'react';
-import {
-  Container,
-  Content,
-  Title,
-  ExclimationIcon,
-} from './styled-components';
+import { Container, Content, Title } from './styled-components';
 
 const Note: FC<TProps> = ({
   children,
@@ -15,7 +10,6 @@ const Note: FC<TProps> = ({
 }) => {
   return (
     <Container className={className} status={status}>
-      <ExclimationIcon />
       <Content>
         {title && <Title>{title}</Title>}
         {children}

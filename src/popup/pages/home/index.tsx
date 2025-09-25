@@ -10,14 +10,37 @@ import { Link } from '../../../components';
 import { Header } from '../../components';
 import { useNavigate } from 'react-router';
 import { useVerifications } from '../../store/reducers/verifications';
-import { tasks } from '../../../common/core/task';
+import { Task, tasks } from '../../../common/core/task';
 import {
   ScheduleOverlay,
   ConfirmationOverlay,
   LoadingOverlay,
+  Authorize,
 } from '../../components';
 import { calculateAvailablePoints } from '../../utils';
 import { useUser } from '../../store/reducers/user';
+import { TVerification } from '../../types';
+
+const renderContent = (
+  userKey: string | null,
+  availableTasks: Task[],
+  verifications: TVerification[],
+  navigate: (location: string) => void,
+) => {
+  if (!userKey) {
+    return <Authorize />;
+  }
+
+  return (
+    <VerificationsListStyled
+      tasks={availableTasks}
+      verifications={verifications}
+      onAddVerifications={() => {
+        navigate('/tasks');
+      }}
+    />
+  );
+};
 
 const Home: FC = () => {
   const verificationsStore = useVerifications();
@@ -90,7 +113,7 @@ const Home: FC = () => {
 
   return (
     <Container>
-      {loading && <LoadingOverlay />}
+      {loading && <LoadingOverlay title="Processing verification..." />}
       {confirmationOverlayShow && (
         <ConfirmationOverlay
           onClose={() => {
@@ -115,13 +138,6 @@ const Home: FC = () => {
 
       <Header points={availablePoints} address={user.address} />
 
-      {/* <ProgressBarStyled
-        current={percentageFinished > 100 ? 100 : percentageFinished}
-        max={100}
-        title={`${leftForAdvanced < 0 ? 0 : leftForAdvanced} points more to Advanced`}
-        value={`${Math.round(percentageFinished > 100 ? 100 : percentageFinished)}%`}
-      /> */}
-
       <SubtitleStyled>
         {verifications && verifications.length > 0 && (
           <ButtonStyled
@@ -142,13 +158,7 @@ const Home: FC = () => {
         </MessageStyled>
       )}
 
-      <VerificationsListStyled
-        tasks={availableTasks}
-        verifications={verifications}
-        onAddVerifications={() => {
-          navigate('/tasks');
-        }}
-      />
+      {renderContent(user.key, availableTasks, verifications, navigate)}
     </Container>
   );
 };

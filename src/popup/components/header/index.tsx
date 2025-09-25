@@ -13,7 +13,7 @@ import TProps from './types';
 import getStorage from '../../db-storage';
 import { getTabsByHost, shortenString } from '../../utils';
 import AddressIcon from '../../../components/icons/address';
-import configs from '../../configs';
+import configs from '../../../configs';
 import { TExtensionRequestType } from '../../types';
 
 const defineContent = (address: string | null, points: number) => {

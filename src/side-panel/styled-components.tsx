@@ -1,11 +1,22 @@
 import styled from 'styled-components';
-import { Title, LogoWrapper, Spinner, Button, Note } from '../components';
+import {
+  Title,
+  LogoWrapper,
+  Spinner,
+  Button,
+  Note,
+  Text,
+  List,
+  Link,
+} from '../components';
 
 export const Container = styled.div`
   border: 1px solid ${(props) => props.theme.secondaryBorderColor};
   border-radius: 8px;
   padding: 24px;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const TitleStyled = styled(Title)`
@@ -23,6 +34,7 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  flex: 1;
 `;
 
 export const Wrapper = styled.div`
@@ -30,7 +42,7 @@ export const Wrapper = styled.div`
 `;
 
 export const LogoWrapperStyled = styled(LogoWrapper)`
-  margin-bottom: 12px;
+  margin-bottom: 20px;
   img {
     object-fit: contain;
   }
@@ -45,3 +57,20 @@ export const ButtonStyled = styled(Button)`
 `;
 
 export const NoteStyled = styled(Note)``;
+
+export const TextStyled = styled(Text)`
+  text-align: center;
+  margin-top: 10px;
+`;
+
+export const ListStyled = styled(List)``;
+
+export const LinkStyled = styled(Link)`
+  color: ${(props) => props.theme.infoStatusTextColor};
+`;
+
+export const Buttons = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+`;
