@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "BringID Extension",
-  "description": "A chrome extension for BringID verification",
+  "name": "BringID",
+  "description": "Verify your Internet activity and prove that you’re a real human and not a bot.",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp76Uaolss4JYjXK1xc/5jG94VR3+5yLVvd0KV/mrtHWybG1eXXu384DHyJh0I3OSEjZgmnHqZR261b7zaOhDBzjeXLfQhHGBLJsE1I2QXTe5DNYQr91iDI3Tvd9fr8ScJ01gqJZjWC9YurXUYiOpJoQ6pandTAqP7s3nX6HTNDoVdZwjGiZHUN20pU6hU0I+d8wZH53CtkDPXRG9FkhlsliUaXaFIeCVp4m+O1xpxeYAv6Sb5UfXvM+9jRIhrnSw+aiwbDRhOqXPgkhIQdI0Bsan/9s78OEqvm4ats5mpCpwch0SAs9A6ysdQ28dmkyoj4V1lGKoIXOpsH/E/rw0PQIDAQAB",
   "background": {
     "service_worker": "background.bundle.js"
@@ -65,9 +65,11 @@
     }
   ],
   "optional_host_permissions": [
+    "https://api.x.com/*",
     "https://x.com/*",
     "https://appleid.apple.com/*",
-    "https://riders.uber.com/*"
+    "https://riders.uber.com/*",
+    "https://account.apple.com/*"
   ],
   "host_permissions": [
     "https://task-manager-production-4062.up.railway.app/*",

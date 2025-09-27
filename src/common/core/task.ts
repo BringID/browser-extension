@@ -8,7 +8,7 @@ export type Task = {
   groups: TNotarizationGroup[];
   steps: TNotarizationStep[];
   dev?: boolean;
-  permissionUrl: string
+  permissionUrl: string[]
 };
 
 function loadTasks(): Task[] {

@@ -31,7 +31,7 @@ const showNote = () => {
 };
 
 const defineButtons = (
-  permissionUrl: string,
+  permissionUrl: string[],
   loading: boolean,
   setLoading: (loading: boolean) => void,
   onAccepted: () => void
