@@ -6,8 +6,6 @@ const checkIfPermissionGranted = async (origins: string[]): Promise<boolean> => 
         return resolve(false);
       }
 
-      console.log({ result })
-
       resolve(result);
     });
   });
