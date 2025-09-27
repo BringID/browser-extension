@@ -3,7 +3,6 @@ import { RequestRecorder } from '../../requests-recorder';
 import { Request } from '../../../common/types';
 import { TLSNotary } from '../../tlsn';
 import { Commit } from 'tlsn-js';
-import { requestHostPermission } from '../../../utils';
 
 export class NotarizationXVerifiedFollowers extends NotarizationBase {
   requestRecorder: RequestRecorder = new RequestRecorder(
@@ -18,12 +17,6 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
   );
 
   public async onStart(): Promise<void> {
-
-    const requested = await requestHostPermission('https://x.com/*')
-    if (!requested) {
-      return alert('Permission denied')
-    }
-
     this.requestRecorder.start();
     
     await chrome.tabs.create({

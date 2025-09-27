@@ -4,6 +4,7 @@
     "title": "X Account",
     "description": "Prove the ownership of an account on X",
     "dev": true,
+    "permissionUrl": "https://x.com/*",
     "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
     "groups": [
       {
@@ -30,7 +31,7 @@
     "id": "2",
     "description": "Prove the amount of Uber rides you took",
     "icon": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png",
-
+    "permissionUrl": "https://riders.uber.com/*",
     "groups": [
       {
         "points": 10,
@@ -55,6 +56,7 @@
   {
     "title": "X Verified Followers",
     "id": "3",
+    "permissionUrl": "https://x.com/*",
     "description": "Prove verified followers on X",
     "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
     "groups": [
@@ -113,6 +115,7 @@
     "title": "Apple Devices",
     "description": "Prove you own an Apple device",
     "icon": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+    "permissionUrl": "https://appleid.apple.com/*",
     "groups": [
       {
         "points": 10,

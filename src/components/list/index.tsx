@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 import TProps from './types';
 import { Container, ListItem } from './styled-components';
 
-const List: FC<TProps> = ({ items }) => {
+const List: FC<TProps> = ({ items, className }) => {
   return (
-    <Container>
+    <Container className={className}>
       {items.map((item) => (
         <ListItem>{item}</ListItem>
       ))}

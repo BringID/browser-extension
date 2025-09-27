@@ -1,4 +1,6 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect,
+  useState
+ } from 'react';
 import browser from 'webextension-polyfill';
 import { notarizationManager } from './services/notarization';
 import { sendMessage, Task } from '../common/core';
@@ -25,6 +27,7 @@ import { Page, Step } from '../components';
 import './style.css';
 import { TMessage } from '../common/core/messages';
 import config from '../configs';
+import { PermissionOverlay } from './components';
 
 const renderButtons = (
   retryTask: () => Promise<void>,
@@ -166,13 +169,22 @@ const renderContent = (
 
 const SidePanel: FC = () => {
   const dispatch = useDispatch();
+  const [
+    showPermissionOverlay,
+    setShowPermissionOverlay
+  ] = useState<boolean>(false)
+
   useEffect(() => {
     const listener = (request: TMessage) => {
       switch (request.type) {
         case 'NOTARIZE':
           if ('task_id' in request) {
             dispatch(notarizationSlice.actions.clear());
-            void notarizationManager.run(request.task_id);
+            
+            // void notarizationManager.run(request.task_id);
+            setNextTaskId(request.task_id)
+            setShowPermissionOverlay(true)
+            window.focus()
           }
           break;
 
@@ -194,6 +206,13 @@ const SidePanel: FC = () => {
     };
   }, []);
 
+
+
+  const [
+    nextTaskId,
+    setNextTaskId
+  ] = useState<null | number>(null)
+
   const { result, taskId, progress, currentStep, transcriptRecv, error } =
     useSelector((state: RootState) => {
       return state.notarization;
@@ -209,15 +228,23 @@ const SidePanel: FC = () => {
   });
 
   const availableTasks = tasks();
-  console.log({ taskId });
   const currentTask = availableTasks[taskId];
 
   // const credentialGroupId = currentTask.credentialGroupId;
   console.log('SIDE PANEL steps: ', { currentStep });
 
+
   return (
     <Wrapper>
+
       <Page>
+        {showPermissionOverlay && nextTaskId !== null && <PermissionOverlay
+          nextTaskIndex={nextTaskId}
+          onAccepted={() => {
+            setShowPermissionOverlay(false)
+            notarizationManager.run(nextTaskId);
+          }}
+        />}
         <Container>
           {renderHeader(currentTask, error)}
 

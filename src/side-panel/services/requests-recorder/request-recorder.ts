@@ -48,6 +48,8 @@ export class RequestRecorder extends Progressive<Status> {
     const urls: UrlPattern[] = this.#targetRequests.map(
       (tr: TargetRequest) => tr.urlPattern,
     );
+
+    console.log({ urls })
     chrome.webRequest.onBeforeRequest.addListener(
       this.handleRequestBody,
       { urls },
@@ -135,6 +137,8 @@ export class RequestRecorder extends Progressive<Status> {
     details: chrome.webRequest.WebRequestBodyDetails,
   ): void => {
     const requestId = this.requestId(details.method, details.url);
+
+    console.log('handleRequestBody: ' , { requestId })
     if (this.state.status !== Status.Recording) return;
 
     this.updateRequestLog(requestId, {

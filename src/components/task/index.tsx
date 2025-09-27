@@ -48,6 +48,11 @@ const defineTaskContent = (
               });
 
               await manager.runTask(taskIndex);
+
+              setTimeout(() => {
+                window.close();
+              }, 1500)
+
             }}
           >
             Verify

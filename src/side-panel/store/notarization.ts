@@ -25,7 +25,7 @@ const initialState: NotarizationState = {
   status: NotarizationStatus.pending,
   progress: 0,
   error: '',
-  currentStep: 0,
+  currentStep: 0
 };
 
 export const notarizationSlice = createSlice({
@@ -82,7 +82,7 @@ export const notarizationSlice = createSlice({
 
     setTaskId: (state: NotarizationState, action: PayloadAction<number>) => {
       state.taskId = action.payload;
-    },
+    }
 
     // setResult
   },

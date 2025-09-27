@@ -4,7 +4,6 @@ import { Request } from '../../../common/types';
 import { TLSNotary } from '../../tlsn';
 import { Commit } from 'tlsn-js';
 import { Mapping, parse, Pointers } from 'json-source-map';
-import { requestHostPermission } from '../../../utils';
 
 export class NotarizationAppleDevices extends NotarizationBase {
   requestRecorder: RequestRecorder = new RequestRecorder(
@@ -18,10 +17,6 @@ export class NotarizationAppleDevices extends NotarizationBase {
   );
 
   public async onStart(): Promise<void> {
-    const requested = await requestHostPermission('https://appleid.apple.com/*')
-    if (!requested) {
-      return alert('Permission denied')
-    }
     this.requestRecorder.start();
     await chrome.tabs.create({
       url: 'https://account.apple.com/account/manage/section/devices',
