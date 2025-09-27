@@ -14,6 +14,7 @@
     "lint:fix": "./node_modules/.bin/eslint --fix ."
   },
   "dependencies": {
+    "@bring-id/tlsn-js": "~0.1.0-alpha.12",
     "@reduxjs/toolkit": "^2.8.2",
     "@semaphore-protocol/core": "^4.11.1",
     "@semaphore-protocol/identity": "^4.11.1",
@@ -33,11 +34,11 @@
     "redux": "^4.2.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
-    "styled-components": "^6.1.18",
-    "tlsn-js": "/Users/ian/git/tlsn-js"
+    "styled-components": "^6.1.18"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.12",
+    "@babel/cli": "^7.28.3",
+    "@babel/core": "^7.28.4",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",

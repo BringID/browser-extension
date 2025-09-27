@@ -2,6 +2,9 @@
   "compilerOptions": {
     "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
+    "paths": {
+      "tlsn-js": ["./node_modules/@bring-id/tlsn-js"]
+    },
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,

@@ -17,12 +17,14 @@ const { init, Prover, Presentation }: any = Comlink.wrap(
   new Worker(new URL('./worker.ts', import.meta.url)),
 );
 
-await init({
-  loggingLevel: "Debug",
-  logCallback: async (msg: string) => {
-    console.log(msg);
-  }
-});
+await init(
+  {
+    loggingLevel: "Debug",
+  },
+  Comlink.proxy((msg: string) => {
+    console.log("MSG:", msg);
+  })
+);
 
 export class TLSNotary extends Progressive<Status>{
     readonly #notary = new NotaryServer(process.env.NOTARY_URL || "");
@@ -41,7 +43,7 @@ export class TLSNotary extends Progressive<Status>{
     return new TLSNotary(hostname, prover, updatesCallback);
   }
 
-    private constructor(
+  private constructor(
     hostname: string,
     prover: TProver,
     updatesCallback?: OnStateUpdated<Status>,

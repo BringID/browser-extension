@@ -8,7 +8,9 @@ const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin"
 
 const ASSET_PATH = process.env.ASSET_PATH || "/";
 
-const alias = {};
+const alias = {
+  "tlsn-js": "@bring-id/tlsn-js"
+};
 
 const fileExtensions = [
   "jpg",
@@ -128,7 +130,7 @@ const options = {
     alias: alias,
     extensions: fileExtensions
       .map((extension) => "." + extension)
-      .concat([".js", ".jsx", ".ts", ".tsx", ".css", ".png", ".gif"]),
+      .concat([".js", ".jsx", ".ts", ".tsx", ".css", ".png", ".gif", ".json", ".wasm"]),
   },
   plugins: [
     isDevelopment && new ReactRefreshWebpackPlugin(),
@@ -179,7 +181,7 @@ const options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: "node_modules/tlsn-js/build",
+          from: "node_modules/@bring-id/tlsn-js/build",
           to: path.join(__dirname, "build"),
           force: true,
         }
