@@ -1022,10 +1022,10 @@
     "@babel/helper-string-parser" "^7.27.1"
     "@babel/helper-validator-identifier" "^7.27.1"
 
-"@bring-id/tlsn-js@~0.1.0-alpha.12":
-  version "0.1.0-alpha.12.1"
-  resolved "https://registry.npmjs.org/@bring-id/tlsn-js/-/tlsn-js-0.1.0-alpha.12.1.tgz"
-  integrity sha512-HQKfqxh5PsItMltNIu9tkr06b6ToPYARYpCUuRLsN0ZpTALMY6V7SWdsIb3gOpqeOhkWiCB/OBx8i1aeMg+vUQ==
+"@bring-id/tlsn-js@^0.1.0-alpha.12.2":
+  version "0.1.0-alpha.12.2"
+  resolved "https://registry.yarnpkg.com/@bring-id/tlsn-js/-/tlsn-js-0.1.0-alpha.12.2.tgz#4240069bfb92a891ea5183e899865a6dba223dbc"
+  integrity sha512-UG5W75DUlaESnYYcd7N6hpp9espHb6Qdt9YepT+rwuISmQ3EnLvpopNG4Y9QCEja9ZgMHO8AnBHeBNagYhx1TA==
   dependencies:
     "@bring-id/tlsn-wasm" "~0.1.0-alpha.12"
 
