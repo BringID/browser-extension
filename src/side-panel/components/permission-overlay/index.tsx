@@ -21,7 +21,7 @@ const showNote = () => {
     <NoteStyled status="info">
       The TLS notary validates encrypted session integrity and generates a signed attestation without accessing decrypted content.{' '}
       <LinkStyled
-        href=""
+        href="https://github.com/BringID/whitepaper"
         target='_blank'
       >
         Learn more
