@@ -1,8 +1,7 @@
-const requestHostPermission = async (origin: string): Promise<boolean> => {
-  const originPattern = origin.endsWith("/*") ? origin : `${origin}/*`;
+const requestHostPermission = async (origins: string[]): Promise<boolean> => {
 
   return new Promise((resolve) => {
-    chrome.permissions.request({ origins: [originPattern] }, (granted) => {
+    chrome.permissions.request({ origins }, (granted) => {
       if (chrome.runtime.lastError) {
         console.error("Permission request error:", chrome.runtime.lastError.message);
         return resolve(false);
