@@ -5,7 +5,7 @@ import {
   Button,
   Note,
   Link,
-  List
+  List,
 } from '../../../components';
 
 import styled from 'styled-components';
@@ -59,8 +59,7 @@ export const ButtonsContainer = styled.div`
   width: 100%;
 `;
 
-export const ButtonStyled = styled(Button)`
-`;
+export const ButtonStyled = styled(Button)``;
 
 export const Image = styled.img`
   width: 48px;
@@ -73,13 +72,12 @@ export const NoteStyled = styled(Note)`
   margin-bottom: 18px;
 `;
 
-
 export const LinkStyled = styled(Link)`
-  color: ${props => props.theme.infoStatusTextColor};
+  color: ${(props) => props.theme.infoStatusTextColor};
   text-decoration: underline;
-`
+`;
 
 export const ListStyled = styled(List)`
   align-self: start;
   margin-bottom: 20px;
-`
+`;

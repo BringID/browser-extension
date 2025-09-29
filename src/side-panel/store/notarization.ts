@@ -18,9 +18,9 @@ export interface NotarizationState {
   transcriptSent?: string;
 
   progress: number;
-  connectionQuality?: TConnectionQuality
-  eta?: number
-  speed?: string
+  connectionQuality?: TConnectionQuality;
+  eta?: number;
+  speed?: string;
 
   // message => UI
   // result => UI
@@ -31,7 +31,7 @@ const initialState: NotarizationState = {
   status: NotarizationStatus.pending,
   progress: 0,
   error: '',
-  currentStep: 0
+  currentStep: 0,
 };
 
 export const notarizationSlice = createSlice({
@@ -53,12 +53,15 @@ export const notarizationSlice = createSlice({
       state.progress = action.payload;
     },
 
-    setProgressData: (state: NotarizationState, action: PayloadAction<{
-      progress: number,
-      connectionQuality: TConnectionQuality
-      eta: number
-      speed: string
-    }>) => {
+    setProgressData: (
+      state: NotarizationState,
+      action: PayloadAction<{
+        progress: number;
+        connectionQuality: TConnectionQuality;
+        eta: number;
+        speed: string;
+      }>,
+    ) => {
       state.progress = action.payload.progress;
       state.connectionQuality = action.payload.connectionQuality;
       state.eta = action.payload.eta;
@@ -107,7 +110,7 @@ export const notarizationSlice = createSlice({
 
     setTaskId: (state: NotarizationState, action: PayloadAction<number>) => {
       state.taskId = action.payload;
-    }
+    },
 
     // setResult
   },

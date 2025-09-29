@@ -13,19 +13,17 @@ export const TagStyled = styled(Tag)``;
 
 export const TimeLeftProgressStyled = styled(TimeLeftProgress)`
   margin: 10px 0;
-`
+`;
 
-export const Progress = styled.div`
-  
-`
+export const Progress = styled.div``;
 
 export const Connection = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
-  color: ${props => props.theme.secondaryTextColor};
-`
+  color: ${(props) => props.theme.secondaryTextColor};
+`;
 
 export const Divider = styled.span`
   font-size: 6px;
-`
+`;

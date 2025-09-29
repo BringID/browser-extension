@@ -37,19 +37,23 @@ export class NotarizationAppleDevices extends NotarizationBase {
 
     // Extract necessary values before modifying
     const originalHeaders = { ...log[0].headers };
-    const userAgent = originalHeaders['user-agent'] || originalHeaders['User-Agent'];
+    const userAgent =
+      originalHeaders['user-agent'] || originalHeaders['User-Agent'];
 
     // Extract aidsp cookie value
-    const cookieHeader = originalHeaders['cookie'] || originalHeaders['Cookie'] || '';
+    const cookieHeader =
+      originalHeaders['cookie'] || originalHeaders['Cookie'] || '';
     const aidspMatch = cookieHeader.match(/aidsp=([^;]+)/);
     const aidspValue = aidspMatch ? aidspMatch[1] : '';
 
     // Create new headers with only required fields
     reqLog.headers = {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Accept-Encoding': 'identity',
-      'Connection': 'close',
-      'User-Agent': userAgent || 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36'
+      Connection: 'close',
+      'User-Agent':
+        userAgent ||
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
     };
 
     // Add cookie only if aidsp value exists
@@ -60,7 +64,10 @@ export class NotarizationAppleDevices extends NotarizationBase {
       console.warn('[AppleDevices] Warning: aidsp cookie not found');
     }
 
-    console.log('[AppleDevices] Final headers count:', Object.keys(reqLog.headers).length);
+    console.log(
+      '[AppleDevices] Final headers count:',
+      Object.keys(reqLog.headers).length,
+    );
     console.log('[AppleDevices] Final headers:', reqLog.headers);
 
     try {
@@ -85,9 +92,8 @@ export class NotarizationAppleDevices extends NotarizationBase {
         return;
       }
       const [transcript, message] = result;
-      // keep only HTTP method and URL and hide everything after in the response      
-      const sentEnd = `${reqLog.method} ${reqLog.url}`.length
-
+      // keep only HTTP method and URL and hide everything after in the response
+      const sentEnd = `${reqLog.method} ${reqLog.url}`.length;
 
       const commit: Commit = {
         sent: [{ start: 0, end: sentEnd }],

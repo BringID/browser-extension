@@ -1,10 +1,10 @@
-function downloadDataAsFile (
+function downloadDataAsFile(
   data: Record<string, string | undefined>,
-  filename = 'data.json'
+  filename = 'data.json',
 ): void {
   // Step 1: Remove undefined values
   const filteredData: Record<string, string | undefined> = Object.fromEntries(
-    Object.entries(data).filter(([_, value]) => value !== undefined)
+    Object.entries(data).filter(([_, value]) => value !== undefined),
   );
 
   // Step 2: Convert to JSON string
@@ -26,4 +26,4 @@ function downloadDataAsFile (
   URL.revokeObjectURL(url);
 }
 
-export default downloadDataAsFile
+export default downloadDataAsFile;

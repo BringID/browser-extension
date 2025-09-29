@@ -6,26 +6,26 @@ import styled from 'styled-components';
 import { TConnectionQuality } from '../../common/types';
 
 const GoodConnectionQuality = styled(Icons.ConnectionIcon)`
-  color: ${props => props.theme.successStatusTextColor}
+  color: ${(props) => props.theme.successStatusTextColor};
 `;
 
 const MediumConnectionQuality = styled(Icons.ConnectionIcon)`
-  color: ${props => props.theme.warningStatusTextColor}
+  color: ${(props) => props.theme.warningStatusTextColor};
 `;
 
 const PoorConnectionQuality = styled(Icons.ConnectionIcon)`
-  color: ${props => props.theme.errorStatusTextColor}
-`
+  color: ${(props) => props.theme.errorStatusTextColor};
+`;
 
 const defineConnectionQualityIcon = (connectionQuality: TConnectionQuality) => {
-  switch(connectionQuality) {
+  switch (connectionQuality) {
     case 'good':
     case 'excellent':
-      return <GoodConnectionQuality />
+      return <GoodConnectionQuality />;
     case 'fair':
-      return <MediumConnectionQuality />
+      return <MediumConnectionQuality />;
     case 'poor':
-      return <PoorConnectionQuality />
+      return <PoorConnectionQuality />;
   }
 };
 

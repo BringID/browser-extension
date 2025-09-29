@@ -51,8 +51,7 @@ const defineTaskContent = (
 
               setTimeout(() => {
                 window.close();
-              }, 1500)
-
+              }, 1500);
             }}
           >
             Verify
@@ -75,7 +74,7 @@ const Task: FC<TProps> = ({
   description,
   status,
   id,
-  taskIndex
+  taskIndex,
 }) => {
   const content = defineTaskContent(status, groups, taskIndex);
 

@@ -94,18 +94,17 @@ async function createOffscreenDocument() {
       }
 
       case TWebsiteRequestType.has_user_key: {
-        const userKey = await storage.getUserKey()
+        const userKey = await storage.getUserKey();
         const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOST);
-        console.log({ connectorTabs })
+        console.log({ connectorTabs });
         connectorTabs.forEach((tab) => {
           chrome.tabs.sendMessage(tab.id as number, {
             type: TExtensionRequestType.has_user_key_response,
-            hasUserKey: Boolean(userKey)
+            hasUserKey: Boolean(userKey),
           });
         });
-        
-        break
 
+        break;
       }
 
       case TWebsiteRequestType.open_extension: {

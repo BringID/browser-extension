@@ -10,20 +10,18 @@ import {
   ButtonStyled,
   NoteStyled,
   LinkStyled,
-  ListStyled
-} from './styled-components'
-import TProps from './types'
+  ListStyled,
+} from './styled-components';
+import TProps from './types';
 import { requestHostPermission, checkIfPermissionGranted } from '../../utils';
 import { tasks } from '../../../common/core';
 
 const showNote = () => {
   return (
     <NoteStyled status="info">
-      The TLS notary validates encrypted session integrity and generates a signed attestation without accessing decrypted content.{' '}
-      <LinkStyled
-        href="https://github.com/BringID/whitepaper"
-        target='_blank'
-      >
+      The TLS notary validates encrypted session integrity and generates a
+      signed attestation without accessing decrypted content.{' '}
+      <LinkStyled href="https://github.com/BringID/whitepaper" target="_blank">
         Learn more
       </LinkStyled>
     </NoteStyled>
@@ -34,52 +32,53 @@ const defineButtons = (
   permissionUrl: string[],
   loading: boolean,
   setLoading: (loading: boolean) => void,
-  onAccepted: () => void
+  onAccepted: () => void,
 ) => {
-  return <ButtonsContainer>
-    <ButtonStyled onClick={async () => {
-      setLoading(true)
-      const requested = await requestHostPermission(permissionUrl)
-      if (!requested) {
-        setLoading(false)
-        window.close()
-        return alert('Permission denied')
-      }
-      setLoading(false)
-      onAccepted()
-    }} appearance="action" loading={loading}>
-      Authorize MPC-TLS Session
-    </ButtonStyled>
+  return (
+    <ButtonsContainer>
+      <ButtonStyled
+        onClick={async () => {
+          setLoading(true);
+          const requested = await requestHostPermission(permissionUrl);
+          if (!requested) {
+            setLoading(false);
+            window.close();
+            return alert('Permission denied');
+          }
+          setLoading(false);
+          onAccepted();
+        }}
+        appearance="action"
+        loading={loading}
+      >
+        Authorize MPC-TLS Session
+      </ButtonStyled>
 
-    <ButtonStyled onClick={() => {
-      window.close()
-    }}>
-      Cancel
-    </ButtonStyled>
-
-  </ButtonsContainer>
+      <ButtonStyled
+        onClick={() => {
+          window.close();
+        }}
+      >
+        Cancel
+      </ButtonStyled>
+    </ButtonsContainer>
+  );
 };
 
-const PermissionOverlay: FC<TProps> = ({
-  nextTaskIndex,
-  onAccepted
-}) => {
+const PermissionOverlay: FC<TProps> = ({ nextTaskIndex, onAccepted }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-    const availableTasks = tasks();
-    const currentTask = availableTasks[nextTaskIndex];
-
+  const availableTasks = tasks();
+  const currentTask = availableTasks[nextTaskIndex];
 
   useEffect(() => {
     (async () => {
-      const granted = await checkIfPermissionGranted(currentTask.permissionUrl)
+      const granted = await checkIfPermissionGranted(currentTask.permissionUrl);
       if (granted) {
-        onAccepted()
+        onAccepted();
       }
-    })()
-  }, [
-
-  ])
+    })();
+  }, []);
 
   return (
     <Container>
@@ -87,15 +86,13 @@ const PermissionOverlay: FC<TProps> = ({
         <LogoWrapperStyled icon={<Image src={currentTask.icon} />} />
         <TitleStyled>{currentTask.title}</TitleStyled>
 
-        <TextStyled>
-          Private & Secure
-        </TextStyled>
+        <TextStyled>Private & Secure</TextStyled>
 
         <ListStyled
           items={[
             '✅ Your credentials remain private',
             '✅ Zero-knowledge verification',
-            '❌ No data storage or logging'
+            '❌ No data storage or logging',
           ]}
         />
         {showNote()}
@@ -104,7 +101,7 @@ const PermissionOverlay: FC<TProps> = ({
           currentTask.permissionUrl,
           loading,
           setLoading,
-          onAccepted
+          onAccepted,
         )}
       </Content>
     </Container>

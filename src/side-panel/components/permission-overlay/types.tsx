@@ -1,6 +1,6 @@
 type TProps = {
   onAccepted: () => void;
-  nextTaskIndex: number
+  nextTaskIndex: number;
 };
 
 export default TProps;

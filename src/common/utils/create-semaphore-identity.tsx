@@ -16,7 +16,6 @@ const createSemaphoreIdentity = (
   const identityKey = keccak256(encoded);
   const identity = new Identity(identityKey);
   return identity;
-}
+};
 
-export default createSemaphoreIdentity
-
+export default createSemaphoreIdentity;

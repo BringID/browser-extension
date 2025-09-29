@@ -19,5 +19,5 @@ export {
   TWebsiteRequestType,
   TTaskServer,
   TVerifyResult,
-  TSemaphoreProof
+  TSemaphoreProof,
 };

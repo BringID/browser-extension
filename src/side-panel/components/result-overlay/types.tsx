@@ -4,7 +4,7 @@ type TProps = {
   taskIndex: number;
   transcriptRecv: string;
   transcriptSent: string;
-  masterKey: string
+  masterKey: string;
 };
 
 export default TProps;

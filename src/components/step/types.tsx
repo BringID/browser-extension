@@ -1,4 +1,4 @@
-import { TConnectionQuality } from "../../common/types";
+import { TConnectionQuality } from '../../common/types';
 
 type TProps = {
   text: string;
@@ -7,8 +7,8 @@ type TProps = {
   progress?: number; // percentage
 
   speed?: string; // bits per second
-  connectionQuality?: TConnectionQuality
-  eta?: number
+  connectionQuality?: TConnectionQuality;
+  eta?: number;
 };
 
 export default TProps;

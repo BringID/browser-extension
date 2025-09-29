@@ -11,7 +11,6 @@ import getTabsByHost from './get-tabs-by-host';
 import areArraysEqual from './are-arrays-equal';
 import areObjectsEqual from './are-objects-equal';
 
-
 export {
   msToTime,
   api,
@@ -24,5 +23,5 @@ export {
   defineRelatedVerification,
   getTabsByHost,
   areArraysEqual,
-  areObjectsEqual
+  areObjectsEqual,
 };

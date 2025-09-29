@@ -6,5 +6,4 @@ const msToMinutes = (duration: number): string => {
   return `${minutes}m ${seconds}s`;
 };
 
-
-export default msToMinutes
+export default msToMinutes;

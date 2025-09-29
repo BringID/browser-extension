@@ -3,7 +3,6 @@ import { indexer } from '../api';
 import { createSemaphoreIdentity } from '../../common/utils';
 import config from '../../configs';
 
-
 class Semaphore implements ISemaphore {
   #apiUrl: string;
 
@@ -27,7 +26,7 @@ class Semaphore implements ISemaphore {
     masterKey: string,
     credentialGroupId: string,
   ) => {
-    return createSemaphoreIdentity(masterKey, credentialGroupId)
+    return createSemaphoreIdentity(masterKey, credentialGroupId);
   };
 }
 

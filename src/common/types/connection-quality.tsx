@@ -1,1 +1,1 @@
-export type TConnectionQuality = 'good' | 'fair' | 'poor' | 'excellent'
+export type TConnectionQuality = 'good' | 'fair' | 'poor' | 'excellent';

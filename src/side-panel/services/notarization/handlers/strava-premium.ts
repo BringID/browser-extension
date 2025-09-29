@@ -21,7 +21,6 @@ export class NotarizationStravaPremium extends NotarizationBase {
   }
 
   private async onRequestsCaptured(log: Array<Request>) {
-
     try {
       const notary = await TLSNotary.new('strava.com', {
         logEveryNMessages: 100,

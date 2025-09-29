@@ -1,6 +1,4 @@
-import React, { FC, useEffect,
-  useState
- } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import browser from 'webextension-polyfill';
 import { notarizationManager } from './services/notarization';
 import { sendMessage, Task } from '../common/core';
@@ -38,41 +36,39 @@ const renderButtons = (
   result?: string,
 ) => {
   if (!error && !result) {
-    return <Buttons>
-      <ButtonStyled
-        disabled={Boolean(!result || error)}
-        onClick={sendResult}
-        appearance='action'
-      >
-        Continue ({progress}%)
-      </ButtonStyled>
-      <ButtonStyled
-        onClick={() => {
-          chrome.tabs.query(
-            { active: true, currentWindow: true },
-            function (tabs) {
-              if (tabs.length > 0) {
-                if (tabs[0].id) {
-                  chrome.tabs.remove(tabs[0].id);
+    return (
+      <Buttons>
+        <ButtonStyled
+          disabled={Boolean(!result || error)}
+          onClick={sendResult}
+          appearance="action"
+        >
+          Continue ({progress}%)
+        </ButtonStyled>
+        <ButtonStyled
+          onClick={() => {
+            chrome.tabs.query(
+              { active: true, currentWindow: true },
+              function (tabs) {
+                if (tabs.length > 0) {
+                  if (tabs[0].id) {
+                    chrome.tabs.remove(tabs[0].id);
+                  }
                 }
-              }
-            },
-          );
-          window.close();
-        }}
-      >
-        Cancel verification
-      </ButtonStyled>
-
-    </Buttons>      
+              },
+            );
+            window.close();
+          }}
+        >
+          Cancel verification
+        </ButtonStyled>
+      </Buttons>
+    );
   }
 
   return (
     <Buttons>
-      <ButtonStyled
-        onClick={sendResult}
-        appearance='action'
-      >
+      <ButtonStyled onClick={sendResult} appearance="action">
         Continue
       </ButtonStyled>
       <ButtonStyled
@@ -173,20 +169,12 @@ const renderContent = (
 
 const SidePanel: FC = () => {
   const dispatch = useDispatch();
-  const [
-    showPermissionOverlay,
-    setShowPermissionOverlay
-  ] = useState<boolean>(false)
+  const [showPermissionOverlay, setShowPermissionOverlay] =
+    useState<boolean>(false);
 
-  const [
-    masterKey,
-    setMasterKey
-  ] = useState<string>('')
+  const [masterKey, setMasterKey] = useState<string>('');
 
-  const [
-    showResultOverlay,
-    setShowResultOverlay
-  ] = useState<boolean>(false)
+  const [showResultOverlay, setShowResultOverlay] = useState<boolean>(false);
 
   useEffect(() => {
     const listener = (request: TMessage) => {
@@ -195,10 +183,10 @@ const SidePanel: FC = () => {
           if ('task_id' in request) {
             dispatch(notarizationSlice.actions.clear());
 
-            setNextTaskId(request.task_id)
-            setMasterKey(request.master_key)
-            setShowPermissionOverlay(true)
-            window.focus()
+            setNextTaskId(request.task_id);
+            setMasterKey(request.master_key);
+            setShowPermissionOverlay(true);
+            window.focus();
           }
           break;
 
@@ -220,12 +208,7 @@ const SidePanel: FC = () => {
     };
   }, []);
 
-
-
-  const [
-    nextTaskId,
-    setNextTaskId
-  ] = useState<null | number>(null)
+  const [nextTaskId, setNextTaskId] = useState<null | number>(null);
 
   const {
     result,
@@ -237,11 +220,10 @@ const SidePanel: FC = () => {
     eta,
     connectionQuality,
     speed,
-    transcriptSent
-  } =
-    useSelector((state: RootState) => {
-      return state.notarization;
-    });
+    transcriptSent,
+  } = useSelector((state: RootState) => {
+    return state.notarization;
+  });
 
   console.log('DATA: ', {
     result,
@@ -259,46 +241,47 @@ const SidePanel: FC = () => {
   // const credentialGroupId = currentTask.credentialGroupId;
   console.log('SIDE PANEL steps: ', { currentStep });
 
-
   return (
     <Wrapper>
-
       <Page>
-        {showResultOverlay && <ResultOverlay
-          taskIndex={taskId}
-          masterKey={masterKey}
-          onAccept={() => {
-            setShowResultOverlay(false)
+        {showResultOverlay && (
+          <ResultOverlay
+            taskIndex={taskId}
+            masterKey={masterKey}
+            onAccept={() => {
+              setShowResultOverlay(false);
 
-            chrome.runtime.sendMessage({ action: 'openPopup' });
+              chrome.runtime.sendMessage({ action: 'openPopup' });
 
-            window.setTimeout(() => {
-              sendMessage({
-                type: 'PRESENTATION',
-                data: {
-                  presentationData: result as string,
-                  transcriptRecv: transcriptRecv as string,
-                  transcriptSent: transcriptSent as string,
-                  taskIndex: taskId,
-                },
-              });
-            }, 1500);
+              window.setTimeout(() => {
+                sendMessage({
+                  type: 'PRESENTATION',
+                  data: {
+                    presentationData: result as string,
+                    transcriptRecv: transcriptRecv as string,
+                    transcriptSent: transcriptSent as string,
+                    taskIndex: taskId,
+                  },
+                });
+              }, 1500);
+            }}
+            onReject={() => {
+              setShowResultOverlay(false);
+            }}
+            transcriptRecv={transcriptRecv as string}
+            transcriptSent={transcriptSent as string}
+          />
+        )}
 
-          }}
-          onReject={() => {
-            setShowResultOverlay(false)
-          }}
-          transcriptRecv={transcriptRecv as string}
-          transcriptSent={transcriptSent as string}
-        />}
-
-        {showPermissionOverlay && nextTaskId !== null && <PermissionOverlay
-          nextTaskIndex={nextTaskId}
-          onAccepted={() => {
-            setShowPermissionOverlay(false)
-            notarizationManager.run(nextTaskId);
-          }}
-        />}
+        {showPermissionOverlay && nextTaskId !== null && (
+          <PermissionOverlay
+            nextTaskIndex={nextTaskId}
+            onAccepted={() => {
+              setShowPermissionOverlay(false);
+              notarizationManager.run(nextTaskId);
+            }}
+          />
+        )}
         <Container>
           {renderHeader(currentTask, error)}
 
@@ -310,7 +293,7 @@ const SidePanel: FC = () => {
               connectionQuality,
               speed,
               eta,
-              error
+              error,
             )}
 
             {renderButtons(
@@ -326,7 +309,7 @@ const SidePanel: FC = () => {
                   );
                 }
 
-                setShowResultOverlay(true)
+                setShowResultOverlay(true);
               },
               progress,
               error,

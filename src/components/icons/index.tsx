@@ -10,8 +10,8 @@ import PlusIcon from './plus';
 import ArrowBackIcon from './arrow-back';
 import ExclimationIcon from './exclimation-icon';
 import AddressIcon from './address';
-import ConnectionIcon from './connection'
-import Copy from './copy'
+import ConnectionIcon from './connection';
+import Copy from './copy';
 
 const Icons = {
   VehicleIcon,
@@ -27,7 +27,7 @@ const Icons = {
   ExclimationIcon,
   AddressIcon,
   ConnectionIcon,
-  Copy
+  Copy,
 };
 
 export default Icons;

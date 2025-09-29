@@ -48,7 +48,7 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
       // Create a deep copy of the request to avoid modifying the original
       const reqLog = {
         ...log[0],
-        headers: { ...log[0].headers }  // Shallow copy of headers is fine since we're replacing them
+        headers: { ...log[0].headers }, // Shallow copy of headers is fine since we're replacing them
       };
 
       // Store original headers for extraction
@@ -83,11 +83,18 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
       reqLog.url = newUrl;
 
       // Extract required values from original headers
-      const authorization = originalHeaders['authorization'] || originalHeaders['Authorization'] || '';
-      const xCsrfToken = originalHeaders['x-csrf-token'] || originalHeaders['X-Csrf-Token'] || '';
+      const authorization =
+        originalHeaders['authorization'] ||
+        originalHeaders['Authorization'] ||
+        '';
+      const xCsrfToken =
+        originalHeaders['x-csrf-token'] ||
+        originalHeaders['X-Csrf-Token'] ||
+        '';
 
       // Extract auth_token and ct0 from cookie
-      const cookieHeader = originalHeaders['cookie'] || originalHeaders['Cookie'] || '';
+      const cookieHeader =
+        originalHeaders['cookie'] || originalHeaders['Cookie'] || '';
       const authTokenMatch = cookieHeader.match(/auth_token=([^;]+)/);
       const ct0Match = cookieHeader.match(/ct0=([^;]+)/);
       const authTokenValue = authTokenMatch ? authTokenMatch[1] : '';
@@ -95,10 +102,10 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
 
       // Create new headers with only required fields
       reqLog.headers = {
-        'Accept': '*/*',
+        Accept: '*/*',
         'Accept-Encoding': 'identity',
-        'Connection': 'close',
-        'Content-Type': 'application/json'
+        Connection: 'close',
+        'Content-Type': 'application/json',
       };
 
       // Add authorization if exists
@@ -141,8 +148,8 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
 
       console.log({ responseBody, verifiedFollowersMatch, userIdMatch });
 
-      // keep only HTTP method and URL and hide everything after in the response      
-      const sentEnd = `${reqLog.method} ${reqLog.url}`.length
+      // keep only HTTP method and URL and hide everything after in the response
+      const sentEnd = `${reqLog.method} ${reqLog.url}`.length;
 
       const commit: Commit = {
         sent: [{ start: 0, end: sentEnd }],

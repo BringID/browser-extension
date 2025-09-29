@@ -7,7 +7,7 @@ import {
   TimeLeftProgressStyled,
   Progress,
   Divider,
-  Connection
+  Connection,
 } from './styled-components';
 import { TNotarizationStatus } from '../../common/types';
 import Icons from '../icons';
@@ -28,7 +28,6 @@ const defineCurrentStep = (
   return 'disabled';
 };
 
-
 const Step: FC<TProps> = ({
   text,
   currentStep,
@@ -36,8 +35,8 @@ const Step: FC<TProps> = ({
   progress,
   speed,
   connectionQuality,
-  eta
- }) => {
+  eta,
+}) => {
   const status: TNotarizationStatus = defineCurrentStep(idx, currentStep);
 
   return (
@@ -49,20 +48,19 @@ const Step: FC<TProps> = ({
         )}
       </NoteContent>
 
-      {progress !== undefined && <Progress>
-        <TimeLeftProgressStyled
-          max={100}
-          current={progress}
-          timeLeft={eta}
-        />
+      {progress !== undefined && (
+        <Progress>
+          <TimeLeftProgressStyled max={100} current={progress} timeLeft={eta} />
 
-        {connectionQuality && <Connection>
-          {defineConnectionQualityIcon(connectionQuality)}
-          <Divider>●</Divider>
-          {speed}
-        </Connection>}
-
-      </Progress>}
+          {connectionQuality && (
+            <Connection>
+              {defineConnectionQualityIcon(connectionQuality)}
+              <Divider>●</Divider>
+              {speed}
+            </Connection>
+          )}
+        </Progress>
+      )}
     </NoteStyled>
   );
 };
