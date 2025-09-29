@@ -1,6 +1,7 @@
 // @ts-nocheck
 import * as Comlink from 'comlink';
 import init, { Prover, Presentation } from 'tlsn-js';
+import { TConnectionQuality } from '../../../common/types';
 
 /**
  * WebSocket Traffic Monitor for TLSN with Progress Tracking
@@ -95,11 +96,11 @@ function initWsMonitor() {
             const etaSeconds = remainingBytes / avgThroughput;
 
             // Determine network quality based on throughput
-            let quality = 'Poor';
+            let quality: TConnectionQuality = 'poor';
             const throughputKBps = avgThroughput / 1024;
-            if (throughputKBps >= 1000) quality = 'Excellent';
-            else if (throughputKBps >= 500) quality = 'Good';
-            else if (throughputKBps >= 200) quality = 'Fair';
+            if (throughputKBps >= 1000) quality = 'excellent';
+            else if (throughputKBps >= 500) quality = 'good';
+            else if (throughputKBps >= 200) quality = 'fair';
 
             const status = {
                 progress: Math.min(100, parseFloat(progress.toFixed(1))),

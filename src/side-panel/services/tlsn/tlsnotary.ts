@@ -11,14 +11,38 @@ import {Result} from "../../../common/types";
 import {Request} from "../../common/types";
 import {ParsedHTTPMessage, parseHttpMessage} from "../../common/helpers/httpParser";
 import { WsMonitorConfig } from './worker';
+import { TProgressData } from "../../types";
+import { store } from '../../store';
+import { notarizationSlice } from '../../store/notarization';
 
 const worker = new Worker(new URL('./worker.ts', import.meta.url))
 worker.postMessage({
   action: 'initWsMonitor',
 });
 
-worker.onmessage = (event: MessageEvent<{type: string, payload: unknown}>) => {
+worker.onmessage = (event: MessageEvent<{type: string, payload: TProgressData}>) => {
   console.log("WORKER: ", event.data);
+
+  if (!event.data) { return }
+  const {
+    payload
+  } = event.data
+
+  if (!payload) { return }
+
+  const {
+    progress,
+    etaSeconds,
+    quality,
+    speed
+  } = payload
+
+  store.dispatch(notarizationSlice.actions.setProgressData({
+    progress,
+    eta: etaSeconds,
+    connectionQuality: quality,
+    speed
+  }));
 };
 
 // tlsn-js doesn't provide a valid Comlink API type

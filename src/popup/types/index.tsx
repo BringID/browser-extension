@@ -8,7 +8,6 @@ import TWebsiteRequestType from './website-request-type';
 import TTaskServer from './task-server';
 import TVerifyResult from './verify-result';
 import TSemaphoreProof from './semaphore-proof';
-import TConnectionQuality from './connection-quality'
 
 export {
   TUserStatus,
@@ -20,6 +19,5 @@ export {
   TWebsiteRequestType,
   TTaskServer,
   TVerifyResult,
-  TSemaphoreProof,
-  TConnectionQuality
+  TSemaphoreProof
 };

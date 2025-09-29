@@ -4,8 +4,7 @@ import {
   Text,
   Button,
   Note,
-  Link,
-  List
+  Link
 } from '../../../components';
 
 import styled from 'styled-components';
@@ -28,13 +27,14 @@ export const TitleStyled = styled(Title)`
   margin-bottom: 8px;
 `;
 
+export const Header = styled.header`
+  
+`
+
 export const Content = styled.div`
   padding: 24px;
   border-radius: 8px;
   border: 1px solid ${(props) => props.theme.secondaryBorderColor};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   height: 100%;
 `;
 
@@ -77,9 +77,4 @@ export const NoteStyled = styled(Note)`
 export const LinkStyled = styled(Link)`
   color: ${props => props.theme.infoStatusTextColor};
   text-decoration: underline;
-`
-
-export const ListStyled = styled(List)`
-  align-self: start;
-  margin-bottom: 20px;
 `

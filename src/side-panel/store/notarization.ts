@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TConnectionQuality } from '../../common/types';
 
 export enum NotarizationStatus {
   pending,
@@ -10,11 +11,16 @@ export enum NotarizationStatus {
 export interface NotarizationState {
   taskId: number;
   status: NotarizationStatus;
-  progress: number;
   error?: string;
   currentStep: number;
   result?: string;
   transcriptRecv?: string;
+
+
+  progress: number;
+  connectionQuality?: TConnectionQuality
+  eta?: number
+  speed?: string
 
   // message => UI
   // result => UI
@@ -45,6 +51,18 @@ export const notarizationSlice = createSlice({
 
     setProgress: (state: NotarizationState, action: PayloadAction<number>) => {
       state.progress = action.payload;
+    },
+
+    setProgressData: (state: NotarizationState, action: PayloadAction<{
+      progress: number,
+      connectionQuality: TConnectionQuality
+      eta: number
+      speed: string
+    }>) => {
+      state.progress = action.payload.progress;
+      state.connectionQuality = action.payload.connectionQuality;
+      state.eta = action.payload.eta;
+      state.speed = action.payload.speed;
     },
 
     setError: (
