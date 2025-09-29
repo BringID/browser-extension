@@ -11,7 +11,8 @@ import {
 } from './styled-components';
 import TProps from './types';
 import getStorage from '../../db-storage';
-import { getTabsByHost, shortenString } from '../../utils';
+import { getTabsByHost } from '../../utils';
+import { shortenString } from '../../../common/utils';
 import AddressIcon from '../../../components/icons/address';
 import configs from '../../../configs';
 import { TExtensionRequestType } from '../../types';

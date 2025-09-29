@@ -47,7 +47,7 @@ const defineTaskContent = (
                 tabId: tab.id,
               });
 
-              await manager.runTask(taskIndex);
+              await manager.runTask(taskIndex, userKey);
 
               setTimeout(() => {
                 window.close();
@@ -75,7 +75,7 @@ const Task: FC<TProps> = ({
   description,
   status,
   id,
-  taskIndex,
+  taskIndex
 }) => {
   const content = defineTaskContent(status, groups, taskIndex);
 

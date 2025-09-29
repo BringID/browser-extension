@@ -1,13 +1,12 @@
 import {
   Title,
-  LogoWrapper,
   Text,
   Button,
-  Note,
-  Link,
-  Checkbox
+  Checkbox,
+  Subtitle,
+  Tag
 } from '../../../components';
-
+import Icons from '../../../components/icons';
 
 import styled from 'styled-components';
 
@@ -16,16 +15,20 @@ export const Container = styled.div`
   height: 100%;
   position: fixed;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+  overflow: auto;
   top: 0;
   z-index: 100;
   left: 0;
   background-color: ${(props) => props.theme.backgroundColor};
+
+  display: flex;
+  flex-direction: column;
 `;
 
 export const TitleStyled = styled(Title)`
-  text-align: center;
-  font-size: 24px;
+  text-align: left;
+  font-size: 18px;
   margin-bottom: 8px;
 `;
 
@@ -34,30 +37,48 @@ export const Header = styled.header`
 `
 
 export const Content = styled.div`
-  padding: 24px;
-
+  padding: 0px;
 `;
-
 
 export const Result = styled.div`
-  padding: 24px;
+  padding: 12px;
   border-radius: 8px;
   border: 1px solid ${(props) => props.theme.secondaryBorderColor};
-  height: 100%;
+  margin-bottom: 16px;
 `
 
-export const LogoWrapperStyled = styled(LogoWrapper)`
-  margin-bottom: 12px;
-  border-radius: 58px;
-  width: 58px;
-  height: 58px;
-  padding: 5px;
-`;
+export const SubtitleStyled = styled(Subtitle)`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${props => props.theme.primaryTextColor};
+  margin: 0 0 10px;
+
+  display: flex;
+  align-items: center;
+
+`
+
+export const TagStyled = styled(Tag)`
+  margin-left: auto;
+`
+
 
 export const TextStyled = styled(Text)`
-  text-align: center;
-  font-size: 14px;
-  margin-bottom: 40px;
+  text-align: left;
+  font-size: 12px;
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+export const ActionTextStyled = styled(Text)<{
+  onClick: () => void
+}>`
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
 `;
 
 export const ButtonsContainer = styled.div`
@@ -77,17 +98,41 @@ export const Image = styled.img`
   object-position: center;
 `;
 
-export const NoteStyled = styled(Note)`
-  margin-bottom: 18px;
-`;
-
-
-export const LinkStyled = styled(Link)`
-  color: ${props => props.theme.infoStatusTextColor};
-  text-decoration: underline;
+export const CheckboxStyled = styled(Checkbox)`
+  margin-bottom: 12px;
 `
 
+export const Hr = styled.hr`
+  margin: 12px 0;
+  border: none;
+  border-bottom: 1px solid ${(props) => props.theme.secondaryBorderColor};
+`
 
-export const CheckboxStyled = styled(Checkbox)`
-  
+export const FlexData = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  margin-bottom: 8px;
+`
+
+export const FlexDataTitle = styled.span`
+  font-size: 12px;
+  color: ${props => props.theme.secondaryTextColor};
+`
+
+export const FlexDataValue = styled.span`
+  font-size: 12px;
+  color: ${props => props.theme.primaryTextColor};
+  display: flex;
+  gap: 4px;
+  align-items: center;
+`
+
+export const CopyIconStyled = styled(Icons.Copy)`
+  color: ${props => props.theme.primaryTextColor};
+`
+
+export const Footer = styled.footer`
+  margin-top: auto;
 `

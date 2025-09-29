@@ -4,6 +4,7 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   text-align: left;
+  cursor: pointer;
 `;
 
 export const Checkbox = styled.div<{ checked: boolean }>`
@@ -23,8 +24,7 @@ export const Checkbox = styled.div<{ checked: boolean }>`
 `;
 
 export const Title = styled.h3`
-  font-size: 16px;
-  font-weight: 500;
-  margin-left: 10px;
-  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0 0 0 6px;
 `;

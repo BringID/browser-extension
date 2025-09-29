@@ -1,4 +1,4 @@
-import { TNotarizationGroup } from '../../common/types';
+import { TNotarizationGroup } from '../types';
 
 type GroupMatchResult = {
   semaphoreGroupId: string;

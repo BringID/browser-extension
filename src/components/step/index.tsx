@@ -52,7 +52,7 @@ const Step: FC<TProps> = ({
       {progress !== undefined && <Progress>
         <TimeLeftProgressStyled
           max={100}
-          current={Math.round(progress)}
+          current={progress}
           timeLeft={eta}
         />
 

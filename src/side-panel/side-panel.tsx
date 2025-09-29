@@ -179,6 +179,11 @@ const SidePanel: FC = () => {
   ] = useState<boolean>(false)
 
   const [
+    masterKey,
+    setMasterKey
+  ] = useState<string>('')
+
+  const [
     showResultOverlay,
     setShowResultOverlay
   ] = useState<boolean>(false)
@@ -189,9 +194,9 @@ const SidePanel: FC = () => {
         case 'NOTARIZE':
           if ('task_id' in request) {
             dispatch(notarizationSlice.actions.clear());
-            
-            // void notarizationManager.run(request.task_id);
+
             setNextTaskId(request.task_id)
+            setMasterKey(request.master_key)
             setShowPermissionOverlay(true)
             window.focus()
           }
@@ -261,6 +266,7 @@ const SidePanel: FC = () => {
       <Page>
         {showResultOverlay && <ResultOverlay
           taskIndex={taskId}
+          masterKey={masterKey}
           onAccept={() => {
             setShowResultOverlay(false)
 
@@ -282,8 +288,8 @@ const SidePanel: FC = () => {
           onReject={() => {
             setShowResultOverlay(false)
           }}
-          transcriptRecv={transcriptRecv}
-          transcriptSent={transcriptSent}
+          transcriptRecv={transcriptRecv as string}
+          transcriptSent={transcriptSent as string}
         />}
 
         {showPermissionOverlay && nextTaskId !== null && <PermissionOverlay

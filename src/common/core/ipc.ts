@@ -3,6 +3,7 @@ import browser from 'webextension-polyfill';
 export type IPCNotarize = {
   type: 'NOTARIZE';
   task_id: number;
+  master_key: string;
 };
 
 export type IPCPresentation = {
