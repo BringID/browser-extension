@@ -34,57 +34,35 @@ export class NotarizationAppleDevices extends NotarizationBase {
     console.log('[AppleDevices] Original request log:', log);
 
     const reqLog = log[0];
-    // Create a deep copy of headers to avoid modifying original
-    reqLog.headers = { ...log[0].headers };
 
-    console.log(
-      '[AppleDevices] Original headers count:',
-      Object.keys(reqLog.headers).length,
-    );
-    console.log(
-      '[AppleDevices] Original headers:',
-      Object.keys(reqLog.headers),
-    );
+    // Extract necessary values before modifying
+    const originalHeaders = { ...log[0].headers };
+    const userAgent = originalHeaders['user-agent'] || originalHeaders['User-Agent'];
 
-    reqLog.headers['Accept-Encoding'] = 'identity';
-    reqLog.headers['Connection'] = 'close';
+    // Extract aidsp cookie value
+    const cookieHeader = originalHeaders['cookie'] || originalHeaders['Cookie'] || '';
+    const aidspMatch = cookieHeader.match(/aidsp=([^;]+)/);
+    const aidspValue = aidspMatch ? aidspMatch[1] : '';
 
-    const headersToRemove = [
-      'cookie',
-      'scnt',
-      'x-apple-api-key',
-      'x-apple-i-request-context',
-      'origin',
-      'referer',
+    // Create new headers with only required fields
+    reqLog.headers = {
+      'Accept': 'application/json',
+      'Accept-Encoding': 'identity',
+      'Connection': 'close',
+      'User-Agent': userAgent || 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36'
+    };
 
-      'user-agent',
-      'accept',
+    // Add cookie only if aidsp value exists
+    if (aidspValue) {
+      reqLog.headers['Cookie'] = `aidsp=${aidspValue}`;
+      console.log('[AppleDevices] Using aidsp cookie');
+    } else {
+      console.warn('[AppleDevices] Warning: aidsp cookie not found');
+    }
 
-      'Accept-Language',
-      'Content-Type',
-      'X-Apple-I-TimeZone',
-      'Sec-Fetch-Dest',
-      'Sec-Fetch-Mode',
-      'Sec-Fetch-Site',
-      'sec-ch-ua',
-      'sec-ch-ua-mobile',
-      'sec-ch-ua-platform',
-      'X-Apple-I-FD-Client-Info',
-    ];
+    console.log('[AppleDevices] Final headers count:', Object.keys(reqLog.headers).length);
+    console.log('[AppleDevices] Final headers:', reqLog.headers);
 
-    headersToRemove.forEach((header) => {
-      if (reqLog.headers[header]) {
-        delete reqLog.headers[header];
-        console.log(`[AppleDevices] Removed header: ${header}`);
-      }
-    });
-
-    console.log(
-      '[AppleDevices] Cleaned headers count:',
-      Object.keys(reqLog.headers).length,
-    );
-    console.log('[AppleDevices] Cleaned headers:', Object.keys(reqLog.headers));
-    console.log('[AppleDevices] Cleaned request headers:', reqLog.headers);
     try {
       const notary = await TLSNotary.new('account.apple.com', {
         logEveryNMessages: 100,

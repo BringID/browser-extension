@@ -18,7 +18,7 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
 
   public async onStart(): Promise<void> {
     this.requestRecorder.start();
-    
+
     await chrome.tabs.create({
       url: 'https://x.com/i/account_analytics/overview',
     });
@@ -46,10 +46,17 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
       console.log('LOG:', log[0]);
       this.setProgress(33);
 
-      const reqLog = log[0];
+      // Create a deep copy of the request to avoid modifying the original
+      const reqLog = {
+        ...log[0],
+        headers: { ...log[0].headers }  // Shallow copy of headers is fine since we're replacing them
+      };
+
+      // Store original headers for extraction
+      const originalHeaders = log[0].headers;
 
       // Extract the original URL and parse the variables
-      const originalUrl = reqLog.url;
+      const originalUrl = log[0].url;
       const url = new URL(originalUrl);
       const variablesParam = url.searchParams.get('variables');
 
@@ -57,9 +64,9 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
         decodeURIComponent(variablesParam || ''),
       );
 
-      // Extract only the required parameters
+      // Create minimal variables with "Follows" metric to avoid errors
       const minimalVariables = {
-        requested_metrics: ['Follows'], // Use minimal metric instead of all metrics
+        requested_metrics: ['Follows'],
         to_time: originalVariables.to_time,
         from_time: originalVariables.from_time,
         granularity: originalVariables.granularity,
@@ -73,13 +80,53 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
       );
       const newUrl = `${baseUrl}?variables=${newVariablesParam}`;
 
-      // Update the request log
+      // Update the copied request log
       reqLog.url = newUrl;
 
-      console.log('newUrl:', newUrl);
+      // Extract required values from original headers
+      const authorization = originalHeaders['authorization'] || originalHeaders['Authorization'] || '';
+      const xCsrfToken = originalHeaders['x-csrf-token'] || originalHeaders['X-Csrf-Token'] || '';
 
-      reqLog.headers = { ...log[0].headers };
-      delete reqLog.headers['Accept-Encoding'];
+      // Extract auth_token and ct0 from cookie
+      const cookieHeader = originalHeaders['cookie'] || originalHeaders['Cookie'] || '';
+      const authTokenMatch = cookieHeader.match(/auth_token=([^;]+)/);
+      const ct0Match = cookieHeader.match(/ct0=([^;]+)/);
+      const authTokenValue = authTokenMatch ? authTokenMatch[1] : '';
+      const ct0Value = ct0Match ? ct0Match[1] : '';
+
+      // Create new headers with only required fields
+      reqLog.headers = {
+        'Accept': '*/*',
+        'Accept-Encoding': 'identity',
+        'Connection': 'close',
+        'Content-Type': 'application/json'
+      };
+
+      // Add authorization if exists
+      if (authorization) {
+        reqLog.headers['Authorization'] = authorization;
+      }
+
+      // Add x-csrf-token if exists
+      if (xCsrfToken) {
+        reqLog.headers['X-Csrf-Token'] = xCsrfToken;
+      }
+
+      // Add cookies with both auth_token and ct0
+      const cookies = [];
+      if (authTokenValue) {
+        cookies.push(`auth_token=${authTokenValue}`);
+      }
+      if (ct0Value) {
+        cookies.push(`ct0=${ct0Value}`);
+      }
+      if (cookies.length > 0) {
+        reqLog.headers['Cookie'] = cookies.join('; ');
+      }
+
+      console.log('Modified headers:', reqLog.headers);
+      console.log('Original request preserved:', log[0]);
+
       const result = await notary.transcript(reqLog);
       if (result instanceof Error) {
         this.result(result);
@@ -100,7 +147,7 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
         recv: [],
       };
       this.setProgress(66);
-      // Add verified followers if found
+
       // Add verified followers if found
       if (verifiedFollowersMatch) {
         const start = verifiedFollowersMatch.index;
@@ -126,10 +173,11 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
 
       this.result(await notary.notarize(commit));
     } catch (err) {
+      console.error('Error during notarization:', err);
+      console.log('Original request that failed:', log[0]);
       this.result(err as Error);
     }
   }
-
   public async onStop(): Promise<void> {
     this.requestRecorder.stop();
   }
