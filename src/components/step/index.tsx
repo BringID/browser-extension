@@ -11,7 +11,7 @@ import {
 } from './styled-components';
 import { TNotarizationStatus } from '../../common/types';
 import Icons from '../icons';
-import { defineConnectionQualityIcon, formatBandwidth } from '../../side-panel/utils';
+import { defineConnectionQualityIcon } from '../../side-panel/utils';
 
 const defineCurrentStep = (
   idx: number,
@@ -34,9 +34,9 @@ const Step: FC<TProps> = ({
   currentStep,
   idx,
   progress,
-  latency,
-  bandwidth,
-  connectionQuality
+  speed,
+  connectionQuality,
+  eta
  }) => {
   const status: TNotarizationStatus = defineCurrentStep(idx, currentStep);
 
@@ -52,18 +52,15 @@ const Step: FC<TProps> = ({
       {progress !== undefined && <Progress>
         <TimeLeftProgressStyled
           max={100}
-          current={progress}
-          timeLeft={180000}
+          current={Math.round(progress)}
+          timeLeft={eta}
         />
 
-
-        <Connection>
+        {connectionQuality && <Connection>
           {defineConnectionQualityIcon(connectionQuality)}
-          {' '}
-          {latency}ms
           <Divider>●</Divider>
-          {formatBandwidth(bandwidth)}
-        </Connection>
+          {speed}
+        </Connection>}
 
       </Progress>}
     </NoteStyled>

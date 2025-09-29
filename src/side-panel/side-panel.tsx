@@ -28,6 +28,7 @@ import './style.css';
 import { TMessage } from '../common/core/messages';
 import config from '../configs';
 import { PermissionOverlay } from './components';
+import { TConnectionQuality } from '../common/types';
 
 const renderButtons = (
   retryTask: () => Promise<void>,
@@ -127,7 +128,10 @@ const renderContent = (
   currentTask: Task,
   currentStep: number,
   progress: number,
-  error?: string | null
+  connectionQuality?: TConnectionQuality,
+  speed?: string,
+  eta?: number,
+  error?: string | null,
 ) => {
   if (error) {
     return (
@@ -159,9 +163,9 @@ const renderContent = (
         key={step.text}
         currentStep={currentStep}
         progress={step.notarization ? progress : undefined}
-        connectionQuality='poor'
-        bandwidth={1000000}
-        latency={35}
+        connectionQuality={connectionQuality}
+        speed={speed}
+        eta={eta}
       />
     );
   });
@@ -213,7 +217,7 @@ const SidePanel: FC = () => {
     setNextTaskId
   ] = useState<null | number>(null)
 
-  const { result, taskId, progress, currentStep, transcriptRecv, error } =
+  const { result, taskId, progress, currentStep, transcriptRecv, error, eta, connectionQuality, speed } =
     useSelector((state: RootState) => {
       return state.notarization;
     });
@@ -253,6 +257,9 @@ const SidePanel: FC = () => {
               currentTask,
               currentStep,
               progress,
+              connectionQuality,
+              speed,
+              eta,
               error
             )}
 

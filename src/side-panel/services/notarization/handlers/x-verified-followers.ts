@@ -35,8 +35,7 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
 
     try {
       const notary = await TLSNotary.new('x.com');
-      console.log('Original LOG:', log[0]);
-      this.setProgress(33);
+      console.log('LOG:', log[0]);
 
       // Create a deep copy of the request to avoid modifying the original
       const reqLog = {
@@ -138,7 +137,6 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
         sent: [{ start: 0, end: transcript.sent.length }],
         recv: [],
       };
-      this.setProgress(66);
 
       // Add verified followers if found
       if (verifiedFollowersMatch) {
@@ -161,7 +159,6 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
           });
         }
       }
-      this.setProgress(99);
 
       this.result(await notary.notarize(commit));
     } catch (err) {

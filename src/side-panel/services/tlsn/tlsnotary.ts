@@ -10,6 +10,9 @@ import * as Comlink from 'comlink';
 import {Result} from "../../../common/types";
 import {Request} from "../../common/types";
 import {ParsedHTTPMessage, parseHttpMessage} from "../../common/helpers/httpParser";
+import { TProgressData } from "../../types";
+import { store } from '../../store';
+import { notarizationSlice } from '../../store/notarization';
 
 const worker = new Worker(new URL('./worker.ts', import.meta.url))
 worker.postMessage({
@@ -19,14 +22,35 @@ worker.postMessage({
     verbose: true,
     logPrefix: "[WS Monitor]",
     trackSize: true,
-    expectedTotalBytes: 50170000,
+    expectedTotalBytes: 116128768,
     enableProgress: true,
     progressUpdateInterval: 500
   }
 });
 
-worker.onmessage = (event: MessageEvent<{type: string, payload: unknown}>) => {
+worker.onmessage = (event: MessageEvent<{type: string, payload: TProgressData}>) => {
   console.log("WORKER: ", event.data);
+
+  if (!event.data) { return }
+  const {
+    payload
+  } = event.data
+
+  if (!payload) { return }
+
+  const {
+    progress,
+    etaSeconds,
+    quality,
+    speed
+  } = payload
+
+  store.dispatch(notarizationSlice.actions.setProgressData({
+    progress,
+    eta: etaSeconds,
+    connectionQuality: quality,
+    speed
+  }));
 };
 
 // tlsn-js doesn't provide a valid Comlink API type
@@ -45,8 +69,8 @@ export class TLSNotary extends Progressive<Status>{
   ): Promise<TLSNotary> {
     const prover = (await new Prover({
       serverDns: hostname,
-      maxSentData: 65536,
-      maxRecvData: 65536,
+      maxSentData: 6000,
+      maxRecvData: 24000,
     })) as TProver;
     return new TLSNotary(hostname, prover, updatesCallback);
   }
