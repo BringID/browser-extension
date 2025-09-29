@@ -172,8 +172,6 @@ const SidePanel: FC = () => {
   const [showPermissionOverlay, setShowPermissionOverlay] =
     useState<boolean>(false);
 
-  const [masterKey, setMasterKey] = useState<string>('');
-
   const [showResultOverlay, setShowResultOverlay] = useState<boolean>(false);
 
   useEffect(() => {
@@ -184,7 +182,6 @@ const SidePanel: FC = () => {
             dispatch(notarizationSlice.actions.clear());
 
             setNextTaskId(request.task_id);
-            setMasterKey(request.master_key);
             setShowPermissionOverlay(true);
             window.focus();
           }
@@ -246,8 +243,7 @@ const SidePanel: FC = () => {
       <Page>
         {showResultOverlay && (
           <ResultOverlay
-            taskIndex={taskId}
-            masterKey={masterKey}
+            title={currentTask.title}
             onAccept={() => {
               setShowResultOverlay(false);
 

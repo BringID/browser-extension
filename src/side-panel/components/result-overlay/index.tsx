@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Container,
   TitleStyled,
@@ -6,6 +6,7 @@ import {
   ButtonsContainer,
   TextStyled,
   Image,
+  LockIconStyled,
   ButtonStyled,
   Header,
   Result,
@@ -13,19 +14,15 @@ import {
   CheckboxStyled,
   SubtitleStyled,
   Hr,
-  FlexData,
-  FlexDataTitle,
-  FlexDataValue,
   TagStyled,
-  CopyIconStyled,
   Footer,
+  ExpandableContainerStyled,
+  MiniSubtitle
 } from './styled-components';
 import { defineGroup, createSemaphoreIdentity } from '../../../common/utils';
 import TProps from './types';
 import { downloadDataAsFile } from '../../utils';
 import { Task } from '../../../common/core';
-import { tasks } from '../../../common/core';
-import { shortenString } from '../../../common/utils';
 
 const defineButtons = (
   checked: boolean,
@@ -67,23 +64,13 @@ const defineSemaphoreIdentityCommitment = (
 };
 
 const ResultOverlay: FC<TProps> = ({
-  taskIndex,
+  title,
   onAccept,
   onReject,
   transcriptRecv,
   transcriptSent,
-  masterKey,
 }) => {
   const [checked, setChecked] = useState<boolean>(false);
-
-  const availableTasks = tasks();
-  const currentTask = availableTasks[taskIndex];
-
-  const semaphoreIdentityCommitment = defineSemaphoreIdentityCommitment(
-    currentTask,
-    transcriptRecv,
-    masterKey,
-  );
 
   return (
     <Container>
@@ -100,7 +87,7 @@ const ResultOverlay: FC<TProps> = ({
         <Result>
           <SubtitleStyled>
             Notarization summary
-            <TagStyled status="default">{currentTask.title}</TagStyled>
+            <TagStyled status="default">{title}</TagStyled>
           </SubtitleStyled>
           <TextStyled>
             Visible only to the BringID notary during verification; not stored
@@ -119,22 +106,40 @@ const ResultOverlay: FC<TProps> = ({
 
           <Hr />
 
-          <SubtitleStyled>Published onchain</SubtitleStyled>
-
-          <FlexData>
-            <FlexDataTitle>Semaphore Identity Commitment (IC):</FlexDataTitle>
-
-            <FlexDataValue>
-              {shortenString(String(semaphoreIdentityCommitment), 4)}
-              <CopyIconStyled />
-            </FlexDataValue>
-          </FlexData>
+          <SubtitleStyled>
+            <LockIconStyled />
+            Publish onchain
+          </SubtitleStyled>
 
           <TextStyled>
-            Derived as a hash of your account ID. Not tied to your wallet.
-            Proofs are unlinkable (per-request nullifiers).
+           Only verification commitments are published onchain. They don't reveal your Uber account, not linked to your wallet, and required to generate unique, unlinkable proofs when needed.
           </TextStyled>
+
+          <ExpandableContainerStyled title="Learn more">
+            <MiniSubtitle>
+              Verification Commitment
+            </MiniSubtitle>
+            <TextStyled>
+              A random public key generated from your BringID key.
+            </TextStyled>
+
+            <MiniSubtitle>
+              Protected Account Hash
+            </MiniSubtitle>
+            <TextStyled>
+              Your account ID, hashed with the notary's secret key to prevent brute-force lookups.
+            </TextStyled>
+
+            <Hr />
+
+            <TextStyled>
+              Privacy note: These commitments are never tied to your wallet. Each proof is unique and unlinkable.
+            </TextStyled>
+          </ExpandableContainerStyled>
+
+
         </Result>
+
       </Content>
 
       <Footer>

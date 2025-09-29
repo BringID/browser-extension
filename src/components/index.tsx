@@ -18,6 +18,7 @@ import Checkbox from './checkbox';
 import TimeLeftProgress from './time-left-progress';
 import Step from './step';
 import List from './list';
+import ExpandableContainer from './expandable-container';
 
 export {
   Spinner,
@@ -40,4 +41,5 @@ export {
   TimeLeftProgress,
   Step,
   List,
+  ExpandableContainer
 };

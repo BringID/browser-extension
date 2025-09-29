@@ -5,6 +5,7 @@ import {
   Checkbox,
   Subtitle,
   Tag,
+  ExpandableContainer
 } from '../../../components';
 import Icons from '../../../components/icons';
 
@@ -53,6 +54,8 @@ export const SubtitleStyled = styled(Subtitle)`
 
   display: flex;
   align-items: center;
+
+  gap: 6px;
 `;
 
 export const TagStyled = styled(Tag)`
@@ -103,31 +106,20 @@ export const Hr = styled.hr`
   border-bottom: 1px solid ${(props) => props.theme.secondaryBorderColor};
 `;
 
-export const FlexData = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 0;
-  margin-bottom: 8px;
-`;
-
-export const FlexDataTitle = styled.span`
-  font-size: 12px;
-  color: ${(props) => props.theme.secondaryTextColor};
-`;
-
-export const FlexDataValue = styled.span`
-  font-size: 12px;
-  color: ${(props) => props.theme.primaryTextColor};
-  display: flex;
-  gap: 4px;
-  align-items: center;
-`;
-
-export const CopyIconStyled = styled(Icons.Copy)`
-  color: ${(props) => props.theme.primaryTextColor};
-`;
-
 export const Footer = styled.footer`
   margin-top: auto;
 `;
+
+
+export const LockIconStyled = styled(Icons.Lock)`
+  color: ${(props) => props.theme.secondaryTextColor};
+`;
+
+
+export const ExpandableContainerStyled = styled(ExpandableContainer)``
+
+export const MiniSubtitle = styled.h5`
+  font-size: 12px;
+  color: ${props => props.theme.primaryTextColor};
+  margin: 0 0 4px;
+`

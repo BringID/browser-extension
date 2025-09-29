@@ -12,6 +12,7 @@ import ExclimationIcon from './exclimation-icon';
 import AddressIcon from './address';
 import ConnectionIcon from './connection';
 import Copy from './copy';
+import Lock from './lock'
 
 const Icons = {
   VehicleIcon,
@@ -28,6 +29,7 @@ const Icons = {
   AddressIcon,
   ConnectionIcon,
   Copy,
+  Lock
 };
 
 export default Icons;
