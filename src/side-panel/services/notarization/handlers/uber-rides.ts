@@ -51,8 +51,11 @@ export class NotarizationUberRides extends NotarizationBase {
       }
       const [transcript, message] = result;
 
+      // keep only HTTP method and URL and hide everything after in the response
+      const sentEnd = `${log[0].method} ${log[0].url}`.length
+
       const commit: Commit = {
-        sent: [{ start: 0, end: transcript.sent.length }],
+        sent: [{ start: 0, end: sentEnd }],
         recv: [],
       };
       console.log(
