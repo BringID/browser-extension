@@ -9,7 +9,6 @@ function downloadDataAsFile(
 
   // Step 2: Convert to JSON string
   const jsonString = JSON.stringify(filteredData, null, 2); // pretty-print with 2 spaces
-
   // Step 3: Create a Blob from JSON
   const blob = new Blob([jsonString], { type: 'application/json' });
 
