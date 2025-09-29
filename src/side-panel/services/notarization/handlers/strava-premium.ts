@@ -18,11 +18,9 @@ export class NotarizationStravaPremium extends NotarizationBase {
   public async onStart(): Promise<void> {
     this.requestRecorder.start();
     await chrome.tabs.create({ url: 'https://www.strava.com/dashboard' });
-    this.setProgress(30);
   }
 
   private async onRequestsCaptured(log: Array<Request>) {
-    this.setProgress(60);
 
     try {
       const notary = await TLSNotary.new('strava.com');

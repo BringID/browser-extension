@@ -3,7 +3,7 @@ import { Icons } from '../../components';
 import chains from '../../configs/chains';
 
 import styled from 'styled-components';
-import { TConnectionQuality } from '../../popup/types';
+import { TConnectionQuality } from '../../common/types';
 
 const GoodConnectionQuality = styled(Icons.ConnectionIcon)`
   color: ${props => props.theme.successStatusTextColor}
@@ -20,8 +20,9 @@ const PoorConnectionQuality = styled(Icons.ConnectionIcon)`
 const defineConnectionQualityIcon = (connectionQuality: TConnectionQuality) => {
   switch(connectionQuality) {
     case 'good':
+    case 'excellent':
       return <GoodConnectionQuality />
-    case 'medium':
+    case 'fair':
       return <MediumConnectionQuality />
     case 'poor':
       return <PoorConnectionQuality />

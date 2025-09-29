@@ -30,7 +30,6 @@ export class NotarizationUberRides extends NotarizationBase {
       this.currentStepUpdateCallback(this.currentStep);
     try {
       const notary = await TLSNotary.new('riders.uber.com');
-      this.setProgress(33);
       const result = await notary.transcript({
         url: log[0].url,
         method: log[0].method,
@@ -56,7 +55,6 @@ export class NotarizationUberRides extends NotarizationBase {
         sent: [{ start: 0, end: transcript.sent.length }],
         recv: [],
       };
-      this.setProgress(66);
       console.log(
         'Transcript: ',
         Buffer.from(transcript.recv).toString('utf-8'),
@@ -84,8 +82,6 @@ export class NotarizationUberRides extends NotarizationBase {
           end: jsonStarts + activities.valueEnd.pos,
         },
       ];
-
-      this.setProgress(99);
 
       this.result(await notary.notarize(commit));
     } catch (err) {
