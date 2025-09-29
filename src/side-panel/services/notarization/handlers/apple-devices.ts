@@ -86,7 +86,15 @@ export class NotarizationAppleDevices extends NotarizationBase {
     console.log('[AppleDevices] Cleaned headers:', Object.keys(reqLog.headers));
     console.log('[AppleDevices] Cleaned request headers:', reqLog.headers);
     try {
-      const notary = await TLSNotary.new('account.apple.com');
+      const notary = await TLSNotary.new('account.apple.com', {
+        logEveryNMessages: 100,
+        verbose: true,
+        logPrefix: '[WS Monitor - Cupertino]',
+        trackSize: true,
+        expectedTotalBytes: 50170000,
+        enableProgress: true,
+        progressUpdateInterval: 500,
+      });
       this.setProgress(33);
       console.log('[AppleDevices] TLSNotary instance created');
 

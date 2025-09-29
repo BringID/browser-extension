@@ -25,8 +25,15 @@ export class NotarizationStravaPremium extends NotarizationBase {
     this.setProgress(60);
 
     try {
-      const notary = await TLSNotary.new('strava.com');
-
+      const notary = await TLSNotary.new('strava.com', {
+        logEveryNMessages: 100,
+        verbose: true,
+        logPrefix: '[WS Monitor / X-Strava]',
+        trackSize: true,
+        expectedTotalBytes: 50170000,
+        enableProgress: true,
+        progressUpdateInterval: 500,
+      });
       const reqLog = log[0];
       reqLog.headers = { ...log[0].headers };
       delete reqLog.headers['Accept-Encoding'];

@@ -34,7 +34,15 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
       this.currentStepUpdateCallback(this.currentStep);
 
     try {
-      const notary = await TLSNotary.new('x.com');
+      const notary = await TLSNotary.new('x.com', {
+        logEveryNMessages: 100,
+        verbose: true,
+        logPrefix: '[WS Monitor / X-verified]',
+        trackSize: true,
+        expectedTotalBytes: 50170000,
+        enableProgress: true,
+        progressUpdateInterval: 500,
+      });
       console.log('LOG:', log[0]);
       this.setProgress(33);
 

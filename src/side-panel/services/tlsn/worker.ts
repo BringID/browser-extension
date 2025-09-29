@@ -13,7 +13,7 @@ import init, { Prover, Presentation } from 'tlsn-js';
  * (or any other file where WebSocket connections are created)
  */
 
-type WsMonitorConfig = {
+export type WsMonitorConfig = {
     // How often to log message count updates (every N messages)
     logEveryNMessages: number
     // Enable verbose logging for debugging
@@ -32,28 +32,32 @@ type WsMonitorConfig = {
 
 self.onmessage = (event) => {
     if (event.data.action === 'initWsMonitor') {
-        initWsMonitor(event.data.config);
+        initWsMonitor();
+    } else if (event.data.action === 'setWsMonitorConfig') {
+        let cfg: WsMonitorConfig = event.data.config;
+        CONFIG.LOG_EVERY_N_MESSAGES = cfg.logEveryNMessages;
+        CONFIG.VERBOSE = cfg.verbose;
+        CONFIG.LOG_PREFIX = cfg.logPrefix;
+        CONFIG.TRACK_SIZE = cfg.trackSize;
+        CONFIG.EXPECTED_TOTAL_BYTES = cfg.expectedTotalBytes;
+        CONFIG.ENABLE_PROGRESS = cfg.enableProgress;
+        CONFIG.PROGRESS_UPDATE_INTERVAL = cfg.progressUpdateInterval;
+        console.log('CONFIG is set to:', CONFIG);
     }
 };
 
-function initWsMonitor(cfg: WsMonitorConfig) {
+const CONFIG: WsMonitorConfig = {
+    LOG_EVERY_N_MESSAGES: 100,
+    VERBOSE: true,
+    LOG_PREFIX: "[WS Monitor]",
+    TRACK_SIZE: true,
+    EXPECTED_TOTAL_BYTES: 50170000, // ~50MB (46.71 + 3.46 MB)
+    ENABLE_PROGRESS: true,
+    PROGRESS_UPDATE_INTERVAL: 500
+};
+
+function initWsMonitor() {
     'use strict';
-
-    // ============================
-    // Configuration
-    // ============================
-
-    const CONFIG = {
-        LOG_EVERY_N_MESSAGES: cfg.logEveryNMessages,
-        VERBOSE: cfg.verbose,
-        LOG_PREFIX: cfg.logPrefix,
-        TRACK_SIZE: cfg.trackSize,
-        EXPECTED_TOTAL_BYTES: cfg.expectedTotalBytes, // ~50MB (46.71 + 3.46 MB)
-        ENABLE_PROGRESS: cfg.enableProgress,
-        PROGRESS_UPDATE_INTERVAL: cfg.progressUpdateInterval
-    };
-
-    console.log("TLSN Monitor initialized with config:", cfg)
 
     // ============================
     // MinimalProgressMonitor Class

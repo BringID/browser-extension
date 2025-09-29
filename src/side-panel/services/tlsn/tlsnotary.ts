@@ -10,19 +10,11 @@ import * as Comlink from 'comlink';
 import {Result} from "../../../common/types";
 import {Request} from "../../common/types";
 import {ParsedHTTPMessage, parseHttpMessage} from "../../common/helpers/httpParser";
+import { WsMonitorConfig } from './worker';
 
 const worker = new Worker(new URL('./worker.ts', import.meta.url))
 worker.postMessage({
   action: 'initWsMonitor',
-  config: {
-    logEveryNMessages: 100,
-    verbose: true,
-    logPrefix: "[WS Monitor]",
-    trackSize: true,
-    expectedTotalBytes: 50170000,
-    enableProgress: true,
-    progressUpdateInterval: 500
-  }
 });
 
 worker.onmessage = (event: MessageEvent<{type: string, payload: unknown}>) => {
@@ -41,8 +33,13 @@ export class TLSNotary extends Progressive<Status>{
 
    static async new(
     hostname: string,
+    config: WsMonitorConfig,
     updatesCallback?: OnStateUpdated<Status>,
   ): Promise<TLSNotary> {
+     worker.postMessage({
+       action: 'setWsMonitorConfig',
+       config
+     });
     const prover = (await new Prover({
       serverDns: hostname,
       maxSentData: 65536,
