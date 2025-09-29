@@ -11,11 +11,27 @@ import {Result} from "../../../common/types";
 import {Request} from "../../common/types";
 import {ParsedHTTPMessage, parseHttpMessage} from "../../common/helpers/httpParser";
 
+const worker = new Worker(new URL('./worker.ts', import.meta.url))
+worker.postMessage({
+  action: 'initWsMonitor',
+  config: {
+    logEveryNMessages: 100,
+    verbose: true,
+    logPrefix: "[WS Monitor]",
+    trackSize: true,
+    expectedTotalBytes: 50170000,
+    enableProgress: true,
+    progressUpdateInterval: 500
+  }
+});
+
+worker.onmessage = (event: MessageEvent<{type: string, payload: unknown}>) => {
+  console.log("WORKER: ", event.data);
+};
+
 // tlsn-js doesn't provide a valid Comlink API type
 // @ts-ignore
-const { init, Prover, Presentation }: any = Comlink.wrap(
-    new Worker(new URL('./worker.ts', import.meta.url)),
-);
+const { init, Prover, Presentation }: any = Comlink.wrap(worker);
 void init({loggingLevel: "Debug"});
 
 export class TLSNotary extends Progressive<Status>{
