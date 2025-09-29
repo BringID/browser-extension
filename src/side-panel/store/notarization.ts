@@ -15,7 +15,7 @@ export interface NotarizationState {
   currentStep: number;
   result?: string;
   transcriptRecv?: string;
-
+  transcriptSent?: string;
 
   progress: number;
   connectionQuality?: TConnectionQuality
@@ -96,6 +96,13 @@ export const notarizationSlice = createSlice({
       action: PayloadAction<string>,
     ) => {
       state.transcriptRecv = action.payload;
+    },
+
+    setTranscriptSent: (
+      state: NotarizationState,
+      action: PayloadAction<string>,
+    ) => {
+      state.transcriptSent = action.payload;
     },
 
     setTaskId: (state: NotarizationState, action: PayloadAction<number>) => {

@@ -27,7 +27,7 @@ import { Page, Step } from '../components';
 import './style.css';
 import { TMessage } from '../common/core/messages';
 import config from '../configs';
-import { PermissionOverlay } from './components';
+import { PermissionOverlay, ResultOverlay } from './components';
 import { TConnectionQuality } from '../common/types';
 
 const renderButtons = (
@@ -178,6 +178,11 @@ const SidePanel: FC = () => {
     setShowPermissionOverlay
   ] = useState<boolean>(false)
 
+  const [
+    showResultOverlay,
+    setShowResultOverlay
+  ] = useState<boolean>(false)
+
   useEffect(() => {
     const listener = (request: TMessage) => {
       switch (request.type) {
@@ -217,7 +222,18 @@ const SidePanel: FC = () => {
     setNextTaskId
   ] = useState<null | number>(null)
 
-  const { result, taskId, progress, currentStep, transcriptRecv, error, eta, connectionQuality, speed } =
+  const {
+    result,
+    taskId,
+    progress,
+    currentStep,
+    transcriptRecv,
+    error,
+    eta,
+    connectionQuality,
+    speed,
+    transcriptSent
+  } =
     useSelector((state: RootState) => {
       return state.notarization;
     });
@@ -228,6 +244,7 @@ const SidePanel: FC = () => {
     progress,
     currentStep,
     transcriptRecv,
+    transcriptSent,
     error,
   });
 
@@ -242,6 +259,33 @@ const SidePanel: FC = () => {
     <Wrapper>
 
       <Page>
+        {showResultOverlay && <ResultOverlay
+          taskIndex={taskId}
+          onAccept={() => {
+            setShowResultOverlay(false)
+
+            chrome.runtime.sendMessage({ action: 'openPopup' });
+
+            window.setTimeout(() => {
+              sendMessage({
+                type: 'PRESENTATION',
+                data: {
+                  presentationData: result as string,
+                  transcriptRecv: transcriptRecv as string,
+                  transcriptSent: transcriptSent as string,
+                  taskIndex: taskId,
+                },
+              });
+            }, 1500);
+
+          }}
+          onReject={() => {
+            setShowResultOverlay(false)
+          }}
+          transcriptRecv={transcriptRecv}
+          transcriptSent={transcriptSent}
+        />}
+
         {showPermissionOverlay && nextTaskId !== null && <PermissionOverlay
           nextTaskIndex={nextTaskId}
           onAccepted={() => {
@@ -270,26 +314,13 @@ const SidePanel: FC = () => {
               },
 
               () => {
-                if (!result || !transcriptRecv) {
+                if (!result || !transcriptRecv || !transcriptSent) {
                   return alert(
                     'Presentation data or transcriptRecv not defined',
                   );
                 }
-                // @ts-ignore
-                // chrome.action.openPopup();
 
-                chrome.runtime.sendMessage({ action: 'openPopup' });
-
-                window.setTimeout(() => {
-                  sendMessage({
-                    type: 'PRESENTATION',
-                    data: {
-                      presentationData: result,
-                      transcriptRecv,
-                      taskIndex: taskId,
-                    },
-                  });
-                }, 1500);
+                setShowResultOverlay(true)
               },
               progress,
               error,

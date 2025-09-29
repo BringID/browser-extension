@@ -1,6 +1,9 @@
 type TProps = {
-  onAccepted: () => void;
-  nextTaskIndex: number
+  onAccept: () => void;
+  onReject: () => void;
+  taskIndex: number;
+  transcriptRecv?: string;
+  transcriptSent?: string;
 };
 
 export default TProps;

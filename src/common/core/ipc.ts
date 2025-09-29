@@ -10,6 +10,7 @@ export type IPCPresentation = {
   data: {
     presentationData: string;
     transcriptRecv: string;
+    transcriptSent: string;
     taskIndex: number;
   };
 };

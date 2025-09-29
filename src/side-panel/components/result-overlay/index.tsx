@@ -10,77 +10,75 @@ import {
   ButtonStyled,
   NoteStyled,
   LinkStyled,
-  Header
+  Header,
+  Result,
+  CheckboxStyled
 } from './styled-components'
 import TProps from './types'
 import { requestHostPermission, checkIfPermissionGranted } from '../../utils';
 import { tasks } from '../../../common/core';
 
 const defineButtons = (
-  permissionUrl: string[],
-  loading: boolean,
-  setLoading: (loading: boolean) => void,
-  onAccepted: () => void
+  onAccepted: () => void,
+  onReject: () => void
 ) => {
   return <ButtonsContainer>
-    <ButtonStyled onClick={async () => {
-      setLoading(true)
-      const requested = await requestHostPermission(permissionUrl)
-      if (!requested) {
-        setLoading(false)
-        window.close()
-        return alert('Permission denied')
-      }
-      setLoading(false)
-      onAccepted()
-    }} appearance="action" loading={loading}>
-      Authorize MPC-TLS Session
+    <ButtonStyled onClick={onAccepted} appearance="action">
+      Publish
     </ButtonStyled>
 
-    <ButtonStyled onClick={() => {
-      window.close()
-    }}>
+    <ButtonStyled onClick={onReject}>
       Cancel
     </ButtonStyled>
 
   </ButtonsContainer>
 };
 
-const PermissionOverlay: FC<TProps> = ({
-  nextTaskIndex,
-  onAccepted
+const ResultOverlay: FC<TProps> = ({
+  taskIndex,
+  onAccept,
+  onReject,
+  transcriptRecv,
+  transcriptSent
 }) => {
-  const [loading, setLoading] = useState<boolean>(false);
-
-    const availableTasks = tasks();
-    const currentTask = availableTasks[nextTaskIndex];
-
-
-  useEffect(() => {
-    (async () => {
-      const granted = await checkIfPermissionGranted(currentTask.permissionUrl)
-      if (granted) {
-        onAccepted()
-      }
-    })()
-  }, [
-
-  ])
+  const [checked, setChecked] = useState<boolean>(false);
 
   return (
     <Container>
-      <Header>
-        <TitleStyled>{currentTask.title}</TitleStyled>
-      </Header>
+      {/* <Header>
+        
+      </Header> */}
       <Content>
-
+        <TitleStyled>
+          Register verification onchain
+        </TitleStyled>
         <TextStyled>
-          Private & Secure
+          Publish a Semaphore commitment from your Uber account. No personal data goes onchain.
         </TextStyled>
+
+        <Result>
+
+        </Result>
+
+        <CheckboxStyled
+          title='Only my Semaphore commitment is published onchain; it is not tied to my wallet, and proofs are unlinkable.'
+          checked={checked}
+          onClick={(
+            checked
+          ) => {
+            setChecked(checked)
+          }}
+          id={1}
+        />
+
+        {defineButtons(
+          onAccept,
+          onReject
+        )}
 
       </Content>
     </Container>
   );
 };
 
-export default PermissionOverlay;
+export default ResultOverlay;

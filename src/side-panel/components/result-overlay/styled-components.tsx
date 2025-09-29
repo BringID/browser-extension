@@ -4,8 +4,10 @@ import {
   Text,
   Button,
   Note,
-  Link
+  Link,
+  Checkbox
 } from '../../../components';
+
 
 import styled from 'styled-components';
 
@@ -33,10 +35,16 @@ export const Header = styled.header`
 
 export const Content = styled.div`
   padding: 24px;
+
+`;
+
+
+export const Result = styled.div`
+  padding: 24px;
   border-radius: 8px;
   border: 1px solid ${(props) => props.theme.secondaryBorderColor};
   height: 100%;
-`;
+`
 
 export const LogoWrapperStyled = styled(LogoWrapper)`
   margin-bottom: 12px;
@@ -77,4 +85,9 @@ export const NoteStyled = styled(Note)`
 export const LinkStyled = styled(Link)`
   color: ${props => props.theme.infoStatusTextColor};
   text-decoration: underline;
+`
+
+
+export const CheckboxStyled = styled(Checkbox)`
+  
 `
