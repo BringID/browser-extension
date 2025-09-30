@@ -29,15 +29,22 @@ export class NotarizationUberRides extends NotarizationBase {
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
     try {
-      const notary = await TLSNotary.new('riders.uber.com', {
-        logEveryNMessages: 100,
-        verbose: true,
-        logPrefix: '[WS Monitor / X-Uber]',
-        trackSize: true,
-        expectedTotalBytes: 55000000 * 1.15,
-        enableProgress: true,
-        progressUpdateInterval: 500,
-      });
+      const notary = await TLSNotary.new(
+        {
+          serverDns: 'riders.uber.com',
+          maxSentData: 704,
+          maxRecvData: 1504,
+        },
+        {
+          logEveryNMessages: 100,
+          verbose: true,
+          logPrefix: '[WS Monitor / X-Uber]',
+          trackSize: true,
+          expectedTotalBytes: 55000000 * 1.15,
+          enableProgress: true,
+          progressUpdateInterval: 500,
+        },
+      );
 
       const result = await notary.transcript({
         url: log[0].url,

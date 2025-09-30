@@ -56,20 +56,16 @@ export class TLSNotary extends Progressive<Status>{
     readonly #prover: TProver;
 
    static async new(
-    hostname: string,
-    config: WsMonitorConfig,
+    tlsnConfig: {serverDns: string, maxSentData: number, maxRecvData: number},
+    wsMonitorConfig: WsMonitorConfig,
     updatesCallback?: OnStateUpdated<Status>,
   ): Promise<TLSNotary> {
      worker.postMessage({
        action: 'setWsMonitorConfig',
-       config
+       wsMonitorConfig
      });
-    const prover = (await new Prover({
-      serverDns: hostname,
-      maxSentData: 1008,
-      maxRecvData: 24000,
-    })) as TProver;
-    return new TLSNotary(hostname, prover, updatesCallback);
+    const prover = (await new Prover(tlsnConfig)) as TProver;
+    return new TLSNotary(tlsnConfig.serverDns, prover, updatesCallback);
   }
 
     private constructor(

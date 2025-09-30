@@ -33,15 +33,22 @@ export class NotarizationXProfile extends NotarizationBase {
       this.currentStepUpdateCallback(this.currentStep);
 
     try {
-      const notary = await TLSNotary.new('api.x.com', {
-        logEveryNMessages: 100,
-        verbose: true,
-        logPrefix: '[WS Monitor / X-profile]',
-        trackSize: true,
-        expectedTotalBytes: 55000000 * 1.15,
-        enableProgress: true,
-        progressUpdateInterval: 500,
-      });
+      const notary = await TLSNotary.new(
+        {
+          serverDns: 'api.x.com',
+          maxSentData: 1008,
+          maxRecvData: 4352,
+        },
+        {
+          logEveryNMessages: 100,
+          verbose: true,
+          logPrefix: '[WS Monitor / X-profile]',
+          trackSize: true,
+          expectedTotalBytes: 55000000 * 1.15,
+          enableProgress: true,
+          progressUpdateInterval: 500,
+        },
+      );
       delete log[0].headers['Accept-Encoding'];
       const result = await notary.transcript(log[0]);
       if (result instanceof Error) {
