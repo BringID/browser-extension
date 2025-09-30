@@ -76,7 +76,7 @@ const ResultOverlay: FC<TProps> = ({
 
           <TextStyled>
             Only verification commitments are published onchain. They don't
-            reveal your Uber account, not linked to your wallet, and required to
+            reveal your account, not linked to your wallet, and required to
             generate unique, unlinkable proofs when needed.
           </TextStyled>
 

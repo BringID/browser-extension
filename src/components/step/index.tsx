@@ -36,6 +36,7 @@ const Step: FC<TProps> = ({
   speed,
   connectionQuality,
   eta,
+  result
 }) => {
   const status: TNotarizationStatus = defineCurrentStep(idx, currentStep);
 
@@ -50,7 +51,12 @@ const Step: FC<TProps> = ({
 
       {progress !== undefined && (
         <Progress>
-          <TimeLeftProgressStyled max={100} current={progress} timeLeft={eta} />
+          <TimeLeftProgressStyled
+            max={100}
+            current={progress}
+            timeLeft={eta}
+            resultReady={Boolean(result)}
+          />
 
           {connectionQuality && (
             <Connection>
