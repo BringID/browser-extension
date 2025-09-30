@@ -5,7 +5,7 @@ import {
   Checkbox,
   Subtitle,
   Tag,
-  ExpandableContainer
+  ExpandableContainer,
 } from '../../../components';
 import Icons from '../../../components/icons';
 
@@ -97,16 +97,14 @@ export const Footer = styled.footer`
   margin-top: auto;
 `;
 
-
 export const LockIconStyled = styled(Icons.Lock)`
   color: ${(props) => props.theme.secondaryTextColor};
 `;
 
-
-export const ExpandableContainerStyled = styled(ExpandableContainer)``
+export const ExpandableContainerStyled = styled(ExpandableContainer)``;
 
 export const MiniSubtitle = styled.h5`
   font-size: 12px;
-  color: ${props => props.theme.primaryTextColor};
+  color: ${(props) => props.theme.primaryTextColor};
   margin: 0 0 4px;
-`
+`;

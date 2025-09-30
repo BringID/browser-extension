@@ -1,11 +1,9 @@
-import styled, { css } from "styled-components"
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
-  
-`
+export const Container = styled.div``;
 
 export const Title = styled.h4`
-  color: ${props => props.theme.secondaryTextColor};
+  color: ${(props) => props.theme.secondaryTextColor};
   font-size: 12px;
   margin: 0;
   font-weight: 400;
@@ -13,24 +11,28 @@ export const Title = styled.h4`
   display: flex;
   align-items: center;
   gap: 4px;
-`
+`;
 
 export const Content = styled.div<{
-  expanded: boolean
+  expanded: boolean;
 }>`
   padding: 12px 0 0;
   display: none;
 
-  ${props => props.expanded && css`
+  ${(props) =>
+    props.expanded &&
+    css`
       display: block;
-  `}
-`
+    `}
+`;
 
 export const Arrow = styled.span<{
-  expanded: boolean
+  expanded: boolean;
 }>`
-  transition: rotate .3s;
-  ${props => props.expanded && css`
-    rotate: 90deg;
-  `}
-`
+  transition: rotate 0.3s;
+  ${(props) =>
+    props.expanded &&
+    css`
+      rotate: 90deg;
+    `}
+`;

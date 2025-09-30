@@ -14,21 +14,15 @@ import {
   TagStyled,
   Footer,
   ExpandableContainerStyled,
-  MiniSubtitle
+  MiniSubtitle,
 } from './styled-components';
 import TProps from './types';
 import { downloadDataAsFile } from '../../utils';
 
-const defineButtons = (
-  onAccepted: () => void,
-  onReject: () => void,
-) => {
+const defineButtons = (onAccepted: () => void, onReject: () => void) => {
   return (
     <ButtonsContainer>
-      <ButtonStyled
-        onClick={onAccepted}
-        appearance="action"
-      >
+      <ButtonStyled onClick={onAccepted} appearance="action">
         Register verification
       </ButtonStyled>
 
@@ -44,13 +38,13 @@ const ResultOverlay: FC<TProps> = ({
   transcriptRecv,
   transcriptSent,
 }) => {
-
   return (
     <Container>
       <Content>
         <TitleStyled>Register verification</TitleStyled>
         <TextStyled>
-          Publish your verification commitment. No personal data is stored or published.
+          Publish your verification commitment. No personal data is stored or
+          published.
         </TextStyled>
 
         <Result>
@@ -59,7 +53,8 @@ const ResultOverlay: FC<TProps> = ({
             <TagStyled status="default">{title}</TagStyled>
           </SubtitleStyled>
           <TextStyled>
-            Visible only to the BringID notary during verification. Not stored or published.
+            Visible only to the BringID notary during verification. Not stored
+            or published.
           </TextStyled>
           <ActionTextStyled
             onClick={() => {
@@ -80,40 +75,34 @@ const ResultOverlay: FC<TProps> = ({
           </SubtitleStyled>
 
           <TextStyled>
-           Only verification commitments are published onchain. They don't reveal your Uber account, not linked to your wallet, and required to generate unique, unlinkable proofs when needed.
-
+            Only verification commitments are published onchain. They don't
+            reveal your Uber account, not linked to your wallet, and required to
+            generate unique, unlinkable proofs when needed.
           </TextStyled>
 
           <ExpandableContainerStyled title="Learn more">
-            <MiniSubtitle>
-              Verification Commitment
-            </MiniSubtitle>
+            <MiniSubtitle>Verification Commitment</MiniSubtitle>
             <TextStyled>
               A random public key generated from your BringID key.
             </TextStyled>
 
-            <MiniSubtitle>
-              Protected Account Hash
-            </MiniSubtitle>
+            <MiniSubtitle>Protected Account Hash</MiniSubtitle>
             <TextStyled>
-              Your account ID, hashed with the notary's secret key to prevent brute-force lookups.
+              Your account ID, hashed with the notary's secret key to prevent
+              brute-force lookups.
             </TextStyled>
 
             <Hr />
 
             <TextStyled>
-              Privacy note: These commitments are never tied to your wallet. Each proof is unique and unlinkable.
+              Privacy note: These commitments are never tied to your wallet.
+              Each proof is unique and unlinkable.
             </TextStyled>
           </ExpandableContainerStyled>
-
-
         </Result>
-
       </Content>
 
-      <Footer>
-        {defineButtons(onAccept, onReject)}
-      </Footer>
+      <Footer>{defineButtons(onAccept, onReject)}</Footer>
     </Container>
   );
 };

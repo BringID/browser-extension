@@ -3,7 +3,7 @@ import React from 'react';
 type TProps = {
   children: React.ReactNode | React.ReactNode[];
   className?: string;
-  onClick?: () => void
+  onClick?: () => void;
 };
 
 export default TProps;

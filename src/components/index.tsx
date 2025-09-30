@@ -41,5 +41,5 @@ export {
   TimeLeftProgress,
   Step,
   List,
-  ExpandableContainer
+  ExpandableContainer,
 };
