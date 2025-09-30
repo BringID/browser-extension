@@ -8,6 +8,10 @@ const defineTimeLeft = (resultReady: boolean, timeLeft?: number) => {
     return 'Waiting...';
   }
 
+  if (resultReady) {
+    return 'Done';
+  }
+
   if (timeLeft <= 0) {
     if (!resultReady) {
       return 'Almost done'
@@ -31,7 +35,7 @@ const TimeLeftProgress: FC<TProps> = ({
   return (
     <ProgressBarContainer className={className}>
       <Titles>
-        <Title>{barValue}%</Title>
+        <Title>{barValue.toFixed(2)}%</Title>
         <Title>{limeLeftValueText}</Title>
       </Titles>
       <Bar

@@ -157,6 +157,7 @@ const renderContent = (
       <Step
         {...step}
         idx={idx}
+        result={result}
         key={step.text}
         currentStep={currentStep}
         progress={step.notarization ? progress : undefined}
