@@ -34,7 +34,7 @@ export class NotarizationUberRides extends NotarizationBase {
         verbose: true,
         logPrefix: '[WS Monitor / X-Uber]',
         trackSize: true,
-        expectedTotalBytes: 50170000,
+        expectedTotalBytes: 55000000 * 1.15,
         enableProgress: true,
         progressUpdateInterval: 500,
       });

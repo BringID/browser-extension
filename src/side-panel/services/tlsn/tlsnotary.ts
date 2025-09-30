@@ -66,7 +66,7 @@ export class TLSNotary extends Progressive<Status>{
      });
     const prover = (await new Prover({
       serverDns: hostname,
-      maxSentData: 6000,
+      maxSentData: 1008,
       maxRecvData: 24000,
     })) as TProver;
     return new TLSNotary(hostname, prover, updatesCallback);

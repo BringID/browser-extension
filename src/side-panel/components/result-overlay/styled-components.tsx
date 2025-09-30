@@ -33,8 +33,6 @@ export const TitleStyled = styled(Title)`
   margin-bottom: 8px;
 `;
 
-export const Header = styled.header``;
-
 export const Content = styled.div`
   padding: 0px;
 `;
@@ -88,17 +86,6 @@ export const ButtonsContainer = styled.div`
 `;
 
 export const ButtonStyled = styled(Button)``;
-
-export const Image = styled.img`
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-  object-position: center;
-`;
-
-export const CheckboxStyled = styled(Checkbox)`
-  margin-bottom: 12px;
-`;
 
 export const Hr = styled.hr`
   margin: 12px 0;

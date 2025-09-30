@@ -38,7 +38,7 @@ export class NotarizationXProfile extends NotarizationBase {
         verbose: true,
         logPrefix: '[WS Monitor / X-profile]',
         trackSize: true,
-        expectedTotalBytes: 50170000,
+        expectedTotalBytes: 55000000 * 1.15,
         enableProgress: true,
         progressUpdateInterval: 500,
       });
