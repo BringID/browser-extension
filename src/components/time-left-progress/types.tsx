@@ -3,4 +3,5 @@ export type TProps = {
   current: number;
   timeLeft?: number;
   max: number;
+  resultReady: boolean;
 };

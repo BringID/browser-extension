@@ -124,6 +124,7 @@ const renderContent = (
   currentTask: Task,
   currentStep: number,
   progress: number,
+  result?: string,
   connectionQuality?: TConnectionQuality,
   speed?: string,
   eta?: number,
@@ -243,7 +244,7 @@ const SidePanel: FC = () => {
       <Page>
         {showResultOverlay && (
           <ResultOverlay
-            title={currentTask.title}
+            title={currentTask.service}
             onAccept={() => {
               setShowResultOverlay(false);
 
@@ -286,6 +287,7 @@ const SidePanel: FC = () => {
               currentTask,
               currentStep,
               progress,
+              result,
               connectionQuality,
               speed,
               eta,

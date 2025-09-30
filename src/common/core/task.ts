@@ -9,6 +9,7 @@ export type Task = {
   steps: TNotarizationStep[];
   dev?: boolean;
   permissionUrl: string[];
+  service: string;
 };
 
 function loadTasks(): Task[] {
@@ -37,6 +38,7 @@ function loadTasks(): Task[] {
         groups: task.groups,
         steps: task.steps,
         dev: task.dev,
+        service: task.service,
         permissionUrl: task.permissionUrl,
       };
     });

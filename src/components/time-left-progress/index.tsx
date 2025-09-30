@@ -3,12 +3,15 @@ import { ProgressBarContainer, Bar, Titles, Title } from './styled-components';
 import { TProps } from './types';
 import { msToMinutes } from '../../side-panel/utils';
 
-const defineTimeLeft = (timeLeft?: number) => {
+const defineTimeLeft = (resultReady: boolean, timeLeft?: number) => {
   if (timeLeft === undefined) {
     return 'Waiting...';
   }
 
   if (timeLeft <= 0) {
+    if (!resultReady) {
+      return 'Almost done'
+    }
     return 'Done';
   }
 
@@ -20,9 +23,10 @@ const TimeLeftProgress: FC<TProps> = ({
   current,
   max,
   timeLeft,
+  resultReady
 }) => {
   const barValue = (current / max) * 100;
-  const limeLeftValueText = defineTimeLeft(timeLeft);
+  const limeLeftValueText = defineTimeLeft(resultReady, timeLeft);
 
   return (
     <ProgressBarContainer className={className}>
