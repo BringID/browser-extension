@@ -4,7 +4,7 @@ enum TExtensionRequestType {
   proofs_rejected = 'PROOFS_REJECTED',
   set_user_key = 'SET_USER_KEY',
   logout = 'LOGOUT',
-  has_user_key_response = 'HAS_USER_KEY_RESPONSE'
+  has_user_key_response = 'HAS_USER_KEY_RESPONSE',
 }
 
 export default TExtensionRequestType;

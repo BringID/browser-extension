@@ -1,4 +1,4 @@
-import { TConnectionQuality } from "../../popup/types";
+import { TConnectionQuality } from '../../common/types';
 
 type TProps = {
   text: string;
@@ -6,10 +6,9 @@ type TProps = {
   currentStep: number;
   progress?: number; // percentage
 
-  latency: number; // ms
-  bandwidth: number; // bits per second
-  connectionQuality: TConnectionQuality
-
+  speed?: string; // bits per second
+  connectionQuality?: TConnectionQuality;
+  eta?: number;
 };
 
 export default TProps;

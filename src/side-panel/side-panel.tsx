@@ -1,6 +1,4 @@
-import React, { FC, useEffect,
-  useState
- } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import browser from 'webextension-polyfill';
 import { notarizationManager } from './services/notarization';
 import { sendMessage, Task } from '../common/core';
@@ -27,7 +25,8 @@ import { Page, Step } from '../components';
 import './style.css';
 import { TMessage } from '../common/core/messages';
 import config from '../configs';
-import { PermissionOverlay } from './components';
+import { PermissionOverlay, ResultOverlay } from './components';
+import { TConnectionQuality } from '../common/types';
 
 const renderButtons = (
   retryTask: () => Promise<void>,
@@ -37,41 +36,39 @@ const renderButtons = (
   result?: string,
 ) => {
   if (!error && !result) {
-    return <Buttons>
-      <ButtonStyled
-        disabled={Boolean(!result || error)}
-        onClick={sendResult}
-        appearance='action'
-      >
-        Continue ({progress}%)
-      </ButtonStyled>
-      <ButtonStyled
-        onClick={() => {
-          chrome.tabs.query(
-            { active: true, currentWindow: true },
-            function (tabs) {
-              if (tabs.length > 0) {
-                if (tabs[0].id) {
-                  chrome.tabs.remove(tabs[0].id);
+    return (
+      <Buttons>
+        <ButtonStyled
+          disabled={Boolean(!result || error)}
+          onClick={sendResult}
+          appearance="action"
+        >
+          Continue ({progress}%)
+        </ButtonStyled>
+        <ButtonStyled
+          onClick={() => {
+            chrome.tabs.query(
+              { active: true, currentWindow: true },
+              function (tabs) {
+                if (tabs.length > 0) {
+                  if (tabs[0].id) {
+                    chrome.tabs.remove(tabs[0].id);
+                  }
                 }
-              }
-            },
-          );
-          window.close();
-        }}
-      >
-        Cancel verification
-      </ButtonStyled>
-
-    </Buttons>      
+              },
+            );
+            window.close();
+          }}
+        >
+          Cancel verification
+        </ButtonStyled>
+      </Buttons>
+    );
   }
 
   return (
     <Buttons>
-      <ButtonStyled
-        onClick={sendResult}
-        appearance='action'
-      >
+      <ButtonStyled onClick={sendResult} appearance="action">
         Continue
       </ButtonStyled>
       <ButtonStyled
@@ -127,7 +124,10 @@ const renderContent = (
   currentTask: Task,
   currentStep: number,
   progress: number,
-  error?: string | null
+  connectionQuality?: TConnectionQuality,
+  speed?: string,
+  eta?: number,
+  error?: string | null,
 ) => {
   if (error) {
     return (
@@ -159,9 +159,9 @@ const renderContent = (
         key={step.text}
         currentStep={currentStep}
         progress={step.notarization ? progress : undefined}
-        connectionQuality='poor'
-        bandwidth={1000000}
-        latency={35}
+        connectionQuality={connectionQuality}
+        speed={speed}
+        eta={eta}
       />
     );
   });
@@ -169,10 +169,10 @@ const renderContent = (
 
 const SidePanel: FC = () => {
   const dispatch = useDispatch();
-  const [
-    showPermissionOverlay,
-    setShowPermissionOverlay
-  ] = useState<boolean>(false)
+  const [showPermissionOverlay, setShowPermissionOverlay] =
+    useState<boolean>(false);
+
+  const [showResultOverlay, setShowResultOverlay] = useState<boolean>(false);
 
   useEffect(() => {
     const listener = (request: TMessage) => {
@@ -180,11 +180,10 @@ const SidePanel: FC = () => {
         case 'NOTARIZE':
           if ('task_id' in request) {
             dispatch(notarizationSlice.actions.clear());
-            
-            // void notarizationManager.run(request.task_id);
-            setNextTaskId(request.task_id)
-            setShowPermissionOverlay(true)
-            window.focus()
+
+            setNextTaskId(request.task_id);
+            setShowPermissionOverlay(true);
+            window.focus();
           }
           break;
 
@@ -206,17 +205,22 @@ const SidePanel: FC = () => {
     };
   }, []);
 
+  const [nextTaskId, setNextTaskId] = useState<null | number>(null);
 
-
-  const [
-    nextTaskId,
-    setNextTaskId
-  ] = useState<null | number>(null)
-
-  const { result, taskId, progress, currentStep, transcriptRecv, error } =
-    useSelector((state: RootState) => {
-      return state.notarization;
-    });
+  const {
+    result,
+    taskId,
+    progress,
+    currentStep,
+    transcriptRecv,
+    error,
+    eta,
+    connectionQuality,
+    speed,
+    transcriptSent,
+  } = useSelector((state: RootState) => {
+    return state.notarization;
+  });
 
   console.log('DATA: ', {
     result,
@@ -224,6 +228,7 @@ const SidePanel: FC = () => {
     progress,
     currentStep,
     transcriptRecv,
+    transcriptSent,
     error,
   });
 
@@ -233,18 +238,46 @@ const SidePanel: FC = () => {
   // const credentialGroupId = currentTask.credentialGroupId;
   console.log('SIDE PANEL steps: ', { currentStep });
 
-
   return (
     <Wrapper>
-
       <Page>
-        {showPermissionOverlay && nextTaskId !== null && <PermissionOverlay
-          nextTaskIndex={nextTaskId}
-          onAccepted={() => {
-            setShowPermissionOverlay(false)
-            notarizationManager.run(nextTaskId);
-          }}
-        />}
+        {showResultOverlay && (
+          <ResultOverlay
+            title={currentTask.title}
+            onAccept={() => {
+              setShowResultOverlay(false);
+
+              chrome.runtime.sendMessage({ action: 'openPopup' });
+
+              window.setTimeout(() => {
+                sendMessage({
+                  type: 'PRESENTATION',
+                  data: {
+                    presentationData: result as string,
+                    transcriptRecv: transcriptRecv as string,
+                    transcriptSent: transcriptSent as string,
+                    taskIndex: taskId,
+                  },
+                });
+              }, 1500);
+            }}
+            onReject={() => {
+              setShowResultOverlay(false);
+            }}
+            transcriptRecv={transcriptRecv as string}
+            transcriptSent={transcriptSent as string}
+          />
+        )}
+
+        {showPermissionOverlay && nextTaskId !== null && (
+          <PermissionOverlay
+            nextTaskIndex={nextTaskId}
+            onAccepted={() => {
+              setShowPermissionOverlay(false);
+              notarizationManager.run(nextTaskId);
+            }}
+          />
+        )}
         <Container>
           {renderHeader(currentTask, error)}
 
@@ -253,7 +286,10 @@ const SidePanel: FC = () => {
               currentTask,
               currentStep,
               progress,
-              error
+              connectionQuality,
+              speed,
+              eta,
+              error,
             )}
 
             {renderButtons(
@@ -263,26 +299,13 @@ const SidePanel: FC = () => {
               },
 
               () => {
-                if (!result || !transcriptRecv) {
+                if (!result || !transcriptRecv || !transcriptSent) {
                   return alert(
                     'Presentation data or transcriptRecv not defined',
                   );
                 }
-                // @ts-ignore
-                // chrome.action.openPopup();
 
-                chrome.runtime.sendMessage({ action: 'openPopup' });
-
-                window.setTimeout(() => {
-                  sendMessage({
-                    type: 'PRESENTATION',
-                    data: {
-                      presentationData: result,
-                      transcriptRecv,
-                      taskIndex: taskId,
-                    },
-                  });
-                }, 1500);
+                setShowResultOverlay(true);
               },
               progress,
               error,

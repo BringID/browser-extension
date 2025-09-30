@@ -81,8 +81,16 @@ export class NotarizationAppleDevices extends NotarizationBase {
     console.log('[AppleDevices] Cleaned headers:', Object.keys(reqLog.headers));
     console.log('[AppleDevices] Cleaned request headers:', reqLog.headers);
     try {
-      const notary = await TLSNotary.new('account.apple.com');
-      this.setProgress(33);
+      const notary = await TLSNotary.new('account.apple.com', {
+        logEveryNMessages: 100,
+        verbose: true,
+        logPrefix: '[WS Monitor - Cupertino-Aqua]',
+        trackSize: true,
+        expectedTotalBytes: 55000000 * 1.15,
+        enableProgress: true,
+        progressUpdateInterval: 500,
+      });
+
       console.log('[AppleDevices] TLSNotary instance created');
 
       const result = await notary.transcript(reqLog);
@@ -99,7 +107,6 @@ export class NotarizationAppleDevices extends NotarizationBase {
         sent: [{ start: 0, end: transcript.sent.length }],
         recv: [],
       };
-      this.setProgress(66);
       // Find JSON start position in the response
       const responseText = Buffer.from(transcript.recv).toString('utf-8');
       const jsonStarts: number = responseText.indexOf('{');
@@ -163,7 +170,6 @@ export class NotarizationAppleDevices extends NotarizationBase {
       console.log('[AppleDevices] Starting notarization...');
       const notarizationResult = await notary.notarize(commit);
       console.log('[AppleDevices] Notarization completed:', notarizationResult);
-      this.setProgress(99);
 
       this.result(notarizationResult);
     } catch (err) {

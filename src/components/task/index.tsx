@@ -47,12 +47,11 @@ const defineTaskContent = (
                 tabId: tab.id,
               });
 
-              await manager.runTask(taskIndex);
+              await manager.runTask(taskIndex, userKey);
 
               setTimeout(() => {
                 window.close();
-              }, 1500)
-
+              }, 1500);
             }}
           >
             Verify

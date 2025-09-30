@@ -6,11 +6,11 @@ type TProps = {
 };
 
 const Svg = styled.svg`
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
 `;
 
-const ConnectionIcon: FC<TProps> = ({ className }) => {
+const LockIcon: FC<TProps> = ({ className }) => {
   return (
     <Svg
       className={className}
@@ -19,16 +19,15 @@ const ConnectionIcon: FC<TProps> = ({ className }) => {
       height="24"
       viewBox="0 0 24 24"
       fill="none"
+      stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path stroke="currentColor" d="M12 20h.01"></path>
-      <path stroke="currentColor" d="M2 8.82a15 15 0 0 1 20 0"></path>
-      <path stroke="currentColor" d="M5 12.859a10 10 0 0 1 14 0"></path>
-      <path stroke="currentColor" d="M8.5 16.429a5 5 0 0 1 7 0"></path>
+      <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
     </Svg>
   );
 };
 
-export default ConnectionIcon;
+export default LockIcon;

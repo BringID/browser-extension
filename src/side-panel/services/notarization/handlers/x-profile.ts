@@ -33,8 +33,15 @@ export class NotarizationXProfile extends NotarizationBase {
       this.currentStepUpdateCallback(this.currentStep);
 
     try {
-      const notary = await TLSNotary.new('api.x.com');
-      this.setProgress(33);
+      const notary = await TLSNotary.new('api.x.com', {
+        logEveryNMessages: 100,
+        verbose: true,
+        logPrefix: '[WS Monitor / X-profile]',
+        trackSize: true,
+        expectedTotalBytes: 55000000 * 1.15,
+        enableProgress: true,
+        progressUpdateInterval: 500,
+      });
       delete log[0].headers['Accept-Encoding'];
       const result = await notary.transcript(log[0]);
       if (result instanceof Error) {
@@ -47,7 +54,6 @@ export class NotarizationXProfile extends NotarizationBase {
         sent: [{ start: 0, end: transcript.sent.length }],
         recv: [{ start: 0, end: message.info.length }],
       };
-      this.setProgress(66);
       const jsonStarts: number = Buffer.from(transcript.recv)
         .toString('utf-8')
         .indexOf('{');
@@ -65,8 +71,6 @@ export class NotarizationXProfile extends NotarizationBase {
         end: jsonStarts + screenName.valueEnd.pos,
       });
       console.log({ commit });
-
-      this.setProgress(99);
 
       this.result(await notary.notarize(commit));
     } catch (err) {

@@ -21,7 +21,7 @@ import { TExtensionRequestType } from '../popup/types';
           {
             source: 'bringID extension',
             data: {
-              hasUserKey: message.hasUserKey
+              hasUserKey: message.hasUserKey,
             },
             type: TExtensionRequestType.has_user_key_response,
           },

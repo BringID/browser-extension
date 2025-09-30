@@ -1,9 +1,7 @@
-import React from 'react';
-
 type TProps = {
   children: React.ReactNode | React.ReactNode[];
+  title: string;
   className?: string;
-  onClick?: () => void;
 };
 
 export default TProps;

@@ -10,7 +10,8 @@ import { IPCPresentation, tasks } from '../common/core';
 import store from './store';
 import { setLoading, useVerifications } from './store/reducers/verifications';
 import { sendMessage } from '../common/core/messages';
-import { defineGroup, areArraysEqual, areObjectsEqual } from './utils';
+import { areArraysEqual, areObjectsEqual } from './utils';
+import { defineGroup } from '../common/utils';
 import { useUser } from './store/reducers/user';
 import { LoadingOverlay } from './components';
 

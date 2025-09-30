@@ -29,8 +29,16 @@ export class NotarizationUberRides extends NotarizationBase {
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
     try {
-      const notary = await TLSNotary.new('riders.uber.com');
-      this.setProgress(33);
+      const notary = await TLSNotary.new('riders.uber.com', {
+        logEveryNMessages: 100,
+        verbose: true,
+        logPrefix: '[WS Monitor / X-Uber]',
+        trackSize: true,
+        expectedTotalBytes: 55000000 * 1.15,
+        enableProgress: true,
+        progressUpdateInterval: 500,
+      });
+
       const result = await notary.transcript({
         url: log[0].url,
         method: log[0].method,
@@ -52,11 +60,13 @@ export class NotarizationUberRides extends NotarizationBase {
       }
       const [transcript, message] = result;
 
+      // keep only HTTP method and URL and hide everything after in the response
+      const sentEnd = `${log[0].method} ${log[0].url}`.length;
+
       const commit: Commit = {
-        sent: [{ start: 0, end: transcript.sent.length }],
+        sent: [{ start: 0, end: sentEnd }],
         recv: [],
       };
-      this.setProgress(66);
       console.log(
         'Transcript: ',
         Buffer.from(transcript.recv).toString('utf-8'),
@@ -84,8 +94,6 @@ export class NotarizationUberRides extends NotarizationBase {
           end: jsonStarts + activities.valueEnd.pos,
         },
       ];
-
-      this.setProgress(99);
 
       this.result(await notary.notarize(commit));
     } catch (err) {

@@ -31,11 +31,12 @@ class Manager implements IManager {
     await this.#db?.addUserKey(key, address);
   };
 
-  runTask: TRunTask = async (taskIndex) => {
+  runTask: TRunTask = async (taskIndex, masterKey) => {
     window.setTimeout(() => {
       sendMessage({
         type: 'NOTARIZE',
         task_id: taskIndex,
+        master_key: masterKey,
       });
     }, 1000);
   };

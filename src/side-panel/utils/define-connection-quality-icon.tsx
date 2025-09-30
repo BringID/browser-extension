@@ -3,28 +3,29 @@ import { Icons } from '../../components';
 import chains from '../../configs/chains';
 
 import styled from 'styled-components';
-import { TConnectionQuality } from '../../popup/types';
+import { TConnectionQuality } from '../../common/types';
 
 const GoodConnectionQuality = styled(Icons.ConnectionIcon)`
-  color: ${props => props.theme.successStatusTextColor}
+  color: ${(props) => props.theme.successStatusTextColor};
 `;
 
 const MediumConnectionQuality = styled(Icons.ConnectionIcon)`
-  color: ${props => props.theme.warningStatusTextColor}
+  color: ${(props) => props.theme.warningStatusTextColor};
 `;
 
 const PoorConnectionQuality = styled(Icons.ConnectionIcon)`
-  color: ${props => props.theme.errorStatusTextColor}
-`
+  color: ${(props) => props.theme.errorStatusTextColor};
+`;
 
 const defineConnectionQualityIcon = (connectionQuality: TConnectionQuality) => {
-  switch(connectionQuality) {
+  switch (connectionQuality) {
     case 'good':
-      return <GoodConnectionQuality />
-    case 'medium':
-      return <MediumConnectionQuality />
+    case 'excellent':
+      return <GoodConnectionQuality />;
+    case 'fair':
+      return <MediumConnectionQuality />;
     case 'poor':
-      return <PoorConnectionQuality />
+      return <PoorConnectionQuality />;
   }
 };
 
