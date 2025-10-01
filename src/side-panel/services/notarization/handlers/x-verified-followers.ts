@@ -38,7 +38,7 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
         {
           serverDns: 'api.x.com',
           maxSentData: 1008,
-          maxRecvData: 4352,
+          maxRecvData: 25000,
         },
         {
           logEveryNMessages: 100,
