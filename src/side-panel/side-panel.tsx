@@ -68,9 +68,9 @@ const renderButtons = (
 
   return (
     <Buttons>
-      <ButtonStyled onClick={sendResult} appearance="action">
+      {!error && <ButtonStyled onClick={sendResult} appearance="action">
         Continue
-      </ButtonStyled>
+      </ButtonStyled>}
       <ButtonStyled
         onClick={() => {
           window.close();
@@ -249,9 +249,7 @@ const SidePanel: FC = () => {
             onAccept={() => {
               setShowResultOverlay(false);
 
-              chrome.runtime.sendMessage({ action: 'openPopup' });
-
-              window.setTimeout(() => {
+              const callback = () => window.setTimeout(() => {
                 sendMessage({
                   type: 'PRESENTATION',
                   data: {
@@ -262,6 +260,27 @@ const SidePanel: FC = () => {
                   },
                 });
               }, 1500);
+
+              // chrome.runtime.sendMessage({ action: 'openPopup' });
+
+              // @ts-ignore
+              chrome.action.openPopup()
+              .then(() => {
+                console.log('popup was opened')
+                callback()
+              })
+              // @ts-ignore
+              .catch((err) => {
+                console.error('Failed to open popup:', err);
+
+                // if it wasnt open for some reason try again, because it can be due to service worker was not active initially but should wake up
+                // @ts-ignore
+                chrome.action.openPopup().then(() => {
+                  callback()
+                })
+              });
+
+              
             }}
             onReject={() => {
               setShowResultOverlay(false);
