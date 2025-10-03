@@ -36,9 +36,9 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
     try {
       const notary = await TLSNotary.new(
         {
-          serverDns: 'api.x.com',
+          serverDns: 'x.com',
           maxSentData: 1008,
-          maxRecvData: 4352,
+          maxRecvData: 25000,
         },
         {
           logEveryNMessages: 100,
