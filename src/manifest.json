@@ -23,9 +23,9 @@
   "content_scripts": [
     {
       "matches": [
-          "https://*.bringid.org/*",
-          "http://localhost/*",
-          "https://localhost/*"
+        "https://app.bringid.org/*",
+        "http://localhost/*",
+        "https://localhost/*"
       ],
       "js": ["contentScript.bundle.js"],
       "css": []
@@ -33,40 +33,36 @@
   ],
   "externally_connectable": {
     "matches": [
-      "https://*.bringid.org/*",
-      "https://localhost/*",
-      "http://localhost/*",
-      "wss://*/*"
+      "https://app.bringid.org/*",
+      "http://localhost/*"
     ]
   },
   "web_accessible_resources": [
     {
       "resources": [
-        "content.styles.css",
-        "icon-128.png",
-        "icon-32.png",
         "content.bundle.js"
       ],
       "matches": [
-        "https://*.bringid.org/*",
-        "https://localhost/*",
-        "http://localhost/*",
-        "wss://*/*"
+        "https://app.bringid.org/*",
+        "http://localhost/*"
       ]
     }
   ],
   "optional_host_permissions": [
-    "https://api.x.com/*",
-    "https://x.com/*",
-    "https://appleid.apple.com/*",
-    "https://riders.uber.com/*",
-    "https://account.apple.com/*"
+    "https://x.com/i/account_analytics/overview",
+    "https://x.com/i/api/graphql/LwtiA7urqM6eDeBheAFi5w/AccountOverviewQuery?*",
+    "https://appleid.apple.com/account/manage/security/devices",
+    "https://riders.uber.com/graphql",
+    "https://riders.uber.com/trips",
+    "https://account.apple.com/account/manage/section/devices"
   ],
   "host_permissions": [
-    "https://*.bringid.org/*",
-    "https://localhost/*",
-    "http://localhost/*",
-    "wss://*/*"
+    "https://verifier-base-sepolia.bringid.org/verify",
+    "https://task-manager-base-sepolia.bringid.org/api/v1/verification/tasks",
+    "https://task-manager-base-sepolia.bringid.org/api/v1/verification/tasks/*",
+    "https://indexer-base-sepolia.bringid.org/api/v1/proofs?*",
+    "https://app.bringid.org/*",
+    "http://localhost/*"
   ],
   "permissions": [
     "offscreen",
