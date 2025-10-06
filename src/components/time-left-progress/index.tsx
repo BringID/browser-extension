@@ -14,7 +14,7 @@ const defineTimeLeft = (resultReady: boolean, timeLeft?: number) => {
 
   if (timeLeft <= 0) {
     if (!resultReady) {
-      return 'Almost done'
+      return 'Almost done';
     }
     return 'Done';
   }
@@ -27,7 +27,7 @@ const TimeLeftProgress: FC<TProps> = ({
   current,
   max,
   timeLeft,
-  resultReady
+  resultReady,
 }) => {
   const barValue = (current / max) * 100;
   const limeLeftValueText = defineTimeLeft(resultReady, timeLeft);

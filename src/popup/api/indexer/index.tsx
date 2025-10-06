@@ -7,7 +7,7 @@ const getProof: TGetProof = (apiUrl, identityCommitment, semaphoreGroupId) =>
     `${apiUrl}/v1/indexer/base-sepolia/proofs?identity_commitment=${identityCommitment}&semaphore_group_id=${semaphoreGroupId}`,
     'GET',
     {
-      'Authorization': `Bearer ${configs.ZUPLO_KEY}`,
+      Authorization: `Bearer ${configs.ZUPLO_KEY}`,
     },
   );
 

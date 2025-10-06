@@ -6,7 +6,7 @@ class Semaphore implements ISemaphore {
   #apiUrl: string;
 
   constructor() {
-    this.#apiUrl = defineApiUrl()
+    this.#apiUrl = defineApiUrl();
   }
 
   getProof: TGetProof = async (identityCommitment, semaphoreGroupId) => {
@@ -22,9 +22,8 @@ class Semaphore implements ISemaphore {
       }
     } catch (err) {
       // @ts-ignore
-      alert(err.message)
+      alert(err.message);
     }
-    
   };
 
   createIdentity: TCreateIdentity = (

@@ -13,7 +13,7 @@ const verify: TVerify = (
     `${apiUrl}/v1/verifier/base-sepolia/verify `,
     'POST',
     {
-      'Authorization': `Bearer ${configs.ZUPLO_KEY}`,
+      Authorization: `Bearer ${configs.ZUPLO_KEY}`,
     },
     {
       tlsn_presentation: presentationData,

@@ -7,7 +7,7 @@ class Relayer implements IRelayer {
   #apiUrl: string;
 
   constructor() {
-    this.#apiUrl = defineApiUrl()
+    this.#apiUrl = defineApiUrl();
   }
 
   createVerification: TCreateVerification = async (
