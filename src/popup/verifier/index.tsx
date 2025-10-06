@@ -40,6 +40,7 @@ class Verifier implements IVerifier {
       }
     } catch (err) {
       console.error(err);
+      alert('Verification failed. Please, check console for more information')
       console.error('Verify failed');
       return;
     }

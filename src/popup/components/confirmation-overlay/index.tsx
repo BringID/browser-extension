@@ -181,15 +181,21 @@ const ConfirmationOverlay: FC<TProps> = ({
     });
 
     return result;
-  }, [selected]);
+  }, [
+    selected
+  ]);
 
   useEffect(() => {
     if (!verificationsState.verifications) {
       return;
     }
 
+
+
     setSelected(defineInitialVerifications(verificationsState.verifications));
-  }, [verificationsState.verifications]);
+  }, [
+    verificationsState.verifications
+  ]);
 
   return (
     <Container>

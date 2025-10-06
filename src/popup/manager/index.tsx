@@ -192,7 +192,8 @@ class Manager implements IManager {
         }
         return verification;
       } catch (err) {
-        alert('Check Error in console');
+        // @ts-ignore
+        alert(`Error occured: ${err.message}`);
         console.error(err);
       }
     }
