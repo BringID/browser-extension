@@ -266,8 +266,8 @@ const SidePanel: FC = () => {
 
               // chrome.runtime.sendMessage({ action: 'openPopup' });
 
-              // @ts-ignore
               chrome.action
+                // @ts-ignore
                 .openPopup()
                 .then(() => {
                   console.log('popup was opened');
