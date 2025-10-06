@@ -26,6 +26,22 @@ const chains: TChains = {
     rpcUrls: ['https://base-sepolia.drpc.org'],
     blockExplorerUrls: ['https://sepolia.basescan.org'],
   },
+  8453: {
+    chainName: 'Base',
+    displayName: 'Base',
+    testnet: false,
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    rpcUrls: [
+      'https://developer-access-mainnet.base.org'
+    ],
+    blockExplorerUrls: [
+      'https://basescan.org'
+    ]
+  },
 };
 
 export default chains;

@@ -10,15 +10,21 @@ class Semaphore implements ISemaphore {
   }
 
   getProof: TGetProof = async (identityCommitment, semaphoreGroupId) => {
-    const response = await indexer.getProof(
-      this.#apiUrl,
-      identityCommitment,
-      semaphoreGroupId,
-    );
-    const { success, proof } = response;
-    if (success) {
-      return proof;
+    try {
+      const response = await indexer.getProof(
+        this.#apiUrl,
+        identityCommitment,
+        semaphoreGroupId,
+      );
+      const { success, proof } = response;
+      if (success) {
+        return proof;
+      }
+    } catch (err) {
+      // @ts-ignore
+      alert(err.message)
     }
+    
   };
 
   createIdentity: TCreateIdentity = (
