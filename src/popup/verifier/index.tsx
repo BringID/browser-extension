@@ -1,16 +1,16 @@
 import IVerifier, { TVerify } from './types';
 import verifierApi from '../api/verify-service';
 import config from '../../configs';
+import { defineApiUrl } from '../../common/utils';
 
 class Verifier implements IVerifier {
   #apiUrl: string;
 
   constructor() {
-    this.#apiUrl = config.VERIFIER_API;
+    this.#apiUrl = defineApiUrl()
   }
 
   verify: TVerify = async (
-    apiKey,
     presentationData,
     credentialGroupId,
     semaphoreIdentityCommitment,
@@ -18,7 +18,6 @@ class Verifier implements IVerifier {
     try {
       const response = await verifierApi.verify(
         this.#apiUrl,
-        apiKey,
         presentationData,
         config.REGISTRY,
         credentialGroupId,
@@ -41,6 +40,7 @@ class Verifier implements IVerifier {
       }
     } catch (err) {
       console.error(err);
+      alert('Verification failed. Please, check console for more information')
       console.error('Verify failed');
       return;
     }

@@ -49,7 +49,6 @@ class Manager implements IManager {
 
       try {
         const verification = await verifier.verify(
-          '',
           presentationData,
           credentialGroupId,
           String(identity.commitment),
@@ -193,7 +192,8 @@ class Manager implements IManager {
         }
         return verification;
       } catch (err) {
-        alert('Check Error in console');
+        // @ts-ignore
+        alert(`Error occured: ${err.message}`);
         console.error(err);
       }
     }
