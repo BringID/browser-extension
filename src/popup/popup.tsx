@@ -27,7 +27,7 @@ const Popup: FC = () => {
     userRef.current = user;
   }, [verifications.verifications, user]);
 
-  console.log('FROM COMPONENT: ', { verifications: verificationsRef.current })
+  console.log('FROM COMPONENT: ', { verifications: verificationsRef.current });
 
   useEffect(() => {
     chrome.action.setBadgeText({ text: '' });
@@ -104,9 +104,7 @@ const Popup: FC = () => {
         await dbStorage.syncUser();
       }
 
-      if (
-        !areArraysEqual(verificationsRef.current, verificationsFromStorage)
-      ) {
+      if (!areArraysEqual(verificationsRef.current, verificationsFromStorage)) {
         await dbStorage.syncVerifications();
       }
 
@@ -120,16 +118,16 @@ const Popup: FC = () => {
         if (
           !areArraysEqual(verificationsRef.current, verificationsFromStorage)
         ) {
-          console.log('FROM INTERVAL: ', { verifications: verificationsRef.current })
+          console.log('FROM INTERVAL: ', {
+            verifications: verificationsRef.current,
+          });
           await dbStorage.syncVerifications();
         }
       }, 2000);
     })();
 
     return () => window.clearInterval(interval);
-  }, [
-
-  ]);
+  }, []);
 
   return (
     <Page>

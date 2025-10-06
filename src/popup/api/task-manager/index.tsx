@@ -19,7 +19,7 @@ const addVerification: TAddVerification = (
     `${apiUrl}/v1/task-manager/base-sepolia/verification/tasks`,
     'POST',
     {
-      'Authorization': `Bearer ${configs.ZUPLO_KEY}`,
+      Authorization: `Bearer ${configs.ZUPLO_KEY}`,
     },
     {
       registry: registry,
@@ -35,8 +35,8 @@ const getVerification: TGetVerification = (taskId) =>
     `${configs.ZUPLO_API_URL}/v1/task-manager/base-sepolia/verification/tasks/${taskId}`,
     'GET',
     {
-      'Authorization': `Bearer ${configs.ZUPLO_KEY}`,
-    }
+      Authorization: `Bearer ${configs.ZUPLO_KEY}`,
+    },
   );
 
 const taskManager = {

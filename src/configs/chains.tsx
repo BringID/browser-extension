@@ -33,14 +33,10 @@ const chains: TChains = {
     nativeCurrency: {
       name: 'ETH',
       symbol: 'ETH',
-      decimals: 18
+      decimals: 18,
     },
-    rpcUrls: [
-      'https://developer-access-mainnet.base.org'
-    ],
-    blockExplorerUrls: [
-      'https://basescan.org'
-    ]
+    rpcUrls: ['https://developer-access-mainnet.base.org'],
+    blockExplorerUrls: ['https://basescan.org'],
   },
 };
 

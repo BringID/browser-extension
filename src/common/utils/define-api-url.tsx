@@ -1,11 +1,11 @@
-import configs from "../../configs"
+import configs from '../../configs';
 
 function defineApiUrl() {
   try {
-    return configs.ZUPLO_API_URL || ''
+    return configs.ZUPLO_API_URL || '';
   } catch (err) {
-    return ''
+    return '';
   }
 }
 
-export default defineApiUrl
+export default defineApiUrl;

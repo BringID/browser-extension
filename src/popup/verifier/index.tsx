@@ -7,7 +7,7 @@ class Verifier implements IVerifier {
   #apiUrl: string;
 
   constructor() {
-    this.#apiUrl = defineApiUrl()
+    this.#apiUrl = defineApiUrl();
   }
 
   verify: TVerify = async (
@@ -40,7 +40,7 @@ class Verifier implements IVerifier {
       }
     } catch (err) {
       console.error(err);
-      alert('Verification failed. Please, check console for more information')
+      alert('Verification failed. Please, check console for more information');
       console.error('Verify failed');
       return;
     }
