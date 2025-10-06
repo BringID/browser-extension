@@ -99,7 +99,7 @@ const Verification: FC<TProps> = ({
         const { txHash } = verification;
 
         chrome.tabs.create({
-          url: `${defineExplorerURL(84532)}/tx/${txHash}`,
+          url: `${defineExplorerURL(Number(process.env.CHAIN_ID || '84532'))}/tx/${txHash}`,
         });
       }
     },
