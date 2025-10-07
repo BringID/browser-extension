@@ -1,12 +1,8 @@
 import React, { FC, useState, useEffect } from 'react';
 import {
   Container,
-  SubtitleStyled,
-  ButtonStyled,
-  MessageStyled,
   VerificationsListStyled,
 } from './styled-components';
-import { Link } from '../../../components';
 import { Header } from '../../components';
 import { useNavigate } from 'react-router';
 import { useVerifications } from '../../store/reducers/verifications';
@@ -137,26 +133,6 @@ const Home: FC = () => {
       )}
 
       <Header points={availablePoints} address={user.address} />
-
-      <SubtitleStyled>
-        {verifications && verifications.length > 0 && (
-          <ButtonStyled
-            size="small"
-            onClick={() => {
-              navigate('/tasks');
-            }}
-          >
-            + Add
-          </ButtonStyled>
-        )}
-      </SubtitleStyled>
-
-      {verifications && verifications.length > 0 && (
-        <MessageStyled>
-          Verifications are batched for better privacy.{' '}
-          <Link href="#">Learn more</Link>
-        </MessageStyled>
-      )}
 
       {renderContent(user.key, availableTasks, verifications, navigate)}
     </Container>

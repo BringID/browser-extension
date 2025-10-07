@@ -136,8 +136,11 @@ class Manager implements IManager {
         if (!data) {
           throw new Error('no proof found');
         }
+        console.log('scope: ', 'START')
 
         const scope = calculateScope(dropAddress);
+
+        console.log('scope: ', { identity, data, scope })
 
         const { merkleTreeDepth, merkleTreeRoot, message, points, nullifier } =
           await generateProof(identity, data as any, 'verification', scope);
