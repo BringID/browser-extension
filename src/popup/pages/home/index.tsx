@@ -1,8 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import {
-  Container,
-  VerificationsListStyled,
-} from './styled-components';
+import { Container, VerificationsListStyled } from './styled-components';
 import { Header } from '../../components';
 import { useNavigate } from 'react-router';
 import { useVerifications } from '../../store/reducers/verifications';

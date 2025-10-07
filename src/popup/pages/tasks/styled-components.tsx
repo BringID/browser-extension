@@ -34,10 +34,10 @@ export const TextStyled = styled(Text)`
   text-align: center;
   font-size: 12px;
   padding: 0 12px;
-`
+`;
 
 export const LinkStyled = styled(Link)`
   font-size: 12px;
-  color: ${props => props.theme.secondaryTextColor};
+  color: ${(props) => props.theme.secondaryTextColor};
   text-decoration: underline;
-`
+`;

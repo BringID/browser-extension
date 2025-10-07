@@ -11,11 +11,8 @@ const getProof: TGetProof = (apiUrl, identityCommitment, semaphoreGroupId) => {
     },
   );
 
-  console.log({ response })
-
-  return response
-}
-  
+  return response;
+};
 
 const indexer = {
   getProof,

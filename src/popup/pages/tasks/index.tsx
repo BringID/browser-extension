@@ -8,7 +8,7 @@ import {
   SubtitleStyled,
   ArrowBackIconStyled,
   TextStyled,
-  LinkStyled
+  LinkStyled,
 } from './styled-components';
 import { useNavigate } from 'react-router';
 import { tasks } from '../../../common/core/task';
@@ -35,7 +35,10 @@ const Tasks = () => {
         <TasksList tasks={availableTasks} verifications={verifications} />
       </Content>
       <TextStyled>
-        No verifications available? Request new ones in our <LinkStyled target="_blank" href={configs.TELEGRAM_CHAT_LINK}>Telegram group</LinkStyled>
+        No verifications available? Request new ones in our{' '}
+        <LinkStyled target="_blank" href={configs.TELEGRAM_CHAT_LINK}>
+          Telegram group
+        </LinkStyled>
       </TextStyled>
     </Container>
   );

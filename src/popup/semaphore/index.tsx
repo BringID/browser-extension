@@ -18,9 +18,6 @@ class Semaphore implements ISemaphore {
       );
       const { success, proof } = response;
 
-      console.log('getProof: ', {
-        success, proof
-      })
       if (success) {
         return proof;
       }

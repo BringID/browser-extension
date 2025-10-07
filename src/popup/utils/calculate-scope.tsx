@@ -11,10 +11,7 @@ function calculateScope(contractAddress: string): string {
   const types = ['address', 'uint256'];
   const values = [fullAddress, 0];
 
-
   const encoded = ethers.AbiCoder.defaultAbiCoder().encode(types, values);
-
-  console.log({ contractAddress, cleanAddress, encoded })
 
   const hash = ethers.keccak256(encoded);
 

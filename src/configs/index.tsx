@@ -8,8 +8,8 @@ const ZUPLO_API_URL = 'https://api.bringid.org';
 const CONNECTOR_HOST = 'app.bringid.org';
 const CONNECT_WALLET_URL = `https://${CONNECTOR_HOST}`;
 const TELEGRAM_URL = 'https://t.me/bringid_chat';
-const TELEGRAM_CHAT_LINK = 'https://t.me/bringid_chat'
-const CHAIN_ID = '8453'
+const TELEGRAM_CHAT_LINK = 'https://t.me/bringid_chat';
+const CHAIN_ID = '8453';
 
 export default {
   REGISTRY,
@@ -20,5 +20,5 @@ export default {
   TELEGRAM_URL,
   ZUPLO_API_URL,
   TELEGRAM_CHAT_LINK,
-  CHAIN_ID
+  CHAIN_ID,
 };

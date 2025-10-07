@@ -31,8 +31,6 @@ const addVerification: TAddVerification = (
   );
 
 const getVerification: TGetVerification = (taskId) => {
-
-  console.log({ configs })
   return api<TGetVerificationResponse>(
     `${configs.ZUPLO_API_URL}/v1/task-manager/base/verification/tasks/${taskId}`,
     'GET',
@@ -40,8 +38,7 @@ const getVerification: TGetVerification = (taskId) => {
       Authorization: `Bearer ${configs.ZUPLO_KEY}`,
     },
   );
-}
-  
+};
 
 const taskManager = {
   addVerification,

@@ -27,8 +27,6 @@ const Popup: FC = () => {
     userRef.current = user;
   }, [verifications.verifications, user]);
 
-  console.log('FROM COMPONENT: ', { verifications: verificationsRef.current });
-
   useEffect(() => {
     chrome.action.setBadgeText({ text: '' });
     // to cleanup all notifications after open
@@ -50,12 +48,6 @@ const Popup: FC = () => {
               const currentTask = availableTasks[taskIndex];
 
               const groupData = defineGroup(transcriptRecv, currentTask.groups);
-
-              console.log({
-                groupData,
-                presentationData,
-                transcriptRecv,
-              });
 
               if (groupData) {
                 const { credentialGroupId, semaphoreGroupId } = groupData;
@@ -118,9 +110,7 @@ const Popup: FC = () => {
         if (
           !areArraysEqual(verificationsRef.current, verificationsFromStorage)
         ) {
-          console.log('FROM INTERVAL: ', {
-            verifications: verificationsRef.current,
-          });
+
           await dbStorage.syncVerifications();
         }
       }, 2000);

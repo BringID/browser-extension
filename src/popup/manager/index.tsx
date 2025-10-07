@@ -68,11 +68,7 @@ class Manager implements IManager {
     pointsRequired,
     selectedVerifications,
   ) => {
-    console.log('getProofs 0: ', {
-      dropAddress,
-      pointsRequired,
-      selectedVerifications,
-    });
+
 
     const userKey = await this.#db?.getUserKey();
 
@@ -83,7 +79,6 @@ class Manager implements IManager {
     const availableTasks = tasks();
     let totalScore = 0;
 
-    console.log('getProofs 1: ', availableTasks);
     const verifications = await this.#db?.getVerifications();
 
     if (!verifications || verifications.length === 0) {
@@ -114,13 +109,6 @@ class Manager implements IManager {
 
         totalScore = totalScore + group.points;
         const identity = semaphore.createIdentity(userKey, credentialGroupId);
-
-        console.log('getProofs 2: ', {
-          totalScore,
-          identity,
-          credentialGroupId,
-        });
-
         const { commitment } = identity;
 
         const data = await semaphore.getProof(
@@ -128,34 +116,16 @@ class Manager implements IManager {
           group.semaphoreGroupId,
         );
 
-        console.log('getProofs 3: ', {
-          data,
-          credentialGroupId,
-        });
-
         if (!data) {
           throw new Error('no proof found');
         }
-        console.log('scope: ', 'START')
 
         const scope = calculateScope(dropAddress);
-
-        console.log('scope: ', { identity, data, scope })
 
         const { merkleTreeDepth, merkleTreeRoot, message, points, nullifier } =
           await generateProof(identity, data as any, 'verification', scope);
 
-        console.log('getProofs 4: ', {
-          credential_group_id: credentialGroupId,
-          semaphore_proof: {
-            merkle_tree_depth: merkleTreeDepth,
-            merkle_tree_root: merkleTreeRoot,
-            nullifier: nullifier,
-            message: message,
-            scope,
-            points,
-          },
-        });
+
         semaphoreProofs.push({
           credential_group_id: credentialGroupId,
           semaphore_proof: {
