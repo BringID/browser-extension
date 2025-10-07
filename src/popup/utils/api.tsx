@@ -25,7 +25,6 @@ function api<T>(
       const data = await response.json();
       throw new Error(data.error);
     }
-    console.log('api: ', { response, responseJSON: response.json() })
 
     return response.json() as Promise<T>;
   });
