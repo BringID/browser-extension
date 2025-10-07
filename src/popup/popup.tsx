@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import browser from 'webextension-polyfill';
 import { Page } from '../components';
 import { Home, Tasks } from './pages';
@@ -14,10 +14,18 @@ import { areArraysEqual, areObjectsEqual } from './utils';
 import { defineGroup } from '../common/utils';
 import { useUser } from './store/reducers/user';
 import { LoadingOverlay } from './components';
+import { TVerification, TUser } from './types';
 
 const Popup: FC = () => {
   const user = useUser();
   const verifications = useVerifications();
+  const verificationsRef = useRef<TVerification[]>(verifications.verifications);
+  const userRef = useRef<TUser>(user);
+
+  useEffect(() => {
+    verificationsRef.current = verifications.verifications;
+    userRef.current = user;
+  }, [verifications.verifications, user]);
 
   useEffect(() => {
     chrome.action.setBadgeText({ text: '' });
@@ -40,12 +48,6 @@ const Popup: FC = () => {
               const currentTask = availableTasks[taskIndex];
 
               const groupData = defineGroup(transcriptRecv, currentTask.groups);
-
-              console.log({
-                groupData,
-                presentationData,
-                transcriptRecv,
-              });
 
               if (groupData) {
                 const { credentialGroupId, semaphoreGroupId } = groupData;
@@ -90,25 +92,23 @@ const Popup: FC = () => {
       const verificationsFromStorage = await dbStorage.getVerifications();
       const userFromStorage = await dbStorage.getUser();
 
-      if (!areObjectsEqual(user, userFromStorage)) {
+      if (userRef && !areObjectsEqual(userRef.current, userFromStorage)) {
         await dbStorage.syncUser();
       }
 
-      if (
-        !areArraysEqual(verifications.verifications, verificationsFromStorage)
-      ) {
+      if (!areArraysEqual(verificationsRef.current, verificationsFromStorage)) {
         await dbStorage.syncVerifications();
       }
 
       interval = window.setInterval(async () => {
         const verificationsFromStorage = await dbStorage.getVerifications();
         const userFromStorage = await dbStorage.getUser();
-        if (!areObjectsEqual(user, userFromStorage)) {
+        if (!areObjectsEqual(userRef.current, userFromStorage)) {
           await dbStorage.syncUser();
         }
 
         if (
-          !areArraysEqual(verifications.verifications, verificationsFromStorage)
+          !areArraysEqual(verificationsRef.current, verificationsFromStorage)
         ) {
           await dbStorage.syncVerifications();
         }
@@ -116,7 +116,7 @@ const Popup: FC = () => {
     })();
 
     return () => window.clearInterval(interval);
-  }, [verifications, user]);
+  }, []);
 
   return (
     <Page>

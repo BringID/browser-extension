@@ -24,8 +24,8 @@
     {
       "matches": [
         "https://app.bringid.org/*",
-        "http://localhost/*",
-        "https://localhost/*"
+        "https://dev.app.bringid.org/*",
+        "http://localhost/*"
       ],
       "js": ["contentScript.bundle.js"],
       "css": []
@@ -34,6 +34,7 @@
   "externally_connectable": {
     "matches": [
       "https://app.bringid.org/*",
+      "https://dev.app.bringid.org/*",
       "http://localhost/*"
     ]
   },
@@ -44,6 +45,7 @@
       ],
       "matches": [
         "https://app.bringid.org/*",
+        "https://dev.app.bringid.org/*",
         "http://localhost/*"
       ]
     }
@@ -57,11 +59,8 @@
     "https://account.apple.com/account/manage/section/devices"
   ],
   "host_permissions": [
-    "https://verifier-base-sepolia.bringid.org/verify",
-    "https://task-manager-base-sepolia.bringid.org/api/v1/verification/tasks",
-    "https://task-manager-base-sepolia.bringid.org/api/v1/verification/tasks/*",
-    "https://indexer-base-sepolia.bringid.org/api/v1/proofs?*",
     "https://app.bringid.org/*",
+    "https://dev.app.bringid.org/*",
     "http://localhost/*"
   ],
   "permissions": [

@@ -36,7 +36,7 @@ const Step: FC<TProps> = ({
   speed,
   connectionQuality,
   eta,
-  result
+  result,
 }) => {
   const status: TNotarizationStatus = defineCurrentStep(idx, currentStep);
 

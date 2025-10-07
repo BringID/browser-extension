@@ -68,9 +68,11 @@ const renderButtons = (
 
   return (
     <Buttons>
-      {!error && <ButtonStyled onClick={sendResult} appearance="action">
-        Continue
-      </ButtonStyled>}
+      {!error && (
+        <ButtonStyled onClick={sendResult} appearance="action">
+          Continue
+        </ButtonStyled>
+      )}
       <ButtonStyled
         onClick={() => {
           window.close();
@@ -249,30 +251,32 @@ const SidePanel: FC = () => {
             onAccept={() => {
               setShowResultOverlay(false);
 
-              const callback = () => window.setTimeout(() => {
-                sendMessage({
-                  type: 'PRESENTATION',
-                  data: {
-                    presentationData: result as string,
-                    transcriptRecv: transcriptRecv as string,
-                    transcriptSent: transcriptSent as string,
-                    taskIndex: taskId,
-                  },
-                });
-              }, 1500);
+              const callback = () =>
+                window.setTimeout(() => {
+                  sendMessage({
+                    type: 'PRESENTATION',
+                    data: {
+                      presentationData: result as string,
+                      transcriptRecv: transcriptRecv as string,
+                      transcriptSent: transcriptSent as string,
+                      taskIndex: taskId,
+                    },
+                  });
+                }, 1500);
 
               // chrome.runtime.sendMessage({ action: 'openPopup' });
 
-              // @ts-ignore
-              chrome.action.openPopup()
+              chrome.action
+                // @ts-ignore
+                .openPopup()
                 .then(() => {
-                  console.log('popup was opened')
-                  callback()
+                  console.log('popup was opened');
+                  callback();
                 })
                 // @ts-ignore
                 .catch((err) => {
                   console.error('Failed to open popup:', err);
-                })
+                });
             }}
             onReject={() => {
               setShowResultOverlay(false);

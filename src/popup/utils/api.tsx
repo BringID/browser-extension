@@ -25,6 +25,7 @@ function api<T>(
       const data = await response.json();
       throw new Error(data.error);
     }
+
     return response.json() as Promise<T>;
   });
 }

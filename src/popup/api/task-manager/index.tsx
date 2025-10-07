@@ -5,7 +5,7 @@ import {
   TGetVerification,
   TGetVerificationResponse,
 } from './types';
-import app from '../../../configs';
+import configs from '../../../configs';
 
 const addVerification: TAddVerification = (
   apiUrl,
@@ -16,9 +16,11 @@ const addVerification: TAddVerification = (
   verifierSignature,
 ) =>
   api<TAddVerificationResponse>(
-    `${apiUrl}/api/v1/verification/tasks`,
+    `${apiUrl}/v1/task-manager/base/verification/tasks`,
     'POST',
-    {},
+    {
+      Authorization: `Bearer ${configs.ZUPLO_KEY}`,
+    },
     {
       registry: registry,
       credential_group_id: credentialGroupId,
@@ -28,11 +30,15 @@ const addVerification: TAddVerification = (
     },
   );
 
-const getVerification: TGetVerification = (taskId) =>
-  api<TGetVerificationResponse>(
-    `${app.TASK_MANAGER_API}/api/v1/verification/tasks/${taskId}`,
+const getVerification: TGetVerification = (taskId) => {
+  return api<TGetVerificationResponse>(
+    `${configs.ZUPLO_API_URL}/v1/task-manager/base/verification/tasks/${taskId}`,
     'GET',
+    {
+      Authorization: `Bearer ${configs.ZUPLO_KEY}`,
+    },
   );
+};
 
 const taskManager = {
   addVerification,

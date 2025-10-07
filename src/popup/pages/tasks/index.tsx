@@ -7,11 +7,14 @@ import {
   HeaderContent,
   SubtitleStyled,
   ArrowBackIconStyled,
+  TextStyled,
+  LinkStyled,
 } from './styled-components';
 import { useNavigate } from 'react-router';
 import { tasks } from '../../../common/core/task';
 import { TasksList } from '../../components';
 import { useVerifications } from '../../store/reducers/verifications';
+import configs from '../../../configs';
 
 const Tasks = () => {
   const navigate = useNavigate();
@@ -31,6 +34,12 @@ const Tasks = () => {
       <Content>
         <TasksList tasks={availableTasks} verifications={verifications} />
       </Content>
+      <TextStyled>
+        No verifications available? Request new ones in our{' '}
+        <LinkStyled target="_blank" href={configs.TELEGRAM_CHAT_LINK}>
+          Telegram group
+        </LinkStyled>
+      </TextStyled>
     </Container>
   );
 };

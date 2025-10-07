@@ -95,7 +95,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
           expectedTotalBytes: 55000000 * 1.15,
           enableProgress: true,
           progressUpdateInterval: 500,
-       }
+        },
       );
 
       console.log('[AppleDevices] TLSNotary instance created');
