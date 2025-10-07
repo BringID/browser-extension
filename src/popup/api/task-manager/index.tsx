@@ -16,7 +16,7 @@ const addVerification: TAddVerification = (
   verifierSignature,
 ) =>
   api<TAddVerificationResponse>(
-    `${apiUrl}/v1/task-manager/base-sepolia/verification/tasks`,
+    `${apiUrl}/v1/task-manager/base/verification/tasks`,
     'POST',
     {
       Authorization: `Bearer ${configs.ZUPLO_KEY}`,
@@ -30,14 +30,18 @@ const addVerification: TAddVerification = (
     },
   );
 
-const getVerification: TGetVerification = (taskId) =>
-  api<TGetVerificationResponse>(
-    `${configs.ZUPLO_API_URL}/v1/task-manager/base-sepolia/verification/tasks/${taskId}`,
+const getVerification: TGetVerification = (taskId) => {
+
+  console.log({ configs })
+  return api<TGetVerificationResponse>(
+    `${configs.ZUPLO_API_URL}/v1/task-manager/base/verification/tasks/${taskId}`,
     'GET',
     {
       Authorization: `Bearer ${configs.ZUPLO_KEY}`,
     },
   );
+}
+  
 
 const taskManager = {
   addVerification,

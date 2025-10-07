@@ -2,14 +2,20 @@ import configs from '../../../configs';
 import api from '../../utils/api';
 import { TGetProof, TGetProofResponse } from './types';
 
-const getProof: TGetProof = (apiUrl, identityCommitment, semaphoreGroupId) =>
-  api<TGetProofResponse>(
-    `${apiUrl}/v1/indexer/base-sepolia/proofs?identity_commitment=${identityCommitment}&semaphore_group_id=${semaphoreGroupId}`,
+const getProof: TGetProof = (apiUrl, identityCommitment, semaphoreGroupId) => {
+  const response = api<TGetProofResponse>(
+    `${apiUrl}/v1/indexer/base/proofs?identity_commitment=${identityCommitment}&semaphore_group_id=${semaphoreGroupId}`,
     'GET',
     {
       Authorization: `Bearer ${configs.ZUPLO_KEY}`,
     },
   );
+
+  console.log({ response })
+
+  return response
+}
+  
 
 const indexer = {
   getProof,

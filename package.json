@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
-    "@semaphore-protocol/core": "^4.11.1",
-    "@semaphore-protocol/identity": "^4.11.1",
+    "@semaphore-protocol/core": "^4.13.1",
+    "@semaphore-protocol/identity": "^4.13.1",
     "buffer": "^6.0.3",
     "charwise": "^3.0.1",
     "comlink": "^4.4.2",

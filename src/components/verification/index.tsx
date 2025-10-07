@@ -9,6 +9,7 @@ import { msToTime, defineExplorerURL } from '../../popup/utils';
 import { Tag } from '../../components';
 import relayer from '../../popup/relayer';
 import getStorage from '../../popup/db-storage';
+import configs from '../../configs';
 
 const definePluginContent = (
   status: TVerificationStatus,
@@ -99,7 +100,7 @@ const Verification: FC<TProps> = ({
         const { txHash } = verification;
 
         chrome.tabs.create({
-          url: `${defineExplorerURL(Number(process.env.CHAIN_ID || '84532'))}/tx/${txHash}`,
+          url: `${defineExplorerURL(Number(configs.CHAIN_ID || '84532'))}/tx/${txHash}`,
         });
       }
     },
