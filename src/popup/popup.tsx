@@ -110,7 +110,6 @@ const Popup: FC = () => {
         if (
           !areArraysEqual(verificationsRef.current, verificationsFromStorage)
         ) {
-
           await dbStorage.syncVerifications();
         }
       }, 2000);

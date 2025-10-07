@@ -68,8 +68,6 @@ class Manager implements IManager {
     pointsRequired,
     selectedVerifications,
   ) => {
-
-
     const userKey = await this.#db?.getUserKey();
 
     if (!userKey) {
@@ -124,7 +122,6 @@ class Manager implements IManager {
 
         const { merkleTreeDepth, merkleTreeRoot, message, points, nullifier } =
           await generateProof(identity, data as any, 'verification', scope);
-
 
         semaphoreProofs.push({
           credential_group_id: credentialGroupId,
