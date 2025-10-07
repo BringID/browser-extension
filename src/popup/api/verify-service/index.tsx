@@ -10,7 +10,7 @@ const verify: TVerify = (
   semaphoreIdentityCommitment,
 ) =>
   api<TVerifyResponse>(
-    `${apiUrl}/v1/verifier/base-sepolia/verify `,
+    `${apiUrl}/v1/verifier/verify `,
     'POST',
     {
       Authorization: `Bearer ${configs.ZUPLO_KEY}`,
