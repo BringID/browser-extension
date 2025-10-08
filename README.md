@@ -1,10 +1,10 @@
-# 🔌 BringID browser extension
+# BringID extension
 
 A browser extension that connects with a notary and proxy server for blockchain-related interactions.
 
 ---
 
-## 🚀 Requirements
+## Requirements
 
 - **Node.js** version **20** or higher
 - **Yarn** package manager
@@ -12,7 +12,7 @@ A browser extension that connects with a notary and proxy server for blockchain-
 
 ---
 
-## 📁 Environment Variables
+## Environment Variables
 
 Before running the extension, create a `.env` file in the root directory with the following content:
 
@@ -21,12 +21,15 @@ export NOTARY_URL="https://notary-production-ae4d.up.railway.app"
 export PROXY_URL="wss://proxy-production-2e63.up.railway.app/websockify"
 ```
 
-**Note:**  
-Make sure to load these environment variables in your terminal session before running any commands, or use a tool like `dotenv`.
+After creating the file, run the following command to load the environment variables into your shell:
+
+```
+source .env
+```
 
 ---
 
-## 📦 Install Dependencies
+## Install Dependencies
 
 Use `yarn` to install all necessary packages:
 
@@ -36,7 +39,7 @@ yarn
 
 ---
 
-## 👨‍💻 Development Mode
+## Development Mode
 
 To start the extension in development mode (with hot reload, source maps, etc.):
 
@@ -48,7 +51,7 @@ This will build the extension into a temporary development directory.
 
 ---
 
-## 🛠 Production Build
+## Production Build
 
 To generate a production-ready build of the extension:
 
@@ -58,7 +61,7 @@ yarn build
 
 This will create a `build/` folder containing the compiled extension.
 
-### ➕ Load into Browser
+### Load into Browser
 
 1. Open your browser (e.g., Chrome or Edge)
 2. Go to `chrome://extensions/`
@@ -68,16 +71,10 @@ This will create a `build/` folder containing the compiled extension.
 
 ---
 
-## 🧹 Linting
+## Linting
 
 To automatically fix lint issues:
 
 ```
 yarn lint:fix
 ```
-
----
-
-## ✨ Credits
-
-Built with ❤️ by BringID
