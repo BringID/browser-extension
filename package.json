@@ -1,7 +1,7 @@
 {
   "name": "browser-extension-v2",
+  "version": "0.0.3",
   "license": "AGPL3",
-  "version": "0.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/zkbring/browser-extension-v2.git"
