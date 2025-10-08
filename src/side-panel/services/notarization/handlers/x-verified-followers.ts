@@ -74,7 +74,7 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
       const minimalVariables = {
         requested_metrics: ['Follows'],
         to_time: originalVariables.to_time,
-        from_time: originalVariables.from_time,
+        from_time: originalVariables.to_time,
         granularity: originalVariables.granularity,
         show_verified_followers: originalVariables.show_verified_followers,
       };
