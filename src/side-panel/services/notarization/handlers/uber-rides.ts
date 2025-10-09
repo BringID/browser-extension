@@ -33,7 +33,7 @@ export class NotarizationUberRides extends NotarizationBase {
         {
           serverDns: 'riders.uber.com',
           maxSentData: 704,
-          maxRecvData: 1504,
+          maxRecvData: 5000,
         },
         {
           logEveryNMessages: 100,
@@ -58,7 +58,7 @@ export class NotarizationUberRides extends NotarizationBase {
         },
         body: {
           query:
-            '{ currentUser { uuid } activities { past(limit: 1) { activities { uuid } } } }',
+            '{ currentUser { uuid } activities { past(limit: 10) { activities { uuid, description } } } }',
         },
       });
       if (result instanceof Error) {
