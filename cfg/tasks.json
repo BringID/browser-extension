@@ -34,7 +34,7 @@
     "title": "Uber Rides",
     "id": "2",
     "service": "Uber",
-    "description": "Prove the amount of Uber rides you took",
+    "description": "Prove that you had at least 5 uber trips",
     "icon": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png",
     "permissionUrl": [
       "https://riders.uber.com/graphql",
@@ -62,14 +62,14 @@
     ]
   },
   {
-    "title": "X Verified Followers",
+    "title": "X Account & Verified Followers",
     "id": "3",
     "service": "X/Twitter",
     "permissionUrl": [
       "https://x.com/i/account_analytics/overview",
       "https://x.com/i/api/graphql/LwtiA7urqM6eDeBheAFi5w/AccountOverviewQuery?*"
     ],
-    "description": "Prove verified followers on X",
+    "description": "Prove premium X account with verified followers",
     "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
     "groups": [
       {
@@ -114,7 +114,7 @@
         "text": "Visit website"
       },
       {
-        "text": "Wait for request capture"
+        "text": "Login with a premium X account"
       },
       {
         "text": "MPC-TLS verification progress",
