@@ -157,7 +157,7 @@
     "icon": "https://farcaster.xyz/favicon.svg",
     "permissionUrl": [
       "https://client.farcaster.xyz/v2/onboarding-state",
-      "https://farcaster.xyz"
+      "https://farcaster.xyz/*"
     ],
     "groups": [
       {
