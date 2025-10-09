@@ -33,7 +33,7 @@ export class NotarizationUberRides extends NotarizationBase {
         {
           serverDns: 'riders.uber.com',
           maxSentData: 704,
-          maxRecvData: 1504,
+          maxRecvData: 5000,
         },
         {
           logEveryNMessages: 100,
@@ -58,7 +58,7 @@ export class NotarizationUberRides extends NotarizationBase {
         },
         body: {
           query:
-            '{ currentUser { uuid } activities { past(limit: 1) { activities { uuid } } } }',
+            '{ currentUser { uuid } activities { past(limit: 10) { activities { uuid, description } } } }',
         },
       });
       if (result instanceof Error) {
@@ -74,12 +74,10 @@ export class NotarizationUberRides extends NotarizationBase {
         sent: [{ start: 0, end: sentEnd }],
         recv: [],
       };
-      console.log(
-        'Transcript: ',
-        Buffer.from(transcript.recv).toString('utf-8'),
-      );
-      const jsonStarts: number =
-        Buffer.from(transcript.recv).toString('utf-8').indexOf('\n{') + 1;
+
+      const transcriptJsonStr = Buffer.from(transcript.recv).toString('utf-8');
+
+      const jsonStarts: number = transcriptJsonStr.indexOf('\n{') + 1;
 
       const pointers: Pointers = parse(message.body.toString()).pointers;
 
@@ -91,6 +89,14 @@ export class NotarizationUberRides extends NotarizationBase {
         return;
       }
 
+      // We need it to properly process UTF-8 symbols in Verifier.
+      const dataLength = Buffer.from(
+        message.body
+          .toString()
+          .substring(activities.key?.pos, activities.valueEnd.pos),
+        'utf-8',
+      ).length;
+
       commit.recv = [
         {
           start: jsonStarts + uuid.key?.pos,
@@ -98,9 +104,28 @@ export class NotarizationUberRides extends NotarizationBase {
         },
         {
           start: jsonStarts + activities.key?.pos,
-          end: jsonStarts + activities.valueEnd.pos,
+          end: jsonStarts + activities.key?.pos + dataLength,
         },
       ];
+
+      const jsonTranscript: [{ description: string; uuid: string }] =
+        JSON.parse(
+          transcriptJsonStr.slice(
+            jsonStarts + activities.value.pos,
+            jsonStarts + activities.valueEnd.pos,
+          ),
+        );
+
+      const validRidesCount = jsonTranscript.filter(
+        (item) =>
+          item.description.indexOf('Canceled') === -1 &&
+          item.description.indexOf('0.00') === -1,
+      ).length;
+
+      if (validRidesCount < 5) {
+        this.result(new Error('not enough valid trips'));
+        return;
+      }
 
       this.result(await notary.notarize(commit));
     } catch (err) {
