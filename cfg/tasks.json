@@ -148,6 +148,36 @@
         "notarization": true
       }
     ]
+  },
+  {
+    "id": "5",
+    "title": "Farcaster Username",
+    "service": "Farcaster",
+    "description": "Prove the ownership of a Farcaster account",
+    "icon": "https://farcaster.xyz/favicon.svg",
+    "permissionUrl": [
+      "https://client.farcaster.xyz/v2/onboarding-state",
+      "https://farcaster.xyz"
+    ],
+    "groups": [
+      {
+        "points": 10,
+        "semaphoreGroupId": "5",
+        "credentialGroupId": "6"
+      }
+    ],
+    "steps": [
+      {
+        "text": "Visit website"
+      },
+      {
+        "text": "Wait for request capture"
+      },
+      {
+        "text": "MPC-TLS verification progress",
+        "notarization": true
+      }
+    ]
   }
 ]
 
