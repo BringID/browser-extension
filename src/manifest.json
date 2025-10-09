@@ -51,8 +51,9 @@
     "https://riders.uber.com/graphql",
     "https://riders.uber.com/trips",
     "https://account.apple.com/account/manage/section/devices",
-    "https://client.farcaster.xyz/*",
-    "https://farcaster.xyz/*"
+    "https://client.farcaster.xyz/v2/onboarding-state",
+    "https://farcaster.xyz"
+
   ],
   "host_permissions": [
     "https://app.bringid.org/*"
