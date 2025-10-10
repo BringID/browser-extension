@@ -10,6 +10,11 @@ export type Task = {
   dev?: boolean;
   permissionUrl: string[];
   service: string;
+  additionalInfo?: {
+    title: string,
+    text: string,
+    showBeforeStep?: number
+  }
 };
 
 function loadTasks(): Task[] {
@@ -40,6 +45,7 @@ function loadTasks(): Task[] {
         dev: task.dev,
         service: task.service,
         permissionUrl: task.permissionUrl,
+        additionalInfo: task.additionalInfo
       };
     });
   } catch (error) {
