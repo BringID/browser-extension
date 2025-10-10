@@ -10,6 +10,7 @@ import defineRelatedVerification from './define-related-verification';
 import getTabsByHost from './get-tabs-by-host';
 import areArraysEqual from './are-arrays-equal';
 import areObjectsEqual from './are-objects-equal';
+import defineZuploNetworkName from './define-zuplo-network-name'
 
 export {
   msToTime,
@@ -24,4 +25,5 @@ export {
   getTabsByHost,
   areArraysEqual,
   areObjectsEqual,
+  defineZuploNetworkName
 };
