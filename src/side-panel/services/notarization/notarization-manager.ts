@@ -9,7 +9,7 @@ import { store } from '../../store';
 import { NotarizationStravaPremium } from './handlers/strava-premium';
 import { NotarizationAppleDevices } from './handlers/apple-devices';
 import { NotarizationXVerifiedFollowers } from './handlers/x-verified-followers';
-import { NotarizationFarcasterUsername } from './handlers/farcaster-username';
+import { NotarizationFarcasterLegitFollowers } from './handlers/farcaster-legit-followers';
 
 // NotarizationManager stores Notarization and handles Redux
 export class NotarizationManager {
@@ -86,5 +86,5 @@ export const notarizationManager = new NotarizationManager([
   new NotarizationUberRides(t[1]),
   new NotarizationXVerifiedFollowers(t[2]),
   new NotarizationAppleDevices(t[3]),
-  new NotarizationFarcasterUsername(t[4]),
+  new NotarizationFarcasterLegitFollowers(t[4]),
 ]);

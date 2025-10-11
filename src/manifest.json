@@ -27,6 +27,13 @@
       ],
       "js": ["contentScript.bundle.js"],
       "css": []
+    },
+    {
+      "matches": [
+        "https://farcaster.xyz/*"
+      ],
+      "js": ["farcasterHelper.bundle.js"],
+      "css": []
     }
   ],
   "externally_connectable": {
@@ -52,6 +59,7 @@
     "https://riders.uber.com/trips",
     "https://account.apple.com/account/manage/section/devices",
     "https://client.farcaster.xyz/v2/onboarding-state",
+    "https://client.farcaster.xyz/v2/followers*",
     "https://farcaster.xyz/*"
 
   ],
