@@ -1,36 +1,5 @@
 [ 
   {
-    "id": "1",
-    "title": "X Account",
-    "description": "Prove the ownership of an account on X",
-    "dev": true,
-    "service": "X/Twitter",
-    "permissionUrl": [
-      "https://api.x.com/1.1/account/settings.json?*",
-      "https://x.com"
-    ],
-    "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
-    "groups": [
-      {
-        "points": 10,
-        "semaphoreGroupId": "27",
-        "credentialGroupId": "99"
-      }
-    ],
-    "steps": [
-      {
-        "text": "Visit website"
-      },
-      {
-        "text": "Wait for request capture"
-      },
-      {
-        "text": "MPC-TLS verification progress",
-        "notarization": true
-      }
-    ]
-  },
-  {
     "title": "Uber Rides",
     "id": "2",
     "service": "Uber",

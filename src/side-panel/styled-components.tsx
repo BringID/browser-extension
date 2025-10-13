@@ -73,10 +73,16 @@ export const ListStyled = styled(List)``;
 
 export const LinkStyled = styled(Link)`
   color: ${(props) => props.theme.infoStatusTextColor};
+  text-decoration: underline;
 `;
 
 export const Buttons = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: auto;
+`;
+
+
+export const NoteMarginStyled = styled(Note)`
+  margin-top: 20px;
 `;
