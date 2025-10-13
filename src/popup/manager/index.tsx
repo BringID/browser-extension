@@ -112,6 +112,7 @@ class Manager implements IManager {
         const data = await semaphore.getProof(
           String(commitment),
           group.semaphoreGroupId,
+          true
         );
 
         if (!data) {

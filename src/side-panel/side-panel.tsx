@@ -18,6 +18,7 @@ import {
   ButtonStyled,
   Buttons,
   LinkStyled,
+  NoteMarginStyled
 } from './styled-components';
 import { useDispatch } from 'react-redux';
 import { notarizationSlice } from './store/notarization';
@@ -27,6 +28,8 @@ import { TMessage } from '../common/core/messages';
 import config from '../configs';
 import { PermissionOverlay, ResultOverlay } from './components';
 import { TConnectionQuality } from '../common/types';
+import configs from '../configs';
+import { Link } from '../components';
 
 const renderButtons = (
   retryTask: () => Promise<void>,
@@ -237,10 +240,40 @@ const SidePanel: FC = () => {
   });
 
   const availableTasks = tasks();
+
+  if (taskId === null) {
+    return <Wrapper>
+      <Page>
+        {showPermissionOverlay && nextTaskId !== null && (
+          <PermissionOverlay
+            nextTaskIndex={nextTaskId}
+            onAccepted={() => {
+              setShowPermissionOverlay(false);
+              console.log('confirm: ', { nextTaskId })
+
+              notarizationManager.run(nextTaskId);
+            }}
+          />
+        )}
+        <Container>
+          <Header>
+            <TitleStyled>Verification will start soon</TitleStyled>
+
+            <NoteMarginStyled status='info'>
+              If you don't see any browser requests for permission to read website data, or if verification doesn't begin after granting permissions, please contact us through our <LinkStyled href={configs.TELEGRAM_CHAT_LINK} target="_blank">Telegram community</LinkStyled> for assistance.
+            </NoteMarginStyled>
+          </Header>
+        </Container>
+     
+        
+      </Page>
+    </Wrapper>
+  }
+
   const currentTask = availableTasks[taskId];
 
   // const credentialGroupId = currentTask.credentialGroupId;
-  console.log('SIDE PANEL steps: ', { currentStep });
+  console.log('SIDE PANEL steps: ', { currentStep, currentTask });
 
   return (
     <Wrapper>
@@ -286,15 +319,6 @@ const SidePanel: FC = () => {
           />
         )}
 
-        {showPermissionOverlay && nextTaskId !== null && (
-          <PermissionOverlay
-            nextTaskIndex={nextTaskId}
-            onAccepted={() => {
-              setShowPermissionOverlay(false);
-              notarizationManager.run(nextTaskId);
-            }}
-          />
-        )}
         <Container>
           {renderHeader(currentTask, error)}
 
