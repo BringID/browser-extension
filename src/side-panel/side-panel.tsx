@@ -31,6 +31,7 @@ import { PermissionOverlay, ResultOverlay } from './components';
 import { TConnectionQuality } from '../common/types';
 import configs from '../configs';
 import { Link } from '../components';
+import errors from '../configs/errors';
 
 const renderAdditionalInformation = (
   currentStep: number, // starts with 0
@@ -39,10 +40,11 @@ const renderAdditionalInformation = (
     title: string,
     text: string,
     showBeforeStep?: number
-  }
+  },
+  error?: string | null,
 ) => {
 
-  if (!additionalInfo) {
+  if (!additionalInfo || error) {
     return null
   }
 
@@ -133,19 +135,41 @@ const renderButtons = (
   );
 };
 
-const renderHeader = (currentTask: Task, error?: string | null) => {
+const renderHeader = (
+  taskId: number,
+  currentTask: Task,
+  error?: string | null
+) => {
   if (error) {
+    const currentTaskErrors = errors.notarization[taskId]
+
+    // if no task or no error for task found
+    if (!currentTaskErrors || !currentTaskErrors[error]) {
+      return (
+        <Header>
+          <LogoWrapperStyled icon={currentTask?.icon} status="error" />
+
+          <TitleStyled>Verification Failed</TitleStyled>
+
+          <TextStyled>
+            Something went wrong during the MPC-TLS verification
+          </TextStyled>
+        </Header>
+      );
+    }
+
     return (
       <Header>
         <LogoWrapperStyled icon={currentTask?.icon} status="error" />
 
-        <TitleStyled>Verification Failed</TitleStyled>
+        <TitleStyled>Account Not Eligible</TitleStyled>
 
         <TextStyled>
-          Something went wrong during the MPC-TLS verification
+          Your account doesn’t meet the requirements for verification.
         </TextStyled>
       </Header>
     );
+    
   }
 
   return (
@@ -158,6 +182,7 @@ const renderHeader = (currentTask: Task, error?: string | null) => {
 };
 
 const renderContent = (
+  taskId: number,
   currentTask: Task,
   currentStep: number,
   progress: number,
@@ -168,16 +193,35 @@ const renderContent = (
   error?: string | null,
 ) => {
   if (error) {
+    const currentTaskErrors = errors.notarization[taskId]
+
+    if (!currentTaskErrors || !currentTaskErrors[error]) {
+      return (
+        <>
+          <NoteStyled status="error" title="Common issues:">
+            <ListStyled
+              items={[
+                'Network connection problems',
+                'Service temporarily unavailable',
+                "Account doesn't meet verification requirements",
+              ]}
+            />
+          </NoteStyled>
+
+          <NoteStyled status="info" title="Need help?">
+            If the error persists, ask for help in our{' '}
+            <LinkStyled href={config.TELEGRAM_URL} target="_blank">
+              Telegram community
+            </LinkStyled>
+          </NoteStyled>
+        </>
+      );
+    }
+
     return (
       <>
-        <NoteStyled status="error" title="Common issues:">
-          <ListStyled
-            items={[
-              'Network connection problems',
-              'Service temporarily unavailable',
-              "Account doesn't meet verification requirements",
-            ]}
-          />
+        <NoteStyled status="error" title="Reason:">
+          {currentTaskErrors[error]}
         </NoteStyled>
 
         <NoteStyled status="info" title="Need help?">
@@ -187,7 +231,8 @@ const renderContent = (
           </LinkStyled>
         </NoteStyled>
       </>
-    );
+    )
+
   }
   return currentTask.steps.map((step, idx) => {
     return (
@@ -292,7 +337,7 @@ const SidePanel: FC = () => {
             <TitleStyled>Verification will start soon</TitleStyled>
 
             <NoteMarginStyled status='info'>
-              If you don't see any browser requests for permission to read website data, or if verification doesn't begin after granting permissions, please contact us through our <LinkStyled href={configs.TELEGRAM_CHAT_LINK} target="_blank">Telegram community</LinkStyled> for assistance.
+              If you don't see any browser requests for permission to read website data, or if verification doesn't begin after granting permissions, please contact us through our <LinkStyled href={configs.TELEGRAM_URL} target="_blank">Telegram community</LinkStyled> for assistance.
             </NoteMarginStyled>
           </Header>
         </Container>
@@ -352,15 +397,17 @@ const SidePanel: FC = () => {
         )}
 
         <Container>
-          {renderHeader(currentTask, error)}
+          {renderHeader(taskId, currentTask, error)}
 
           {renderAdditionalInformation(
             currentStep,
-            currentTask.additionalInfo
+            currentTask.additionalInfo,
+            error
           )}
 
           <Content>
             {renderContent(
+              taskId,
               currentTask,
               currentStep,
               progress,

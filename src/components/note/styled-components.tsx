@@ -23,6 +23,13 @@ export const Container = styled.div<{
       background-color: ${(props) => props.theme.errorStatusBackgroundColor};
       border: 1px solid ${(props) => props.theme.errorStatusBorderColor};
       color: ${(props) => props.theme.errorStatusTextColor};
+
+      svg {
+        stroke: ${(props) => props.theme.errorStatusTextColor};
+        path {
+          stroke: ${(props) => props.theme.errorStatusTextColor};
+        }
+      }
     `}
 
   ${(props) =>

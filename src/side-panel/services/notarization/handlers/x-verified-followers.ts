@@ -173,6 +173,11 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
         }
       }
 
+      if (verifiedFollowersMatch && Number(verifiedFollowersMatch[1]) < 10) {
+        this.result(new Error('not_enough_followers'));
+        return;
+      }
+
       // Add user ID if found
       if (userIdMatch) {
         const start = userIdMatch.index;
