@@ -8,8 +8,10 @@ const verify: TVerify = (
   registry,
   credentialGroupId,
   semaphoreIdentityCommitment,
-) =>
-  api<TVerifyResponse>(
+) => {
+
+  
+  return api<TVerifyResponse>(
     `${apiUrl}/v1/verifier/verify`,
     'POST',
     {
@@ -22,6 +24,7 @@ const verify: TVerify = (
       semaphore_identity_commitment: semaphoreIdentityCommitment,
     },
   );
+}
 
 const verifyService = {
   verify,
