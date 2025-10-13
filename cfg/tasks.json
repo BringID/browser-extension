@@ -1,4 +1,4 @@
-[
+[ 
   {
     "title": "Uber Rides",
     "id": "2",
@@ -40,6 +40,11 @@
     ],
     "description": "Prove premium X account with verified followers",
     "icon": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
+    "additionalInfo": {
+      "title": "Premium Account Required",
+      "text": "This verification is only available for premium X users. Please ensure you are logged in with a premium account to complete the verification process.",
+      "showBeforeStep": 2
+    },
     "groups": [
       {
         "points": 20,

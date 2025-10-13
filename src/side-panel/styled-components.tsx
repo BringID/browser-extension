@@ -17,6 +17,7 @@ export const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: auto;
 `;
 
 export const TitleStyled = styled(Title)`
@@ -57,6 +58,11 @@ export const ButtonStyled = styled(Button)`
 `;
 
 export const NoteStyled = styled(Note)``;
+
+export const NoteAdditionalInfoStyled = styled(Note)`
+  margin-bottom: 20px;
+`;
+
 
 export const TextStyled = styled(Text)`
   text-align: center;

@@ -18,7 +18,8 @@ import {
   ButtonStyled,
   Buttons,
   LinkStyled,
-  NoteMarginStyled
+  NoteMarginStyled,
+  NoteAdditionalInfoStyled
 } from './styled-components';
 import { useDispatch } from 'react-redux';
 import { notarizationSlice } from './store/notarization';
@@ -30,6 +31,37 @@ import { PermissionOverlay, ResultOverlay } from './components';
 import { TConnectionQuality } from '../common/types';
 import configs from '../configs';
 import { Link } from '../components';
+
+const renderAdditionalInformation = (
+  currentStep: number, // starts with 0
+
+  additionalInfo?: {
+    title: string,
+    text: string,
+    showBeforeStep?: number
+  }
+) => {
+
+  if (!additionalInfo) {
+    return null
+  }
+
+  const {
+    showBeforeStep, // if set to 2 it means that should be visible on step 0 and 1
+    title,
+    text
+  } = additionalInfo
+
+  if (showBeforeStep !== undefined) {
+    if (currentStep >= showBeforeStep) {
+      return null
+    }
+  }
+
+  return <NoteAdditionalInfoStyled status='warning' title={additionalInfo.title}>
+    {additionalInfo.text}
+  </NoteAdditionalInfoStyled>
+}
 
 const renderButtons = (
   retryTask: () => Promise<void>,
@@ -321,6 +353,11 @@ const SidePanel: FC = () => {
 
         <Container>
           {renderHeader(currentTask, error)}
+
+          {renderAdditionalInformation(
+            currentStep,
+            currentTask.additionalInfo
+          )}
 
           <Content>
             {renderContent(

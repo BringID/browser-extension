@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { TNoteStatus } from './types';
-import Icons from '../icons';
+import ExclimationIcon from '../icons/exclimation-icon';
+
 
 export const Container = styled.div<{
   status: TNoteStatus;
@@ -11,6 +12,7 @@ export const Container = styled.div<{
   background-color: ${(props) => props.theme.messageBackgroundColor};
   border: 1px solid ${(props) => props.theme.primaryBorderColor};
   color: ${(props) => props.theme.primaryTextColor};
+  display: flex;
   svg {
     stroke: ${(props) => props.theme.primaryTextColor};
   }
@@ -37,14 +39,27 @@ export const Container = styled.div<{
       background-color: ${(props) => props.theme.warningStatusBackgroundColor};
       border: 1px solid ${(props) => props.theme.warningStatusBorderColor};
       color: ${(props) => props.theme.warningStatusTextColor};
+
+      svg {
+        stroke: ${(props) => props.theme.warningStatusTextColor};
+        path {
+          stroke: ${(props) => props.theme.warningStatusTextColor};
+        }
+      }
     `}
 `;
 
 export const Content = styled.div`
   font-size: 12px;
+  flex: 1;
 `;
 
 export const Title = styled.h4`
   font-size: 14px;
   margin: 0 0 4px;
 `;
+
+
+export const ExclimationIconStyled = styled(ExclimationIcon)`
+  margin-right: 6px;
+`
