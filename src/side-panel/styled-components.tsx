@@ -84,5 +84,6 @@ export const Buttons = styled.div`
 
 
 export const NoteMarginStyled = styled(Note)`
-  margin-top: 20px;
+  margin: 20px 0px 0;
+  width: 100%;
 `;

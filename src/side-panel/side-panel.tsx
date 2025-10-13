@@ -257,6 +257,7 @@ const SidePanel: FC = () => {
     useState<boolean>(false);
 
   const [showResultOverlay, setShowResultOverlay] = useState<boolean>(false);
+  const [taskIsReady, setTaskIsReady] = useState<boolean>(false);
 
   useEffect(() => {
     const listener = (request: TMessage) => {
@@ -288,6 +289,12 @@ const SidePanel: FC = () => {
       browser.runtime.onMessage.removeListener(listener);
     };
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTaskIsReady(true)
+    }, 2000)
+  }, [])
 
   const [nextTaskId, setNextTaskId] = useState<null | number>(null);
 
@@ -335,10 +342,24 @@ const SidePanel: FC = () => {
         <Container>
           <Header>
             <TitleStyled>Verification will start soon</TitleStyled>
-
             <NoteMarginStyled status='info'>
-              If you don't see any browser requests for permission to read website data, or if verification doesn't begin after granting permissions, please contact us through our <LinkStyled href={configs.TELEGRAM_URL} target="_blank">Telegram community</LinkStyled> for assistance.
+              Verification will begin in a few seconds. If it doesn't start automatically, click the button below.
             </NoteMarginStyled>
+            <ButtonStyled appearance='action' disabled={!taskIsReady} onClick={() => {
+              chrome.storage.local.get(['task'], (data) => {
+                if (!data || data.task === undefined) {
+                  alert('No task found')
+                  return 
+                }
+                
+                setNextTaskId(Number(data.task));
+
+                chrome.storage.local.remove('task')
+                setShowPermissionOverlay(true);
+              })
+            }}>
+              Start manually
+            </ButtonStyled>
           </Header>
         </Container>
      
