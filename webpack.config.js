@@ -45,8 +45,7 @@ const options = {
 
     // should be injected to webpage
     contentScript: path.join(__dirname, "src", "content", "index.tsx"),
-    content: path.join(__dirname, "src", "content", "content.tsx"),
-    farcasterHelper: path.join(__dirname, "src", "content", "farcaster-helper.tsx")
+    content: path.join(__dirname, "src", "content", "content.tsx")
   },
   output: {
     filename: "[name].bundle.js",

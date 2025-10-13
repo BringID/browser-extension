@@ -27,13 +27,6 @@
       ],
       "js": ["contentScript.bundle.js"],
       "css": []
-    },
-    {
-      "matches": [
-        "https://farcaster.xyz/*"
-      ],
-      "js": ["farcasterHelper.bundle.js"],
-      "css": []
     }
   ],
   "externally_connectable": {
@@ -71,6 +64,7 @@
     "storage",
     "webRequest",
     "activeTab",
-    "sidePanel"
+    "sidePanel",
+    "scripting"
   ]
 }

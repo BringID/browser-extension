@@ -15,99 +15,173 @@ export class NotarizationFarcasterLegitFollowers extends NotarizationBase {
     'balajis.eth', // Balaji Srinivasan
   ];
   
-  private capturedRequests: Array<Request> = [];
   private userFid: number | null = null;
+  private username: string | null = null;
   private currentTabId: number | null = null;
   private foundUsername: string | null = null;
   
+  // First recorder: only for onboarding-state
   requestRecorder: RequestRecorder = new RequestRecorder(
     [
       {
         method: 'GET',
         urlPattern: 'https://client.farcaster.xyz/v2/onboarding-state',
       },
-      {
-        method: 'GET',
-        urlPattern: 'https://client.farcaster.xyz/v2/followers*',
-      },
     ],
-    this.onRequestsCaptured.bind(this),
+    this.onOnboardingStateCaptured.bind(this),
   );
+  
+  // Second recorder: for followers (started after we get FID)
+  private followersRecorder: RequestRecorder | null = null;
 
   public async onStart(): Promise<void> {
+    console.log('[Farcaster] onStart called');
+    
     this.requestRecorder.start();
+    console.log('[Farcaster] Listening for onboarding-state...');
 
     const tab = await chrome.tabs.create({ url: 'https://farcaster.xyz' });
     this.currentTabId = tab.id || null;
+    console.log('[Farcaster] Tab created with ID:', this.currentTabId);
 
-    // check if on login page => this.setMessage('...')
     this.currentStep = 1;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
   }
 
-  private async onRequestsCaptured(log: Array<Request>) {
-    // Store captured requests
-    this.capturedRequests.push(...log);
+  private async onOnboardingStateCaptured(log: Array<Request>) {
+    console.log('[Farcaster] ✅ Onboarding-state captured!', log[0].url);
     
-    // Check if we have the onboarding-state request
-    const onboardingRequest = this.capturedRequests.find(
-      req => req.url.includes('/onboarding-state')
-    );
+    // Extract auth header from the captured request
+    const authHeader = log[0].headers['Authorization'] || log[0].headers['authorization'];
     
-    // Check if we already have FID and need to trigger followers request
-    if (onboardingRequest && !this.userFid) {
-      // We need to process the transcript to get the FID
-      try {
-        const notary = await TLSNotary.new(
-          {
-            serverDns: 'client.farcaster.xyz',
-            maxSentData: 2048,
-            maxRecvData: 8192,
-          },
-          {
-            logEveryNMessages: 100,
-            verbose: true,
-            logPrefix: '[WS Monitor / Farcaster-Legit-Followers-FID-Extract]',
-            trackSize: true,
-            expectedTotalBytes: 55000000 * 1.15,
-            enableProgress: false,
-            progressUpdateInterval: 500,
-          },
-        );
-        
-        const reqCopy = { ...onboardingRequest };
-        delete reqCopy.headers['Accept-Encoding'];
-        
-        const result = await notary.transcript(reqCopy);
-        if (!(result instanceof Error)) {
-          const [, message] = result;
-          const responseData = JSON.parse(message.body.toString());
-          this.userFid = responseData?.result?.state?.user?.fid;
-          
-          if (this.userFid) {
-            console.log(`[Farcaster] Found user FID: ${this.userFid}`);
-            await this.triggerFollowersRequest(this.userFid);
-          }
-        }
-      } catch (err) {
-        console.error('[Farcaster] Error extracting FID:', err);
-      }
+    if (!authHeader) {
+      this.result(new Error('No Authorization header found in captured request'));
+      return;
     }
     
-    // Check if we have the followers requests
-    const followersRequests = this.capturedRequests.filter(
-      req => req.url.includes('/followers?fid=')
-    );
+    console.log('[Farcaster] Found auth header, fetching FID...');
     
-    if (onboardingRequest && followersRequests.length > 0) {
-      // Find which followers request contains one of our target usernames
-      const followersRequestWithTarget = await this.findFollowersRequestWithTargetUsername(followersRequests);
-      
-      if (followersRequestWithTarget) {
-        // We have both requests, proceed with notarization
-        await this.processNotarization(onboardingRequest, followersRequestWithTarget);
+    try {
+      if (!this.currentTabId) {
+        this.result(new Error('No tab ID available'));
+        return;
       }
+      
+      // Use the auth header from the captured request
+      const results = await chrome.scripting.executeScript({
+        target: { tabId: this.currentTabId },
+        args: [authHeader],
+        func: async (auth: string) => {
+          console.log('[executeScript] Fetching with auth...');
+          const response = await fetch('https://client.farcaster.xyz/v2/onboarding-state', {
+            headers: {
+              'Authorization': auth
+            }
+          });
+          console.log('[executeScript] Response status:', response.status);
+          const data = await response.json();
+          console.log('[executeScript] Response data:', data);
+          return {
+            fid: data?.result?.state?.user?.fid,
+            username: data?.result?.state?.user?.username,
+          };
+        },
+      });
+      
+      console.log('[Farcaster] executeScript results:', results);
+      
+      if (!results || results.length === 0 || !results[0].result) {
+        this.result(new Error('Failed to execute script to get FID'));
+        return;
+      }
+      
+      const { fid, username } = results[0].result;
+      this.userFid = fid;
+      this.username = username;
+      
+      console.log(`[Farcaster] Extracted FID: ${this.userFid}, username: ${this.username}`);
+      
+      if (!this.userFid || !this.username) {
+        this.result(new Error('Could not extract FID and username from page'));
+        return;
+      }
+      
+      // Now start listening for followers requests
+      console.log('[Farcaster] Starting followers recorder...');
+      this.followersRecorder = new RequestRecorder(
+        [
+          {
+            method: 'GET',
+            urlPattern: 'https://client.farcaster.xyz/v2/followers*',
+          },
+        ],
+        this.onFollowersCaptured.bind(this),
+      );
+      this.followersRecorder.start();
+      
+      // Fetch followers directly from side panel (no auth needed for this endpoint!)
+      console.log(`[Farcaster] Starting to fetch followers for FID ${this.userFid}...`);
+      await this.fetchFollowersUntilTarget(this.userFid);
+      
+    } catch (err) {
+      console.error('[Farcaster] Error processing onboarding-state:', err);
+      this.result(err as Error);
+    }
+  }
+  
+  private async fetchFollowersUntilTarget(userFid: number, cursor: string | null = null): Promise<void> {
+    try {
+      const url = cursor 
+        ? `https://client.farcaster.xyz/v2/followers?fid=${userFid}&limit=100&cursor=${cursor}`
+        : `https://client.farcaster.xyz/v2/followers?fid=${userFid}&limit=100`;
+      
+      console.log(`[Farcaster] Fetching followers from: ${url}`);
+      const response = await fetch(url);
+      console.log(`[Farcaster] Response status: ${response.status}`);
+      const data = await response.json();
+      
+      console.log(`[Farcaster] Fetched followers page, got ${data?.result?.users?.length || 0} users`);
+      
+      // Check if any of our target usernames are in this page
+      const foundUser = data?.result?.users?.find((user: any) => 
+        this.TARGET_USERNAMES.includes(user.username)
+      );
+      
+      if (foundUser) {
+        console.log(`[Farcaster] ✅ FOUND ${foundUser.username} in this page!`);
+        // Don't fetch more - RequestRecorder will capture this request
+        // and onFollowersCaptured will handle notarization
+        return;
+      }
+      
+      // If there's a next cursor and we haven't found a target, fetch next page
+      if (data?.next?.cursor) {
+        console.log(`[Farcaster] Target usernames [${this.TARGET_USERNAMES.join(', ')}] not found yet, fetching next page...`);
+        await this.fetchFollowersUntilTarget(userFid, data.next.cursor);
+      } else {
+        console.log(`[Farcaster] ⚠️ Reached end of followers list, none of [${this.TARGET_USERNAMES.join(', ')}] found`);
+        this.result(new Error(`None of the target usernames (${this.TARGET_USERNAMES.join(', ')}) are following this user`));
+      }
+    } catch (err) {
+      console.error('[Farcaster] Error fetching followers:', err);
+      this.result(err as Error);
+    }
+  }
+
+  private async onFollowersCaptured(log: Array<Request>) {
+    console.log('[Farcaster] ✅ Followers request captured!', log[0].url);
+    
+    // Check if this request contains one of our target usernames
+    const followersRequestWithTarget = await this.findFollowersRequestWithTargetUsername(log);
+    
+    if (followersRequestWithTarget) {
+      // Found a request with target username - notarize ONLY this one!
+      console.log('[Farcaster] Found target username, starting notarization');
+      await this.notarizeFollowersRequest(followersRequestWithTarget);
+    } else {
+      console.log('[Farcaster] Target usernames not in this request, continuing...');
+      // Continue fetching - fetchFollowersUntilTarget is handling pagination
     }
   }
 
@@ -115,73 +189,23 @@ export class NotarizationFarcasterLegitFollowers extends NotarizationBase {
     followersRequests: Array<Request>
   ): Promise<Request | null> {
     // Check each followers request to see which one contains one of our target usernames
-    for (const request of followersRequests) {
-      try {
-        const notary = await TLSNotary.new(
-          {
-            serverDns: 'client.farcaster.xyz',
-            maxSentData: 2048,
-            maxRecvData: 16384,
-          },
-          {
-            logEveryNMessages: 100,
-            verbose: false,
-            logPrefix: '[WS Monitor / Farcaster-Check-Target]',
-            trackSize: false,
-            expectedTotalBytes: 55000000 * 1.15,
-            enableProgress: false,
-            progressUpdateInterval: 500,
-          },
-        );
-        
-        const reqCopy = { ...request };
-        delete reqCopy.headers['Accept-Encoding'];
-        
-        const result = await notary.transcript(reqCopy);
-        if (!(result instanceof Error)) {
-          const [, message] = result;
-          const responseData = JSON.parse(message.body.toString());
-          const users = responseData?.result?.users || [];
-          
-          // Check if any of our target usernames are in this page
-          for (const targetUsername of this.TARGET_USERNAMES) {
-            const foundUser = users.find((user: any) => user.username === targetUsername);
-            if (foundUser) {
-              this.foundUsername = targetUsername;
-              console.log(`[Farcaster] Found the followers request containing ${targetUsername}`);
-              return request;
-            }
-          }
-        }
-      } catch (err) {
-        console.error('[Farcaster] Error checking request for target usernames:', err);
-      }
+    // We need to actually notarize to get the response, so we'll just return the first one
+    // and check during notarization
+    
+    // For now, just return the most recent followers request
+    // The actual check will happen during notarization
+    if (followersRequests.length > 0) {
+      const latestRequest = followersRequests[followersRequests.length - 1];
+      console.log(`[Farcaster] Using latest followers request: ${latestRequest.url}`);
+      return latestRequest;
     }
     
-    console.log(`[Farcaster] None of the target usernames (${this.TARGET_USERNAMES.join(', ')}) found in captured followers requests`);
+    console.log(`[Farcaster] No followers requests captured yet`);
     return null;
   }
 
-  private async triggerFollowersRequest(fid: number): Promise<void> {
-    // Send a message to the Farcaster content script to fetch followers
-    if (this.currentTabId) {
-      try {
-        await chrome.tabs.sendMessage(this.currentTabId, {
-          type: 'FETCH_FARCASTER_FOLLOWERS',
-          payload: {
-            fid,
-            targetUsernames: this.TARGET_USERNAMES,
-          },
-        });
-        console.log('[Farcaster] Sent message to content script to fetch followers');
-      } catch (err) {
-        console.error('[Farcaster] Error sending message to content script:', err);
-      }
-    }
-  }
 
-  private async processNotarization(
-    onboardingRequest: Request,
+  private async notarizeFollowersRequest(
     followersRequest: Request
   ): Promise<void> {
     this.currentStep = 2;
@@ -189,10 +213,12 @@ export class NotarizationFarcasterLegitFollowers extends NotarizationBase {
       this.currentStepUpdateCallback(this.currentStep);
 
     try {
+      console.log('[Farcaster] Starting TLSNotary for followers request');
+      
       const notary = await TLSNotary.new(
         {
           serverDns: 'client.farcaster.xyz',
-          maxSentData: 4096,
+          maxSentData: 2048,
           maxRecvData: 16384,
         },
         {
@@ -206,75 +232,31 @@ export class NotarizationFarcasterLegitFollowers extends NotarizationBase {
         },
       );
       
-      // Process onboarding-state request for username
-      delete onboardingRequest.headers['Accept-Encoding'];
-      
-      const result1 = await notary.transcript(onboardingRequest);
-      if (result1 instanceof Error) {
-        this.result(result1);
-        return;
-      }
-      const [transcript1, message1] = result1;
-
-      const commit: Commit = {
-        sent: [{ start: 0, end: transcript1.sent.length }],
-        recv: [{ start: 0, end: message1.info.length }],
-      };
-      
-      const jsonStarts1: number = Buffer.from(transcript1.recv)
-        .toString('utf-8')
-        .indexOf('{');
-
-      const pointers1: Pointers = parse(message1.body.toString()).pointers;
-
-      const username: Mapping = pointers1['/result/state/user/username'];
-      const fid: Mapping = pointers1['/result/state/user/fid'];
-      console.log({ pointers: pointers1 });
-      
-      if (!username.key?.pos) {
-        this.result(new Error('username not found'));
-        return;
-      }
-      
-      if (!fid.key?.pos) {
-        this.result(new Error('fid not found'));
-        return;
-      }
-      
-      // Commit username and fid from onboarding-state
-      commit.recv.push({
-        start: jsonStarts1 + username.key?.pos,
-        end: jsonStarts1 + username.valueEnd.pos,
-      });
-      
-      commit.recv.push({
-        start: jsonStarts1 + fid.key?.pos,
-        end: jsonStarts1 + fid.valueEnd.pos,
-      });
-      
-      // Process followers request to check for vitalik.eth
+      // Notarize ONLY the followers request
       delete followersRequest.headers['Accept-Encoding'];
       
-      const result2 = await notary.transcript(followersRequest);
-      if (result2 instanceof Error) {
-        this.result(result2);
+      const result = await notary.transcript(followersRequest);
+      if (result instanceof Error) {
+        this.result(result);
         return;
       }
-      const [transcript2, message2] = result2;
+      const [transcript, message] = result;
+
+      const commit: Commit = {
+        sent: [{ start: 0, end: transcript.sent.length }],
+        recv: [{ start: 0, end: message.info.length }],
+      };
       
-      const jsonStarts2: number = Buffer.from(transcript2.recv)
+      const jsonStarts: number = Buffer.from(transcript.recv)
         .toString('utf-8')
         .indexOf('{');
       
-      const followersData = JSON.parse(message2.body.toString());
-      const pointers2: Pointers = parse(message2.body.toString()).pointers;
+      const followersData = JSON.parse(message.body.toString());
+      const pointers: Pointers = parse(message.body.toString()).pointers;
       
       // Check if our target username is in the followers list
       let targetFollowerIndex = -1;
       const users = followersData?.result?.users || [];
-      
-      // Use the username we found earlier, or fall back to checking all targets
-      const usernameToFind = this.foundUsername || this.TARGET_USERNAMES[0];
       
       for (let i = 0; i < users.length; i++) {
         if (this.TARGET_USERNAMES.includes(users[i].username)) {
@@ -292,8 +274,8 @@ export class NotarizationFarcasterLegitFollowers extends NotarizationBase {
       console.log(`[Farcaster] Found ${this.foundUsername} at followers index ${targetFollowerIndex}`);
       
       // Commit the target follower entry
-      const targetUsername: Mapping = pointers2[`/result/users/${targetFollowerIndex}/username`];
-      const targetFollowedBy: Mapping = pointers2[`/result/users/${targetFollowerIndex}/viewerContext/followedBy`];
+      const targetUsername: Mapping = pointers[`/result/users/${targetFollowerIndex}/username`];
+      const targetFollowedBy: Mapping = pointers[`/result/users/${targetFollowerIndex}/viewerContext/followedBy`];
       
       if (!targetUsername.key?.pos) {
         this.result(new Error(`${this.foundUsername} username pointer not found`));
@@ -307,14 +289,14 @@ export class NotarizationFarcasterLegitFollowers extends NotarizationBase {
       
       // Commit target username
       commit.recv.push({
-        start: jsonStarts2 + targetUsername.key?.pos,
-        end: jsonStarts2 + targetUsername.valueEnd.pos,
+        start: jsonStarts + targetUsername.key?.pos,
+        end: jsonStarts + targetUsername.valueEnd.pos,
       });
       
       // Commit followedBy status (should be true)
       commit.recv.push({
-        start: jsonStarts2 + targetFollowedBy.key?.pos,
-        end: jsonStarts2 + targetFollowedBy.valueEnd.pos,
+        start: jsonStarts + targetFollowedBy.key?.pos,
+        end: jsonStarts + targetFollowedBy.valueEnd.pos,
       });
       
       console.log({ commit });
@@ -327,6 +309,9 @@ export class NotarizationFarcasterLegitFollowers extends NotarizationBase {
 
   public async onStop(): Promise<void> {
     this.requestRecorder.stop();
+    if (this.followersRecorder) {
+      this.followersRecorder.stop();
+    }
   }
 }
 
