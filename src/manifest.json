@@ -23,7 +23,9 @@
   "content_scripts": [
     {
       "matches": [
-        "https://app.bringid.org/*"
+        "https://app.bringid.org/*",
+        "http://localhost:3000/*",
+        "https://dev.app.bringid.org/*"
       ],
       "js": ["contentScript.bundle.js"],
       "css": []
@@ -31,8 +33,9 @@
   ],
   "externally_connectable": {
     "matches": [
-      "https://app.bringid.org/*"
-
+      "https://app.bringid.org/*",
+      "http://localhost:3000/*",
+      "https://dev.app.bringid.org/*"
     ]
   },
   "web_accessible_resources": [
@@ -41,7 +44,9 @@
         "content.bundle.js"
       ],
       "matches": [
-        "https://app.bringid.org/*"
+        "https://app.bringid.org/*",
+        "http://localhost:3000/*",
+        "https://dev.app.bringid.org/*"
       ]
     }
   ],
@@ -54,7 +59,9 @@
     "https://account.apple.com/account/manage/section/devices"
   ],
   "host_permissions": [
-    "https://app.bringid.org/*"
+    "https://app.bringid.org/*",
+    "http://localhost:3000/*",
+    "https://dev.app.bringid.org/*"
   ],
   "permissions": [
     "offscreen",

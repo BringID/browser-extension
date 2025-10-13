@@ -27,7 +27,7 @@ import { Page, Step } from '../components';
 import './style.css';
 import { TMessage } from '../common/core/messages';
 import config from '../configs';
-import { PermissionOverlay, ResultOverlay } from './components';
+import { PermissionOverlay, ResultOverlay, TaskLoader } from './components';
 import { TConnectionQuality } from '../common/types';
 import configs from '../configs';
 import { Link } from '../components';
@@ -257,7 +257,6 @@ const SidePanel: FC = () => {
     useState<boolean>(false);
 
   const [showResultOverlay, setShowResultOverlay] = useState<boolean>(false);
-  const [taskIsReady, setTaskIsReady] = useState<boolean>(false);
 
   useEffect(() => {
     const listener = (request: TMessage) => {
@@ -289,12 +288,6 @@ const SidePanel: FC = () => {
       browser.runtime.onMessage.removeListener(listener);
     };
   }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setTaskIsReady(true)
-    }, 2000)
-  }, [])
 
   const [nextTaskId, setNextTaskId] = useState<null | number>(null);
 
@@ -339,13 +332,9 @@ const SidePanel: FC = () => {
             }}
           />
         )}
-        <Container>
-          <Header>
-            <TitleStyled>Verification will start soon</TitleStyled>
-            <NoteMarginStyled status='info'>
-              Verification will begin in a few seconds. If it doesn't start automatically, click the button below.
-            </NoteMarginStyled>
-            <ButtonStyled appearance='action' disabled={!taskIsReady} onClick={() => {
+
+        <TaskLoader
+          onStart={() => {
               chrome.storage.local.get(['task'], (data) => {
                 if (!data || data.task === undefined) {
                   alert('No task found')
@@ -357,13 +346,9 @@ const SidePanel: FC = () => {
                 chrome.storage.local.remove('task')
                 setShowPermissionOverlay(true);
               })
-            }}>
-              Start manually
-            </ButtonStyled>
-          </Header>
-        </Container>
-     
-        
+            }}
+        />
+             
       </Page>
     </Wrapper>
   }

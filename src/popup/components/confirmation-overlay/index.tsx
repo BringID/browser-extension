@@ -19,7 +19,7 @@ import TProps from './types';
 import { useVerifications } from '../../store/reducers/verifications';
 import { defineTaskByCredentialGroupId, getCurrentTab } from '../../utils';
 import { Tag } from '../../../components';
-import BringGif from './bring.gif';
+import BringGif from '../../../images/bring.gif';
 import { TExtensionRequestType, TUserStatus, TVerification } from '../../types';
 import manager from '../../manager';
 import { tasks } from '../../../common/core';
