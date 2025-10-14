@@ -22,6 +22,7 @@ function loadTasks(): Task[] {
     const tasksConfig = require('../../../cfg/tasks.json');
     // const tasksConfig = require('../../../cfg/tasks-sepolia.json');
 
+    
     // Validate that it's an array
     if (!Array.isArray(tasksConfig)) {
       console.error('Tasks config is not an array');
