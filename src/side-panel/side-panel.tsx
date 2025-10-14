@@ -18,6 +18,8 @@ import {
   ButtonStyled,
   Buttons,
   LinkStyled,
+  NoteMarginStyled,
+  NoteAdditionalInfoStyled
 } from './styled-components';
 import { useDispatch } from 'react-redux';
 import { notarizationSlice } from './store/notarization';
@@ -25,8 +27,43 @@ import { Page, Step } from '../components';
 import './style.css';
 import { TMessage } from '../common/core/messages';
 import config from '../configs';
-import { PermissionOverlay, ResultOverlay } from './components';
+import { PermissionOverlay, ResultOverlay, TaskLoader } from './components';
 import { TConnectionQuality } from '../common/types';
+import configs from '../configs';
+import { Link } from '../components';
+import errors from '../configs/errors';
+
+const renderAdditionalInformation = (
+  currentStep: number, // starts with 0
+
+  additionalInfo?: {
+    title: string,
+    text: string,
+    showBeforeStep?: number
+  },
+  error?: string | null,
+) => {
+
+  if (!additionalInfo || error) {
+    return null
+  }
+
+  const {
+    showBeforeStep, // if set to 2 it means that should be visible on step 0 and 1
+    title,
+    text
+  } = additionalInfo
+
+  if (showBeforeStep !== undefined) {
+    if (currentStep >= showBeforeStep) {
+      return null
+    }
+  }
+
+  return <NoteAdditionalInfoStyled status='warning' title={additionalInfo.title}>
+    {additionalInfo.text}
+  </NoteAdditionalInfoStyled>
+}
 
 const renderButtons = (
   retryTask: () => Promise<void>,
@@ -98,19 +135,41 @@ const renderButtons = (
   );
 };
 
-const renderHeader = (currentTask: Task, error?: string | null) => {
+const renderHeader = (
+  taskId: number,
+  currentTask: Task,
+  error?: string | null
+) => {
   if (error) {
+    const currentTaskErrors = errors.notarization[taskId]
+
+    // if no task or no error for task found
+    if (!currentTaskErrors || !currentTaskErrors[error]) {
+      return (
+        <Header>
+          <LogoWrapperStyled icon={currentTask?.icon} status="error" />
+
+          <TitleStyled>Verification Failed</TitleStyled>
+
+          <TextStyled>
+            Something went wrong during the MPC-TLS verification
+          </TextStyled>
+        </Header>
+      );
+    }
+
     return (
       <Header>
         <LogoWrapperStyled icon={currentTask?.icon} status="error" />
 
-        <TitleStyled>Verification Failed</TitleStyled>
+        <TitleStyled>Account Not Eligible</TitleStyled>
 
         <TextStyled>
-          Something went wrong during the MPC-TLS verification
+          Your account doesn’t meet the requirements for verification.
         </TextStyled>
       </Header>
     );
+    
   }
 
   return (
@@ -123,6 +182,7 @@ const renderHeader = (currentTask: Task, error?: string | null) => {
 };
 
 const renderContent = (
+  taskId: number,
   currentTask: Task,
   currentStep: number,
   progress: number,
@@ -133,16 +193,35 @@ const renderContent = (
   error?: string | null,
 ) => {
   if (error) {
+    const currentTaskErrors = errors.notarization[taskId]
+
+    if (!currentTaskErrors || !currentTaskErrors[error]) {
+      return (
+        <>
+          <NoteStyled status="error" title="Common issues:">
+            <ListStyled
+              items={[
+                'Network connection problems',
+                'Service temporarily unavailable',
+                "Account doesn't meet verification requirements",
+              ]}
+            />
+          </NoteStyled>
+
+          <NoteStyled status="info" title="Need help?">
+            If the error persists, ask for help in our{' '}
+            <LinkStyled href={config.TELEGRAM_URL} target="_blank">
+              Telegram community
+            </LinkStyled>
+          </NoteStyled>
+        </>
+      );
+    }
+
     return (
       <>
-        <NoteStyled status="error" title="Common issues:">
-          <ListStyled
-            items={[
-              'Network connection problems',
-              'Service temporarily unavailable',
-              "Account doesn't meet verification requirements",
-            ]}
-          />
+        <NoteStyled status="error" title="Reason:">
+          {currentTaskErrors[error]}
         </NoteStyled>
 
         <NoteStyled status="info" title="Need help?">
@@ -152,7 +231,8 @@ const renderContent = (
           </LinkStyled>
         </NoteStyled>
       </>
-    );
+    )
+
   }
   return currentTask.steps.map((step, idx) => {
     return (
@@ -237,10 +317,46 @@ const SidePanel: FC = () => {
   });
 
   const availableTasks = tasks();
+
+  if (taskId === null) {
+    return <Wrapper>
+      <Page>
+        {showPermissionOverlay && nextTaskId !== null && (
+          <PermissionOverlay
+            nextTaskIndex={nextTaskId}
+            onAccepted={() => {
+              setShowPermissionOverlay(false);
+              console.log('confirm: ', { nextTaskId })
+
+              notarizationManager.run(nextTaskId);
+            }}
+          />
+        )}
+
+        <TaskLoader
+          onStart={() => {
+              chrome.storage.local.get(['task'], (data) => {
+                if (!data || data.task === undefined) {
+                  alert('No task found')
+                  return 
+                }
+                
+                setNextTaskId(Number(data.task));
+
+                chrome.storage.local.remove('task')
+                setShowPermissionOverlay(true);
+              })
+            }}
+        />
+             
+      </Page>
+    </Wrapper>
+  }
+
   const currentTask = availableTasks[taskId];
 
   // const credentialGroupId = currentTask.credentialGroupId;
-  console.log('SIDE PANEL steps: ', { currentStep });
+  console.log('SIDE PANEL steps: ', { currentStep, currentTask });
 
   return (
     <Wrapper>
@@ -286,20 +402,18 @@ const SidePanel: FC = () => {
           />
         )}
 
-        {showPermissionOverlay && nextTaskId !== null && (
-          <PermissionOverlay
-            nextTaskIndex={nextTaskId}
-            onAccepted={() => {
-              setShowPermissionOverlay(false);
-              notarizationManager.run(nextTaskId);
-            }}
-          />
-        )}
         <Container>
-          {renderHeader(currentTask, error)}
+          {renderHeader(taskId, currentTask, error)}
+
+          {renderAdditionalInformation(
+            currentStep,
+            currentTask.additionalInfo,
+            error
+          )}
 
           <Content>
             {renderContent(
+              taskId,
               currentTask,
               currentStep,
               progress,

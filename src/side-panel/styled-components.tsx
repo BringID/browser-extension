@@ -17,6 +17,7 @@ export const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: auto;
 `;
 
 export const TitleStyled = styled(Title)`
@@ -58,6 +59,11 @@ export const ButtonStyled = styled(Button)`
 
 export const NoteStyled = styled(Note)``;
 
+export const NoteAdditionalInfoStyled = styled(Note)`
+  margin-bottom: 20px;
+`;
+
+
 export const TextStyled = styled(Text)`
   text-align: center;
   margin-top: 10px;
@@ -67,10 +73,17 @@ export const ListStyled = styled(List)``;
 
 export const LinkStyled = styled(Link)`
   color: ${(props) => props.theme.infoStatusTextColor};
+  text-decoration: underline;
 `;
 
 export const Buttons = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: auto;
+`;
+
+
+export const NoteMarginStyled = styled(Note)`
+  margin: 20px 0px 0;
+  width: 100%;
 `;

@@ -42,12 +42,18 @@ const defineTaskContent = (
                 return;
               }
 
-              // @ts-ignore
-              chrome.sidePanel.open({
-                tabId: tab.id,
-              });
+             
 
-              await manager.runTask(taskIndex, userKey);
+              chrome.storage.local.set(
+                { task: taskIndex },
+                async () => {
+                  // @ts-ignore
+                  chrome.sidePanel.open({
+                    tabId: tab.id,
+                  });
+                  await manager.runTask(taskIndex, userKey);
+                },
+              );
 
               setTimeout(() => {
                 window.close();

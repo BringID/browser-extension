@@ -9,7 +9,7 @@ export enum NotarizationStatus {
 }
 
 export interface NotarizationState {
-  taskId: number;
+  taskId: number | null;
   status: NotarizationStatus;
   error?: string;
   currentStep: number;
@@ -27,7 +27,7 @@ export interface NotarizationState {
 }
 
 const initialState: NotarizationState = {
-  taskId: 0,
+  taskId: null,
   status: NotarizationStatus.pending,
   progress: 0,
   error: '',

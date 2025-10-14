@@ -1,12 +1,10 @@
 import { NotarizationStatus, NotarizationHandler } from './types';
 import { tasks, Task } from '../../../common/core';
-import { NotarizationXProfile } from './handlers/x-profile';
 import { NotarizationUberRides } from './handlers/uber-rides';
 import { State } from '../../common/helpers/progressive';
 import { Transcript } from 'tlsn-js';
 import { notarizationSlice } from '../../store/notarization';
 import { store } from '../../store';
-import { NotarizationStravaPremium } from './handlers/strava-premium';
 import { NotarizationAppleDevices } from './handlers/apple-devices';
 import { NotarizationXVerifiedFollowers } from './handlers/x-verified-followers';
 
@@ -81,8 +79,7 @@ export class NotarizationManager {
 const t: Task[] = tasks();
 
 export const notarizationManager = new NotarizationManager([
-  new NotarizationXProfile(t[0]),
-  new NotarizationUberRides(t[1]),
-  new NotarizationXVerifiedFollowers(t[2]),
-  new NotarizationAppleDevices(t[3]),
+  new NotarizationUberRides(t[0]),
+  new NotarizationXVerifiedFollowers(t[1]),
+  new NotarizationAppleDevices(t[2]),
 ]);

@@ -118,7 +118,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
       const pointers: Pointers = parse(message.body.toString()).pointers;
       const devices: Mapping = pointers['/devices'];
       if (!devices || !devices.key?.pos) {
-        this.result(new Error('required data not found'));
+        this.result(new Error('required_data_not_found'));
         return;
       }
 
@@ -145,7 +145,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
       );
 
       if (commit.recv[0].end - commit.recv[0].start < 10) {
-        this.result(new Error('not enough devices'));
+        this.result(new Error('not_enough_devices'));
         return;
       }
 

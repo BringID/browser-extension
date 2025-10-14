@@ -85,7 +85,7 @@ export class NotarizationUberRides extends NotarizationBase {
       const activities: Mapping = pointers['/data/activities/past/activities'];
 
       if (!activities.key?.pos || !uuid.key?.pos) {
-        this.result(new Error('required data not found'));
+        this.result(new Error('required_data_not_found'));
         return;
       }
 
@@ -123,7 +123,7 @@ export class NotarizationUberRides extends NotarizationBase {
       ).length;
 
       if (validRidesCount < 5) {
-        this.result(new Error('not enough valid trips'));
+        this.result(new Error('not_enough_rides'));
         return;
       }
 

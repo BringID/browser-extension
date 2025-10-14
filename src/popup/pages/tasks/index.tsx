@@ -36,7 +36,7 @@ const Tasks = () => {
       </Content>
       <TextStyled>
         No verifications available? Request new ones in our{' '}
-        <LinkStyled target="_blank" href={configs.TELEGRAM_CHAT_LINK}>
+        <LinkStyled target="_blank" href={configs.TELEGRAM_URL}>
           Telegram group
         </LinkStyled>
       </TextStyled>

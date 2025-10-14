@@ -9,12 +9,13 @@ class Semaphore implements ISemaphore {
     this.#apiUrl = defineApiUrl();
   }
 
-  getProof: TGetProof = async (identityCommitment, semaphoreGroupId) => {
+  getProof: TGetProof = async (identityCommitment, semaphoreGroupId, fetchProofs) => {
     try {
       const response = await indexer.getProof(
         this.#apiUrl,
         identityCommitment,
         semaphoreGroupId,
+        fetchProofs
       );
       const { success, proof } = response;
 
