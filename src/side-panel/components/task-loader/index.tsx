@@ -6,7 +6,7 @@ import {
   Content,
   TextStyled,
   Image,
-  ButtonStyled,
+  Span,
 } from './styled-components'
 import TProps from './types'
 import BringGif from '../../../images/bring.gif';
@@ -29,17 +29,14 @@ const TaskLoader: FC<TProps> = ({
         <TitleStyled>Verification will start soon</TitleStyled>
 
         <TextStyled>
-          Verification will begin in a few seconds. If it doesn't start automatically, click the button below.
+            Verification will begin in a few seconds. If it doesn't start automatically, <Span onClick={
+              () => {
+                if (!taskIsReady) { return }
+                onStart()
+              }
+            }>click here to continue</Span>
         </TextStyled>
    
-        <ButtonStyled
-          size="default"
-          appearance='action'
-          disabled={!taskIsReady}
-          onClick={onStart}
-        >
-          Start manually
-        </ButtonStyled>
       </Content>
     </Container>
   );

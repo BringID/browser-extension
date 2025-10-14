@@ -59,7 +59,9 @@ export const TextStyled = styled(Text)`
   margin-bottom: 40px;
 `;
 
-export const ButtonStyled = styled(Button)`
+export const Span = styled.span`
+  text-decoration: underline;
+  cursor: pointer;
 `;
 
 export const Image = styled.img`
