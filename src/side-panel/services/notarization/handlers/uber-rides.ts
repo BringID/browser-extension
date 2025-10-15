@@ -118,8 +118,7 @@ export class NotarizationUberRides extends NotarizationBase {
 
       const validRidesCount = jsonTranscript.filter(
         (item) =>
-          item.description.indexOf('Canceled') === -1 &&
-          item.description.indexOf('0.00') === -1,
+          item.description.indexOf('Canceled') === -1
       ).length;
 
       if (validRidesCount < 5) {
