@@ -119,7 +119,7 @@ const Home: FC = () => {
         />
       )}
 
-      {!confirmationOverlayShow && timerOverlayShow && scheduledTime && (
+      {/* {!confirmationOverlayShow && timerOverlayShow && scheduledTime && (
         <ScheduleOverlay
           onClose={() => {
             setScheduledTime(null);
@@ -127,7 +127,7 @@ const Home: FC = () => {
           }}
           scheduledTime={scheduledTime}
         />
-      )}
+      )} */}
 
       <Header points={availablePoints} address={user.address} />
 

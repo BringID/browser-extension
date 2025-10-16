@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Container, ButtonStyled } from './styled-components';
+import { Container, ButtonStyled, NoteStyled, LinkStyled } from './styled-components';
 import { Verification } from '../../../components';
 import TProps from './types';
 import NoVerificationsFound from '../no-verifications-found';
@@ -14,6 +14,10 @@ const VerificationsList: FC<TProps> = ({
 }) => {
   return (
     <Container className={className}>
+
+      <NoteStyled>
+        We batch verifications for better privacy. <LinkStyled href="https://app.bringid.org/privacy" target="_blank">Learn more</LinkStyled>
+      </NoteStyled>
       {verifications.length === 0 && (
         <NoVerificationsFound title="No verifications yet" />
       )}

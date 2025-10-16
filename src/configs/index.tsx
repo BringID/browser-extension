@@ -1,4 +1,4 @@
-const REGISTRY = '0xFEA4133236B093eC727286473286A45c5d4443BC';
+const REGISTRY = '0x0b2Ab187a6FD2d2F05fACc158611838c284E3a9c';
 
 // sepolia
 // const REGISTRY = '0x0b2Ab187a6FD2d2F05fACc158611838c284E3a9c'
@@ -11,7 +11,7 @@ const CONNECT_WALLET_URL = `https://${CONNECTOR_HOST}`;
 const TELEGRAM_URL = 'https://t.me/bringid_chat';
 // const CHAIN_ID = '8453';
 // sepolia
-const CHAIN_ID = '8453';
+const CHAIN_ID = '84532';
 
 export default {
   REGISTRY,
