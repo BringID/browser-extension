@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
 import { TWebsiteRequestType, TExtensionRequestType } from '../popup/types';
-import getStorage from '../popup/db-storage';
+import getStorage from '../db-storage';
 import { getCurrentTab, getTabsByHost } from '../popup/utils';
 import configs from '../configs';
 

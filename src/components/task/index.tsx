@@ -1,16 +1,15 @@
 import React, { FC } from 'react';
 import { TProps } from './types';
 import { Value } from './styled-components';
-import { TVerificationStatus } from '../../popup/types';
 import { TaskContainer } from '../../components';
 import Button from '../button';
-import manager from '../../popup/manager';
+import manager from '../../manager';
 import configs from '../../configs';
 import browser from 'webextension-polyfill';
 import { Icons, Tag } from '../../components';
-import getStorage from '../../popup/db-storage';
-import { TNotarizationGroup } from '../../common/types';
-import { defineTaskPointsRange } from '../../popup/utils';
+import getStorage from '../../db-storage';
+import { TNotarizationGroup,TVerificationStatus } from '../../common/types';
+import { defineTaskPointsRange } from '../../common/utils';
 
 const defineTaskContent = (
   status: TVerificationStatus,

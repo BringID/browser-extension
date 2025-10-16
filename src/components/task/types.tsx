@@ -1,5 +1,4 @@
-import { TNotarizationGroup } from '../../common/types';
-import { TVerificationStatus } from '../../popup/types';
+import { TNotarizationGroup, TVerificationStatus } from '../../common/types';
 
 export type TProps = {
   icon?: string;

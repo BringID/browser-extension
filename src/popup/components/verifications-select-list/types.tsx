@@ -1,4 +1,4 @@
-import { TVerification } from '../../types';
+import { TVerification } from '../../../common/types';
 import { Task } from '../../../common/core';
 
 type TProps = {

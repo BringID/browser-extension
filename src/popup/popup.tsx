@@ -4,8 +4,8 @@ import { Page } from '../components';
 import { Home, Tasks } from './pages';
 import './styles.css';
 import { Navigate, Route, Routes } from 'react-router';
-import getStorage from './db-storage';
-import manager from './manager';
+import getStorage from '../db-storage';
+import manager from '../manager';
 import { IPCPresentation, tasks } from '../common/core';
 import store from './store';
 import { setLoading, useVerifications } from './store/reducers/verifications';
@@ -14,7 +14,7 @@ import { areArraysEqual, areObjectsEqual } from './utils';
 import { defineGroup } from '../common/utils';
 import { useUser } from './store/reducers/user';
 import { LoadingOverlay } from './components';
-import { TVerification, TUser } from './types';
+import { TVerification, TUser } from '../common/types';
 
 const Popup: FC = () => {
   const user = useUser();
@@ -40,35 +40,35 @@ const Popup: FC = () => {
           {
             store.dispatch(setLoading(true));
 
-            try {
-              const { presentationData, transcriptRecv, taskIndex } =
-                request.data;
+            // try {
+            //   const { presentationData, transcriptRecv, taskIndex } =
+            //     request.data;
 
-              const availableTasks = tasks();
-              const currentTask = availableTasks[taskIndex];
+            //   const availableTasks = tasks();
+            //   const currentTask = availableTasks[taskIndex];
 
-              const groupData = defineGroup(transcriptRecv, currentTask.groups);
+            //   const groupData = defineGroup(transcriptRecv, currentTask.groups);
 
-              if (groupData) {
-                const { credentialGroupId, semaphoreGroupId } = groupData;
+            //   if (groupData) {
+            //     const { credentialGroupId, semaphoreGroupId } = groupData;
 
-                const verify = await manager.runVerify(
-                  presentationData,
-                  credentialGroupId,
-                );
+            //     const verify = await manager.runVerify(
+            //       presentationData,
+            //       credentialGroupId,
+            //     );
 
-                if (verify) {
-                  await manager.saveVerification(verify, credentialGroupId);
+            //     if (verify) {
+            //       await manager.saveVerification(verify, credentialGroupId);
 
-                  sendMessage({
-                    type: 'SIDE_PANEL_CLOSE',
-                  });
-                }
-              }
-            } catch (err) {
-              store.dispatch(setLoading(false));
-              console.log('ERROR: ', err);
-            }
+            //       sendMessage({
+            //         type: 'SIDE_PANEL_CLOSE',
+            //       });
+            //     }
+            //   }
+            // } catch (err) {
+            //   store.dispatch(setLoading(false));
+            //   console.log('ERROR: ', err);
+            // }
             store.dispatch(setLoading(false));
           }
           break;

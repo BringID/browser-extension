@@ -32,6 +32,8 @@ import { TConnectionQuality } from '../common/types';
 import configs from '../configs';
 import { Link } from '../components';
 import errors from '../configs/errors';
+import { defineGroup } from '../common/utils';
+import manager from '../manager';
 
 const renderAdditionalInformation = (
   currentStep: number, // starts with 0
@@ -257,6 +259,7 @@ const SidePanel: FC = () => {
     useState<boolean>(false);
 
   const [showResultOverlay, setShowResultOverlay] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const listener = (request: TMessage) => {
@@ -363,36 +366,36 @@ const SidePanel: FC = () => {
       <Page>
         {showResultOverlay && (
           <ResultOverlay
+            loading={loading}
             title={currentTask.service}
-            onAccept={() => {
-              setShowResultOverlay(false);
+            onAccept={async () => {
+              setLoading(true)
+              try {
+                const availableTasks = tasks();
+                const currentTask = availableTasks[taskId];
 
-              const callback = () =>
-                window.setTimeout(() => {
-                  sendMessage({
-                    type: 'PRESENTATION',
-                    data: {
-                      presentationData: result as string,
-                      transcriptRecv: transcriptRecv as string,
-                      transcriptSent: transcriptSent as string,
-                      taskIndex: taskId,
-                    },
-                  });
-                }, 1500);
+                const groupData = defineGroup(transcriptRecv as string, currentTask.groups);
 
-              // chrome.runtime.sendMessage({ action: 'openPopup' });
+                if (groupData) {
+                  const { credentialGroupId, semaphoreGroupId } = groupData;
 
-              chrome.action
-                // @ts-ignore
-                .openPopup()
-                .then(() => {
-                  console.log('popup was opened');
-                  callback();
-                })
-                // @ts-ignore
-                .catch((err) => {
-                  console.error('Failed to open popup:', err);
-                });
+                  const verify = await manager.runVerify(
+                    result as string,
+                    credentialGroupId,
+                  );
+
+                  if (verify) {
+                    await manager.saveVerification(verify, credentialGroupId);
+                    setShowResultOverlay(false)
+                    window.close()
+                  }
+                } else {
+                  alert('GROUP NOT FOUND')
+                }
+              } catch (err) {
+                console.log('ERROR: ', err);
+              }
+              setLoading(false)
             }}
             onReject={() => {
               setShowResultOverlay(false);

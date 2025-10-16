@@ -5,14 +5,13 @@ import { useNavigate } from 'react-router';
 import { useVerifications } from '../../store/reducers/verifications';
 import { Task, tasks } from '../../../common/core/task';
 import {
-  ScheduleOverlay,
   ConfirmationOverlay,
   LoadingOverlay,
   Authorize,
 } from '../../components';
-import { calculateAvailablePoints } from '../../utils';
+import { calculateAvailablePoints } from '../../../common/utils';
 import { useUser } from '../../store/reducers/user';
-import { TVerification } from '../../types';
+import { TVerification } from '../../../common/types';
 
 const renderContent = (
   userKey: string | null,

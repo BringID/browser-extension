@@ -10,7 +10,7 @@ import {
   Address,
 } from './styled-components';
 import TProps from './types';
-import getStorage from '../../db-storage';
+import getStorage from '../../../db-storage';
 import { getTabsByHost } from '../../utils';
 import { shortenString } from '../../../common/utils';
 import AddressIcon from '../../../components/icons/address';

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { TVerificationStatus } from '../../popup/types';
+import { TVerificationStatus } from '../../common/types';
 
 export const Container = styled.div<{ status: TVerificationStatus }>`
   padding: 12px;

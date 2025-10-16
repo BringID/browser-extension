@@ -1,4 +1,4 @@
-import { TVerification } from '../../types';
+import { TVerification } from '../../../common/types'
 import { AppRootState } from './index';
 import { useSelector } from 'react-redux';
 

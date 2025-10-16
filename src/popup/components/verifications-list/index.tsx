@@ -4,7 +4,7 @@ import { Container, ButtonStyled, NoteStyled, LinkStyled } from './styled-compon
 import { Verification } from '../../../components';
 import TProps from './types';
 import NoVerificationsFound from '../no-verifications-found';
-import { defineTaskByCredentialGroupId } from '../../utils';
+import { defineTaskByCredentialGroupId } from '../../../common/utils';
 
 const VerificationsList: FC<TProps> = ({
   tasks,
