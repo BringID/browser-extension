@@ -5,7 +5,7 @@ import {
   TGetVerificationResponse,
 } from './types';
 import configs from '../../configs';
-import { defineZuploNetworkName, api } from '../../common/utils'
+import { defineZuploNetworkName, api } from '../../common/utils';
 
 const addVerification: TAddVerification = (
   apiUrl,
@@ -14,31 +14,26 @@ const addVerification: TAddVerification = (
   idHash,
   identityCommitment,
   verifierSignature,
-) =>
-  {
-    const networkName = defineZuploNetworkName(
-      configs.CHAIN_ID
-    )
-    return api<TAddVerificationResponse>(
-      `${apiUrl}/v1/task-manager/${networkName}/verification/tasks`,
-      'POST',
-      {
-        Authorization: `Bearer ${configs.ZUPLO_KEY}`,
-      },
-      {
-        registry: registry,
-        credential_group_id: credentialGroupId,
-        id_hash: idHash,
-        identity_commitment: identityCommitment,
-        verifier_signature: verifierSignature,
-      },
-    );
-  }
+) => {
+  const networkName = defineZuploNetworkName(configs.CHAIN_ID);
+  return api<TAddVerificationResponse>(
+    `${apiUrl}/v1/task-manager/${networkName}/verification/tasks`,
+    'POST',
+    {
+      Authorization: `Bearer ${configs.ZUPLO_KEY}`,
+    },
+    {
+      registry: registry,
+      credential_group_id: credentialGroupId,
+      id_hash: idHash,
+      identity_commitment: identityCommitment,
+      verifier_signature: verifierSignature,
+    },
+  );
+};
 
 const getVerification: TGetVerification = (taskId) => {
-  const networkName = defineZuploNetworkName(
-    configs.CHAIN_ID
-  )
+  const networkName = defineZuploNetworkName(configs.CHAIN_ID);
 
   return api<TGetVerificationResponse>(
     `${configs.ZUPLO_API_URL}/v1/task-manager/${networkName}/verification/tasks/${taskId}`,

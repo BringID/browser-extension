@@ -1,11 +1,12 @@
 import { Level } from 'level';
-import {
-  TUser,
-  TVerification,
-  TVerificationStatus,
-} from '../common/types';
+import { TUser, TVerification, TVerificationStatus } from '../common/types';
 import TDBStorage from './types';
-import { setId, setKey, setAddress, setLoading } from '../popup/store/reducers/user';
+import {
+  setId,
+  setKey,
+  setAddress,
+  setLoading,
+} from '../popup/store/reducers/user';
 import {
   addVerification,
   addVerifications,

@@ -41,12 +41,9 @@ const Home: FC = () => {
 
   const [confirmationOverlayShow, setConfirmationOverlayShow] =
     useState<boolean>(false);
-  const [timerOverlayShow, setTimerOverlayShow] = useState<boolean>(false);
   const [requestHost, setRequestHost] = useState<string>('');
   const [pointsRequired, setPointsRequired] = useState<string>('');
   const [dropAddress, setDropAddress] = useState<string>('');
-
-  const [scheduledTime, setScheduledTime] = useState<number | null>(null);
 
   const availablePoints = calculateAvailablePoints(verifications);
 
@@ -74,28 +71,6 @@ const Home: FC = () => {
     });
   }, []);
 
-  useEffect(() => {
-    if (!verifications) {
-      return;
-    }
-    const findNotCompleted = verifications.find(
-      (verification) => verification.status !== 'completed',
-    );
-
-    if (findNotCompleted) {
-      const now = +new Date();
-      if (now >= findNotCompleted.scheduledTime) {
-        return;
-      }
-
-      setScheduledTime(findNotCompleted.scheduledTime);
-      setTimerOverlayShow(true);
-    } else {
-      setScheduledTime(null);
-      setTimerOverlayShow(false);
-    }
-  }, [verifications]);
-
   const onRequestClose = () => {
     setDropAddress('');
     setPointsRequired('');
@@ -117,17 +92,6 @@ const Home: FC = () => {
           dropAddress={dropAddress}
         />
       )}
-
-      {/* {!confirmationOverlayShow && timerOverlayShow && scheduledTime && (
-        <ScheduleOverlay
-          onClose={() => {
-            setScheduledTime(null);
-            setTimerOverlayShow(false);
-          }}
-          scheduledTime={scheduledTime}
-        />
-      )} */}
-
       <Header points={availablePoints} address={user.address} />
 
       {renderContent(user.key, availableTasks, verifications, navigate)}

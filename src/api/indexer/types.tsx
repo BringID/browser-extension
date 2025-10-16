@@ -9,7 +9,7 @@ type TGetProof = (
   apiUrl: string,
   identityCommitment: string,
   semaphoreGroupId: string,
-  fetchProofs?: boolean
+  fetchProofs?: boolean,
 ) => Promise<TGetProofResponse>;
 
 export { TGetProof, TGetProofResponse };

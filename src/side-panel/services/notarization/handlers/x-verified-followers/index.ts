@@ -34,7 +34,6 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
 
-
     // Create a deep copy of the request to avoid modifying the original
     const reqLog = {
       ...log[0],
@@ -78,9 +77,7 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
       originalHeaders['Authorization'] ||
       '';
     const xCsrfToken =
-      originalHeaders['x-csrf-token'] ||
-      originalHeaders['X-Csrf-Token'] ||
-      '';
+      originalHeaders['x-csrf-token'] || originalHeaders['X-Csrf-Token'] || '';
 
     // Extract auth_token and ct0 from cookie
     const cookieHeader =
@@ -126,34 +123,29 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
     const requestParams = {
       headers: reqLog.headers,
       method: reqLog.method,
-    }
-    
-    try {
-      const response = await fetch(log[0].url, requestParams)
+    };
 
-      const responseJSON = await response.json() as TUserDataResponse
+    try {
+      const response = await fetch(log[0].url, requestParams);
+
+      const responseJSON = (await response.json()) as TUserDataResponse;
 
       const verifiedFollowersMatch = JSON.stringify(responseJSON).match(
         /"verified_follower_count":"(\d+)"/,
       );
 
-      
       if (!verifiedFollowersMatch) {
         this.result(new Error('required_data_not_found'));
         return;
       }
 
-
       if (verifiedFollowersMatch[1] && Number(verifiedFollowersMatch[1]) < 10) {
         this.result(new Error('not_enough_followers'));
       }
-
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-  
-    
-    
+
     try {
       const notary = await TLSNotary.new(
         {
@@ -174,7 +166,6 @@ export class NotarizationXVerifiedFollowers extends NotarizationBase {
       console.log('LOG:', log[0]);
 
       const result = await notary.transcript(reqLog);
-
 
       if (result instanceof Error) {
         this.result(result);

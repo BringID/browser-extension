@@ -16,8 +16,8 @@ import {
 import TProps from './types';
 import { useVerifications } from '../../store/reducers/verifications';
 import { defineTaskByCredentialGroupId } from '../../../common/utils';
-import { TVerification } from '../../../common/types'
-import { getCurrentTab } from '../../utils'
+import { TVerification } from '../../../common/types';
+import { getCurrentTab } from '../../utils';
 import { Tag } from '../../../components';
 import BringGif from '../../../images/bring.gif';
 import { TExtensionRequestType } from '../../types';

@@ -9,11 +9,14 @@ import {
   Content,
   CheckIconStyled,
   ClockIconStyled,
+  Footer,
+  ButtonsContainer,
+  BoldText
 } from './styled-components';
 import TProps from './types';
-import { msToTime } from '../../utils';
+import { msToTime } from '../../../popup/utils';
 
-const ScheduleOverlay: FC<TProps> = ({ onClose, scheduledTime }) => {
+const ScheduleOverlay: FC<TProps> = ({ onClose, scheduledTime, onAction }) => {
   const [expiration, setExpiration] = useState<number>(1);
 
   useEffect(() => {
@@ -44,17 +47,25 @@ const ScheduleOverlay: FC<TProps> = ({ onClose, scheduledTime }) => {
         <TitleStyled>{title}</TitleStyled>
 
         <TextStyled>
-          We batch all verifications for better privacy.
-          <br />
+          We batch all verifications for better privacy. <BoldText>You can safely close this window and return to the extension later.</BoldText>
           Your verification will be confirmed in:
         </TextStyled>
 
         <Timer>{msToTime(expiration)}</Timer>
 
-        <ButtonStyled appearance="action" onClick={onClose}>
-          Go to verifications
-        </ButtonStyled>
+        
       </Content>
+
+      <Footer>
+        <ButtonsContainer>
+          <ButtonStyled appearance="action" onClick={onClose}>
+            Close
+          </ButtonStyled>
+
+          <ButtonStyled onClick={onAction}>Add more verifications</ButtonStyled>
+        </ButtonsContainer>
+        
+      </Footer>
     </Container>
   );
 };

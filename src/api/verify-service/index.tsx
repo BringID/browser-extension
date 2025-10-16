@@ -1,6 +1,6 @@
 import { TVerify, TVerifyResponse } from './types';
 import configs from '../../configs';
-import { createQueryString, api } from '../../common/utils'
+import { createQueryString, api } from '../../common/utils';
 
 const verify: TVerify = (
   apiUrl,
@@ -9,10 +9,9 @@ const verify: TVerify = (
   credentialGroupId,
   semaphoreIdentityCommitment,
 ) => {
-
   const queryParams = createQueryString({
-    environment: configs.CHAIN_ID === '84532' ? 'staging' : undefined
-  })
+    environment: configs.CHAIN_ID === '84532' ? 'staging' : undefined,
+  });
 
   return api<TVerifyResponse>(
     `${apiUrl}/v1/verifier/verify?${queryParams}`,
@@ -27,7 +26,7 @@ const verify: TVerify = (
       semaphore_identity_commitment: semaphoreIdentityCommitment,
     },
   );
-}
+};
 
 const verifyService = {
   verify,

@@ -1,3 +1,3 @@
-type TUserDataResponse = Record<string, any>
+type TUserDataResponse = Record<string, any>;
 
-export default TUserDataResponse
+export default TUserDataResponse;

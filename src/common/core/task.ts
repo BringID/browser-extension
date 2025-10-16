@@ -11,10 +11,10 @@ export type Task = {
   permissionUrl: string[];
   service: string;
   additionalInfo?: {
-    title: string,
-    text: string,
-    showBeforeStep?: number
-  }
+    title: string;
+    text: string;
+    showBeforeStep?: number;
+  };
 };
 
 function loadTasks(): Task[] {
@@ -22,7 +22,6 @@ function loadTasks(): Task[] {
     // const tasksConfig = require('../../../cfg/tasks.json');
     const tasksConfig = require('../../../cfg/tasks-sepolia.json');
 
-    
     // Validate that it's an array
     if (!Array.isArray(tasksConfig)) {
       console.error('Tasks config is not an array');
@@ -47,7 +46,7 @@ function loadTasks(): Task[] {
         dev: task.dev,
         service: task.service,
         permissionUrl: task.permissionUrl,
-        additionalInfo: task.additionalInfo
+        additionalInfo: task.additionalInfo,
       };
     });
   } catch (error) {

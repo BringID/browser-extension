@@ -1,7 +1,7 @@
-type TDevice = Record<string, string | boolean | number | null>
+type TDevice = Record<string, string | boolean | number | null>;
 
 type TDevicesResponse = {
-  devices: TDevice[]
-}
+  devices: TDevice[];
+};
 
-export default TDevicesResponse
+export default TDevicesResponse;

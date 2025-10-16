@@ -19,7 +19,7 @@ import {
   Buttons,
   LinkStyled,
   NoteMarginStyled,
-  NoteAdditionalInfoStyled
+  NoteAdditionalInfoStyled,
 } from './styled-components';
 import { useDispatch } from 'react-redux';
 import { notarizationSlice } from './store/notarization';
@@ -27,7 +27,12 @@ import { Page, Step } from '../components';
 import './style.css';
 import { TMessage } from '../common/core/messages';
 import config from '../configs';
-import { PermissionOverlay, ResultOverlay, TaskLoader } from './components';
+import {
+  PermissionOverlay,
+  ResultOverlay,
+  TaskLoader,
+  ScheduleOverlay,
+} from './components';
 import { TConnectionQuality } from '../common/types';
 import configs from '../configs';
 import { Link } from '../components';
@@ -39,33 +44,34 @@ const renderAdditionalInformation = (
   currentStep: number, // starts with 0
 
   additionalInfo?: {
-    title: string,
-    text: string,
-    showBeforeStep?: number
+    title: string;
+    text: string;
+    showBeforeStep?: number;
   },
   error?: string | null,
 ) => {
-
   if (!additionalInfo || error) {
-    return null
+    return null;
   }
 
   const {
     showBeforeStep, // if set to 2 it means that should be visible on step 0 and 1
     title,
-    text
-  } = additionalInfo
+    text,
+  } = additionalInfo;
 
   if (showBeforeStep !== undefined) {
     if (currentStep >= showBeforeStep) {
-      return null
+      return null;
     }
   }
 
-  return <NoteAdditionalInfoStyled status='warning' title={additionalInfo.title}>
-    {additionalInfo.text}
-  </NoteAdditionalInfoStyled>
-}
+  return (
+    <NoteAdditionalInfoStyled status="warning" title={additionalInfo.title}>
+      {additionalInfo.text}
+    </NoteAdditionalInfoStyled>
+  );
+};
 
 const renderButtons = (
   retryTask: () => Promise<void>,
@@ -140,10 +146,10 @@ const renderButtons = (
 const renderHeader = (
   taskId: number,
   currentTask: Task,
-  error?: string | null
+  error?: string | null,
 ) => {
   if (error) {
-    const currentTaskErrors = errors.notarization[taskId]
+    const currentTaskErrors = errors.notarization[taskId];
 
     // if no task or no error for task found
     if (!currentTaskErrors || !currentTaskErrors[error]) {
@@ -171,7 +177,6 @@ const renderHeader = (
         </TextStyled>
       </Header>
     );
-    
   }
 
   return (
@@ -195,7 +200,7 @@ const renderContent = (
   error?: string | null,
 ) => {
   if (error) {
-    const currentTaskErrors = errors.notarization[taskId]
+    const currentTaskErrors = errors.notarization[taskId];
 
     if (!currentTaskErrors || !currentTaskErrors[error]) {
       return (
@@ -233,8 +238,7 @@ const renderContent = (
           </LinkStyled>
         </NoteStyled>
       </>
-    )
-
+    );
   }
   return currentTask.steps.map((step, idx) => {
     return (
@@ -320,40 +324,42 @@ const SidePanel: FC = () => {
   });
 
   const availableTasks = tasks();
+  const [scheduledTime, setScheduledTime] = useState<number | null>(null);
 
   if (taskId === null) {
-    return <Wrapper>
-      <Page>
-        {showPermissionOverlay && nextTaskId !== null && (
-          <PermissionOverlay
-            nextTaskIndex={nextTaskId}
-            onAccepted={() => {
-              setShowPermissionOverlay(false);
-              console.log('confirm: ', { nextTaskId })
+    return (
+      <Wrapper>
+        <Page>
+          {showPermissionOverlay && nextTaskId !== null && (
+            <PermissionOverlay
+              nextTaskIndex={nextTaskId}
+              onAccepted={() => {
+                setShowPermissionOverlay(false);
+                console.log('confirm: ', { nextTaskId });
 
-              notarizationManager.run(nextTaskId);
-            }}
-          />
-        )}
+                notarizationManager.run(nextTaskId);
+              }}
+            />
+          )}
 
-        <TaskLoader
-          onStart={() => {
+          <TaskLoader
+            onStart={() => {
               chrome.storage.local.get(['task'], (data) => {
                 if (!data || data.task === undefined) {
-                  alert('No task found')
-                  return 
+                  alert('No task found');
+                  return;
                 }
-                
+
                 setNextTaskId(Number(data.task));
 
-                chrome.storage.local.remove('task')
+                chrome.storage.local.remove('task');
                 setShowPermissionOverlay(true);
-              })
+              });
             }}
-        />
-             
-      </Page>
-    </Wrapper>
+          />
+        </Page>
+      </Wrapper>
+    );
   }
 
   const currentTask = availableTasks[taskId];
@@ -369,12 +375,15 @@ const SidePanel: FC = () => {
             loading={loading}
             title={currentTask.service}
             onAccept={async () => {
-              setLoading(true)
+              setLoading(true);
               try {
                 const availableTasks = tasks();
                 const currentTask = availableTasks[taskId];
 
-                const groupData = defineGroup(transcriptRecv as string, currentTask.groups);
+                const groupData = defineGroup(
+                  transcriptRecv as string,
+                  currentTask.groups,
+                );
 
                 if (groupData) {
                   const { credentialGroupId, semaphoreGroupId } = groupData;
@@ -385,17 +394,23 @@ const SidePanel: FC = () => {
                   );
 
                   if (verify) {
-                    await manager.saveVerification(verify, credentialGroupId);
-                    setShowResultOverlay(false)
-                    window.close()
+                    const verification = await manager.saveVerification(
+                      verify,
+                      credentialGroupId,
+                    );
+
+                    if (verification) {
+                      setShowResultOverlay(false);
+                      setScheduledTime(verification.scheduledTime);
+                    }
                   }
                 } else {
-                  alert('GROUP NOT FOUND')
+                  alert('GROUP NOT FOUND');
                 }
               } catch (err) {
                 console.log('ERROR: ', err);
               }
-              setLoading(false)
+              setLoading(false);
             }}
             onReject={() => {
               setShowResultOverlay(false);
@@ -405,13 +420,31 @@ const SidePanel: FC = () => {
           />
         )}
 
+        {scheduledTime && (
+          <ScheduleOverlay
+            onClose={() => {
+              window.close();
+            }}
+            onAction={() => {
+              chrome.action
+                // @ts-ignore
+                .openPopup()
+                // @ts-ignore
+                .catch((err) => {
+                  console.error('Failed to open popup:', err);
+                });
+            }}
+            scheduledTime={scheduledTime}
+          />
+        )}
+
         <Container>
           {renderHeader(taskId, currentTask, error)}
 
           {renderAdditionalInformation(
             currentStep,
             currentTask.additionalInfo,
-            error
+            error,
           )}
 
           <Content>

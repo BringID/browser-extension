@@ -19,7 +19,11 @@ import {
 import TProps from './types';
 import { downloadDataAsFile } from '../../utils';
 
-const defineButtons = (onAccepted: () => void, onReject: () => void, loading: boolean) => {
+const defineButtons = (
+  onAccepted: () => void,
+  onReject: () => void,
+  loading: boolean,
+) => {
   return (
     <ButtonsContainer>
       <ButtonStyled onClick={onAccepted} appearance="action" loading={loading}>
@@ -37,7 +41,7 @@ const ResultOverlay: FC<TProps> = ({
   onReject,
   transcriptRecv,
   transcriptSent,
-  loading
+  loading,
 }) => {
   return (
     <Container>

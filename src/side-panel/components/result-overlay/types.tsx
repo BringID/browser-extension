@@ -4,7 +4,7 @@ type TProps = {
   title: string;
   transcriptRecv: string;
   transcriptSent: string;
-  loading: boolean
+  loading: boolean;
 };
 
 export default TProps;

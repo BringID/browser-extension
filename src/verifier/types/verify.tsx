@@ -1,4 +1,4 @@
-import { TVerifyResult } from '../../common/types'
+import { TVerifyResult } from '../../common/types';
 
 type TVerify = (
   presentationData: string,

@@ -14,8 +14,8 @@ export const Container = styled.div`
 
 export const NoteStyled = styled(Note)`
   margin-bottom: 10px;
-`
+`;
 
 export const LinkStyled = styled(Link)`
   text-decoration: underline;
-`
+`;

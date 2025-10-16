@@ -4,4 +4,3 @@ export type TVerificationStatus =
   | 'completed'
   | 'failed'
   | 'default';
-

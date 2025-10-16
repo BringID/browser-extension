@@ -40,7 +40,9 @@ class Verifier implements IVerifier {
       }
     } catch (err) {
       console.error(err);
-      alert('Verification failed: this account does not meet the necessary criteria.');
+      alert(
+        'Verification failed: this account does not meet the necessary criteria.',
+      );
       return;
     }
   };

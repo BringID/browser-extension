@@ -23,7 +23,7 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
   top: 0;
-  z-index: 1;
+  z-index: 20;
   left: 0;
   background-color: ${(props) => props.theme.blankColor};
 `;
@@ -48,13 +48,29 @@ export const ButtonStyled = styled(Button)`
 `;
 
 export const Content = styled.div`
-  border: 1px solid ${(props) => props.theme.primaryBorderColor};
   border-radius: 8px;
   width: 100%;
-  height: 100%;
   text-align: center;
   padding: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
+
+
+export const ButtonsContainer = styled.div`
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+  width: 100%;
+`;
+
+
+export const Footer = styled.footer`
+  margin-top: auto;
+`;
+
+export const BoldText = styled.span`
+  font-weight: 500;
+  color: ${props => props.theme.primaryTextColor};
+`

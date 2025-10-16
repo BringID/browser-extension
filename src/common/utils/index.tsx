@@ -6,8 +6,8 @@ import defineTaskPointsRange from './define-task-points-range';
 import defineTaskByCredentialGroupId from './define-task-by-credential-group-id';
 import calculateScope from './calculate-scope';
 import api from './api';
-import createQueryString from '../../common/utils/create-query-string'
-import defineZuploNetworkName from './define-zuplo-network-name'
+import createQueryString from '../../common/utils/create-query-string';
+import defineZuploNetworkName from './define-zuplo-network-name';
 import defineRelatedVerification from './define-related-verification';
 import calculateAvailablePoints from './calculate-available-points';
 
@@ -23,5 +23,5 @@ export {
   createQueryString,
   defineZuploNetworkName,
   defineRelatedVerification,
-  calculateAvailablePoints
+  calculateAvailablePoints,
 };
