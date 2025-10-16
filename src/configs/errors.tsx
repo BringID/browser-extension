@@ -13,7 +13,8 @@ const errors: TErrors = {
       'required_data_not_found': 'No rides found'
     },
     1: {
-      'not_enough_followers': 'Not enough verified followers'
+      'not_enough_followers': 'Not enough verified followers',
+      'required_data_not_found': 'Not verified followers found'
     },
     2: {
       'not_enough_devices': 'No devices found',

@@ -24,7 +24,8 @@
     {
       "matches": [
         "https://app.bringid.org/*",
-        "https://dev.app.bringid.org/*"
+        "https://dev.app.bringid.org/*",
+        "https://staging.app.bringid.org/*"
       ],
       "js": ["contentScript.bundle.js"],
       "css": []
@@ -33,7 +34,8 @@
   "externally_connectable": {
     "matches": [
       "https://app.bringid.org/*",
-        "https://dev.app.bringid.org/*"
+      "https://dev.app.bringid.org/*",
+      "https://staging.app.bringid.org/*"
     ]
   },
   "web_accessible_resources": [
@@ -43,7 +45,8 @@
       ],
       "matches": [
         "https://app.bringid.org/*",
-        "https://dev.app.bringid.org/*"
+        "https://dev.app.bringid.org/*",
+        "https://staging.app.bringid.org/*"
       ]
     }
   ],
@@ -57,7 +60,8 @@
   ],
   "host_permissions": [
     "https://app.bringid.org/*",
-        "https://dev.app.bringid.org/*"
+    "https://dev.app.bringid.org/*",
+    "https://staging.app.bringid.org/*"
   ],
   "permissions": [
     "offscreen",
