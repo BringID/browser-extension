@@ -1,14 +1,14 @@
 import React, { FC, useState, useEffect } from 'react';
 import { TProps } from './types';
 import { Value } from './styled-components';
-import { TVerificationStatus } from '../../popup/types';
+import { TVerificationStatus } from '../../common/types';
 import { TaskContainer } from '../../components';
 import { Icons } from '../../components';
 import { Button } from '../../components';
 import { msToTime, defineExplorerURL } from '../../popup/utils';
 import { Tag } from '../../components';
-import relayer from '../../popup/relayer';
-import getStorage from '../../popup/db-storage';
+import relayer from '../../relayer';
+import getStorage from '../../db-storage';
 import configs from '../../configs';
 
 const definePluginContent = (

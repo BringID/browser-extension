@@ -1,4 +1,4 @@
-import { TVerificationStatus } from '../../popup/types';
+import { TVerificationStatus } from '../../common/types';
 
 export type TProps = {
   taskId?: string;

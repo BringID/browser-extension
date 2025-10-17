@@ -1,4 +1,4 @@
-import { TUserStatus, TUser } from '../../types';
+import { TUser } from '../../../common/types';
 import { AppRootState } from './index';
 import { useSelector } from 'react-redux';
 import deepEqual from 'fast-deep-equal';

@@ -75,19 +75,18 @@ export class NotarizationAppleDevices extends NotarizationBase {
     const requestParams = {
       headers: reqLog.headers,
       method: reqLog.method,
-    }
+    };
 
     try {
       // initial check
-      const response = await fetch(log[0].url, requestParams)
+      const response = await fetch(log[0].url, requestParams);
 
-      const responseJSON = await response.json() as TDevicesResponse
+      const responseJSON = (await response.json()) as TDevicesResponse;
 
+      const { devices } = responseJSON;
 
-      const { devices } = responseJSON
+      console.log('DEVICES: ', { devices });
 
-      console.log('DEVICES: ', { devices })
-      
       if (devices === undefined) {
         this.result(new Error('required_data_not_found'));
         return;
@@ -97,14 +96,11 @@ export class NotarizationAppleDevices extends NotarizationBase {
         this.result(new Error('not_enough_devices'));
         return;
       }
-
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
 
     try {
-
-
       const notary = await TLSNotary.new(
         {
           serverDns: 'account.apple.com',
@@ -126,7 +122,7 @@ export class NotarizationAppleDevices extends NotarizationBase {
 
       const result = await notary.transcript({
         url: reqLog.url,
-        ...requestParams
+        ...requestParams,
       });
 
       console.log('[AppleDevices] Transcript result:', result);
@@ -139,8 +135,8 @@ export class NotarizationAppleDevices extends NotarizationBase {
       const [transcript, message] = result;
 
       console.log('MESSAGE: ', {
-        message: result
-      })
+        message: result,
+      });
       // keep only HTTP method and URL and hide everything after in the response
       const sentEnd = `${reqLog.method} ${reqLog.url}`.length;
 
@@ -158,7 +154,6 @@ export class NotarizationAppleDevices extends NotarizationBase {
       console.log('[AppleDevices] JSON starts at position:', jsonStarts);
 
       const pointers: Pointers = parse(message.body.toString()).pointers;
-      
 
       const devices: Mapping = pointers['/devices'];
       if (!devices || !devices.key?.pos) {

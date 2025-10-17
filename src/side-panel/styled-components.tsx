@@ -63,7 +63,6 @@ export const NoteAdditionalInfoStyled = styled(Note)`
   margin-bottom: 20px;
 `;
 
-
 export const TextStyled = styled(Text)`
   text-align: center;
   margin-top: 10px;
@@ -81,7 +80,6 @@ export const Buttons = styled.div`
   flex-direction: column;
   margin-top: auto;
 `;
-
 
 export const NoteMarginStyled = styled(Note)`
   margin: 20px 0px 0;

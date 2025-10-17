@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import getStorage from '../popup/db-storage';
+import getStorage from '../db-storage';
 
 function sendMessageToBackground(data: any): Promise<void> {
   return new Promise((resolve, reject) => {

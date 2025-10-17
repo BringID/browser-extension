@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 import { TNoteStatus } from './types';
 import ExclimationIcon from '../icons/exclimation-icon';
 
-
 export const Container = styled.div<{
   status: TNoteStatus;
 }>`
@@ -66,7 +65,6 @@ export const Title = styled.h4`
   margin: 0 0 4px;
 `;
 
-
 export const ExclimationIconStyled = styled(ExclimationIcon)`
   margin-right: 6px;
-`
+`;

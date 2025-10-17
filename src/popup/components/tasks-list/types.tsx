@@ -1,5 +1,5 @@
 import { Task } from '../../../common/core';
-import { TVerification } from '../../types';
+import { TVerification } from '../../../common/types';
 
 type TProps = {
   tasks: Task[];

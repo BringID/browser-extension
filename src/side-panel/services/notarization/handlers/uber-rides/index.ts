@@ -29,7 +29,6 @@ export class NotarizationUberRides extends NotarizationBase {
     this.currentStep = 2;
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
-    
 
     const requestParams = {
       method: log[0].method,
@@ -44,41 +43,40 @@ export class NotarizationUberRides extends NotarizationBase {
         query:
           '{ currentUser { uuid } activities { past(limit: 10) { activities { uuid, description } } } }',
       }),
-    }
+    };
 
     try {
-
       // initial check
-      const response = await fetch(log[0].url, requestParams)
+      const response = await fetch(log[0].url, requestParams);
 
-      const responseJSON = await response.json() as TActivitiesResponse
+      const responseJSON = (await response.json()) as TActivitiesResponse;
 
-      const { data: { currentUser, activities: { past: { activities: activitiesCheck } } } } = responseJSON
+      const {
+        data: {
+          currentUser,
+          activities: {
+            past: { activities: activitiesCheck },
+          },
+        },
+      } = responseJSON;
 
       if (!currentUser.uuid || !activitiesCheck) {
         this.result(new Error('required_data_not_found'));
       }
-    
-      const activitiesNotCanceled = activitiesCheck.filter(activity => {
-        return activity.description.indexOf('Canceled') !== -1 &&
-              activity.description.indexOf('0.00') === -1
-      })
+
+      const activitiesNotCanceled = activitiesCheck.filter((activity) => {
+        return activity.description.indexOf('Canceled') !== -1;
+      });
 
       if (activitiesNotCanceled.length === 0) {
         this.result(new Error('not_enough_rides'));
         return;
       }
-
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-    
-    
-    
-    
-    
-    try {
 
+    try {
       const notary = await TLSNotary.new(
         {
           serverDns: 'riders.uber.com',
@@ -98,9 +96,9 @@ export class NotarizationUberRides extends NotarizationBase {
 
       const result = await notary.transcript({
         url: log[0].url,
-        ...requestParams
+        ...requestParams,
       });
-    
+
       if (result instanceof Error) {
         this.result(result);
         return;
@@ -123,7 +121,6 @@ export class NotarizationUberRides extends NotarizationBase {
 
       const uuid: Mapping = pointers['/data/currentUser/uuid'];
       const activities: Mapping = pointers['/data/activities/past/activities'];
-
 
       // can be deleted
       if (!activities.key?.pos || !uuid.key?.pos) {
@@ -159,8 +156,7 @@ export class NotarizationUberRides extends NotarizationBase {
         );
 
       const validRidesCount = jsonTranscript.filter(
-        (item) =>
-          item.description.indexOf('Canceled') === -1
+        (item) => item.description.indexOf('Canceled') === -1,
       ).length;
 
       // can be deleted
