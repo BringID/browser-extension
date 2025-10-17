@@ -10,6 +10,8 @@ import createQueryString from '../../common/utils/create-query-string';
 import defineZuploNetworkName from './define-zuplo-network-name';
 import defineRelatedVerification from './define-related-verification';
 import calculateAvailablePoints from './calculate-available-points';
+import getCurrentTab from './get-current-tab';
+import getTabsByHost from './get-tabs-by-host';
 
 export {
   defineGroup,
@@ -20,6 +22,8 @@ export {
   defineTaskByCredentialGroupId,
   calculateScope,
   api,
+  getCurrentTab,
+  getTabsByHost,
   createQueryString,
   defineZuploNetworkName,
   defineRelatedVerification,

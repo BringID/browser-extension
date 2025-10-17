@@ -1,7 +1,9 @@
 import browser from 'webextension-polyfill';
 import { TWebsiteRequestType, TExtensionRequestType } from '../popup/types';
 import getStorage from '../db-storage';
-import { getCurrentTab, getTabsByHost } from '../popup/utils';
+import getCurrentTab from '../common/utils/get-current-tab';
+import getTabsByHost from '../common/utils/get-tabs-by-host';
+
 import configs from '../configs';
 
 let creatingOffscreen: any;

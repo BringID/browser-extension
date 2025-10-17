@@ -57,7 +57,6 @@ export const Content = styled.div`
   align-items: center;
 `;
 
-
 export const ButtonsContainer = styled.div`
   display: flex;
   gap: 12px;
@@ -65,12 +64,11 @@ export const ButtonsContainer = styled.div`
   width: 100%;
 `;
 
-
 export const Footer = styled.footer`
   margin-top: auto;
 `;
 
 export const BoldText = styled.span`
   font-weight: 500;
-  color: ${props => props.theme.primaryTextColor};
-`
+  color: ${(props) => props.theme.primaryTextColor};
+`;

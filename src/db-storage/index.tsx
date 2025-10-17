@@ -177,7 +177,7 @@ export class DBStorage implements TDBStorage {
       });
 
       store.dispatch(setKey(key));
-
+      await this.#verificationsDb.clear();
       await this.addInitialVerifications();
 
       return key;

@@ -11,7 +11,7 @@ import {
   ClockIconStyled,
   Footer,
   ButtonsContainer,
-  BoldText
+  BoldText,
 } from './styled-components';
 import TProps from './types';
 import { msToTime } from '../../../popup/utils';
@@ -47,13 +47,14 @@ const ScheduleOverlay: FC<TProps> = ({ onClose, scheduledTime, onAction }) => {
         <TitleStyled>{title}</TitleStyled>
 
         <TextStyled>
-          We batch all verifications for better privacy. <BoldText>You can safely close this window and return to the extension later.</BoldText>
+          We batch all verifications for better privacy.{' '}
+          <BoldText>
+            You can safely close this window and return to the extension later.
+          </BoldText>
           Your verification will be confirmed in:
         </TextStyled>
 
         <Timer>{msToTime(expiration)}</Timer>
-
-        
       </Content>
 
       <Footer>
@@ -64,7 +65,6 @@ const ScheduleOverlay: FC<TProps> = ({ onClose, scheduledTime, onAction }) => {
 
           <ButtonStyled onClick={onAction}>Add more verifications</ButtonStyled>
         </ButtonsContainer>
-        
       </Footer>
     </Container>
   );

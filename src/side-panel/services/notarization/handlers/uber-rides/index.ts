@@ -65,10 +65,7 @@ export class NotarizationUberRides extends NotarizationBase {
       }
 
       const activitiesNotCanceled = activitiesCheck.filter((activity) => {
-        return (
-          activity.description.indexOf('Canceled') !== -1 &&
-          activity.description.indexOf('0.00') === -1
-        );
+        return activity.description.indexOf('Canceled') !== -1;
       });
 
       if (activitiesNotCanceled.length === 0) {
