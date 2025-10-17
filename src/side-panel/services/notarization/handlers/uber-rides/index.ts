@@ -30,6 +30,9 @@ export class NotarizationUberRides extends NotarizationBase {
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
 
+
+    const query =  '{ currentUser { uuid } activities { past(limit: 10) { activities { uuid, description } } } }'
+
     const requestParams = {
       method: log[0].method,
       headers: {
@@ -40,8 +43,7 @@ export class NotarizationUberRides extends NotarizationBase {
           .join(';'),
       },
       body: JSON.stringify({
-        query:
-          '{ currentUser { uuid } activities { past(limit: 10) { activities { uuid, description } } } }',
+        query
       }),
     };
 
@@ -65,10 +67,10 @@ export class NotarizationUberRides extends NotarizationBase {
       }
 
       const activitiesNotCanceled = activitiesCheck.filter((activity) => {
-        return activity.description.indexOf('Canceled') !== -1;
+        return activity.description.indexOf('Canceled') === -1;
       });
 
-      if (activitiesNotCanceled.length === 0) {
+      if (activitiesNotCanceled.length < 5) {
         this.result(new Error('not_enough_rides'));
         return;
       }
@@ -97,6 +99,9 @@ export class NotarizationUberRides extends NotarizationBase {
       const result = await notary.transcript({
         url: log[0].url,
         ...requestParams,
+        body: {
+          query
+        },
       });
 
       if (result instanceof Error) {
