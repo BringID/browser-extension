@@ -179,7 +179,7 @@ const options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: "node_modules/tlsn-js/build",
+          from: "node_modules/bringid-tlsn-js/build",
           to: path.join(__dirname, "build"),
           force: true,
         }

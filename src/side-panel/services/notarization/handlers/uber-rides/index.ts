@@ -2,7 +2,7 @@ import { NotarizationBase } from '../../notarization-base';
 import { RequestRecorder } from '../../../requests-recorder';
 import { Request } from '../../../../common/types';
 import { TLSNotary } from '../../../tlsn';
-import { Commit } from 'tlsn-js';
+import { Commit } from 'bringid-tlsn-js'
 import { Mapping, parse, Pointers } from 'json-source-map';
 import TActivitiesResponse from './types';
 

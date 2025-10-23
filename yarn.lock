@@ -2914,6 +2914,13 @@ braces@^3.0.3, braces@~3.0.2:
   dependencies:
     fill-range "^7.1.1"
 
+bringid-tlsn-js@^0.1.0-alpha.12.4:
+  version "0.1.0-alpha.12.4"
+  resolved "https://registry.yarnpkg.com/bringid-tlsn-js/-/bringid-tlsn-js-0.1.0-alpha.12.4.tgz#ac674a0aa951502ebed8169a1698fdfcebd8ea04"
+  integrity sha512-5ISKxSkDflqZxrgF/y3Tfxq4PN4GgeFzIMyDp8lu2OjXbY0xLpUoXYnEqAbSAHmqvgZwMAJ7p+CSEs0O5bpd6g==
+  dependencies:
+    tlsn-wasm "0.1.0-alpha.12"
+
 browser-level@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/browser-level/-/browser-level-1.0.1.tgz#36e8c3183d0fe1c405239792faaab5f315871011"
@@ -7579,13 +7586,6 @@ thunky@^1.0.2:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-1.1.0.tgz#5abaf714a9405db0504732bbccd2cedd9ef9537d"
   integrity sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==
-
-tlsn-js@^0.1.0-alpha.12.0:
-  version "0.1.0-alpha.12.0"
-  resolved "https://registry.yarnpkg.com/tlsn-js/-/tlsn-js-0.1.0-alpha.12.0.tgz#d37dd5ea411beaeb31dd49bb98b23feec94c168c"
-  integrity sha512-un2ImvRjZ8d3BypReHJkC58NV1JPIppIhDrPLeR75+1uSsv805fSBruBtIYHklnLZQX38iyMJdDf+BEz7Z4nZQ==
-  dependencies:
-    tlsn-wasm "0.1.0-alpha.12"
 
 tlsn-wasm@0.1.0-alpha.12:
   version "0.1.0-alpha.12"

@@ -2,7 +2,7 @@ import { NotarizationBase } from '../../notarization-base';
 import { RequestRecorder } from '../../../requests-recorder';
 import { Request } from '../../../../common/types';
 import { TLSNotary } from '../../../tlsn';
-import { Commit } from 'tlsn-js';
+import { Commit } from 'bringid-tlsn-js'
 import TUserDataResponse from './types';
 
 export class NotarizationXVerifiedFollowers extends NotarizationBase {
