@@ -5,6 +5,7 @@ This guide explains how to create custom notarization handlers that extend the `
 ## Overview
 
 Notarization handlers are responsible for managing the complete notarization workflow. They can perform virtually any actions needed for their specific use case. While most handlers (99.9% of cases) will typically:
+
 1. Record specific HTTP requests from web pages
 2. Create cryptographic proofs (notarizations) of those requests using TLSNotary
 3. Manage the notarization lifecycle and progress reporting
@@ -19,12 +20,14 @@ The handlers have complete flexibility to implement custom logic, interact with 
 All notarization handlers extend [`NotarizationBase`](../notarization-base.ts), which provides:
 
 #### Protected Methods Available:
+
 - `setProgress(progress: number)` - Update progress (0-100)
 - `setStatus(status: NotarizationStatus)` - Update status
 - `setError(error: Error)` - Set error state
 - `result(res: Result<Presentation>)` - Complete notarization with result
 
 #### Abstract Methods to Implement:
+
 - `onStart(): Promise<void>` - Called when notarization starts
 - `onStop(): Promise<void>` - Called when notarization stops (aborted)
 
@@ -43,54 +46,56 @@ All notarization handlers extend [`NotarizationBase`](../notarization-base.ts), 
 ### Step 1: Basic Handler Structure
 
 ```typescript
-import { NotarizationBase } from "../notarization-base";
+import { NotarizationBase } from '../notarization-base';
 
 export class NotarizationMyService extends NotarizationBase {
-    public async onStart(): Promise<void> {
-        // Implementation here
-    }
+  public async onStart(): Promise<void> {
+    // Implementation here
+  }
 
-    public async onStop(): Promise<void> {
-        // Implementation here
-    }
+  public async onStop(): Promise<void> {
+    // Implementation here
+  }
 }
 ```
 
 ### Step 2: Adding Request Recording (Optional)
 
 Most handlers will need to capture HTTP requests. The `RequestRecorder` constructor takes:
+
 - `targetRequests`: Array of request patterns to capture
 - `successCallback`: Function called when all target requests are captured
 
 ```typescript
-import { NotarizationBase } from "../notarization-base";
-import { RequestRecorder } from "../../requests-recorder";
-import { Request } from "../../../common/types";
+import { NotarizationBase } from '../notarization-base';
+import { RequestRecorder } from '../../requests-recorder';
+import { Request } from '../../../common/types';
 
 export class NotarizationMyService extends NotarizationBase {
-    requestRecorder: RequestRecorder = new RequestRecorder(
-        [
-            { method: "GET", urlPattern: "https://api.myservice.com/user/*" },
-            { method: "POST", urlPattern: "https://api.myservice.com/data*" }
-        ],
-        this.onRequestsCaptured.bind(this)
-    );
+  requestRecorder: RequestRecorder = new RequestRecorder(
+    [
+      { method: 'GET', urlPattern: 'https://api.myservice.com/user/*' },
+      { method: 'POST', urlPattern: 'https://api.myservice.com/data*' },
+    ],
+    this.onRequestsCaptured.bind(this),
+  );
 
-    public async onStart(): Promise<void> {
-        // Implementation here
-    }
+  public async onStart(): Promise<void> {
+    // Implementation here
+  }
 
-    public async onStop(): Promise<void> {
-        // Implementation here
-    }
+  public async onStop(): Promise<void> {
+    // Implementation here
+  }
 
-    private async onRequestsCaptured(log: Array<Request>) {
-        // Implementation here
-    }
+  private async onRequestsCaptured(log: Array<Request>) {
+    // Implementation here
+  }
 }
 ```
 
 **URL Pattern Matching:**
+
 - Use `*` as wildcard for any characters
 - Exact matches without wildcards are supported
 - Patterns are converted to regex internally
@@ -106,10 +111,10 @@ Here's an example of how you might implement the `onStart()` method:
 public async onStart(): Promise<void> {
     // Start request recording
     this.requestRecorder.start();
-    
+
     // Navigate to the target page
     await chrome.tabs.create({ url: "https://myservice.com/profile" });
-    
+
     // Update progress
     this.setProgress(30);
 }
@@ -133,30 +138,30 @@ Here's an example of how you might process captured requests:
 ```typescript
 private async onRequestsCaptured(log: Array<Request>) {
     this.setProgress(60);
-    
+
     try {
         // Create TLSNotary instance for the target hostname
         const notary = await TLSNotary.new("api.myservice.com");
-        
+
         // Generate transcript
         const result = await notary.transcript(log[0]);
         if (result instanceof Error) {
             this.result(result);
             return;
         }
-        
+
         const [transcript, parsedResponse] = result;
-        
+
         // Create commitment for partial data reveal
         const commit: Commit = {
             sent: [{ start: 0, end: transcript.sent.length }],
             recv: [{ start: 0, end: Math.floor(transcript.recv.length / 2) }]
         };
-        
+
         // Generate final notarization
         const presentation = await notary.notarize(commit);
         this.result(presentation);
-        
+
     } catch (error) {
         this.result(new Error(`Notarization failed: ${error.message}`));
     }
@@ -178,23 +183,23 @@ Handlers should provide progress updates to inform users about the notarization 
 ```typescript
 public async onStart(): Promise<void> {
     this.setProgress(10); // Starting
-    
+
     this.requestRecorder.start();
     this.setProgress(30); // Request recording started
-    
+
     await chrome.tabs.create({ url: "https://example.com" });
     this.setProgress(50); // Navigation complete
 }
 
 private async onRequestsCaptured(log: Array<Request>) {
     this.setProgress(70); // Requests captured
-    
+
     const notary = await TLSNotary.new("api.example.com");
     this.setProgress(80); // TLSNotary initialized
-    
+
     const result = await notary.transcript(log[0]);
     this.setProgress(90); // Transcript generated
-    
+
     // Final result call automatically sets progress to 100
     this.result(await notary.notarize(commit));
 }
@@ -212,10 +217,11 @@ const presentation = await notary.notarize(commit);
 this.result(presentation);
 
 // For errors
-this.result(new Error("Notarization failed: invalid response"));
+this.result(new Error('Notarization failed: invalid response'));
 ```
 
 The `result()` method:
+
 - Automatically sets progress to 100% for successful results
 - Sets appropriate error state for Error objects
 - Updates the notarization status
@@ -229,14 +235,14 @@ private async onRequestsCaptured(log: Array<Request>) {
     try {
         const notary = await TLSNotary.new("api.example.com");
         const result = await notary.transcript(log[0]);
-        
+
         if (result instanceof Error) {
             this.result(result);
             return;
         }
-        
+
         // ... process result
-        
+
     } catch (error) {
         this.result(new Error(`Processing failed: ${error.message}`));
     }
@@ -253,8 +259,8 @@ Partial data reveal allows you to prove specific parts of an HTTP request/respon
 
 ```typescript
 const commit: Commit = {
-    sent: [{ start: 0, end: transcript.sent.length }],    // Reveal entire request
-    recv: [{ start: 100, end: 500 }]                     // Reveal bytes 100-500 of response
+  sent: [{ start: 0, end: transcript.sent.length }], // Reveal entire request
+  recv: [{ start: 100, end: 500 }], // Reveal bytes 100-500 of response
 };
 ```
 
@@ -263,48 +269,53 @@ const commit: Commit = {
 Reference implementation from [`x-profile.ts`](./x-profile.ts):
 
 ```typescript
-import { NotarizationBase } from "../notarization-base";
-import { RequestRecorder } from "../../requests-recorder";
-import { Request } from "../../../common/types";
-import { TLSNotary } from "../../tlsn";
-import { Commit } from "tlsn-js";
+import { NotarizationBase } from '../notarization-base';
+import { RequestRecorder } from '../../requests-recorder';
+import { Request } from '../../../common/types';
+import { TLSNotary } from '../../tlsn';
+import { Commit } from 'bringid-tlsn-js';
 
 export class NotarizationXProfile extends NotarizationBase {
-    requestRecorder: RequestRecorder = new RequestRecorder(
-        [{ method: "GET", urlPattern: "https://api.x.com/1.1/account/settings.json?*" }],
-        this.onRequestsCaptured.bind(this)
-    );
+  requestRecorder: RequestRecorder = new RequestRecorder(
+    [
+      {
+        method: 'GET',
+        urlPattern: 'https://api.x.com/1.1/account/settings.json?*',
+      },
+    ],
+    this.onRequestsCaptured.bind(this),
+  );
 
-    public async onStart(): Promise<void> {
-        this.requestRecorder.start();
-        await chrome.tabs.create({ url: "https://x.com" });
-        this.setProgress(30);
+  public async onStart(): Promise<void> {
+    this.requestRecorder.start();
+    await chrome.tabs.create({ url: 'https://x.com' });
+    this.setProgress(30);
+  }
+
+  private async onRequestsCaptured(log: Array<Request>) {
+    this.setProgress(60);
+
+    const notary = await TLSNotary.new('api.x.com');
+    const result = await notary.transcript(log[0]);
+
+    if (result instanceof Error) {
+      this.result(result);
+      return;
     }
 
-    private async onRequestsCaptured(log: Array<Request>) {
-        this.setProgress(60);
-        
-        const notary = await TLSNotary.new("api.x.com");
-        const result = await notary.transcript(log[0]);
-        
-        if (result instanceof Error) {
-            this.result(result);
-            return;
-        }
-        
-        const [transcript,] = result;
-        
-        // Reveal entire request and half of response
-        const commit: Commit = {
-            sent: [{ start: 0, end: transcript.sent.length }],
-            recv: [{ start: 0, end: Math.floor(transcript.recv.length / 2) }]
-        };
+    const [transcript] = result;
 
-        this.result(await notary.notarize(commit));
-    }
+    // Reveal entire request and half of response
+    const commit: Commit = {
+      sent: [{ start: 0, end: transcript.sent.length }],
+      recv: [{ start: 0, end: Math.floor(transcript.recv.length / 2) }],
+    };
 
-    public async onStop(): Promise<void> {
-        this.requestRecorder.stop();
-    }
+    this.result(await notary.notarize(commit));
+  }
+
+  public async onStop(): Promise<void> {
+    this.requestRecorder.stop();
+  }
 }
 ```

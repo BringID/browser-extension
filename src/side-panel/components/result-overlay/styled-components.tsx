@@ -85,16 +85,16 @@ export const ButtonsContainer = styled.div`
   width: 100%;
 `;
 
+export const Footer = styled.footer`
+  margin-top: auto;
+`;
+
 export const ButtonStyled = styled(Button)``;
 
 export const Hr = styled.hr`
   margin: 12px 0;
   border: none;
   border-bottom: 1px solid ${(props) => props.theme.secondaryBorderColor};
-`;
-
-export const Footer = styled.footer`
-  margin-top: auto;
 `;
 
 export const LockIconStyled = styled(Icons.Lock)`

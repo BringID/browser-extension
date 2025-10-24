@@ -1,6 +1,6 @@
 // @ts-nocheck
 import * as Comlink from 'comlink';
-import init, { Prover, Presentation } from 'tlsn-js';
+import init, { Prover, Presentation } from 'bringid-tlsn-js'
 import { TConnectionQuality } from '../../../common/types';
 
 /**

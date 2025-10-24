@@ -11,17 +11,19 @@ import {
   ButtonStyled,
   NoteStyled,
   OpenPopupButton,
-  UserStatusRequired,
-  UserStatus,
   VerificationsSelectListStyled,
 } from './styled-components';
 import TProps from './types';
 import { useVerifications } from '../../store/reducers/verifications';
-import { defineTaskByCredentialGroupId, getCurrentTab } from '../../utils';
+import {
+  defineTaskByCredentialGroupId,
+  getCurrentTab,
+} from '../../../common/utils';
+import { TVerification } from '../../../common/types';
 import { Tag } from '../../../components';
 import BringGif from '../../../images/bring.gif';
-import { TExtensionRequestType, TUserStatus, TVerification } from '../../types';
-import manager from '../../manager';
+import { TExtensionRequestType } from '../../types';
+import manager from '../../../manager';
 import { tasks } from '../../../common/core';
 
 const defineIfButtonIsDisabled = (

@@ -4,3 +4,12 @@ export type { TNotarizationStep } from './notarization-step';
 export type { TNotarizationGroup } from './notarization-group';
 export type { TNotarizationGroupCheck } from './notarization-group-check';
 export type { TConnectionQuality } from './connection-quality';
+export type { TSemaphoreProofServer } from './semaphore-proof-server';
+export type { TSemaphoreProof } from './semaphore-proof';
+
+export type { TUser } from './user';
+export type { TVerificationStatus } from './verification-status';
+export type { TVerification } from './verification';
+
+export type { TTaskServer } from './task-server';
+export type { TVerifyResult } from './verify-result';

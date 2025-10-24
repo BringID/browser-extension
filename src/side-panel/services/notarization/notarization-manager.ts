@@ -2,7 +2,7 @@ import { NotarizationStatus, NotarizationHandler } from './types';
 import { tasks, Task } from '../../../common/core';
 import { NotarizationUberRides } from './handlers/uber-rides';
 import { State } from '../../common/helpers/progressive';
-import { Transcript } from 'tlsn-js';
+import { Transcript } from 'bringid-tlsn-js';
 import { notarizationSlice } from '../../store/notarization';
 import { store } from '../../store';
 import { NotarizationAppleDevices } from './handlers/apple-devices';

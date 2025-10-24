@@ -3,7 +3,7 @@ import {
     NotaryServer,
     Prover as TProver,
     Presentation as TPresentation
-} from "tlsn-js";
+} from 'bringid-tlsn-js'
 import {Status, Transcript} from "./types";
 import {Progressive, OnStateUpdated} from "../../common/helpers/progressive";
 import * as Comlink from 'comlink';
@@ -14,6 +14,7 @@ import { WsMonitorConfig } from './worker';
 import { TProgressData } from "../../types";
 import { store } from '../../store';
 import { notarizationSlice } from '../../store/notarization';
+import configs from '../../../configs';
 
 const worker = new Worker(new URL('./worker.ts', import.meta.url))
 worker.postMessage({
@@ -51,9 +52,9 @@ const { init, Prover, Presentation }: any = Comlink.wrap(worker);
 void init({loggingLevel: "Debug"});
 
 export class TLSNotary extends Progressive<Status>{
-    readonly #notary = new NotaryServer(process.env.NOTARY_URL || "");
-    readonly #proxyURL = process.env.PROXY_URL || "";
-    readonly #prover: TProver;
+  readonly #notary = new NotaryServer(`${configs.ZUPLO_API_URL}/v1/notary` || "", configs.ZUPLO_KEY);
+  readonly #proxyURL = process.env.PROXY_URL || "";
+  readonly #prover: TProver;
 
    static async new(
     tlsnConfig: {serverDns: string, maxSentData: number, maxRecvData: number},

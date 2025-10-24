@@ -54,11 +54,13 @@ export class RequestRecorder extends Progressive<Status> {
       { urls },
       ['requestBody'],
     );
+
     chrome.webRequest.onSendHeaders.addListener(
       this.handleRequestHeaders,
       { urls },
       ['requestHeaders', 'extraHeaders'],
     );
+
     this.setStatus(Status.Recording);
   }
 

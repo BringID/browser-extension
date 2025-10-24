@@ -1,5 +1,5 @@
 type TProps = {
-  onStart: () => void
+  onStart: () => void;
 };
 
 export default TProps;

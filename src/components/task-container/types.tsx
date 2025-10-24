@@ -1,6 +1,5 @@
 import React from 'react';
-import { TVerificationStatus } from '../../popup/types';
-import { TNotarizationGroup } from '../../common/types';
+import { TNotarizationGroup, TVerificationStatus } from '../../common/types';
 
 type TProps = {
   status: TVerificationStatus;

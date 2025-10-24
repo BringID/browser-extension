@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { Container } from './styled-components';
 import { Verification } from '../../../components';
 import TProps from './types';
-import { defineTaskByCredentialGroupId } from '../../utils';
+import { defineTaskByCredentialGroupId } from '../../../common/utils';
 
 const VerificationsSelectList: FC<TProps> = ({
   tasks,

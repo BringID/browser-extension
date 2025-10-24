@@ -6,7 +6,7 @@ import {
   ResultCallback,
 } from './types';
 import { OnStateUpdated, Progressive } from '../../common/helpers/progressive';
-import { Presentation } from 'tlsn-js';
+import { Presentation } from 'bringid-tlsn-js';
 
 export abstract class NotarizationBase
   extends Progressive<NotarizationStatus>

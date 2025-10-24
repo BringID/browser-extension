@@ -7,20 +7,17 @@ import {
   TextStyled,
   Image,
   Span,
-} from './styled-components'
-import TProps from './types'
+} from './styled-components';
+import TProps from './types';
 import BringGif from '../../../images/bring.gif';
 
-
-const TaskLoader: FC<TProps> = ({
-  onStart
-}) => {
+const TaskLoader: FC<TProps> = ({ onStart }) => {
   const [taskIsReady, setTaskIsReady] = useState<boolean>(false);
   useEffect(() => {
     setTimeout(() => {
-      setTaskIsReady(true)
-    }, 2000)
-  }, [])
+      setTaskIsReady(true);
+    }, 2000);
+  }, []);
 
   return (
     <Container>
@@ -29,14 +26,19 @@ const TaskLoader: FC<TProps> = ({
         <TitleStyled>Verification will start soon</TitleStyled>
 
         <TextStyled>
-            Verification will begin in a few seconds. If it doesn't start automatically, <Span onClick={
-              () => {
-                if (!taskIsReady) { return }
-                onStart()
+          Verification will begin in a few seconds. If it doesn't start
+          automatically,{' '}
+          <Span
+            onClick={() => {
+              if (!taskIsReady) {
+                return;
               }
-            }>click here to continue</Span>
+              onStart();
+            }}
+          >
+            click here to continue
+          </Span>
         </TextStyled>
-   
       </Content>
     </Container>
   );

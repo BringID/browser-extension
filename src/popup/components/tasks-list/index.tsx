@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { Container } from './styled-components';
 import { Task } from '../../../components';
 import TProps from './types';
-import { defineRelatedVerification } from '../../utils';
+import { defineRelatedVerification } from '../../../common/utils';
 const { NODE_ENV } = process.env;
 
 const TasksList: FC<TProps> = ({ tasks, className, verifications }) => {
