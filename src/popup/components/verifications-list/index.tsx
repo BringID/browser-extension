@@ -17,17 +17,21 @@ const VerificationsList: FC<TProps> = ({
   onAddVerifications,
   className,
 }) => {
-
-  const hasAnyPendingVerification = verifications.find(verification => verification.status === 'scheduled' || verification.status === 'pending')
+  const hasAnyPendingVerification = verifications.find(
+    (verification) =>
+      verification.status === 'scheduled' || verification.status === 'pending',
+  );
 
   return (
     <Container className={className}>
-      {hasAnyPendingVerification && <NoteStyled>
-        We batch verifications for better privacy.{' '}
-        <LinkStyled href="https://app.bringid.org/privacy" target="_blank">
-          Learn more
-        </LinkStyled>
-      </NoteStyled>}
+      {hasAnyPendingVerification && (
+        <NoteStyled>
+          We batch verifications for better privacy.{' '}
+          <LinkStyled href="https://app.bringid.org/privacy" target="_blank">
+            Learn more
+          </LinkStyled>
+        </NoteStyled>
+      )}
       {verifications.length === 0 && (
         <NoVerificationsFound title="No verifications yet" />
       )}

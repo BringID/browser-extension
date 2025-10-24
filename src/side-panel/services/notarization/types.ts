@@ -4,7 +4,7 @@ import {
   OnStateUpdated,
   State as ProgressiveState,
 } from '../../common/helpers/progressive';
-import { Presentation } from 'bringid-tlsn-js'
+import { Presentation } from 'bringid-tlsn-js';
 export enum NotarizationStatus {
   NotStarted = 'Not Started',
   InProgress = 'In Progress',

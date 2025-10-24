@@ -2,7 +2,7 @@ import { NotarizationBase } from '../../notarization-base';
 import { RequestRecorder } from '../../../requests-recorder';
 import { Request } from '../../../../common/types';
 import { TLSNotary } from '../../../tlsn';
-import { Commit } from 'bringid-tlsn-js'
+import { Commit } from 'bringid-tlsn-js';
 import { Mapping, parse, Pointers } from 'json-source-map';
 import TActivitiesResponse from './types';
 
@@ -30,8 +30,8 @@ export class NotarizationUberRides extends NotarizationBase {
     if (this.currentStepUpdateCallback)
       this.currentStepUpdateCallback(this.currentStep);
 
-
-    const query =  '{ currentUser { uuid } activities { past(limit: 10) { activities { uuid, description } } } }'
+    const query =
+      '{ currentUser { uuid } activities { past(limit: 10) { activities { uuid, description } } } }';
 
     const requestParams = {
       method: log[0].method,
@@ -43,7 +43,7 @@ export class NotarizationUberRides extends NotarizationBase {
           .join(';'),
       },
       body: JSON.stringify({
-        query
+        query,
       }),
     };
 
@@ -100,7 +100,7 @@ export class NotarizationUberRides extends NotarizationBase {
         url: log[0].url,
         ...requestParams,
         body: {
-          query
+          query,
         },
       });
 

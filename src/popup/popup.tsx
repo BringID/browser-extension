@@ -27,7 +27,6 @@ const Popup: FC = () => {
 
     chrome.runtime.connect({ name: 'popup' });
     // connecting port
-
   }, []);
 
   useEffect(() => {
