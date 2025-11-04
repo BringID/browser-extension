@@ -61,6 +61,12 @@ yarn build
 
 This will create a `build/` folder containing the compiled extension.
 
+To use Base Sepolia Testnet production verion please run:
+
+```
+yarn build:testnet
+```
+
 ### Load into Browser
 
 1. Open your browser (e.g., Chrome or Edge)
