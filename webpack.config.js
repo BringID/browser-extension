@@ -135,7 +135,7 @@ const options = {
     new CleanWebpackPlugin({ verbose: false }),
     new webpack.ProgressPlugin(),
     // expose and write the allowed env vars on the compiled bundle
-    new webpack.EnvironmentPlugin(["NODE_ENV", "NOTARY_URL", "PROXY_URL"]),
+    new webpack.EnvironmentPlugin(["NODE_ENV", "PROXY_URL"]),
     // new ExtReloader({
     //   manifest: path.resolve(__dirname, "src/manifest.json")
     // }),
@@ -207,6 +207,9 @@ const options = {
     }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
+    }),
+    new webpack.DefinePlugin({
+      "process.env.EXTENSION_MODE": JSON.stringify(process.env.EXTENSION_MODE),
     }),
   ].filter(Boolean),
   infrastructureLogging: {

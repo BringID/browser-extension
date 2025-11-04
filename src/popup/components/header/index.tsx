@@ -33,7 +33,7 @@ const defineContent = (address: string | null, points: number) => {
         onClick={async () => {
           const storage = await getStorage();
           await storage.destroyUser();
-          const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOST);
+          const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOSTS);
           connectorTabs.forEach((tab) => {
             console.log({ tab });
             chrome.tabs.sendMessage(tab.id as number, {

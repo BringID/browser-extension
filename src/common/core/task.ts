@@ -19,7 +19,7 @@ export type Task = {
 
 function loadTasks(): Task[] {
   try {
-    const tasksConfig = require('../../../cfg/tasks.json');
+    const tasksConfig = process.env.EXTENSION_MODE === 'testnet' ? require('../../../cfg/tasks-sepolia.json') : require('../../../cfg/tasks.json');
     // const tasksConfig = require('../../../cfg/tasks-sepolia.json');
 
     // Validate that it's an array
