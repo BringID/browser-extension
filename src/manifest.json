@@ -39,7 +39,8 @@
       "https://dev.app.bringid.org/*",
       "https://connect.bringid.org/*",
       "https://faucet.bringid.org/*"
-    ]
+    ],
+    "all_frames": true
   },
   "web_accessible_resources": [
     {
@@ -51,7 +52,8 @@
         "https://dev.app.bringid.org/*",
         "https://connect.bringid.org/*",
         "https://faucet.bringid.org/*"
-      ]
+      ],
+      "all_frames": true
     }
   ],
   "optional_host_permissions": [
