@@ -23,10 +23,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://app.bringid.org/*",
-        "https://dev.app.bringid.org/*",
-        "https://connect.bringid.org/*",
-        "https://faucet.bringid.org/*"
+        "https://connect.bringid.org/*"
       ],
       "js": ["contentScript.bundle.js"],
       "css": [],
@@ -35,10 +32,7 @@
   ],
   "externally_connectable": {
     "matches": [
-      "https://app.bringid.org/*",
-      "https://dev.app.bringid.org/*",
-      "https://connect.bringid.org/*",
-      "https://faucet.bringid.org/*"
+      "https://connect.bringid.org/*"
     ],
     "all_frames": true
   },
@@ -48,10 +42,7 @@
         "content.bundle.js"
       ],
       "matches": [
-        "https://app.bringid.org/*",
-        "https://dev.app.bringid.org/*",
-        "https://connect.bringid.org/*",
-        "https://faucet.bringid.org/*"
+        "https://connect.bringid.org/*"
       ],
       "all_frames": true
     }
@@ -65,11 +56,7 @@
     "https://account.apple.com/account/manage/section/devices"
   ],
   "host_permissions": [
-    "https://app.bringid.org/*",
-    "https://dev.app.bringid.org/*",
-    "https://connect.bringid.org/*",
-    "https://faucet.bringid.org/*"
-
+    "https://connect.bringid.org/*"
   ],
   "permissions": [
     "offscreen",
