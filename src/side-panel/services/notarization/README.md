@@ -17,7 +17,7 @@ The handlers have complete flexibility to implement custom logic, interact with 
 
 ### Base Class: NotarizationBase
 
-All notarization handlers extend [`NotarizationBase`](../notarization-base.ts), which provides:
+All notarization handlers extend [`NotarizationBase`](notarization-base.ts), which provides:
 
 #### Protected Methods Available:
 
@@ -33,11 +33,11 @@ All notarization handlers extend [`NotarizationBase`](../notarization-base.ts), 
 
 ### Key Dependencies
 
-1. **RequestRecorder** ([`request-recorder.ts`](../../requests-recorder/request-recorder.ts))
+1. **RequestRecorder** ([`request-recorder.ts`](../requests-recorder/request-recorder.ts))
    - Captures HTTP requests matching specified patterns
    - Provides filtered request logs for notarization
 
-2. **TLSNotary** ([`tlsnotary.ts`](../../tlsn/tlsnotary.ts))
+2. **TLSNotary** ([`tlsnotary.ts`](../tlsn/tlsnotary.ts))
    - Creates cryptographic proofs of HTTP requests
    - Generates transcripts and presentations
 
@@ -170,7 +170,7 @@ private async onRequestsCaptured(log: Array<Request>) {
 
 ## Progress Updates
 
-Handlers should provide progress updates to inform users about the notarization status. Use the protected methods from [`NotarizationBase`](../notarization-base.ts):
+Handlers should provide progress updates to inform users about the notarization status. Use the protected methods from [`NotarizationBase`](notarization-base.ts):
 
 ### Available Progress Methods
 

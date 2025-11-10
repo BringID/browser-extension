@@ -18,21 +18,23 @@
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
-    
+
   },
   "content_scripts": [
     {
       "matches": [
-        "https://app.bringid.org/*"
+        "https://connect.bringid.org/*"
       ],
       "js": ["contentScript.bundle.js"],
-      "css": []
+      "css": [],
+      "all_frames": true
     }
   ],
   "externally_connectable": {
     "matches": [
-      "https://app.bringid.org/*"
-    ]
+      "https://connect.bringid.org/*"
+    ],
+    "all_frames": true
   },
   "web_accessible_resources": [
     {
@@ -40,8 +42,9 @@
         "content.bundle.js"
       ],
       "matches": [
-        "https://app.bringid.org/*"
-      ]
+        "https://connect.bringid.org/*"
+      ],
+      "all_frames": true
     }
   ],
   "optional_host_permissions": [
@@ -53,7 +56,7 @@
     "https://account.apple.com/account/manage/section/devices"
   ],
   "host_permissions": [
-    "https://app.bringid.org/*"
+    "https://connect.bringid.org/*"
   ],
   "permissions": [
     "offscreen",
