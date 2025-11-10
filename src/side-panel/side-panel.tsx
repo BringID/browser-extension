@@ -18,7 +18,6 @@ import {
   ButtonStyled,
   Buttons,
   LinkStyled,
-  NoteMarginStyled,
   NoteAdditionalInfoStyled,
 } from './styled-components';
 import { useDispatch } from 'react-redux';
