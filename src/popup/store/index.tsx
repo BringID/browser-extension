@@ -3,21 +3,14 @@ import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import rootReducer from './reducers';
+import { syncDevModeMiddleware } from '../../middlewares';
 
-const createStoreWithMiddleware =
-  process.env.NODE_ENV === 'development'
-    ? applyMiddleware(
-        thunk,
-        createLogger({
-          collapsed: true,
-        }),
-      )(createStore)
-    : applyMiddleware(thunk)(createStore);
+const middlewares = [thunk, syncDevModeMiddleware];
 
-function configureAppStore() {
-  return createStoreWithMiddleware(rootReducer);
+if (process.env.NODE_ENV === 'development') {
+  middlewares.push(createLogger({ collapsed: true }));
 }
 
-const store = configureAppStore();
+const store = createStore(rootReducer, applyMiddleware(...middlewares));
 
 export default store;

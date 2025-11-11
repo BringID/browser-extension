@@ -10,6 +10,7 @@ import { Tag } from '../../components';
 import relayer from '../../relayer';
 import getStorage from '../../db-storage';
 import configs from '../../configs';
+import modeConfigs from '../../configs/mode-configs';
 
 const definePluginContent = (
   status: TVerificationStatus,
@@ -98,9 +99,10 @@ const Verification: FC<TProps> = ({
 
       if (verification) {
         const { txHash } = verification;
+        const configsResult = await modeConfigs()
 
         chrome.tabs.create({
-          url: `${defineExplorerURL(Number(configs.CHAIN_ID || '84532'))}/tx/${txHash}`,
+          url: `${defineExplorerURL(Number(configsResult.CHAIN_ID || '84532'))}/tx/${txHash}`,
         });
       }
     },
