@@ -1,4 +1,6 @@
 import configs from '../../configs';
+import modeConfigs from '../../configs/mode-configs';
+
 import {
   api,
   defineZuploNetworkName,
@@ -6,18 +8,20 @@ import {
 } from '../../common/utils';
 import { TGetProof, TGetProofResponse } from './types';
 
-const getProof: TGetProof = (
+const getProof: TGetProof = async (
   apiUrl,
   identityCommitment,
   semaphoreGroupId,
   fetchProofs,
 ) => {
-  const networkName = defineZuploNetworkName(configs.CHAIN_ID);
+  const configsResult = await modeConfigs()
+  const networkName = defineZuploNetworkName(configsResult.CHAIN_ID);
   const queryParams = createQueryString({
     identity_commitment: identityCommitment,
     semaphore_group_id: semaphoreGroupId,
     fetch_proofs: fetchProofs,
   });
+
   return api<TGetProofResponse>(
     `${apiUrl}/v1/indexer/${networkName}/proofs?${queryParams}`,
     'GET',

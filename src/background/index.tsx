@@ -38,6 +38,26 @@ async function createOffscreenDocument() {
   const storage = await getStorage();
   await createOffscreenDocument();
 
+  // related to options page
+  // chrome.storage.sync.get('specialMode', ({ specialMode }) => {
+  //   if (specialMode) {
+  //     console.log("Special mode is ON!");
+  //     // Do something cool here
+  //   } else {
+  //     console.log("Special mode is OFF.");
+  //   }
+  // });
+
+  chrome.storage.onChanged.addListener((changes, area) => {
+    console.log(changes)
+    if (area === 'sync' && changes.devMode) {
+      console.log("Special mode changed to:", changes.devMode.newValue);
+    }
+  });
+
+  // related to options page
+
+
   chrome.runtime.onConnect.addListener((port) => {
     if (port.name === 'offscreen') {
       port.onMessage.addListener((msg) => {

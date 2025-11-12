@@ -6,8 +6,9 @@ import {
 } from './types';
 import configs from '../../configs';
 import { defineZuploNetworkName, api } from '../../common/utils';
+import modeConfigs from '../../configs/mode-configs';
 
-const addVerification: TAddVerification = (
+const addVerification: TAddVerification = async (
   apiUrl,
   registry,
   credentialGroupId,
@@ -15,7 +16,9 @@ const addVerification: TAddVerification = (
   identityCommitment,
   verifierSignature,
 ) => {
-  const networkName = defineZuploNetworkName(configs.CHAIN_ID);
+  const configsResult = await modeConfigs()
+
+  const networkName = defineZuploNetworkName(configsResult.CHAIN_ID);
   return api<TAddVerificationResponse>(
     `${apiUrl}/v1/task-manager/${networkName}/verification/tasks`,
     'POST',
@@ -32,8 +35,9 @@ const addVerification: TAddVerification = (
   );
 };
 
-const getVerification: TGetVerification = (taskId) => {
-  const networkName = defineZuploNetworkName(configs.CHAIN_ID);
+const getVerification: TGetVerification = async (taskId) => {
+  const configsResult = await modeConfigs()
+  const networkName = defineZuploNetworkName(configsResult.CHAIN_ID);
 
   return api<TGetVerificationResponse>(
     `${configs.ZUPLO_API_URL}/v1/task-manager/${networkName}/verification/tasks/${taskId}`,

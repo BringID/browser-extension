@@ -19,6 +19,7 @@ import TimeLeftProgress from './time-left-progress';
 import Step from './step';
 import List from './list';
 import ExpandableContainer from './expandable-container';
+import Toggle from './toggle';
 
 export {
   Spinner,
@@ -42,4 +43,5 @@ export {
   Step,
   List,
   ExpandableContainer,
+  Toggle
 };

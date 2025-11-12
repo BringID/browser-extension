@@ -42,6 +42,7 @@ const options = {
     background: path.join(__dirname, "src", "background", "index.tsx"),
 
     offscreen: path.join(__dirname, "src", "offscreen", "index.tsx"),
+    options: path.join(__dirname, "src", "options", "index.tsx"),
 
     // should be injected to webpage
     contentScript: path.join(__dirname, "src", "content", "index.tsx"),
@@ -189,6 +190,13 @@ const options = {
       template: path.join(__dirname, "src", "popup", "index.html"),
       filename: "popup.html",
       chunks: ["popup"],
+      cache: false,
+    }),
+
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src", "options", "index.html"),
+      filename: "options.html",
+      chunks: ["options"],
       cache: false,
     }),
 

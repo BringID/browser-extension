@@ -1,6 +1,6 @@
 import IRelayer, { TCreateVerification, TGetVerification } from './types';
 import taskManager from '../api/task-manager';
-import configs from '../configs';
+import modeConfigs from '../configs/mode-configs';
 import { defineApiUrl } from '../common/utils';
 
 class Relayer implements IRelayer {
@@ -16,9 +16,10 @@ class Relayer implements IRelayer {
     identityCommitment,
     verifierSignature,
   ) => {
+    const configsResult = await modeConfigs()
     const { success, task } = await taskManager.addVerification(
       this.#apiUrl,
-      configs.REGISTRY,
+      configsResult.REGISTRY,
       credentialGroupId,
       idHash,
       identityCommitment,
