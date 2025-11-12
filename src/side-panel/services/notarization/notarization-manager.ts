@@ -8,6 +8,7 @@ import { store } from '../../store';
 import { NotarizationAppleDevices } from './handlers/apple-devices';
 import { NotarizationXVerifiedFollowers } from './handlers/x-verified-followers';
 
+
 // NotarizationManager stores Notarization and handles Redux
 export class NotarizationManager {
   readonly #notarizations: NotarizationHandler[] = [];
@@ -76,7 +77,8 @@ export class NotarizationManager {
   }
 }
 
-const t: Task[] = tasks();
+const state = store.getState()
+const t: Task[] = tasks(state.notarization.devMode);
 
 export const notarizationManager = new NotarizationManager([
   new NotarizationUberRides(t[0]),

@@ -73,7 +73,6 @@ class Manager implements IManager {
       throw new Error('userKey is not available');
     }
     const semaphoreProofs: TSemaphoreProof[] = [];
-    const availableTasks = tasks();
     let totalScore = 0;
 
     const verifications = await this.#db?.getVerifications();
@@ -95,8 +94,8 @@ class Manager implements IManager {
         if (status !== 'completed') {
           continue;
         }
-
-        const relatedTask = defineTaskByCredentialGroupId(credentialGroupId);
+        const storageData = await chrome.storage.sync.get('devMode')
+        const relatedTask = defineTaskByCredentialGroupId(credentialGroupId, storageData.devMode);
 
         if (!relatedTask) {
           continue;

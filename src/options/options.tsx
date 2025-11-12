@@ -3,14 +3,14 @@ import React, {
   useEffect,
   useState
 } from 'react';
-import { Page } from '../components';
-import { Toggle } from '../components'
+import { Page, Toggle } from '../components';
+import { TitleStyled, Container } from './styled-components'
 
 const Options: FC = () => {
   const [
     toggleValue,
     setToggleValue
-  ] = useState<boolean | null>(null)
+  ] = useState<boolean>(false)
 
   useEffect(() => {
     chrome.storage.sync.get('devMode', (data) => {
@@ -18,23 +18,20 @@ const Options: FC = () => {
     });
   }, [])
 
-  useEffect(() => {
-    if (toggleValue === null) {
-      return 
-    }
-    chrome.storage.sync.set({ devMode: toggleValue });
-  }, [
-    toggleValue
-  ])
-
   return (
     <Page>
-      <Toggle
-        label='Dev Mode'
-        size='small'
-        value={Boolean(toggleValue)}
-        onChange={(value) => setToggleValue(value)}
-      />
+      <Container>
+        <TitleStyled>Options</TitleStyled>
+        <Toggle
+          label='Dev Mode'
+          size='small'
+          value={Boolean(toggleValue)}
+          onChange={async (value) => {
+            await chrome.storage.sync.set({ devMode: value });
+            setToggleValue(value)
+          }}
+        />
+      </Container>
     </Page>
   );
 };

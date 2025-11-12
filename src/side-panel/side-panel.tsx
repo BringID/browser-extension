@@ -309,21 +309,12 @@ const SidePanel: FC = () => {
     connectionQuality,
     speed,
     transcriptSent,
+    devMode
   } = useSelector((state: RootState) => {
     return state.notarization;
   });
 
-  console.log('DATA: ', {
-    result,
-    taskId,
-    progress,
-    currentStep,
-    transcriptRecv,
-    transcriptSent,
-    error,
-  });
-
-  const availableTasks = tasks();
+  const availableTasks = tasks(devMode);
   const [scheduledTime, setScheduledTime] = useState<number | null>(null);
 
   if (taskId === null) {
@@ -333,6 +324,7 @@ const SidePanel: FC = () => {
           {showPermissionOverlay && nextTaskId !== null && (
             <PermissionOverlay
               nextTaskIndex={nextTaskId}
+              devMode={devMode}
               onAccepted={() => {
                 setShowPermissionOverlay(false);
                 console.log('confirm: ', { nextTaskId });
@@ -377,7 +369,7 @@ const SidePanel: FC = () => {
             onAccept={async () => {
               setLoading(true);
               try {
-                const availableTasks = tasks();
+                const availableTasks = tasks(devMode);
                 const currentTask = availableTasks[taskId];
 
                 const groupData = defineGroup(

@@ -1,6 +1,6 @@
 {
   "name": "browser-extension",
-  "version": "1.0.1",
+  "version": "0.1.0",
   "license": "AGPL3",
   "repository": {
     "type": "git",
@@ -9,7 +9,6 @@
   "scripts": {
     "prebuild": "node prebuild.js",
     "build": "NODE_ENV=production webpack --config webpack.prod.js",
-    "build:testnet": "NODE_ENV=production EXTENSION_MODE=testnet webpack --config webpack.prod.js",
     "dev": "NODE_ENV=development webpack --config webpack.dev.js --watch",
     "lint": "eslint .",
     "lint:fix": "./node_modules/.bin/eslint --fix ."

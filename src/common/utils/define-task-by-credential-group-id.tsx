@@ -1,8 +1,11 @@
 import { Task, tasks } from '../../common/core';
 import { TNotarizationGroup } from '../../common/types';
 
-type TDefineTaskByCredentialGroupId = (credentialGroupId: string) =>
-  | {
+type TDefineTaskByCredentialGroupId = (
+  credentialGroupId: string,
+  devMode: boolean
+) =>
+  {
       taskId: string;
       title: string;
       description?: string;
@@ -13,8 +16,9 @@ type TDefineTaskByCredentialGroupId = (credentialGroupId: string) =>
 
 const defineTaskByCredentialGroupId: TDefineTaskByCredentialGroupId = (
   credentialGroupId,
+  devMode
 ) => {
-  const availableTasks = tasks();
+  const availableTasks = tasks(devMode);
   for (const task of availableTasks) {
     for (const group of task.groups) {
       if (group.credentialGroupId === credentialGroupId) {

@@ -5,6 +5,7 @@ type TProps = { value: boolean; size: TSize; disabled?: boolean }
 
 export const ToggleContainer = styled.div`
   display: flex;
+  align-items: center;
 `
 
 export const ToggleItem = styled.div<TProps>`
@@ -16,7 +17,7 @@ export const ToggleItem = styled.div<TProps>`
   padding: 2px;
   box-sizing: border-box;
   cursor: pointer;
-  background-color: ${(props) => (props.theme && props.theme.primaryBorderColor)};
+  background-color: ${(props) => (props.theme && props.theme.additionalBorderColor)};
   transition: background-color 0.3s;
   ${(props) =>
     props.value &&

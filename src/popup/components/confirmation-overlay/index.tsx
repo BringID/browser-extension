@@ -25,6 +25,7 @@ import BringGif from '../../../images/bring.gif';
 import { TExtensionRequestType } from '../../types';
 import manager from '../../../manager';
 import { tasks } from '../../../common/core';
+import { useUser } from '../../store/reducers/user';
 
 const defineIfButtonIsDisabled = (
   pointsRequired: number,
@@ -154,7 +155,8 @@ const ConfirmationOverlay: FC<TProps> = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const isEnoughPoints = points >= pointsRequired;
-  const availableTasks = tasks();
+  const user = useUser()
+  const availableTasks = tasks(user.devMode);
   const verificationsState = useVerifications();
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -164,6 +166,7 @@ const ConfirmationOverlay: FC<TProps> = ({
     verificationsState.verifications.forEach((verification) => {
       const relatedTask = defineTaskByCredentialGroupId(
         verification.credentialGroupId,
+        user.devMode
       );
 
       if (!relatedTask) {
@@ -217,6 +220,7 @@ const ConfirmationOverlay: FC<TProps> = ({
         {isEnoughPoints && (
           <VerificationsSelectListStyled
             tasks={availableTasks}
+            devMode={user.devMode}
             verifications={verificationsState.verifications}
             selected={selected}
             onSelect={(id, isSelected) => {

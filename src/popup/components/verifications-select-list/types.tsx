@@ -7,6 +7,7 @@ type TProps = {
   verifications: TVerification[];
   selected: string[];
   onSelect: (id: string, selected: boolean) => void;
+  devMode: boolean
 };
 
 export default TProps;

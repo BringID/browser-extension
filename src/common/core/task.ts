@@ -17,9 +17,11 @@ export type Task = {
   };
 };
 
-function loadTasks(): Task[] {
+function loadTasks(
+  devMode: boolean
+): Task[] {
   try {
-    const tasksConfig = process.env.EXTENSION_MODE === 'testnet' ? require('../../../cfg/tasks-sepolia.json') : require('../../../cfg/tasks.json');
+    const tasksConfig = devMode ? require('../../../cfg/tasks-sepolia.json') : require('../../../cfg/tasks.json');
     // const tasksConfig = require('../../../cfg/tasks-sepolia.json');
 
     // Validate that it's an array
@@ -55,7 +57,10 @@ function loadTasks(): Task[] {
   }
 }
 
-const TASKS = loadTasks();
-export function tasks(): Task[] {
+export function tasks(
+  devMode: boolean
+): Task[] {
+  const TASKS = loadTasks(devMode);
+  console.log({TASKS})
   return [...TASKS];
 }

@@ -216,9 +216,6 @@ const options = {
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
     }),
-    new webpack.DefinePlugin({
-      "process.env.EXTENSION_MODE": JSON.stringify(process.env.EXTENSION_MODE),
-    }),
   ].filter(Boolean),
   infrastructureLogging: {
     level: "info",
