@@ -426,6 +426,8 @@ const SidePanel: FC = () => {
               window.close();
             }}
             onAction={() => {
+              window.close()
+              
               chrome.action
                 // @ts-ignore
                 .openPopup()

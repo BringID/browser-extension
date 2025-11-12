@@ -86,7 +86,7 @@ async function createOffscreenDocument() {
 
   browser.runtime.onMessageExternal.addListener(async function (
     request,
-    _,
+    sender,
     sendResponse: (data: any) => void,
   ) {
     switch (request.type) {
@@ -96,9 +96,23 @@ async function createOffscreenDocument() {
       }
 
       case TWebsiteRequestType.has_user_key: {
+        console.log("HERE TWebsiteRequestType.has_user_key: ", sender)
         const userKey = await storage.getUserKey();
-        const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOST);
-        console.log({ connectorTabs });
+
+        if (sender.tab?.id !== undefined && sender.frameId !== undefined) {
+          chrome.tabs.sendMessage(
+            sender.tab.id,
+            {
+              type: TExtensionRequestType.has_user_key_response,
+              hasUserKey: Boolean(userKey),
+            },
+            { frameId: sender.frameId }
+          );
+        }
+
+
+        // not sure if needed
+        const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOSTS);
         connectorTabs.forEach((tab) => {
           chrome.tabs.sendMessage(tab.id as number, {
             type: TExtensionRequestType.has_user_key_response,

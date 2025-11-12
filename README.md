@@ -17,7 +17,6 @@ A browser extension that connects with a notary and proxy server for blockchain-
 Before running the extension, create a `.env` file in the root directory with the following content:
 
 ```
-export NOTARY_URL="https://notary-production-ae4d.up.railway.app"
 export PROXY_URL="wss://proxy-production-2e63.up.railway.app/websockify"
 ```
 
@@ -60,6 +59,12 @@ yarn build
 ```
 
 This will create a `build/` folder containing the compiled extension.
+
+To use Base Sepolia Testnet production verion please run:
+
+```
+yarn build:testnet
+```
 
 ### Load into Browser
 
