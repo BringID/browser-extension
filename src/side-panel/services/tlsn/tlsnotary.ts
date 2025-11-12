@@ -63,7 +63,7 @@ export class TLSNotary extends Progressive<Status>{
   ): Promise<TLSNotary> {
      worker.postMessage({
        action: 'setWsMonitorConfig',
-       wsMonitorConfig
+       config: wsMonitorConfig
      });
     const prover = (await new Prover(tlsnConfig)) as TProver;
     return new TLSNotary(tlsnConfig.serverDns, prover, updatesCallback);

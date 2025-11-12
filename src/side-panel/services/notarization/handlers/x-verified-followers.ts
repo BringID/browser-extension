@@ -11,7 +11,7 @@ export const XVerifiedFollowersHandlerConfig: SimpleHandlerConfig = {
   redirect: 'https://x.com/i/account_analytics/overview',
   tlsnConfig: {
     serverDns: 'x.com',
-    maxSentData: 1008,
+    maxSentData: 2000,
     maxRecvData: 25000,
   },
   replayRequestCfg: {
@@ -22,14 +22,15 @@ export const XVerifiedFollowersHandlerConfig: SimpleHandlerConfig = {
         Connection: 'close',
         'Content-Type': 'application/json',
       },
+      whitelist: ['authorization', 'x-csrf-token'],
       cookie: {
         whitelist: ['auth_token', 'ct0'],
       },
     },
   },
   transcriptDisclose: [
-    '/viewer_v2/user_results/result/verified_follower_count',
-    '/viewer_v2/user_results/result/id',
+    '/data/viewer_v2/user_results/result/verified_follower_count',
+    '/data/viewer_v2/user_results/result/id',
   ],
   responseMiddleware: async (_, response: JsonValue) => {
     const verifiedFollowersMatch = JSON.stringify(response).match(

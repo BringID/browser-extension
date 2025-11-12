@@ -14,6 +14,8 @@ export type RequestHandler = (
 export type ReplayRequestConfig = {
   headers?: {
     custom?: Record<string, string>;
+    whitelist?: Array<string>;
+    blacklist?: Array<string>;
     cookie?: {
       whitelist?: Array<string>;
       blacklist?: Array<string>;
@@ -22,14 +24,38 @@ export type ReplayRequestConfig = {
   customBody?: JsonValue;
 };
 
+function applyLists(
+  entries: Array<[string, string]>,
+  whitelist?: string[],
+  blacklist?: string[],
+): Array<[string, string]> {
+  let filtered: Array<[string, string]> = [];
+  if (whitelist && whitelist.length > 0) {
+    filtered = entries.filter(([key]) => whitelist.includes(key));
+  }
+  if (blacklist && blacklist.length > 0) {
+    filtered = filtered.filter(([key]) => !blacklist.includes(key));
+  }
+  return filtered;
+}
+
 // @ts-ignore
 export function replayRequest(req: Request, cfg: ReplayRequestConfig): Request {
+  const headers = Object.fromEntries(
+    applyLists(
+      Object.entries(req.headers),
+      cfg.headers?.whitelist,
+      cfg.headers?.blacklist,
+    ),
+  );
+
   return {
     url: req.url,
     method: req.method,
     headers: {
-      ...cfg.headers?.custom,
+      ...headers,
       Cookie: cookiesFromRequest(req, cfg.headers?.cookie),
+      ...cfg.headers?.custom,
     },
     body: cfg.customBody || req.body,
   };
@@ -55,17 +81,7 @@ export function cookiesFromRequest(
       return [k, v] as [string, string];
     });
 
-  if (cfg) {
-    if (cfg.whitelist && cfg.whitelist.length > 0) {
-      const wl = cfg.whitelist;
-      entries = entries.filter(([key]) => wl.includes(key));
-    }
-
-    if (cfg.blacklist && cfg.blacklist.length > 0) {
-      const bl = cfg.blacklist;
-      entries = entries.filter(([key]) => !bl.includes(key));
-    }
-  }
+  if (cfg) entries = applyLists(entries, cfg.whitelist, cfg.blacklist);
   return entries.map(([k, v]) => `${k}=${v}`).join(';');
 }
 
