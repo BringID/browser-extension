@@ -4,6 +4,7 @@ import { Transcript } from 'bringid-tlsn-js';
 import { notarizationSlice } from '../../store/notarization';
 import { store } from '../../store';
 
+
 // NotarizationManager stores Notarization and handles Redux
 export class NotarizationManager {
   readonly #notarizations: NotarizationHandler[] = [];

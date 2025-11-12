@@ -15,10 +15,13 @@ import { tasks } from '../../../common/core/task';
 import { TasksList } from '../../components';
 import { useVerifications } from '../../store/reducers/verifications';
 import configs from '../../../configs';
+import { useUser } from '../../store/reducers/user';
 
 const Tasks = () => {
   const navigate = useNavigate();
-  const availableTasks = tasks();
+  const user = useUser()
+
+  const availableTasks = tasks(user.devMode);
   const { verifications } = useVerifications();
 
   return (

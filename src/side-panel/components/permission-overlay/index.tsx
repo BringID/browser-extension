@@ -65,10 +65,10 @@ const defineButtons = (
   );
 };
 
-const PermissionOverlay: FC<TProps> = ({ nextTaskIndex, onAccepted }) => {
+const PermissionOverlay: FC<TProps> = ({ nextTaskIndex, onAccepted, devMode }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const availableTasks = tasks();
+  const availableTasks = tasks(devMode);
   const currentTask = availableTasks[nextTaskIndex];
 
   useEffect(() => {

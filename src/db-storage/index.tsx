@@ -89,7 +89,9 @@ export class DBStorage implements TDBStorage {
   };
 
   addInitialVerifications: TAddInitialVerifications = async () => {
-    const availableTasks = tasks();
+    const storageData = await chrome.storage.sync.get('devMode')
+
+    const availableTasks = tasks(storageData.devMode);
     const existingUserId = await this.getUserId();
     if (!existingUserId) {
       return [];

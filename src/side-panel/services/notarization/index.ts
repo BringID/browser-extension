@@ -6,8 +6,10 @@ import {
 } from './handlers';
 import { NotarizationManager } from './notarization-manager';
 import { Task, tasks } from '../../../common/core';
+import { store } from '../../store';
 
-const t: Task[] = tasks();
+const state = store.getState()
+const t: Task[] = tasks(state.notarization.devMode);
 
 export const notarizationManager = new NotarizationManager([
   new NotarizationTemplate(UberRidesHandlerConfig, t[0]),
