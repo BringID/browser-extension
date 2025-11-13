@@ -61,6 +61,5 @@ export function tasks(
   devMode: boolean
 ): Task[] {
   const TASKS = loadTasks(devMode);
-  console.log({TASKS})
   return [...TASKS];
 }

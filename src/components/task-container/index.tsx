@@ -44,7 +44,6 @@ const TaskContainer: FC<TProps> = ({
   id,
 }) => {
   const tiers = defineTiers(groups);
-  console.log({ groups });
   return (
     <Container status={status}>
       <Body selectable={selectable}>

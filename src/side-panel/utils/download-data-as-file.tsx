@@ -1,5 +1,5 @@
 function downloadDataAsFile(
-  data: Record<string, string | undefined>,
+  data: Record<string, any>,
   filename = 'data.json',
 ): void {
   // Step 1: Remove undefined values

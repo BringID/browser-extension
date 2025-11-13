@@ -110,8 +110,6 @@ const defineButton = (
               selected,
             );
 
-            console.log({ proofs });
-
             const tab = await getCurrentTab();
             if (tab) {
               chrome.tabs.sendMessage(tab.id as number, {

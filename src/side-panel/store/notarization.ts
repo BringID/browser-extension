@@ -98,9 +98,6 @@ export const notarizationSlice = createSlice({
     },
 
     clear: (state: NotarizationState) => {
-      console.log({
-        initialState,
-      });
       state = { ...initialState };
     },
 

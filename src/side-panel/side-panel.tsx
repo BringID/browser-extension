@@ -36,7 +36,7 @@ import { TConnectionQuality } from '../common/types';
 import errors from '../configs/errors';
 import { defineGroup } from '../common/utils';
 import manager from '../manager';
-import { collectLogs, copyLogBufferToClipboard } from './utils';
+import { collectLogs, copyLogBufferToClipboard, downloadDataAsFile } from './utils';
 
 const buffer = collectLogs(entry => {
   console.debug('Captured:', entry);
@@ -79,6 +79,8 @@ const renderButtons = (
   retryTask: () => Promise<void>,
   sendResult: () => void,
   progress: number,
+  copyStarted: boolean,
+  setCopyStarted: (copyStarted: boolean) => void,
   error?: string | null,
   result?: string,
 ) => {
@@ -121,10 +123,15 @@ const renderButtons = (
         </ButtonStyled>
       )}
       {
-        error && <ButtonStyled onClick={async () => {
-          copyLogBufferToClipboard(buffer)
-        }}>
-          Copy logs to clipboard
+        error && <ButtonStyled
+          appearance='action'
+          onClick={async () => {
+            downloadDataAsFile(
+              buffer,
+              'logs.json'
+            )
+          }}>
+            Download logs
         </ButtonStyled>
       }
       <ButtonStyled
@@ -273,6 +280,7 @@ const SidePanel: FC = () => {
 
   const [showResultOverlay, setShowResultOverlay] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [copyStarted, setCopyStarted] = useState<boolean>(false);
 
   useEffect(() => {
     const listener = (request: TMessage) => {
@@ -336,7 +344,6 @@ const SidePanel: FC = () => {
               devMode={devMode}
               onAccepted={() => {
                 setShowPermissionOverlay(false);
-                console.log('confirm: ', { nextTaskId });
 
                 notarizationManager.run(nextTaskId);
               }}
@@ -366,7 +373,6 @@ const SidePanel: FC = () => {
   const currentTask = availableTasks[taskId];
 
   // const credentialGroupId = currentTask.credentialGroupId;
-  console.log('SIDE PANEL steps: ', { currentStep, currentTask });
 
   return (
     <Wrapper>
@@ -479,6 +485,8 @@ const SidePanel: FC = () => {
                 setShowResultOverlay(true);
               },
               progress,
+              copyStarted,
+              setCopyStarted,
               error,
               result,
             )}
