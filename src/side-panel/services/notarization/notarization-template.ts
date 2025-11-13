@@ -115,20 +115,25 @@ export class NotarizationTemplate extends NotarizationBase {
     }
 
     // Notarization
-    const notary = await TLSNotary.new(this.tlsnConfig, {
-      ...DEFAULT_WS_MONITOR_CONFIG,
-      logPrefix: `[WS Monitor / ${this.name}]`,
-    });
 
-    // Transcript
-    const result = await notary.transcript(request);
-    if (result instanceof Error) return this.result(result);
-    const commit: Result<Commit> = await this.transcriptMiddleware(
-      log,
-      ...result,
-    );
-    if (commit instanceof Error) return this.result(commit);
-    this.result(await notary.notarize(commit));
+    try {
+      const notary = await TLSNotary.new(this.tlsnConfig, {
+        ...DEFAULT_WS_MONITOR_CONFIG,
+        logPrefix: `[WS Monitor / ${this.name}]`,
+      });
+
+      // Transcript
+      const result = await notary.transcript(request);
+      if (result instanceof Error) return this.result(result);
+      const commit: Result<Commit> = await this.transcriptMiddleware(
+        log,
+        ...result,
+      );
+      if (commit instanceof Error) return this.result(commit);
+      this.result(await notary.notarize(commit));
+    } catch (err) {
+      this.result(err as Error)
+    }
   }
 
   public async onStop(): Promise<void> {
