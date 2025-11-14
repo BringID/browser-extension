@@ -11,10 +11,26 @@ export const XVerifiedFollowersHandlerConfig: SimpleHandlerConfig = {
   redirect: 'https://x.com/i/account_analytics/overview',
   tlsnConfig: {
     serverDns: 'x.com',
-    maxSentData: 2000,
+    maxSentData: 1008,
     maxRecvData: 25000,
   },
   replayRequestCfg: {
+    url: (req) => {
+      const url = new URL(req.url);
+      const vars = JSON.parse(
+        decodeURIComponent(url.searchParams.get('variables') || ''),
+      );
+      const newVariablesParam = encodeURIComponent(
+        JSON.stringify({
+          requested_metrics: ['Follows'],
+          to_time: vars.to_time,
+          from_time: vars.to_time,
+          granularity: vars.granularity,
+          show_verified_followers: vars.show_verified_followers,
+        }),
+      );
+      return `${url.protocol}//${url.host}${url.pathname}?variables=${newVariablesParam}`;
+    },
     headers: {
       custom: {
         Accept: '*/*',

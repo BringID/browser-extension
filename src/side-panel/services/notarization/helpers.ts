@@ -12,6 +12,7 @@ export type RequestHandler = (
 ) => Promise<Result<Request>>;
 
 export type ReplayRequestConfig = {
+  url?: string | ((request: Request) => string);
   headers?: {
     custom?: Record<string, string>;
     whitelist?: Array<string>;
@@ -39,7 +40,6 @@ function applyLists(
   return filtered;
 }
 
-// @ts-ignore
 export function replayRequest(req: Request, cfg: ReplayRequestConfig): Request {
   const headers = Object.fromEntries(
     applyLists(
@@ -49,8 +49,15 @@ export function replayRequest(req: Request, cfg: ReplayRequestConfig): Request {
     ),
   );
 
+  let url: string = req.url;
+  if (typeof cfg.url == 'string') {
+    url = cfg.url;
+  } else if (cfg.url) {
+    url = cfg.url(req);
+  }
+
   return {
-    url: req.url,
+    url,
     method: req.method,
     headers: {
       ...headers,
