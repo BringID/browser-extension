@@ -19,6 +19,7 @@ import {
   Buttons,
   LinkStyled,
   NoteAdditionalInfoStyled,
+  DownloadLogs
 } from './styled-components';
 import { useDispatch } from 'react-redux';
 import { notarizationSlice } from './store/notarization';
@@ -36,7 +37,7 @@ import { TConnectionQuality } from '../common/types';
 import errors from '../configs/errors';
 import { defineGroup } from '../common/utils';
 import manager from '../manager';
-import { collectLogs, copyLogBufferToClipboard, downloadDataAsFile } from './utils';
+import { collectLogs, formatCapturedLogs, downloadDataAsFile } from './utils';
 
 const buffer = collectLogs(entry => {
   console.debug('Captured:', entry);
@@ -122,18 +123,6 @@ const renderButtons = (
           Continue
         </ButtonStyled>
       )}
-      {
-        error && <ButtonStyled
-          appearance='action'
-          onClick={async () => {
-            downloadDataAsFile(
-              buffer,
-              'logs.json'
-            )
-          }}>
-            Download logs
-        </ButtonStyled>
-      }
       <ButtonStyled
         onClick={() => {
           window.close();
@@ -141,20 +130,6 @@ const renderButtons = (
       >
         Close
       </ButtonStyled>
-      {/* <ButtonStyled
-      appearance='action'
-      onClick={retryTask}
-    >
-      Try again
-    </ButtonStyled>
-
-    <ButtonStyled
-      onClick={() => {
-        chrome.runtime.sendMessage({ action: 'openPopup' });
-      }}
-    >
-      Back to verifications
-    </ButtonStyled> */}
     </Buttons>
   );
 };
@@ -229,6 +204,17 @@ const renderContent = (
                 "Account doesn't meet verification requirements",
               ]}
             />
+            <DownloadLogs
+              onClick={async () => {
+                const formatBuffer = formatCapturedLogs(buffer)
+                downloadDataAsFile(
+                  formatBuffer,
+                  'logs.json'
+                )
+              }}
+            >
+              Download error logs
+            </DownloadLogs>
           </NoteStyled>
 
           <NoteStyled status="info" title="Need help?">
