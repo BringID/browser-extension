@@ -16,10 +16,6 @@ function sendMessageToBackground(data: any): Promise<void> {
 
       // Listen for a response (assuming background sends ack)
       port.onMessage.addListener((msg) => {
-        console.log('port.onMessage', {
-          messageSent,
-          msg,
-        });
         if (msg && msg.status === 'ok') {
           messageSent = true;
           if (retryTimeout) clearTimeout(retryTimeout);
@@ -58,7 +54,6 @@ const Offscreen = () => {
         await storage.syncVerifications();
 
         const verifications = await storage.getVerifications();
-        console.log('background check verifications: ', { verifications });
         const notCompletedVerifications = verifications.filter(
           (verification) => verification.status !== 'completed',
         );
@@ -74,8 +69,6 @@ const Offscreen = () => {
                 item.credentialGroupId,
                 'completed',
               );
-
-              console.log('UPDATED TO COMPLETED');
 
               sendMessageToBackground({
                 type: 'UPDATE_COMPLETED_INDICATOR',

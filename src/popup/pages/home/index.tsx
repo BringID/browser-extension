@@ -17,6 +17,7 @@ const renderContent = (
   userKey: string | null,
   availableTasks: Task[],
   verifications: TVerification[],
+  devMode: boolean,
   navigate: (location: string) => void,
 ) => {
   if (!userKey) {
@@ -26,6 +27,7 @@ const renderContent = (
   return (
     <VerificationsListStyled
       tasks={availableTasks}
+      devMode={devMode}
       verifications={verifications}
       onAddVerifications={() => {
         navigate('/tasks');
@@ -37,7 +39,9 @@ const renderContent = (
 const Home: FC = () => {
   const verificationsStore = useVerifications();
   const { verifications, loading } = verificationsStore;
-  const availableTasks = tasks();
+  const user = useUser();
+
+  const availableTasks = tasks(user.devMode);
 
   const [confirmationOverlayShow, setConfirmationOverlayShow] =
     useState<boolean>(false);
@@ -45,10 +49,9 @@ const Home: FC = () => {
   const [pointsRequired, setPointsRequired] = useState<string>('');
   const [dropAddress, setDropAddress] = useState<string>('');
 
-  const availablePoints = calculateAvailablePoints(verifications);
+  const availablePoints = calculateAvailablePoints(verifications, user.devMode);
 
   const navigate = useNavigate();
-  const user = useUser();
 
   useEffect(() => {
     chrome.storage.local.get('request', (data) => {
@@ -94,7 +97,7 @@ const Home: FC = () => {
       )}
       <Header points={availablePoints} address={user.address} />
 
-      {renderContent(user.key, availableTasks, verifications, navigate)}
+      {renderContent(user.key, availableTasks, verifications, user.devMode, navigate)}
     </Container>
   );
 };

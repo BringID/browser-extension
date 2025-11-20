@@ -42,6 +42,7 @@ const options = {
     background: path.join(__dirname, "src", "background", "index.tsx"),
 
     offscreen: path.join(__dirname, "src", "offscreen", "index.tsx"),
+    options: path.join(__dirname, "src", "options", "index.tsx"),
 
     // should be injected to webpage
     contentScript: path.join(__dirname, "src", "content", "index.tsx"),
@@ -193,6 +194,13 @@ const options = {
     }),
 
     new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src", "options", "index.html"),
+      filename: "options.html",
+      chunks: ["options"],
+      cache: false,
+    }),
+
+    new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "offscreen", "index.html"),
       filename: "offscreen.html",
       chunks: ["offscreen"],
@@ -207,9 +215,6 @@ const options = {
     }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
-    }),
-    new webpack.DefinePlugin({
-      "process.env.EXTENSION_MODE": JSON.stringify(process.env.EXTENSION_MODE),
     }),
   ].filter(Boolean),
   infrastructureLogging: {

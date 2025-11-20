@@ -72,11 +72,15 @@ export class DBStorage implements TDBStorage {
     }
 
     const userId = charwise.encode(Date.now()).toString('hex');
+  
+    const data = await chrome.storage.sync.get('devMode')
+
     const userNew = {
       key: null,
       id: userId,
       address: null,
       loading: false,
+      devMode: data.devMode
     };
     await this.#userDb.put(userId, userNew);
 
@@ -85,7 +89,9 @@ export class DBStorage implements TDBStorage {
   };
 
   addInitialVerifications: TAddInitialVerifications = async () => {
-    const availableTasks = tasks();
+    const storageData = await chrome.storage.sync.get('devMode')
+
+    const availableTasks = tasks(storageData.devMode);
     const existingUserId = await this.getUserId();
     if (!existingUserId) {
       return [];

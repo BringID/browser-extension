@@ -1,9 +1,9 @@
 import { TSemaphoreProofServer } from '../../common/types';
 
-type TGetProofResponse = Promise<{
+type TGetProofResponse = {
   success: boolean;
   proof: TSemaphoreProofServer;
-}>;
+};
 
 type TGetProof = (
   apiUrl: string,

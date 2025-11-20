@@ -3,4 +3,5 @@ export type TUser = {
   id: string | null;
   address: string | null;
   loading: boolean;
+  devMode: boolean;
 };

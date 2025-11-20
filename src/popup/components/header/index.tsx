@@ -35,7 +35,6 @@ const defineContent = (address: string | null, points: number) => {
           await storage.destroyUser();
           const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOSTS);
           connectorTabs.forEach((tab) => {
-            console.log({ tab });
             chrome.tabs.sendMessage(tab.id as number, {
               type: TExtensionRequestType.logout,
             });

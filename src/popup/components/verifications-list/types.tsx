@@ -6,6 +6,7 @@ type TProps = {
   verifications: TVerification[];
   onAddVerifications: () => void;
   className?: string;
+  devMode: boolean
 };
 
 export default TProps;

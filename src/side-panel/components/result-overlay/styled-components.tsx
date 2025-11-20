@@ -12,7 +12,7 @@ import Icons from '../../../components/icons';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 12px;
+  padding: 24px;
   height: 100%;
   position: fixed;
   width: 100%;

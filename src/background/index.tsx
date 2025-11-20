@@ -34,9 +34,19 @@ async function createOffscreenDocument() {
 }
 
 (async () => {
-  console.log('BACKGROUND LOADED');
   const storage = await getStorage();
   await createOffscreenDocument();
+
+  chrome.storage.onChanged.addListener(async (changes, area) => {
+    if (area === 'sync' && changes.devMode) {
+      console.log('....logout....')
+      const storage = await getStorage();
+      await storage.destroyUser();
+    }
+  });
+
+  // related to options page
+
 
   chrome.runtime.onConnect.addListener((port) => {
     if (port.name === 'offscreen') {
@@ -61,7 +71,6 @@ async function createOffscreenDocument() {
 
     if (port.name === 'popup') {
       port.onDisconnect.addListener(async function () {
-        console.log('CLOSING POPUP');
         const tab = await getCurrentTab();
 
         if (tab) {
@@ -96,7 +105,6 @@ async function createOffscreenDocument() {
       }
 
       case TWebsiteRequestType.has_user_key: {
-        console.log("HERE TWebsiteRequestType.has_user_key: ", sender)
         const userKey = await storage.getUserKey();
 
         if (sender.tab?.id !== undefined && sender.frameId !== undefined) {
