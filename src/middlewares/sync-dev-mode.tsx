@@ -21,10 +21,11 @@ export const syncDevModeMiddleware: Middleware = (store) => {
   return (next) => (action) => {
     const result = next(action);
 
-    if (action.type === '/user/setDevMode') {
-      const devMode = store.getState().user.devMode;
-      chrome.storage.sync.set({ devMode });
-    }
+    // if (action.type === '/user/setDevMode') {
+    //   const devMode = store.getState().user.devMode;
+    //   console.log('HERE CHANGED DEVMODE')
+    //   chrome.storage.sync.set({ devMode });
+    // }
 
     return result;
   };

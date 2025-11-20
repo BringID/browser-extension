@@ -41,6 +41,7 @@ export const devModeSyncMiddleware: Middleware = (store) => {
       // avoid loops
       if (newValue !== lastKnownValue) {
         lastKnownValue = newValue;
+        console.log('HERE CHANGED DEVMODE')
         chrome.storage.sync.set({ devMode: newValue });
       }
     }

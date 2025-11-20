@@ -27,6 +27,7 @@ const Options: FC = () => {
           size='small'
           value={Boolean(toggleValue)}
           onChange={async (value) => {
+            console.log('changed option for devMode')
             await chrome.storage.sync.set({ devMode: value });
             setToggleValue(value)
           }}

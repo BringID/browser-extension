@@ -33,11 +33,14 @@ import {
   ScheduleOverlay,
 } from './components';
 import { TConnectionQuality } from '../common/types';
-import configs from '../configs';
-import { Link } from '../components';
 import errors from '../configs/errors';
 import { defineGroup } from '../common/utils';
 import manager from '../manager';
+import { collectLogs, copyLogBufferToClipboard } from './utils';
+
+const buffer = collectLogs(entry => {
+  console.debug('Captured:', entry);
+});
 
 const renderAdditionalInformation = (
   currentStep: number, // starts with 0
@@ -117,6 +120,13 @@ const renderButtons = (
           Continue
         </ButtonStyled>
       )}
+      {
+        error && <ButtonStyled onClick={async () => {
+          copyLogBufferToClipboard(buffer)
+        }}>
+          Copy logs to clipboard
+        </ButtonStyled>
+      }
       <ButtonStyled
         onClick={() => {
           window.close();
