@@ -6,6 +6,7 @@ import { TExtensionRequestType } from '../popup/types';
   chrome.runtime.onMessage.addListener((message) => {
     switch (message.type) {
       case TExtensionRequestType.logout: {
+        console.log('EVENT FOR LOGOUT TRIGGERED')
         window.postMessage(
           {
             source: 'bringID extension',
@@ -17,6 +18,7 @@ import { TExtensionRequestType } from '../popup/types';
       }
 
       case TExtensionRequestType.login: {
+        console.log('EVENT FOR LOGIN TRIGGERED')
         window.postMessage(
           {
             source: 'bringID extension',
