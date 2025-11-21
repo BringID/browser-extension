@@ -101,6 +101,16 @@ async function createOffscreenDocument() {
     switch (request.type) {
       case TWebsiteRequestType.set_user_key: {
         await storage.addUserKey(request.privateKey, request.address);
+        if (sender.tab?.id !== undefined && sender.frameId !== undefined) {
+          chrome.tabs.sendMessage(
+            sender.tab.id,
+            {
+              type: TExtensionRequestType.login
+            },
+            { frameId: sender.frameId }
+          );
+        }
+      
         return true; // Important for async response
       }
 
@@ -118,8 +128,6 @@ async function createOffscreenDocument() {
           );
         }
 
-
-        // not sure if needed
         const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOSTS);
         connectorTabs.forEach((tab) => {
           chrome.tabs.sendMessage(tab.id as number, {
