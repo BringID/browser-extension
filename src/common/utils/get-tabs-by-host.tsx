@@ -1,7 +1,6 @@
 function getTabsByHost(targetHosts: string[]): Promise<chrome.tabs.Tab[]> {
   return new Promise((resolve) => {
     chrome.tabs.query({}, (tabs) => {
-      console.log({ tabs })
       const matchingTabs = tabs.filter((tab) => {
         if (!tab.url) return false;
         try {
