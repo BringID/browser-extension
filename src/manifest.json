@@ -23,8 +23,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://connect.bringid.org/*",
-        "https://dev.connect.bringid.org/*"
+        "https://connect.bringid.org/*"
       ],
       "js": ["contentScript.bundle.js"],
       "css": [],
@@ -33,8 +32,7 @@
   ],
   "externally_connectable": {
     "matches": [
-      "https://connect.bringid.org/*",
-      "https://dev.connect.bringid.org/*"
+      "https://connect.bringid.org/*"
     ],
     "all_frames": true
   },
@@ -44,8 +42,7 @@
         "content.bundle.js"
       ],
       "matches": [
-        "https://connect.bringid.org/*",
-        "https://dev.connect.bringid.org/*"
+        "https://connect.bringid.org/*"
       ],
       "all_frames": true
     }
@@ -59,8 +56,7 @@
     "https://account.apple.com/account/manage/section/devices"
   ],
   "host_permissions": [
-    "https://connect.bringid.org/*",
-    "https://dev.connect.bringid.org/*"
+    "https://connect.bringid.org/*"
   ],
   "permissions": [
     "offscreen",
