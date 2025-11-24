@@ -17,7 +17,6 @@ import { TExtensionRequestType } from '../popup/types';
       }
 
       case TExtensionRequestType.login: {
-        console.log('EVENT FOR LOGIN TRIGGERED')
         window.postMessage(
           {
             source: 'bringID extension',
