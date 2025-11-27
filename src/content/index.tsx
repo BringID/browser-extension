@@ -16,6 +16,17 @@ import { TExtensionRequestType } from '../popup/types';
         break;
       }
 
+      case TExtensionRequestType.login: {
+        window.postMessage(
+          {
+            source: 'bringID extension',
+            type: TExtensionRequestType.login,
+          },
+          '*',
+        );
+        break;
+      }
+
       case TExtensionRequestType.has_user_key_response: {
         window.postMessage(
           {

@@ -1,16 +1,20 @@
 import { TVerify, TVerifyResponse } from './types';
 import configs from '../../configs';
+import modeConfigs from '../../configs/mode-configs';
+
 import { createQueryString, api } from '../../common/utils';
 
-const verify: TVerify = (
+const verify: TVerify = async (
   apiUrl,
   presentationData,
   registry,
   credentialGroupId,
   semaphoreIdentityCommitment,
 ) => {
+
+  const configsResult = await modeConfigs()
   const queryParams = createQueryString({
-    environment: configs.CHAIN_ID === '84532' ? 'staging' : undefined,
+    environment: configsResult.CHAIN_ID === '84532' ? 'staging' : undefined,
   });
 
   return api<TVerifyResponse>(

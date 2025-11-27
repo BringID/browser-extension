@@ -12,11 +12,12 @@ import NoVerificationsFound from '../no-verifications-found';
 import { defineTaskByCredentialGroupId } from '../../../common/utils';
 
 const VerificationsList: FC<TProps> = ({
-  tasks,
   verifications,
   onAddVerifications,
   className,
+  devMode
 }) => {
+
   const hasAnyPendingVerification = verifications.find(
     (verification) =>
       verification.status === 'scheduled' || verification.status === 'pending',
@@ -27,7 +28,7 @@ const VerificationsList: FC<TProps> = ({
       {hasAnyPendingVerification && (
         <NoteStyled>
           We batch verifications for better privacy.{' '}
-          <LinkStyled href="https://app.bringid.org/privacy" target="_blank">
+          <LinkStyled href="https://bringid.org/privacy-policy" target="_blank">
             Learn more
           </LinkStyled>
         </NoteStyled>
@@ -39,6 +40,7 @@ const VerificationsList: FC<TProps> = ({
         verifications.map((verification) => {
           const relatedTaskData = defineTaskByCredentialGroupId(
             verification.credentialGroupId,
+            devMode
           );
           if (relatedTaskData) {
             return (

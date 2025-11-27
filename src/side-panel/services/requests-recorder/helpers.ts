@@ -46,7 +46,6 @@ export function toRequest(requestLog: RequestLog): Result<Request> {
 
   const bodyParsed = webRequestBodyToJson(requestLog.body);
   if (bodyParsed instanceof Error) {
-    console.log(6);
     return bodyParsed;
   }
 

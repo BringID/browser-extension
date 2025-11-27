@@ -14,10 +14,10 @@ type TAddVerification = (
   verifierSignature: string,
 ) => Promise<TAddVerificationResponse>;
 
-type TGetVerificationResponse = Promise<{
+type TGetVerificationResponse = {
   success: boolean;
   task: TTaskServer;
-}>;
+};
 
 type TGetVerification = (
   verificationId: string,

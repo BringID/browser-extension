@@ -9,6 +9,7 @@ enum ActionType {
   '/user/setUser' = '/user/setUser',
   '/user/setLoading' = '/user/setLoading',
   '/user/setAddress' = '/user/setAddress',
+  '/user/setDevMode' = '/user/setDevMode', 
 }
 
 type Action<payload> = {
@@ -24,6 +25,7 @@ const initState: State = {
   id: null,
   address: null,
   loading: false,
+  devMode: false
 };
 
 export const setKey = (key: string): Action<string> => ({
@@ -51,20 +53,31 @@ export const setAddress = (address: string): Action<string> => ({
   payload: address,
 });
 
+export const setDevMode = (devMode: boolean): Action<boolean> => ({
+  type: ActionType['/user/setDevMode'],
+  payload: devMode,
+});
+
 export default function user(state = initState, action: Action<any>): State {
   switch (action.type) {
     case ActionType['/user/setKey']:
       return { ...state, key: action.payload };
+
     case ActionType['/user/setUser']:
       return action.payload;
+
     case ActionType['/user/setId']:
       return { ...state, id: action.payload };
 
     case ActionType['/user/setLoading']:
       return { ...state, loading: action.payload };
 
+    case ActionType['/user/setDevMode']:
+      return { ...state, devMode: action.payload };
+
     case ActionType['/user/setAddress']:
       return { ...state, address: action.payload };
+
     default:
       return state;
   }

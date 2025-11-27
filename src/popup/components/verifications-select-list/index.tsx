@@ -11,6 +11,7 @@ const VerificationsSelectList: FC<TProps> = ({
   onSelect,
   selected,
   className,
+  devMode
 }) => {
   return (
     <Container className={className}>
@@ -21,6 +22,7 @@ const VerificationsSelectList: FC<TProps> = ({
 
         const relatedTaskData = defineTaskByCredentialGroupId(
           verification.credentialGroupId,
+          devMode
         );
 
         if (relatedTaskData) {

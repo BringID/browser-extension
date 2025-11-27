@@ -8,7 +8,7 @@
     "@typescript-eslint/no-explicit-any": 1,
     "@typescript-eslint/no-var-requires": 0,
     "@typescript-eslint/ban-ts-comment": 0,
-    "no-undef": "error",
+    "no-undef": "off",
     "padding-line-between-statements": "error",
     "@typescript-eslint/no-empty-object-type": "off"
   },

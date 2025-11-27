@@ -22,6 +22,8 @@ export interface NotarizationState {
   eta?: number;
   speed?: string;
 
+  devMode: boolean
+
   // message => UI
   // result => UI
 }
@@ -32,6 +34,7 @@ const initialState: NotarizationState = {
   progress: 0,
   error: '',
   currentStep: 0,
+  devMode: false
 };
 
 export const notarizationSlice = createSlice({
@@ -47,6 +50,13 @@ export const notarizationSlice = createSlice({
       action: PayloadAction<NotarizationStatus>,
     ) => {
       state.status = action.payload;
+    },
+
+    setDevMode: (
+      state: NotarizationState,
+      action: PayloadAction<boolean>,
+    ) => {
+      state.devMode = action.payload;
     },
 
     setProgress: (state: NotarizationState, action: PayloadAction<number>) => {
@@ -88,9 +98,6 @@ export const notarizationSlice = createSlice({
     },
 
     clear: (state: NotarizationState) => {
-      console.log({
-        initialState,
-      });
       state = { ...initialState };
     },
 

@@ -1,6 +1,6 @@
 import IVerifier, { TVerify } from './types';
 import verifierApi from '../api/verify-service';
-import config from '../configs';
+import modeConfigs from '../configs/mode-configs';
 import { defineApiUrl } from '../common/utils';
 
 class Verifier implements IVerifier {
@@ -16,10 +16,11 @@ class Verifier implements IVerifier {
     semaphoreIdentityCommitment,
   ) => {
     try {
+      const configsResult = await modeConfigs()
       const response = await verifierApi.verify(
         this.#apiUrl,
         presentationData,
-        config.REGISTRY,
+        configsResult.REGISTRY,
         credentialGroupId,
         semaphoreIdentityCommitment,
       );

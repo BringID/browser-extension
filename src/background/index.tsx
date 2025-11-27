@@ -34,9 +34,19 @@ async function createOffscreenDocument() {
 }
 
 (async () => {
-  console.log('BACKGROUND LOADED');
   const storage = await getStorage();
   await createOffscreenDocument();
+
+  chrome.storage.onChanged.addListener(async (changes, area) => {
+    if (area === 'sync' && changes.devMode) {
+      console.log('....logout....')
+      const storage = await getStorage();
+      await storage.destroyUser();
+    }
+  });
+
+  // related to options page
+
 
   chrome.runtime.onConnect.addListener((port) => {
     if (port.name === 'offscreen') {
@@ -61,7 +71,6 @@ async function createOffscreenDocument() {
 
     if (port.name === 'popup') {
       port.onDisconnect.addListener(async function () {
-        console.log('CLOSING POPUP');
         const tab = await getCurrentTab();
 
         if (tab) {
@@ -92,11 +101,20 @@ async function createOffscreenDocument() {
     switch (request.type) {
       case TWebsiteRequestType.set_user_key: {
         await storage.addUserKey(request.privateKey, request.address);
+        if (sender.tab?.id !== undefined && sender.frameId !== undefined) {
+          chrome.tabs.sendMessage(
+            sender.tab.id,
+            {
+              type: TExtensionRequestType.login
+            },
+            { frameId: sender.frameId }
+          );
+        }
+      
         return true; // Important for async response
       }
 
       case TWebsiteRequestType.has_user_key: {
-        console.log("HERE TWebsiteRequestType.has_user_key: ", sender)
         const userKey = await storage.getUserKey();
 
         if (sender.tab?.id !== undefined && sender.frameId !== undefined) {
@@ -110,8 +128,6 @@ async function createOffscreenDocument() {
           );
         }
 
-
-        // not sure if needed
         const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOSTS);
         connectorTabs.forEach((tab) => {
           chrome.tabs.sendMessage(tab.id as number, {

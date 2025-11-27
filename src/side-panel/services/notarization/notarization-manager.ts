@@ -1,12 +1,9 @@
 import { NotarizationStatus, NotarizationHandler } from './types';
-import { tasks, Task } from '../../../common/core';
-import { NotarizationUberRides } from './handlers/uber-rides';
 import { State } from '../../common/helpers/progressive';
 import { Transcript } from 'bringid-tlsn-js';
 import { notarizationSlice } from '../../store/notarization';
 import { store } from '../../store';
-import { NotarizationAppleDevices } from './handlers/apple-devices';
-import { NotarizationXVerifiedFollowers } from './handlers/x-verified-followers';
+
 
 // NotarizationManager stores Notarization and handles Redux
 export class NotarizationManager {
@@ -75,11 +72,3 @@ export class NotarizationManager {
     store.dispatch(notarizationSlice.actions.setCurrentStep(currentStep));
   }
 }
-
-const t: Task[] = tasks();
-
-export const notarizationManager = new NotarizationManager([
-  new NotarizationUberRides(t[0]),
-  new NotarizationXVerifiedFollowers(t[1]),
-  new NotarizationAppleDevices(t[2]),
-]);

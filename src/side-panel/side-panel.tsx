@@ -18,8 +18,8 @@ import {
   ButtonStyled,
   Buttons,
   LinkStyled,
-  NoteMarginStyled,
   NoteAdditionalInfoStyled,
+  DownloadLogs
 } from './styled-components';
 import { useDispatch } from 'react-redux';
 import { notarizationSlice } from './store/notarization';
@@ -34,11 +34,14 @@ import {
   ScheduleOverlay,
 } from './components';
 import { TConnectionQuality } from '../common/types';
-import configs from '../configs';
-import { Link } from '../components';
 import errors from '../configs/errors';
 import { defineGroup } from '../common/utils';
 import manager from '../manager';
+import { collectLogs, formatCapturedLogs, downloadDataAsFile } from './utils';
+
+const buffer = collectLogs(entry => {
+  console.debug('Captured:', entry);
+});
 
 const renderAdditionalInformation = (
   currentStep: number, // starts with 0
@@ -77,6 +80,8 @@ const renderButtons = (
   retryTask: () => Promise<void>,
   sendResult: () => void,
   progress: number,
+  copyStarted: boolean,
+  setCopyStarted: (copyStarted: boolean) => void,
   error?: string | null,
   result?: string,
 ) => {
@@ -125,20 +130,6 @@ const renderButtons = (
       >
         Close
       </ButtonStyled>
-      {/* <ButtonStyled
-      appearance='action'
-      onClick={retryTask}
-    >
-      Try again
-    </ButtonStyled>
-
-    <ButtonStyled
-      onClick={() => {
-        chrome.runtime.sendMessage({ action: 'openPopup' });
-      }}
-    >
-      Back to verifications
-    </ButtonStyled> */}
     </Buttons>
   );
 };
@@ -213,6 +204,17 @@ const renderContent = (
                 "Account doesn't meet verification requirements",
               ]}
             />
+            <DownloadLogs
+              onClick={async () => {
+                const formatBuffer = formatCapturedLogs(buffer)
+                downloadDataAsFile(
+                  formatBuffer,
+                  'logs.json'
+                )
+              }}
+            >
+              Download error logs
+            </DownloadLogs>
           </NoteStyled>
 
           <NoteStyled status="info" title="Need help?">
@@ -264,6 +266,7 @@ const SidePanel: FC = () => {
 
   const [showResultOverlay, setShowResultOverlay] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [copyStarted, setCopyStarted] = useState<boolean>(false);
 
   useEffect(() => {
     const listener = (request: TMessage) => {
@@ -309,21 +312,12 @@ const SidePanel: FC = () => {
     connectionQuality,
     speed,
     transcriptSent,
+    devMode
   } = useSelector((state: RootState) => {
     return state.notarization;
   });
 
-  console.log('DATA: ', {
-    result,
-    taskId,
-    progress,
-    currentStep,
-    transcriptRecv,
-    transcriptSent,
-    error,
-  });
-
-  const availableTasks = tasks();
+  const availableTasks = tasks(devMode);
   const [scheduledTime, setScheduledTime] = useState<number | null>(null);
 
   if (taskId === null) {
@@ -333,9 +327,9 @@ const SidePanel: FC = () => {
           {showPermissionOverlay && nextTaskId !== null && (
             <PermissionOverlay
               nextTaskIndex={nextTaskId}
+              devMode={devMode}
               onAccepted={() => {
                 setShowPermissionOverlay(false);
-                console.log('confirm: ', { nextTaskId });
 
                 notarizationManager.run(nextTaskId);
               }}
@@ -365,7 +359,6 @@ const SidePanel: FC = () => {
   const currentTask = availableTasks[taskId];
 
   // const credentialGroupId = currentTask.credentialGroupId;
-  console.log('SIDE PANEL steps: ', { currentStep, currentTask });
 
   return (
     <Wrapper>
@@ -377,7 +370,7 @@ const SidePanel: FC = () => {
             onAccept={async () => {
               setLoading(true);
               try {
-                const availableTasks = tasks();
+                const availableTasks = tasks(devMode);
                 const currentTask = availableTasks[taskId];
 
                 const groupData = defineGroup(
@@ -478,6 +471,8 @@ const SidePanel: FC = () => {
                 setShowResultOverlay(true);
               },
               progress,
+              copyStarted,
+              setCopyStarted,
               error,
               result,
             )}
