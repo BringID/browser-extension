@@ -15,6 +15,15 @@ import { tasks, sendMessage } from '../common/core';
 import { calculateScope, defineTaskByCredentialGroupId } from '../common/utils';
 import { generateProof } from '@semaphore-protocol/core';
 
+
+import {
+  createSemaphoreIdentity,
+  findMemberByIdentity,
+  generateMerklePath,
+  getGroupMembers
+} from './utils/helpers'
+import { Group } from "@semaphore-protocol/group"
+
 class Manager implements IManager {
   #db?: DBStorage;
 
@@ -67,6 +76,12 @@ class Manager implements IManager {
     pointsRequired,
     selectedVerifications,
   ) => {
+
+    console.log({
+      dropAddress,
+      pointsRequired,
+      selectedVerifications,
+    })
     const userKey = await this.#db?.getUserKey();
 
     if (!userKey) {
@@ -96,7 +111,7 @@ class Manager implements IManager {
         }
         const storageData = await chrome.storage.sync.get('devMode')
         const relatedTask = defineTaskByCredentialGroupId(credentialGroupId, storageData.devMode);
-
+        console.log({ relatedTask })
         if (!relatedTask) {
           continue;
         }
@@ -107,20 +122,115 @@ class Manager implements IManager {
         const identity = semaphore.createIdentity(userKey, credentialGroupId);
         const { commitment } = identity;
 
+        // !!!!!!
+
+        const merklePath = await generateMerklePath(String(commitment))
+        const scope = calculateScope(dropAddress);
+
+
+
+        const {
+          group: testGroup,
+          memberIndex,
+          treeDepth,
+          treeSize,
+          pathElements,
+          pathIndices
+        } = merklePath
+
+        console.log({ merklePath })
+
+        if (commitment && testGroup) {
+          const allMembersOfGroup = await getGroupMembers(testGroup?.id) // get all members of the group
+          const allCommitments = allMembersOfGroup
+            .sort((a, b) => a.index - b.index)
+            .map(member => member.identityCommitment)
+
+          console.log({ allCommitments }) // array of strings
+
+
+          const groupInstance  = new Group(
+            allCommitments
+          )
+
+          const subgraphRoot = testGroup.merkleTree.root
+          const computedRoot = String(groupInstance.root)
+          const rootsMatch = subgraphRoot === computedRoot
+          console.log({ rootsMatch, subgraphRoot, computedRoot })
+
+          const identity = createSemaphoreIdentity(
+            userKey,
+            credentialGroupId
+          )
+
+          const {
+            merkleTreeDepth,
+            merkleTreeRoot,
+            message,
+            points,
+            nullifier
+          } = await generateProof(
+            identity,
+            groupInstance,
+            'verification',
+            scope
+          )
+
+          console.log('DIRECT CALL FROM SUBGRAPH: ', {
+            merkleTreeDepth,
+            merkleTreeRoot,
+            message,
+            points,
+            nullifier,
+            group: testGroup,
+            memberIndex,
+            treeDepth,
+            treeSize,
+            pathElements,
+            pathIndices
+          })
+        }
+
+
+
+
+
+
         const data = await semaphore.getProof(
           String(commitment),
           group.semaphoreGroupId,
           true,
-        );
+        )
+
+        console.log('semaphore.getProof: ', {
+          inputs: {
+            commitment: String(commitment),
+            semaphoreGroupId: group.semaphoreGroupId,
+          },
+          outputs: {
+            data
+          }
+        })
 
         if (!data) {
           throw new Error('no proof found');
         }
 
-        const scope = calculateScope(dropAddress);
 
         const { merkleTreeDepth, merkleTreeRoot, message, points, nullifier } =
           await generateProof(identity, data as any, 'verification', scope);
+
+
+        console.log('generateProof: ', {
+          inputs: {
+            identity,
+            data,
+            scope
+          },
+          outputs: {
+            merkleTreeDepth, merkleTreeRoot, message, points, nullifier
+          }
+        })
 
         semaphoreProofs.push({
           credential_group_id: credentialGroupId,
@@ -135,6 +245,8 @@ class Manager implements IManager {
         });
       }
     }
+
+    console.log({ semaphoreProofs })
 
     return semaphoreProofs;
   };

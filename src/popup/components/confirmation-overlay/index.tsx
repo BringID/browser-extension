@@ -123,8 +123,8 @@ const defineButton = (
               alert('NO TAB DETECTED');
             }
 
-            onClose();
-            window.close();
+            // onClose();
+            // window.close();
           } catch (err) {
             setLoading(false);
             console.log({ err });

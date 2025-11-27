@@ -1,6 +1,6 @@
 {
   "name": "browser-extension",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "AGPL3",
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "@semaphore-protocol/core": "^4.13.1",
     "@semaphore-protocol/identity": "^4.13.1",
+    "@semaphore-protocol/group": "^4.13.1",
     "buffer": "^6.0.3",
     "charwise": "^3.0.1",
     "comlink": "^4.4.2",
