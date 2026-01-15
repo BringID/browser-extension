@@ -28,7 +28,6 @@ export class NotarizationManager {
     await this.#currentNotarization.start(
       // TODO Presentation should be passed to popup
       async (res) => {
-        console.log('RESULT: ', { res });
         if (res instanceof Error) {
           console.error(res);
           store.dispatch(notarizationSlice.actions.setError(res.message));

@@ -6,7 +6,7 @@ export type { TNotarizationGroupCheck } from './notarization-group-check';
 export type { TConnectionQuality } from './connection-quality';
 export type { TSemaphoreProofServer } from './semaphore-proof-server';
 export type { TSemaphoreProof } from './semaphore-proof';
-
+export type { TTask } from './task'
 export type { TUser } from './user';
 export type { TVerificationStatus } from './verification-status';
 export type { TVerification } from './verification';

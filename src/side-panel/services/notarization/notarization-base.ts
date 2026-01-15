@@ -1,5 +1,5 @@
 import { Result } from '../../../common/types';
-import { Task } from '../../../common/core';
+import { TTask } from '../../../common/types';
 import {
   NotarizationHandler,
   NotarizationStatus,
@@ -12,14 +12,14 @@ export abstract class NotarizationBase
   extends Progressive<NotarizationStatus>
   implements NotarizationHandler
 {
-  public readonly task: Task;
+  public readonly task: TTask;
   public currentStep: number;
 
   #resultCallback?: ResultCallback;
 
   currentStepUpdateCallback?: (currentStep: number) => void;
 
-  constructor(task: Task) {
+  constructor(task: TTask) {
     super({
       progress: 0,
       status: NotarizationStatus.NotStarted,

@@ -1,57 +1,17 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Container, VerificationsListStyled } from './styled-components';
-import { Header } from '../../components';
-import { useNavigate } from 'react-router';
-import { useVerifications } from '../../store/reducers/verifications';
-import { Task, tasks } from '../../../common/core/task';
+import { Container } from './styled-components';
 import {
   ConfirmationOverlay,
-  LoadingOverlay,
-  Authorize,
 } from '../../components';
-import { calculateAvailablePoints } from '../../../common/utils';
-import { useUser } from '../../store/reducers/user';
-import { TVerification } from '../../../common/types';
-
-const renderContent = (
-  userKey: string | null,
-  availableTasks: Task[],
-  verifications: TVerification[],
-  devMode: boolean,
-  navigate: (location: string) => void,
-) => {
-  if (!userKey) {
-    return <Authorize />;
-  }
-
-  return (
-    <VerificationsListStyled
-      tasks={availableTasks}
-      devMode={devMode}
-      verifications={verifications}
-      onAddVerifications={() => {
-        navigate('/tasks');
-      }}
-    />
-  );
-};
 
 const Home: FC = () => {
-  const verificationsStore = useVerifications();
-  const { verifications, loading } = verificationsStore;
-  const user = useUser();
-
-  const availableTasks = tasks(user.devMode);
 
   const [confirmationOverlayShow, setConfirmationOverlayShow] =
     useState<boolean>(false);
-  const [requestHost, setRequestHost] = useState<string>('');
-  const [pointsRequired, setPointsRequired] = useState<string>('');
-  const [dropAddress, setDropAddress] = useState<string>('');
+  const [ task, setTask ] = useState<string>('');
+  const [ requestOrigin , setRequestOrigin] = useState<string>('');
 
-  const availablePoints = calculateAvailablePoints(verifications, user.devMode);
 
-  const navigate = useNavigate();
 
   useEffect(() => {
     chrome.storage.local.get('request', (data) => {
@@ -59,12 +19,14 @@ const Home: FC = () => {
         return chrome.storage.local.set({ request: `` });
       }
 
-      const [host, pointsRequired, dropAddress] = data.request.split(`__`);
+      const [
+        task,
+        origin
+      ] = data.request.split('__')
 
-      if (host && pointsRequired && dropAddress) {
-        setDropAddress(dropAddress);
-        setPointsRequired(pointsRequired);
-        setRequestHost(host);
+      if (task) {
+        setTask(task)
+        setRequestOrigin(origin)
         setConfirmationOverlayShow(true);
       }
 
@@ -75,29 +37,19 @@ const Home: FC = () => {
   }, []);
 
   const onRequestClose = () => {
-    setDropAddress('');
-    setPointsRequired('');
-    setRequestHost('');
-    setConfirmationOverlayShow(false);
+    setTask('')
+    setConfirmationOverlayShow(false)
   };
 
   return (
     <Container>
-      {loading && <LoadingOverlay title="Processing verification..." />}
-      {confirmationOverlayShow && (
-        <ConfirmationOverlay
-          onClose={() => {
-            onRequestClose();
-          }}
-          host={requestHost}
-          points={availablePoints}
-          pointsRequired={Number(pointsRequired)}
-          dropAddress={dropAddress}
-        />
-      )}
-      <Header points={availablePoints} address={user.address} />
-
-      {renderContent(user.key, availableTasks, verifications, user.devMode, navigate)}
+      {confirmationOverlayShow && <ConfirmationOverlay
+        task={task}
+        origin={origin}
+        onClose={() => {
+          setConfirmationOverlayShow(false)
+        }}
+      ></ConfirmationOverlay>}
     </Container>
   );
 };

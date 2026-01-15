@@ -1,3 +1,3 @@
-type TRunTask = (taskId: number, masterKey: string) => Promise<void>;
+type TRunTask = (task: string) => Promise<void>;
 
 export default TRunTask;

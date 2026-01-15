@@ -19,12 +19,12 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
   },
-  "options_page": "options.html",
   "content_scripts": [
     {
       "matches": [
         "https://connect.bringid.org/*",
-        "https://dev.connect.bringid.org/*"
+        "https://dev.connect.bringid.org/*",
+        "https://widget.bringid.org/*"
       ],
       "js": ["contentScript.bundle.js"],
       "css": [],
@@ -34,7 +34,8 @@
   "externally_connectable": {
     "matches": [
       "https://connect.bringid.org/*",
-      "https://dev.connect.bringid.org/*"
+      "https://dev.connect.bringid.org/*",
+      "https://widget.bringid.org/*"
     ],
     "all_frames": true
   },
@@ -45,7 +46,8 @@
       ],
       "matches": [
         "https://connect.bringid.org/*",
-        "https://dev.connect.bringid.org/*"
+        "https://dev.connect.bringid.org/*",
+        "https://widget.bringid.org/*"
       ],
       "all_frames": true
     }
@@ -60,7 +62,8 @@
   ],
   "host_permissions": [
     "https://connect.bringid.org/*",
-    "https://dev.connect.bringid.org/*"
+    "https://dev.connect.bringid.org/*",
+    "https://widget.bringid.org/*"
   ],
   "permissions": [
     "offscreen",

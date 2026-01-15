@@ -5,63 +5,17 @@ import { TExtensionRequestType } from '../popup/types';
   loadScript('content.bundle.js');
   chrome.runtime.onMessage.addListener((message) => {
     switch (message.type) {
-      case TExtensionRequestType.logout: {
+
+
+      case 'VERIFICATION_DATA_READY': {
         window.postMessage(
           {
             source: 'bringID extension',
-            type: TExtensionRequestType.logout,
+            payload: message.payload,
+            type: 'VERIFICATION_DATA_READY'
           },
           '*',
         );
-        break;
-      }
-
-      case TExtensionRequestType.login: {
-        window.postMessage(
-          {
-            source: 'bringID extension',
-            type: TExtensionRequestType.login,
-          },
-          '*',
-        );
-        break;
-      }
-
-      case TExtensionRequestType.has_user_key_response: {
-        window.postMessage(
-          {
-            source: 'bringID extension',
-            data: {
-              hasUserKey: message.hasUserKey,
-            },
-            type: TExtensionRequestType.has_user_key_response,
-          },
-          '*',
-        );
-        break;
-      }
-
-      case TExtensionRequestType.proofs_generated: {
-        window.postMessage(
-          {
-            source: 'bringID extension',
-            data: message.payload,
-            type: TExtensionRequestType.receive_proofs,
-          },
-          '*',
-        );
-        break;
-      }
-
-      case TExtensionRequestType.proofs_rejected: {
-        window.postMessage(
-          {
-            source: 'bringID extension',
-            type: TExtensionRequestType.proofs_rejected,
-          },
-          '*',
-        );
-
         break;
       }
     }

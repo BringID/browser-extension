@@ -10,8 +10,6 @@ import Note from './note';
 import Tag from './tag';
 import ProgressBar from './progress-bar';
 import TaskContainer from './task-container';
-import Task from './task';
-import Verification from './verification';
 import Message from './message';
 import LogoWrapper from './logo-wrapper';
 import Checkbox from './checkbox';
@@ -34,9 +32,7 @@ export {
   Tag,
   ProgressBar,
   TaskContainer,
-  Task,
   Message,
-  Verification,
   LogoWrapper,
   Checkbox,
   TimeLeftProgress,

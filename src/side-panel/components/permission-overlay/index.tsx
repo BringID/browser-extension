@@ -14,7 +14,6 @@ import {
 } from './styled-components';
 import TProps from './types';
 import { requestHostPermission, checkIfPermissionGranted } from '../../utils';
-import { tasks } from '../../../common/core';
 
 const showNote = () => {
   return (
@@ -65,11 +64,8 @@ const defineButtons = (
   );
 };
 
-const PermissionOverlay: FC<TProps> = ({ nextTaskIndex, onAccepted, devMode }) => {
+const PermissionOverlay: FC<TProps> = ({ onAccepted, currentTask }) => {
   const [loading, setLoading] = useState<boolean>(false);
-
-  const availableTasks = tasks(devMode);
-  const currentTask = availableTasks[nextTaskIndex];
 
   useEffect(() => {
     (async () => {

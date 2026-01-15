@@ -1,7 +1,8 @@
+import { TTask } from "../../../common/types";
+
 type TProps = {
   onAccepted: () => void;
-  nextTaskIndex: number;
-  devMode: boolean
+  currentTask: TTask
 };
 
 export default TProps;

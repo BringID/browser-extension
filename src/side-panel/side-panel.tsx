@@ -1,10 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import browser from 'webextension-polyfill';
 import { notarizationManager } from './services/notarization';
-import { sendMessage, Task } from '../common/core';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
-import { tasks } from '../common/core';
 import {
   Container,
   LogoWrapperStyled,
@@ -33,7 +31,7 @@ import {
   TaskLoader,
   ScheduleOverlay,
 } from './components';
-import { TConnectionQuality } from '../common/types';
+import { TConnectionQuality, TTask } from '../common/types';
 import errors from '../configs/errors';
 import { defineGroup } from '../common/utils';
 import manager from '../manager';
@@ -136,7 +134,7 @@ const renderButtons = (
 
 const renderHeader = (
   taskId: number,
-  currentTask: Task,
+  currentTask: TTask,
   error?: string | null,
 ) => {
   if (error) {
@@ -181,7 +179,7 @@ const renderHeader = (
 
 const renderContent = (
   taskId: number,
-  currentTask: Task,
+  currentTask: TTask,
   currentStep: number,
   progress: number,
   result?: string,
@@ -272,10 +270,9 @@ const SidePanel: FC = () => {
     const listener = (request: TMessage) => {
       switch (request.type) {
         case 'NOTARIZE':
-          if ('task_id' in request) {
+          if ('task' in request) {
             dispatch(notarizationSlice.actions.clear());
-
-            setNextTaskId(request.task_id);
+            dispatch(notarizationSlice.actions.setTask(JSON.parse(request.task)))
             setShowPermissionOverlay(true);
             window.focus();
           }
@@ -299,8 +296,6 @@ const SidePanel: FC = () => {
     };
   }, []);
 
-  const [nextTaskId, setNextTaskId] = useState<null | number>(null);
-
   const {
     result,
     taskId,
@@ -312,26 +307,25 @@ const SidePanel: FC = () => {
     connectionQuality,
     speed,
     transcriptSent,
-    devMode
+    task
   } = useSelector((state: RootState) => {
     return state.notarization;
   });
 
-  const availableTasks = tasks(devMode);
+  console.log({ task })
+
   const [scheduledTime, setScheduledTime] = useState<number | null>(null);
 
   if (taskId === null) {
     return (
       <Wrapper>
         <Page>
-          {showPermissionOverlay && nextTaskId !== null && (
+          {showPermissionOverlay && task && (
             <PermissionOverlay
-              nextTaskIndex={nextTaskId}
-              devMode={devMode}
+              currentTask={task}
               onAccepted={() => {
                 setShowPermissionOverlay(false);
-
-                notarizationManager.run(nextTaskId);
+                notarizationManager.run(0);
               }}
             />
           )}
@@ -344,9 +338,13 @@ const SidePanel: FC = () => {
                   return;
                 }
 
-                setNextTaskId(Number(data.task));
+                console.log('TaskLoader onStart', { task })
 
-                chrome.storage.local.remove('task');
+
+                dispatch(notarizationSlice.actions.setTask(JSON.parse(data.task)))
+
+
+                // chrome.storage.local.remove('task');
                 setShowPermissionOverlay(true);
               });
             }}
@@ -356,50 +354,34 @@ const SidePanel: FC = () => {
     );
   }
 
-  const currentTask = availableTasks[taskId];
-
   // const credentialGroupId = currentTask.credentialGroupId;
 
   return (
     <Wrapper>
       <Page>
-        {showResultOverlay && (
+        {showResultOverlay && task && (
           <ResultOverlay
             loading={loading}
-            title={currentTask.service}
+            title={task.service}
             onAccept={async () => {
               setLoading(true);
               try {
-                const availableTasks = tasks(devMode);
-                const currentTask = availableTasks[taskId];
-
-                const groupData = defineGroup(
-                  transcriptRecv as string,
-                  currentTask.groups,
-                );
-
-                if (groupData) {
-                  const { credentialGroupId, semaphoreGroupId } = groupData;
-
-                  const verify = await manager.runVerify(
-                    result as string,
-                    credentialGroupId,
-                  );
-
-                  if (verify) {
-                    const verification = await manager.saveVerification(
-                      verify,
-                      credentialGroupId,
-                    );
-
-                    if (verification) {
-                      setShowResultOverlay(false);
-                      setScheduledTime(verification.scheduledTime);
-                    }
+                chrome.tabs.query({}, (tabs) => {
+                  for (const tab of tabs) {
+                    if (!tab.id) continue;
+                    chrome.tabs.sendMessage(tab.id as number, {
+                      type: 'VERIFICATION_DATA_READY',
+                      payload: {
+                        transcriptRecv,
+                        presentationData: result
+                      },
+                    });
                   }
-                } else {
-                  alert('GROUP NOT FOUND');
-                }
+                });
+
+                
+                
+                setShowResultOverlay(false);
               } catch (err) {
                 console.log('ERROR: ', err);
               }
@@ -434,18 +416,18 @@ const SidePanel: FC = () => {
         )}
 
         <Container>
-          {renderHeader(taskId, currentTask, error)}
+          {task && renderHeader(taskId, task, error)}
 
-          {renderAdditionalInformation(
+          {task && renderAdditionalInformation(
             currentStep,
-            currentTask.additionalInfo,
+            task.additionalInfo,
             error,
           )}
 
           <Content>
-            {renderContent(
+            {task && renderContent(
               taskId,
-              currentTask,
+              task,
               currentStep,
               progress,
               result,

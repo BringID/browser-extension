@@ -6,7 +6,6 @@ import {
   Button,
   Note,
 } from '../../../components';
-import VerificationsSelectList from '../verifications-select-list';
 
 import styled from 'styled-components';
 
@@ -102,8 +101,4 @@ export const UserStatusRequired = styled.span`
 export const UserStatus = styled.span`
   color: ${(props) => props.theme.successStatusTextColor};
   text-transform: capitalize;
-`;
-
-export const VerificationsSelectListStyled = styled(VerificationsSelectList)`
-  margin-bottom: 16px;
 `;

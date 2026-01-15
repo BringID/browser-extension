@@ -1,11 +1,10 @@
-import { Task } from '../../../common/core';
 import { NotarizationBase } from './notarization-base';
 import { RequestRecorder } from '../requests-recorder';
 import { TargetRequest } from '../requests-recorder/types';
 import { Request } from '../../common/types';
 import { TLSNotary } from '../tlsn';
 import { Commit } from 'bringid-tlsn-js';
-import { Result } from '../../../common/types';
+import { Result, TTask } from '../../../common/types';
 import {
   newRequestMiddleware,
   newTranscriptMiddleware,
@@ -41,7 +40,7 @@ export class NotarizationTemplate extends NotarizationBase {
   requestMiddleware?: RequestHandler;
   responseMiddleware?: ResponseMiddleware;
 
-  constructor(cfg: HandlerConfig | SimpleHandlerConfig, task: Task) {
+  constructor(cfg: HandlerConfig | SimpleHandlerConfig, task: TTask) {
     super(task);
     this.redirect = cfg.redirect;
     this.tlsnConfig = {
