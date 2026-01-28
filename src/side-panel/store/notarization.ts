@@ -22,6 +22,12 @@ export interface NotarizationState {
   eta?: number;
   speed?: string;
 
+
+  // request meta
+  requestId: string | null;
+  tabId: number | null;
+  origin: string| null;
+
   // message => UI
   // result => UI
 }
@@ -32,7 +38,10 @@ const initialState: NotarizationState = {
   progress: 0,
   error: '',
   task: null,
-  currentStep: 0
+  currentStep: 0,
+  requestId: null,
+  tabId: null,
+  origin: null
 };
 
 export const notarizationSlice = createSlice({
@@ -42,6 +51,31 @@ export const notarizationSlice = createSlice({
     set: (_: NotarizationState, action: PayloadAction<NotarizationState>) => {
       return { ...action.payload };
     },
+
+
+
+    setOrigin: (
+      state: NotarizationState,
+      action: PayloadAction<string>,
+    ) => {
+      state.origin = action.payload;
+    },
+
+
+    setRequestId: (
+      state: NotarizationState,
+      action: PayloadAction<string>,
+    ) => {
+      state.requestId = action.payload;
+    },
+
+    setTabId: (
+      state: NotarizationState,
+      action: PayloadAction<number>,
+    ) => {
+      state.tabId = action.payload;
+    },
+
 
     setStatus: (
       state: NotarizationState,
@@ -96,7 +130,7 @@ export const notarizationSlice = createSlice({
     },
 
     clear: (state: NotarizationState) => {
-      state = { ...initialState };
+      return { ...initialState };
     },
 
     setTranscriptRecv: (

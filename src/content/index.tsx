@@ -6,15 +6,37 @@ import { TExtensionRequestType } from '../popup/types';
   chrome.runtime.onMessage.addListener((message) => {
     switch (message.type) {
 
-
       case 'VERIFICATION_DATA_READY': {
+        const { transcriptRecv, presentationData, requestId, origin} = message.payload;
+
         window.postMessage(
           {
             source: 'bringID extension',
-            payload: message.payload,
-            type: 'VERIFICATION_DATA_READY'
+            type: 'VERIFICATION_DATA_READY',
+            payload: {
+              transcriptRecv,
+              presentationData
+            },
+            requestId
           },
-          '*',
+          origin,
+        );
+        break;
+      }
+
+      case 'VERIFICATION_DATA_ERROR': {
+        const { error, requestId, origin } = message.payload;
+
+        window.postMessage(
+          {
+            source: 'bringID extension',
+            type: 'VERIFICATION_DATA_ERROR',
+            requestId,
+            payload: {
+              error
+            }
+          },
+          origin,
         );
         break;
       }

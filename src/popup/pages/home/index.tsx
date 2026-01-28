@@ -8,8 +8,11 @@ const Home: FC = () => {
 
   const [confirmationOverlayShow, setConfirmationOverlayShow] =
     useState<boolean>(false);
-  const [ task, setTask ] = useState<string>('');
-  const [ requestOrigin , setRequestOrigin] = useState<string>('');
+
+  const [task, setTask] = useState<string>('');
+  const [requestOrigin, setRequestOrigin] = useState<string>('');
+  const [requestId, setRequestId] = useState<string>('');
+  const [tabId, setTabId] = useState<number | null>(null);
 
 
 
@@ -19,14 +22,13 @@ const Home: FC = () => {
         return chrome.storage.local.set({ request: `` });
       }
 
-      const [
-        task,
-        origin
-      ] = data.request.split('__')
+      const { task, origin, requestId, tabId } = data.request;
 
       if (task) {
-        setTask(task)
-        setRequestOrigin(origin)
+        setTask(task);
+        setRequestOrigin(origin);
+        setRequestId(requestId);
+        setTabId(tabId);
         setConfirmationOverlayShow(true);
       }
 
@@ -36,16 +38,13 @@ const Home: FC = () => {
     });
   }, []);
 
-  const onRequestClose = () => {
-    setTask('')
-    setConfirmationOverlayShow(false)
-  };
-
   return (
     <Container>
       {confirmationOverlayShow && <ConfirmationOverlay
         task={task}
-        origin={origin}
+        origin={requestOrigin}
+        requestId={requestId}
+        tabId={tabId}
         onClose={() => {
           setConfirmationOverlayShow(false)
         }}

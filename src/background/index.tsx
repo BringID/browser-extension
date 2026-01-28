@@ -20,22 +20,43 @@ import { TWebsiteRequestType } from '../popup/types';
   ) {
     switch (request.type) {
       case TWebsiteRequestType.request_zktls_verification: {
+        const { payload, requestId } = request;
+        const tabId = sender.tab?.id;
 
-        console.log({ request })
-        const {
-          payload: {
-            task, //as string
-            origin
-          }
-        } = request;
+        // Validation
+        if (!payload?.task) {
+          console.error('Invalid request: missing payload.task');
+          return false;
+        }
+        if (!payload?.origin) {
+          console.error('Invalid request: missing payload.origin');
+          return false;
+        }
+        if (!requestId) {
+          console.error('Invalid request: missing requestId');
+          return false;
+        }
+        if (!tabId) {
+          console.error('Invalid request: missing sender.tab.id');
+          return false;
+        }
+
+        const { task, origin } = payload;
 
         chrome.storage.local.set(
-          { request: `${task}__${origin}` },
+          {
+            request: {
+              task,
+              origin,
+              requestId,
+              tabId
+            }
+          },
           () => {
             // @ts-ignore
             chrome.action.openPopup();
           },
-        );
+        )
 
         return true;
       }

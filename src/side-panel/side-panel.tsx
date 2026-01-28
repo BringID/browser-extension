@@ -266,6 +266,7 @@ const SidePanel: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [copyStarted, setCopyStarted] = useState<boolean>(false);
 
+
   useEffect(() => {
     const listener = (request: TMessage) => {
       switch (request.type) {
@@ -307,7 +308,10 @@ const SidePanel: FC = () => {
     connectionQuality,
     speed,
     transcriptSent,
-    task
+    task,
+    origin,
+    tabId,
+    requestId
   } = useSelector((state: RootState) => {
     return state.notarization;
   });
@@ -330,25 +334,30 @@ const SidePanel: FC = () => {
             />
           )}
 
-          <TaskLoader
-            onStart={() => {
-              chrome.storage.local.get(['task'], (data) => {
-                if (!data || data.task === undefined) {
-                  alert('No task found');
-                  return;
-                }
+            <TaskLoader
+              onStart={() => {
+                chrome.storage.local.get(['task', 'requestMeta'], (data) => {
+                  if (!data || data.task === undefined) {
+                    alert('No task found');
+                    return;
+                  }
 
-                console.log('TaskLoader onStart', { task })
+                  console.log('TaskLoader onStart', { task });
 
+                  dispatch(notarizationSlice.actions.setTask(JSON.parse(data.task)));
 
-                dispatch(notarizationSlice.actions.setTask(JSON.parse(data.task)))
+                  if (!data.requestMeta) {
+                    alert('No task requestMeta found');
+                    return;
+                  }
+                  dispatch(notarizationSlice.actions.setOrigin(data.requestMeta.origin));
+                  dispatch(notarizationSlice.actions.setTabId(data.requestMeta.tabId));
+                  dispatch(notarizationSlice.actions.setRequestId(data.requestMeta.requestId));
 
-
-                // chrome.storage.local.remove('task');
-                setShowPermissionOverlay(true);
-              });
-            }}
-          />
+                  setShowPermissionOverlay(true);
+                });
+              }}
+            />
         </Page>
       </Wrapper>
     );
@@ -365,25 +374,35 @@ const SidePanel: FC = () => {
             title={task.service}
             onAccept={async () => {
               setLoading(true);
-              try {
-                chrome.tabs.query({}, (tabs) => {
-                  for (const tab of tabs) {
-                    if (!tab.id) continue;
-                    chrome.tabs.sendMessage(tab.id as number, {
-                      type: 'VERIFICATION_DATA_READY',
-                      payload: {
-                        transcriptRecv,
-                        presentationData: result
-                      },
-                    });
-                  }
-                });
+              if (tabId) {
 
-                
-                
-                setShowResultOverlay(false);
-              } catch (err) {
-                console.log('ERROR: ', err);
+                try {
+                  chrome.tabs.sendMessage(tabId, {
+                    type: 'VERIFICATION_DATA_READY',
+                    payload: {
+                      transcriptRecv,
+                      presentationData: result,
+                      requestId,
+                      origin
+                    },
+                  });
+                  window.close()
+                  setShowResultOverlay(false);
+                } catch (err) {
+                  chrome.tabs.sendMessage(tabId, {
+                    type: 'VERIFICATION_DATA_ERROR',
+                    payload: {
+                      error: 'VERIFICATION_FAILED',
+                      requestId,
+                      origin
+                    }
+                  });
+                  console.log('ERROR: ', err);
+                  setShowResultOverlay(false)
+                  window.close()
+                }
+              } else {
+                console.error('No tabId found in requestMeta');
               }
               setLoading(false);
             }}
