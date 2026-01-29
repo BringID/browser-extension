@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useRef } from 'react';
 import browser from 'webextension-polyfill';
 import { notarizationManager } from './services/notarization';
 import { useSelector } from 'react-redux';
@@ -266,7 +266,21 @@ const SidePanel: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [copyStarted, setCopyStarted] = useState<boolean>(false);
 
+  const tabIdRef = useRef<number | null>(null);
+  const requestIdRef = useRef<string | null>(null);
+  const originRef = useRef<string | null>(null);
+  const portRef = useRef<chrome.runtime.Port | null>(null);
 
+  // Establish port connection on mount
+  useEffect(() => {
+    const port = chrome.runtime.connect({ name: 'side-panel' });
+    portRef.current = port;
+    console.log('Side panel connected to background');
+
+    return () => {
+      // Port will auto-disconnect when component unmounts or window closes
+    };
+  }, []);
   useEffect(() => {
     const listener = (request: TMessage) => {
       switch (request.type) {
@@ -316,6 +330,23 @@ const SidePanel: FC = () => {
     return state.notarization;
   });
 
+  useEffect(() => {
+    tabIdRef.current = tabId;
+    requestIdRef.current = requestId;
+    originRef.current = origin;
+
+    // Register session with background when we have all info
+    if (tabId && requestId && portRef.current) {
+      portRef.current.postMessage({
+        type: 'REGISTER_SESSION',
+        tabId,
+        requestId,
+        origin
+      });
+      console.log('Session registered with background');
+    }
+  }, [tabId, requestId, origin]);
+
   console.log({ task })
 
   const [scheduledTime, setScheduledTime] = useState<number | null>(null);
@@ -337,12 +368,13 @@ const SidePanel: FC = () => {
             <TaskLoader
               onStart={() => {
                 chrome.storage.local.get(['task', 'requestMeta'], (data) => {
+                  console.log('TaskLoader onStart', { data });
                   if (!data || data.task === undefined) {
                     alert('No task found');
                     return;
                   }
 
-                  console.log('TaskLoader onStart', { task });
+                  console.log('TaskLoader onStart', { task, data });
 
                   dispatch(notarizationSlice.actions.setTask(JSON.parse(data.task)));
 
@@ -377,6 +409,9 @@ const SidePanel: FC = () => {
               if (tabId) {
 
                 try {
+                  // Unregister session so disconnect doesn't send cancellation
+                  chrome.runtime.sendMessage({ type: 'UNREGISTER_SESSION', requestId });
+
                   chrome.tabs.sendMessage(tabId, {
                     type: 'VERIFICATION_DATA_READY',
                     payload: {
@@ -386,9 +421,13 @@ const SidePanel: FC = () => {
                       origin
                     },
                   });
+                  chrome.storage.local.remove(['task', 'requestMeta']);
                   window.close()
                   setShowResultOverlay(false);
                 } catch (err) {
+                  // Unregister session so disconnect doesn't send duplicate cancellation
+                  chrome.runtime.sendMessage({ type: 'UNREGISTER_SESSION', requestId });
+
                   chrome.tabs.sendMessage(tabId, {
                     type: 'VERIFICATION_DATA_ERROR',
                     payload: {
@@ -397,6 +436,7 @@ const SidePanel: FC = () => {
                       origin
                     }
                   });
+                  chrome.storage.local.remove(['task', 'requestMeta']);
                   console.log('ERROR: ', err);
                   setShowResultOverlay(false)
                   window.close()

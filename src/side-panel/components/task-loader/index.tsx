@@ -13,9 +13,11 @@ import BringGif from '../../../images/bring.gif';
 
 const TaskLoader: FC<TProps> = ({ onStart }) => {
   const [taskIsReady, setTaskIsReady] = useState<boolean>(false);
+
   useEffect(() => {
     setTimeout(() => {
       setTaskIsReady(true);
+      onStart();
     }, 2000);
   }, []);
 
