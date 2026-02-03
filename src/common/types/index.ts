@@ -10,6 +10,6 @@ export type { TTask } from './task'
 export type { TUser } from './user';
 export type { TVerificationStatus } from './verification-status';
 export type { TVerification } from './verification';
-
 export type { TTaskServer } from './task-server';
 export type { TVerifyResult } from './verify-result';
+export { TWebsiteRequestType } from './website-request-type'

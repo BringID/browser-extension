@@ -1,10 +1,18 @@
 import browser from 'webextension-polyfill';
-import { TWebsiteRequestType } from '../popup/types';
+import { TWebsiteRequestType } from '../common/types';
 
 // Track active side panel connections
 const sidePanelPorts = new Map<number, { tabId: number; requestId: string; origin: string }>();
 
 (async () => {
+
+  // Open side panel when extension icon is clicked
+  chrome.action.onClicked.addListener((tab) => {
+    if (tab.id) {
+      // @ts-ignore
+      chrome.sidePanel.open({ tabId: tab.id });
+    }
+  });
 
   // Listen for side panel port connections
   chrome.runtime.onConnect.addListener((port) => {
@@ -45,13 +53,6 @@ const sidePanelPorts = new Map<number, { tabId: number; requestId: string; origi
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log({ message })
-
-    if (message.action === 'openPopup') {
-      // @ts-ignore
-      chrome.action.openPopup().catch((err) => {
-        console.error('Failed to open popup:', err);
-      });
-    }
 
     // Handle unregistering session (successful completion)
     if (message.type === 'UNREGISTER_SESSION') {
@@ -98,16 +99,17 @@ const sidePanelPorts = new Map<number, { tabId: number; requestId: string; origi
 
         chrome.storage.local.set(
           {
-            request: {
-              task,
-              origin,
+            task,
+            requestMeta: {
               requestId,
-              tabId
+              tabId,
+              origin
             }
           },
           () => {
+
             // @ts-ignore
-            chrome.action.openPopup();
+            chrome.sidePanel.open({ tabId });
           },
         )
 

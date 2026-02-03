@@ -1,5 +1,4 @@
 import browser from 'webextension-polyfill';
-import { TExtensionRequestType } from '../popup/types';
 
 (async () => {
   loadScript('content.bundle.js');

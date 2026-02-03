@@ -14,7 +14,7 @@ import {
   BoldText,
 } from './styled-components';
 import TProps from './types';
-import { msToTime } from '../../../popup/utils';
+import { msToTime } from '../../utils'
 
 const ScheduleOverlay: FC<TProps> = ({ onClose, scheduledTime, onAction }) => {
   const [expiration, setExpiration] = useState<number>(1);

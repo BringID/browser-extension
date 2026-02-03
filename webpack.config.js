@@ -37,7 +37,6 @@ const options = {
   ],
 
   entry: {
-    popup: path.join(__dirname, "src", "popup", "index.tsx"),
     sidePanel: path.join(__dirname, "src", "side-panel", "index.tsx"),
     background: path.join(__dirname, "src", "background", "index.tsx"),
 
@@ -182,12 +181,6 @@ const options = {
           force: true,
         }
       ],
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src", "popup", "index.html"),
-      filename: "popup.html",
-      chunks: ["popup"],
-      cache: false,
     }),
 
     new HtmlWebpackPlugin({
