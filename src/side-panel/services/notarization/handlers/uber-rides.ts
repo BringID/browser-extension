@@ -60,7 +60,7 @@ export const UberRidesHandlerConfig: SimpleHandlerConfig = {
     } = response as TActivitiesResponse;
 
     if (!currentUser.uuid || !activitiesCheck) {
-      return new Error('required_data_not_found');
+      return new Error('uber_data_not_found');
     }
 
     if (
@@ -68,7 +68,7 @@ export const UberRidesHandlerConfig: SimpleHandlerConfig = {
         return activity.description.indexOf('Canceled') === -1;
       }).length < 5
     ) {
-      return new Error('not_enough_rides');
+      return new Error('uber_not_enough_data');
     }
   },
 };

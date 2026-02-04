@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
 import browser from 'webextension-polyfill';
-import { notarizationManager } from '../../services/notarization';
+import { initNotarizationManager, getNotarizationManager } from '../../services/notarization';
+import { NotarizationManager } from '../../services/notarization/notarization-manager';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import {
@@ -35,7 +36,7 @@ import {
   TaskLoader,
   ScheduleOverlay,
 } from '../../components'
-import { TConnectionQuality, TTask } from '../../../common/types'
+import { TConnectionQuality, TNotarizationError, TTask } from '../../../common/types'
 import errors from '../../../configs/errors';
 import { collectLogs, formatCapturedLogs, downloadDataAsFile } from '../../utils';
 
@@ -137,10 +138,10 @@ const renderButtons = (
 const renderHeader = (
   taskId: number,
   currentTask: TTask,
-  error?: string | null,
+  error?: TNotarizationError | null,
 ) => {
   if (error) {
-    const currentTaskErrors = errors.notarization[taskId];
+    const currentTaskErrors = errors.notarization;
 
     // if no task or no error for task found
     if (!currentTaskErrors || !currentTaskErrors[error]) {
@@ -188,10 +189,10 @@ const renderContent = (
   connectionQuality?: TConnectionQuality,
   speed?: string,
   eta?: number,
-  error?: string | null,
+  error?: TNotarizationError | null,
 ) => {
   if (error) {
-    const currentTaskErrors = errors.notarization[taskId];
+    const currentTaskErrors = errors.notarization;
 
     if (!currentTaskErrors || !currentTaskErrors[error]) {
       return (
@@ -267,6 +268,7 @@ const TaskVerification: FC = () => {
   const [showResultOverlay, setShowResultOverlay] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [copyStarted, setCopyStarted] = useState<boolean>(false);
+  const [notarizationManager, setNotarizationManager] = useState<NotarizationManager | null>(null);
 
   const tabIdRef = useRef<number | null>(null);
   const requestIdRef = useRef<string | null>(null);
@@ -281,36 +283,6 @@ const TaskVerification: FC = () => {
 
     return () => {
       // Port will auto-disconnect when component unmounts or window closes
-    };
-  }, []);
-
-  useEffect(() => {
-    const listener = (request: TMessage) => {
-      switch (request.type) {
-        case 'NOTARIZE':
-          if ('task' in request) {
-            dispatch(notarizationSlice.actions.clear());
-            dispatch(notarizationSlice.actions.setTask(JSON.parse(request.task)))
-            setShowPermissionOverlay(true);
-            window.focus();
-          }
-          break;
-
-        case 'SIDE_PANEL_CLOSE':
-          if (window.location.href.includes('sidePanel.html')) {
-            window.close();
-          }
-          break;
-
-        default:
-          console.log({ request });
-      }
-    };
-
-    browser.runtime.onMessage.addListener(listener);
-
-    return () => {
-      browser.runtime.onMessage.removeListener(listener);
     };
   }, []);
 
@@ -357,7 +329,7 @@ const TaskVerification: FC = () => {
     return (
       <Wrapper>
         <Page>
-          {showPermissionOverlay && task && (
+          {showPermissionOverlay && task && notarizationManager && (
             <PermissionOverlay
               currentTask={task}
               onAccepted={() => {
@@ -368,8 +340,8 @@ const TaskVerification: FC = () => {
           )}
 
             <TaskLoader
-              onStart={() => {
-                chrome.storage.local.get(['task', 'requestMeta'], (data) => {
+              onStart={async () => {
+                chrome.storage.local.get(['task', 'requestMeta'], async (data) => {
                   console.log('TaskLoader onStart', { data });
                   if (!data || data.task === undefined) {
                     alert('No task found');
@@ -387,6 +359,10 @@ const TaskVerification: FC = () => {
                   dispatch(notarizationSlice.actions.setOrigin(data.requestMeta.origin));
                   dispatch(notarizationSlice.actions.setTabId(data.requestMeta.tabId));
                   dispatch(notarizationSlice.actions.setRequestId(data.requestMeta.requestId));
+
+                  // Initialize notarization manager with the task from storage
+                  const manager = await initNotarizationManager();
+                  setNotarizationManager(manager);
 
                   setShowPermissionOverlay(true);
                 });
@@ -499,7 +475,10 @@ const TaskVerification: FC = () => {
             {renderButtons(
               async () => {
                 dispatch(notarizationSlice.actions.clear());
-                void notarizationManager.run(taskId);
+                const manager = getNotarizationManager();
+                if (manager) {
+                  void manager.run(taskId);
+                }
               },
 
               () => {

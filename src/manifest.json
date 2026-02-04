@@ -55,12 +55,11 @@
     }
   ],
   "optional_host_permissions": [
-    "https://x.com/i/account_analytics/overview",
-    "https://x.com/i/api/graphql/LwtiA7urqM6eDeBheAFi5w/AccountOverviewQuery?*",
-    "https://appleid.apple.com/account/manage/security/devices",
-    "https://riders.uber.com/graphql",
-    "https://riders.uber.com/trips",
-    "https://account.apple.com/account/manage/section/devices"
+    "https://x.com/*",
+    "https://appleid.apple.com/*",
+    "https://riders.uber.com/*",
+    "https://account.apple.com/*",
+    "https://www.binance.com/*"
   ],
   "host_permissions": [
     "https://connect.bringid.org/*",

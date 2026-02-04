@@ -122,6 +122,37 @@
         "notarization": true
       }
     ]
+  },
+  {
+    "id": "4",
+    "title": "Binance KYC",
+    "service": "Binance",
+    "verificationType": "zktls",
+    "description": "Prove your Binance account is KYC verified",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg",
+    "permissionUrl": [
+      "https://www.binance.com/bapi/kyc/v2/private/certificate/user-kyc/current-kyc-status",
+      "https://www.binance.com/en/my/dashboard"
+    ],
+    "groups": [
+      {
+        "points": 15,
+        "semaphoreGroupId": "5",
+        "credentialGroupId": "6"
+      }
+    ],
+    "steps": [
+      {
+        "text": "Visit website"
+      },
+      {
+        "text": "Wait for request capture"
+      },
+      {
+        "text": "MPC-TLS verification progress",
+        "notarization": true
+      }
+    ]
   }
 ]
 

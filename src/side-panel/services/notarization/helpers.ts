@@ -30,12 +30,18 @@ function applyLists(
   whitelist?: string[],
   blacklist?: string[],
 ): Array<[string, string]> {
-  let filtered: Array<[string, string]> = [];
+  let filtered: Array<[string, string]> = entries;
   if (whitelist && whitelist.length > 0) {
-    filtered = entries.filter(([key]) => whitelist.includes(key));
+    const lowerWhitelist = whitelist.map((k) => k.toLowerCase());
+    filtered = entries.filter(([key]) =>
+      lowerWhitelist.includes(key.toLowerCase()),
+    );
   }
   if (blacklist && blacklist.length > 0) {
-    filtered = filtered.filter(([key]) => !blacklist.includes(key));
+    const lowerBlacklist = blacklist.map((k) => k.toLowerCase());
+    filtered = filtered.filter(
+      ([key]) => !lowerBlacklist.includes(key.toLowerCase()),
+    );
   }
   return filtered;
 }
@@ -56,14 +62,22 @@ export function replayRequest(req: Request, cfg: ReplayRequestConfig): Request {
     url = cfg.url(req);
   }
 
+  const cookies = cookiesFromRequest(req, cfg.headers?.cookie);
+  const finalHeaders = {
+    ...headers,
+    Cookie: cookies,
+    ...cfg.headers?.custom,
+  };
+
+  console.log('[replayRequest] Original request headers:', req.headers);
+  console.log('[replayRequest] Filtered headers:', headers);
+  console.log('[replayRequest] Cookies being sent:', cookies);
+  console.log('[replayRequest] Final headers:', finalHeaders);
+
   return {
     url,
     method: req.method,
-    headers: {
-      ...headers,
-      Cookie: cookiesFromRequest(req, cfg.headers?.cookie),
-      ...cfg.headers?.custom,
-    },
+    headers: finalHeaders,
     body: cfg.customBody || req.body,
   };
 }
@@ -75,8 +89,15 @@ export function cookiesFromRequest(
     blacklist?: Array<string>;
   },
 ): string {
-  const cookie = req.headers['Cookie'];
-  if (!cookie) return '';
+  // Handle case-insensitive Cookie header lookup
+  const cookieKey = Object.keys(req.headers).find(
+    (k) => k.toLowerCase() === 'cookie',
+  );
+  const cookie = cookieKey ? req.headers[cookieKey] : undefined;
+  if (!cookie) {
+    console.log('[cookiesFromRequest] No cookie header found in request');
+    return '';
+  }
 
   let entries = cookie
     .split(';')

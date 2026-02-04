@@ -1,25 +1,19 @@
+import { TNotarizationError } from "../common/types";
+
 type TErrors = {
-  [type: string]: {
-    [taskId: number]: {
-      [name: string]: string;
-    };
-  };
+  [type: string]: Record<TNotarizationError, string>
 };
 
 const errors: TErrors = {
   notarization: {
-    0: {
-      not_enough_rides: 'Not enough trips made',
-      required_data_not_found: 'No rides found',
-    },
-    1: {
-      not_enough_followers: 'Not enough verified followers',
-      required_data_not_found: 'Not verified followers found',
-    },
-    2: {
-      not_enough_devices: 'No devices found',
-      required_data_not_found: 'No devices found',
-    },
+    uber_not_enough_data: 'Not enough trips made',
+    uber_data_not_found: 'No rides found',
+    twitter_not_enough_data: 'Not enough verified followers',
+    twitter_data_not_found: 'Not verified followers found',
+    apple_not_enough_data: 'Not enough devices found',
+    apple_data_not_found: 'No devices found',
+    binance_data_not_found: 'Not enough data about KYC presented',
+    binance_kyc_not_verified: 'KYC not finished'
   },
 };
 

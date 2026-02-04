@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TConnectionQuality, TTask } from '../../common/types';
+import { TConnectionQuality, TNotarizationError, TTask } from '../../common/types';
 
 export enum NotarizationStatus {
   pending,
@@ -11,7 +11,7 @@ export enum NotarizationStatus {
 export interface NotarizationState {
   taskId: number | null;
   status: NotarizationStatus;
-  error?: string;
+  error?: TNotarizationError;
   currentStep: number;
   result?: string;
   transcriptRecv?: string;
@@ -36,7 +36,6 @@ const initialState: NotarizationState = {
   taskId: null,
   status: NotarizationStatus.pending,
   progress: 0,
-  error: '',
   task: null,
   currentStep: 0,
   requestId: null,
@@ -112,7 +111,7 @@ export const notarizationSlice = createSlice({
 
     setError: (
       state: NotarizationState,
-      action: PayloadAction<string | undefined>,
+      action: PayloadAction<TNotarizationError | undefined>,
     ) => {
       console.log('ERROR SET: ', action.payload);
       state.error = action.payload;

@@ -13,3 +13,4 @@ export type { TVerification } from './verification';
 export type { TTaskServer } from './task-server';
 export type { TVerifyResult } from './verify-result';
 export { TWebsiteRequestType } from './website-request-type'
+export type { TNotarizationError } from './notarization-error';
