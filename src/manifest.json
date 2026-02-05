@@ -59,7 +59,8 @@
     "https://appleid.apple.com/*",
     "https://riders.uber.com/*",
     "https://account.apple.com/*",
-    "https://www.binance.com/*"
+    "https://www.binance.com/*",
+    "https://www.okx.com/*"
   ],
   "host_permissions": [
     "https://connect.bringid.org/*",

@@ -6,4 +6,6 @@ export type TNotarizationError =
 'apple_not_enough_data' |
 'apple_data_not_found' |
 'binance_data_not_found' |
-'binance_kyc_not_verified'
+'binance_kyc_not_verified' |
+'okx_data_not_found' | 
+'okx_kyc_not_verified'

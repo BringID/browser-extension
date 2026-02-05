@@ -16,7 +16,7 @@ export const AppleDevicesHandlerConfig: SimpleHandlerConfig = {
   redirect: 'https://account.apple.com/account/manage/section/devices',
   tlsnConfig: {
     serverDns: 'account.apple.com',
-    maxSentData: 608,
+    maxSentData: 2500,
     maxRecvData: 24000,
   },
   replayRequestCfg: {

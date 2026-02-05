@@ -14,6 +14,7 @@ import {
 } from './styled-components';
 import TProps from './types';
 import { requestHostPermission, checkIfPermissionGranted } from '../../utils';
+import { defineTaskIcon } from '../../../common/utils';
 
 const showNote = () => {
   return (
@@ -79,7 +80,7 @@ const PermissionOverlay: FC<TProps> = ({ onAccepted, currentTask }) => {
   return (
     <Container>
       <Content>
-        <LogoWrapperStyled icon={<Image src={currentTask.icon} />} />
+        <LogoWrapperStyled icon={defineTaskIcon(currentTask.icon)} />
         <TitleStyled>{currentTask.title}</TitleStyled>
 
         <TextStyled>Private & Secure</TextStyled>

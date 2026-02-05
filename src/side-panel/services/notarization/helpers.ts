@@ -124,23 +124,74 @@ export function newCommitForRequest(
     sent: [{ start: 0, end: sentEnd }],
     recv: [],
   };
-  const transcriptJsonStr = Buffer.from(transcript.recv).toString('utf-8');
-  const jsonStarts: number = transcriptJsonStr.indexOf('\n{') + 1;
-  const pointers: Pointers = parse(message.body.toString()).pointers;
+
+  const rawRecv = Buffer.from(transcript.recv);
+  const bodyStr = message.body.toString();
+  console.log('[newCommitForRequest] transcript.recv total bytes:', transcript.recv.length);
+  console.log('[newCommitForRequest] body length:', bodyStr.length);
+  console.log('[newCommitForRequest] parsed info line:', message.info);
+
+  if (bodyStr.length === 0) {
+    console.error('[newCommitForRequest] Response body is empty (Content-Length: 0).', {
+      recvBytes: transcript.recv.length,
+      info: message.info,
+      headers: message.headers,
+    });
+    return new Error(
+      `Server returned an empty response body (HTTP status: ${message.info.trim()}). The request may be missing required headers or authentication.`
+    );
+  }
+
+  let pointers: Pointers;
+  try {
+    pointers = parse(bodyStr).pointers;
+  } catch (err) {
+    console.error('[newCommitForRequest] Failed to parse response body as JSON.', {
+      recvBytes: transcript.recv.length,
+      bodyLength: bodyStr.length,
+      bodyTail: bodyStr.slice(-200),
+      error: err,
+    });
+    return new Error(
+      `Response body is not valid JSON (recv: ${transcript.recv.length} bytes, body: ${bodyStr.length} bytes). Response may be truncated — try increasing maxRecvData.`
+    );
+  }
+
+  // Find where the HTTP body area starts in the raw transcript (after \r\n\r\n).
+  // We search for disclosure substrings directly in the raw buffer instead of
+  // using arithmetic offsets, which breaks with Transfer-Encoding: chunked.
+  const headersEndMarker = Buffer.from('\r\n\r\n');
+  const headersEndPos = rawRecv.indexOf(headersEndMarker);
+  if (headersEndPos === -1) {
+    return new Error('Could not find end of HTTP headers in transcript');
+  }
+  const bodyAreaStart = headersEndPos + 4;
 
   for (const path of disclose) {
-    const p: Mapping = pointers[path];
-    if (!p.key?.pos) {
-      return new Error('required_data_not_found');
+    const p: Mapping | undefined = pointers[path];
+    if (!p || !p.key?.pos) {
+      console.warn(`[newCommitForRequest] Skipping missing path: ${path}`);
+      continue;
     }
-    // Needed for properly UTF-8 symbols processing in Verifier.
-    const dataLength = Buffer.from(
-      message.body.toString().substring(p.key?.pos, p.valueEnd.pos),
-      'utf-8',
-    ).length;
+
+    // Extract the disclosure substring from the decoded body and convert to bytes.
+    const disclosureStr = bodyStr.substring(p.key.pos, p.valueEnd.pos);
+    const disclosureBytes = Buffer.from(disclosureStr, 'utf-8');
+
+    // Find the exact byte sequence in the raw transcript (after headers).
+    // This correctly handles chunked Transfer-Encoding since chunk size
+    // markers (hex + \r\n) won't match JSON key-value content.
+    const pos = rawRecv.indexOf(disclosureBytes, bodyAreaStart);
+    if (pos === -1) {
+      return new Error(
+        `Could not locate disclosed data for path '${path}' in raw transcript`,
+      );
+    }
+
+    console.log(`[newCommitForRequest] Disclosed '${path}': "${disclosureStr}" at bytes [${pos}, ${pos + disclosureBytes.length}]`);
     commit.recv.push({
-      start: jsonStarts + p.key?.pos,
-      end: jsonStarts + p.key?.pos + dataLength,
+      start: pos,
+      end: pos + disclosureBytes.length,
     });
   }
   return commit;

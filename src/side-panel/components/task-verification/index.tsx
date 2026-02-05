@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
-import browser from 'webextension-polyfill';
 import { initNotarizationManager, getNotarizationManager } from '../../services/notarization';
 import { NotarizationManager } from '../../services/notarization/notarization-manager';
 import { useSelector } from 'react-redux';
@@ -39,6 +38,7 @@ import {
 import { TConnectionQuality, TNotarizationError, TTask } from '../../../common/types'
 import errors from '../../../configs/errors';
 import { collectLogs, formatCapturedLogs, downloadDataAsFile } from '../../utils';
+import { defineTaskIcon } from '../../../common/utils';
 
 const buffer = collectLogs(entry => {
   console.debug('Captured:', entry);
@@ -147,7 +147,7 @@ const renderHeader = (
     if (!currentTaskErrors || !currentTaskErrors[error]) {
       return (
         <Header>
-          <LogoWrapperStyled icon={currentTask?.icon} status="error" />
+          <LogoWrapperStyled icon={defineTaskIcon(currentTask.icon)} />
 
           <TitleStyled>Verification Failed</TitleStyled>
 
@@ -160,7 +160,7 @@ const renderHeader = (
 
     return (
       <Header>
-        <LogoWrapperStyled icon={currentTask?.icon} status="error" />
+        <LogoWrapperStyled icon={defineTaskIcon(currentTask.icon)} />
 
         <TitleStyled>Account Not Eligible</TitleStyled>
 
@@ -173,7 +173,7 @@ const renderHeader = (
 
   return (
     <Header>
-      <LogoWrapperStyled icon={currentTask?.icon} />
+        <LogoWrapperStyled icon={defineTaskIcon(currentTask.icon)} />
 
       <TitleStyled>{currentTask?.description}</TitleStyled>
     </Header>

@@ -13,7 +13,9 @@ const errors: TErrors = {
     apple_not_enough_data: 'Not enough devices found',
     apple_data_not_found: 'No devices found',
     binance_data_not_found: 'Not enough data about KYC presented',
-    binance_kyc_not_verified: 'KYC not finished'
+    binance_kyc_not_verified: 'KYC not finished',
+    okx_data_not_found: 'Not enough data about OKX KYC presented',
+    okx_kyc_not_verified: 'OKX KYC not verified'
   },
 };
 

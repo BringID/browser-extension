@@ -102,7 +102,21 @@ export class NotarizationTemplate extends NotarizationBase {
       body: JSON.stringify(request.body),
     });
 
-    const responseJSON = await response.json();
+    const responseText = await response.text();
+    console.log(`[NotarizationTemplate] Fetch response size: ${responseText.length} bytes (maxRecvData: ${this.tlsnConfig.maxRecvData})`);
+
+    let responseJSON: any;
+    try {
+      responseJSON = JSON.parse(responseText);
+    } catch (err) {
+      console.error('[NotarizationTemplate] Failed to parse fetch response as JSON:', {
+        status: response.status,
+        contentType: response.headers.get('content-type'),
+        bodyPreview: responseText.substring(0, 500),
+      });
+      return this.result(new Error('Failed to parse API response as JSON'));
+    }
+
     if (this.responseMiddleware) {
       const responseProcessed = await this.responseMiddleware(
         log,
