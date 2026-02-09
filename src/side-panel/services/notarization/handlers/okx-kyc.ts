@@ -7,10 +7,6 @@ type TOkxKycResponse = {
     kycLevel?: number;
     uuid?: string;
   };
-  detailMsg: string;
-  error_code: string;
-  error_message: string;
-  msg: string;
 };
 
 export const OkxKycHandlerConfig: SimpleHandlerConfig = {
@@ -22,7 +18,7 @@ export const OkxKycHandlerConfig: SimpleHandlerConfig = {
   redirect: 'https://www.okx.com/account/users',
   tlsnConfig: {
     serverDns: 'www.okx.com',
-    maxSentData: 5000,
+    maxSentData: 3500,
     maxRecvData: 50000,
   },
   replayRequestCfg: {
@@ -34,15 +30,7 @@ export const OkxKycHandlerConfig: SimpleHandlerConfig = {
       },
       whitelist: [
         'authorization',
-        'user-agent',
-        'referer',
-        'origin',
-        'x-site-info',
-        'x-id-group',
-        'x-locale',
-        'x-utc',
-        'x-zkdex-env',
-        'x-cdn',
+        'user-agent'
       ],
       cookie: {
         whitelist: [

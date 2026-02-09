@@ -31,7 +31,7 @@ function applyLists(
   blacklist?: string[],
 ): Array<[string, string]> {
   let filtered: Array<[string, string]> = entries;
-  if (whitelist && whitelist.length > 0) {
+  if (whitelist) {
     const lowerWhitelist = whitelist.map((k) => k.toLowerCase());
     filtered = entries.filter(([key]) =>
       lowerWhitelist.includes(key.toLowerCase()),

@@ -22,7 +22,7 @@ export const BinanceKycHandlerConfig: SimpleHandlerConfig = {
   redirect: 'https://www.binance.com/en/my/dashboard',
   tlsnConfig: {
     serverDns: 'www.binance.com',
-    maxSentData: 5000,
+    maxSentData: 1000,
     maxRecvData: 24000,
   },
   replayRequestCfg: {
@@ -34,13 +34,7 @@ export const BinanceKycHandlerConfig: SimpleHandlerConfig = {
       },
       whitelist: [
         'csrftoken',
-        'x-csrf-token',
-        'bnc-uuid',
-        'fvideo-id',
-        'fvideo-token',
-        'x-trace-id',
-        'x-ui-request-trace',
-        'x-passthrough-token'
+        'bnc-uuid'
       ],
       cookie: {
         whitelist: [

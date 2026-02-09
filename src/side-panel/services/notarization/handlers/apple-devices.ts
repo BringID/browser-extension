@@ -16,7 +16,7 @@ export const AppleDevicesHandlerConfig: SimpleHandlerConfig = {
   redirect: 'https://account.apple.com/account/manage/section/devices',
   tlsnConfig: {
     serverDns: 'account.apple.com',
-    maxSentData: 2500,
+    maxSentData: 608,
     maxRecvData: 24000,
   },
   replayRequestCfg: {
@@ -28,6 +28,7 @@ export const AppleDevicesHandlerConfig: SimpleHandlerConfig = {
         'User-Agent':
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
       },
+      whitelist: [],
       cookie: {
         whitelist: ['aidsp'],
       },

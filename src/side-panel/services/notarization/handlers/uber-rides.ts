@@ -36,6 +36,7 @@ export const UberRidesHandlerConfig: SimpleHandlerConfig = {
   replayRequestCfg: {
     headers: {
       custom: { 'content-type': 'application/json', 'x-csrf-token': 'x' },
+      whitelist: [],
       cookie: {
         whitelist: ['sid', 'csid'],
       },
