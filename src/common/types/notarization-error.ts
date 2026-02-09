@@ -8,4 +8,8 @@ export type TNotarizationError =
 'binance_data_not_found' |
 'binance_kyc_not_verified' |
 'okx_data_not_found' | 
-'okx_kyc_not_verified'
+'okx_kyc_not_verified' |
+'apple_subscriptions_data_not_found' |
+'apple_no_active_subscriptions' | 
+'apple_no_paid_subscriptions'
+

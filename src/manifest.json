@@ -55,12 +55,13 @@
     }
   ],
   "optional_host_permissions": [
-    "https://x.com/*",
     "https://appleid.apple.com/*",
     "https://riders.uber.com/*",
     "https://account.apple.com/*",
     "https://www.binance.com/*",
-    "https://www.okx.com/*"
+    "https://www.okx.com/*",
+    "https://speedysub.apps.apple.com/*",
+    "https://apps.apple.com/*"
   ],
   "host_permissions": [
     "https://connect.bringid.org/*",

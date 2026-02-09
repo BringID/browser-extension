@@ -178,10 +178,15 @@ export function newCommitForRequest(
     const disclosureStr = bodyStr.substring(p.key.pos, p.valueEnd.pos);
     const disclosureBytes = Buffer.from(disclosureStr, 'utf-8');
 
+    // Use the json-source-map character offset to compute a minimum search
+    // position. This prevents matching an earlier duplicate (e.g. two
+    // subscriptions both having "status":"Active").
+    const searchFrom = bodyAreaStart + Buffer.byteLength(bodyStr.substring(0, p.key.pos), 'utf-8');
+
     // Find the exact byte sequence in the raw transcript (after headers).
     // This correctly handles chunked Transfer-Encoding since chunk size
     // markers (hex + \r\n) won't match JSON key-value content.
-    const pos = rawRecv.indexOf(disclosureBytes, bodyAreaStart);
+    const pos = rawRecv.indexOf(disclosureBytes, searchFrom);
     if (pos === -1) {
       return new Error(
         `Could not locate disclosed data for path '${path}' in raw transcript`,

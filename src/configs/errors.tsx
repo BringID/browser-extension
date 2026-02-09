@@ -15,7 +15,10 @@ const errors: TErrors = {
     binance_data_not_found: 'Not enough data about KYC presented',
     binance_kyc_not_verified: 'KYC not finished',
     okx_data_not_found: 'Not enough data about OKX KYC presented',
-    okx_kyc_not_verified: 'OKX KYC not verified'
+    okx_kyc_not_verified: 'OKX KYC not verified',
+    apple_subscriptions_data_not_found: 'No related data found about subscriptions',
+    apple_no_active_subscriptions: 'No active subscriptions found',
+    apple_no_paid_subscriptions: "No paid subscriptions found"
   },
 };
 
