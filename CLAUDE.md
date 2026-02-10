@@ -590,5 +590,3 @@ yarn lint:fix     # Fix ESLint issues
 8. **Semaphore Integration**: Verification results can be used to join Semaphore groups on-chain (Base), enabling privacy-preserving proof of humanity.
 
 9. **Content Security Policy**: Extension pages use `'wasm-unsafe-eval'` for WebAssembly support (required by `bringid-tlsn-js`).
-
-10. **Task Definitions**: Tasks are loaded from `cfg/tasks.json` (mainnet) or `cfg/tasks-sepolia.json` (testnet) and can also be provided dynamically by the requesting web application.
