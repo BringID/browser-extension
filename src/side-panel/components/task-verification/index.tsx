@@ -427,6 +427,7 @@ const TaskVerification: FC = () => {
             }}
             transcriptRecv={transcriptRecv as string}
             transcriptSent={transcriptSent as string}
+            presentationData={result as string}
           />
         )}
 
