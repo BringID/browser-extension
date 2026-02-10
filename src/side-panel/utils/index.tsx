@@ -5,7 +5,7 @@ import checkIfPermissionGranted from './check-if-permission-granted';
 import downloadDataAsFile from './download-data-as-file';
 import collectLogs from './collect-logs'
 import formatCapturedLogs from './format-captured-logs'
-
+import msToTime from './ms-to-time';
 export {
   msToMinutes,
   defineConnectionQualityIcon,
@@ -13,5 +13,6 @@ export {
   checkIfPermissionGranted,
   downloadDataAsFile,
   collectLogs,
-  formatCapturedLogs
+  formatCapturedLogs,
+  msToTime
 };

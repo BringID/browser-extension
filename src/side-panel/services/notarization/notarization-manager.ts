@@ -3,6 +3,7 @@ import { State } from '../../common/helpers/progressive';
 import { Transcript } from 'bringid-tlsn-js';
 import { notarizationSlice } from '../../store/notarization';
 import { store } from '../../store';
+import { TNotarizationError } from '../../../common/types';
 
 
 // NotarizationManager stores Notarization and handles Redux
@@ -28,10 +29,9 @@ export class NotarizationManager {
     await this.#currentNotarization.start(
       // TODO Presentation should be passed to popup
       async (res) => {
-        console.log('RESULT: ', { res });
         if (res instanceof Error) {
           console.error(res);
-          store.dispatch(notarizationSlice.actions.setError(res.message));
+          store.dispatch(notarizationSlice.actions.setError(res.message as TNotarizationError));
           return;
         }
 

@@ -1,7 +1,7 @@
 [
   {
     "title": "Uber Rides",
-    "id": "2",
+    "id": "1",
     "service": "Uber",
     "description": "Prove that you had at least 5 uber trips",
     "icon": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png",
@@ -32,7 +32,7 @@
   },
   {
     "title": "X Premium & Verified Followers",
-    "id": "3",
+    "id": "2",
     "service": "X/Twitter",
     "permissionUrl": [
       "https://x.com/i/account_analytics/overview",
@@ -97,7 +97,7 @@
     ]
   },
   {
-    "id": "4",
+    "id": "3",
     "title": "Apple Devices",
     "service": "Apple ID",
     "description": "Prove you own an Apple device",
@@ -108,6 +108,68 @@
         "points": 10,
         "semaphoreGroupId": "4",
         "credentialGroupId": "5"
+      }
+    ],
+    "steps": [
+      {
+        "text": "Visit website"
+      },
+      {
+        "text": "Wait for request capture"
+      },
+      {
+        "text": "MPC-TLS verification progress",
+        "notarization": true
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "title": "Binance KYC",
+    "service": "Binance",
+    "verificationType": "zktls",
+    "description": "Prove your Binance account is KYC verified",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg",
+    "permissionUrl": [
+      "https://www.binance.com/bapi/kyc/v2/private/certificate/user-kyc/current-kyc-status",
+      "https://www.binance.com/en/my/dashboard"
+    ],
+    "groups": [
+      {
+        "points": 15,
+        "semaphoreGroupId": "5",
+        "credentialGroupId": "6"
+      }
+    ],
+    "steps": [
+      {
+        "text": "Visit website"
+      },
+      {
+        "text": "Wait for request capture"
+      },
+      {
+        "text": "MPC-TLS verification progress",
+        "notarization": true
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "title": "Binance KYC",
+    "service": "Binance",
+    "verificationType": "zktls",
+    "description": "Prove your Binance account is KYC verified",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg",
+    "permissionUrl": [
+      "https://www.binance.com/bapi/kyc/v2/private/certificate/user-kyc/current-kyc-status",
+      "https://www.binance.com/en/my/dashboard"
+    ],
+    "groups": [
+      {
+        "points": 15,
+        "semaphoreGroupId": "5",
+        "credentialGroupId": "6"
       }
     ],
     "steps": [

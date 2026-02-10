@@ -13,6 +13,10 @@ import AddressIcon from './address';
 import ConnectionIcon from './connection';
 import Copy from './copy';
 import Lock from './lock';
+import BinanceIcon from './binance-icon'
+import OKXIcon from './okx-icon'
+import AppleIcon from './apple-icon'
+import UberIcon from './uber-icon'
 
 const Icons = {
   VehicleIcon,
@@ -20,8 +24,12 @@ const Icons = {
   HouseIcon,
   JoystickIcon,
   ShopppingCart,
+  BinanceIcon,
   Check,
+  OKXIcon,
   Clock,
+  UberIcon,
+  AppleIcon,
   Spinner,
   PlusIcon,
   ArrowBackIcon,

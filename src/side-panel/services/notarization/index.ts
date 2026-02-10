@@ -1,18 +1,53 @@
 import { NotarizationTemplate } from './notarization-template';
 import {
   AppleDevicesHandlerConfig,
+  AppleSubscriptionsHandlerConfig,
   UberRidesHandlerConfig,
-  XVerifiedFollowersHandlerConfig,
+  BinanceKycHandlerConfig,
+  OkxKycHandlerConfig
 } from './handlers';
 import { NotarizationManager } from './notarization-manager';
-import { Task, tasks } from '../../../common/core';
-import { store } from '../../store';
+import { TTask } from '../../../common/types';
 
-const state = store.getState()
-const t: Task[] = tasks(state.notarization.devMode);
+function getHandlerConfigForTask(taskId: string | undefined) {
+  switch (taskId) {
+    case '100':
+      return UberRidesHandlerConfig;
+    case '101':
+      return AppleDevicesHandlerConfig;
+    case '102':
+      return BinanceKycHandlerConfig;
+    case '103':
+      return OkxKycHandlerConfig;
+    case '104':
+      return AppleSubscriptionsHandlerConfig;
+    default:
+      return null
+  }
+}
 
-export const notarizationManager = new NotarizationManager([
-  new NotarizationTemplate(UberRidesHandlerConfig, t[0]),
-  new NotarizationTemplate(XVerifiedFollowersHandlerConfig, t[1]),
-  new NotarizationTemplate(AppleDevicesHandlerConfig, t[2]),
-]);
+let notarizationManager: NotarizationManager | null = null;
+
+export async function initNotarizationManager(): Promise<NotarizationManager> {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get(['task'], (data) => {
+      const task: TTask | null = data.task ? JSON.parse(data.task) : null;
+      console.log('initNotarizationManager: task from storage', { task });
+
+      const handlerConfig = getHandlerConfigForTask(task?.id);
+
+      if (!handlerConfig) {
+        return reject(`NO TASK FOUND FOR TASK ID: ${task?.id}`)
+      }
+      notarizationManager = new NotarizationManager([
+        new NotarizationTemplate(handlerConfig, task as TTask),
+      ]);
+
+      resolve(notarizationManager);
+    });
+  });
+}
+
+export function getNotarizationManager(): NotarizationManager | null {
+  return notarizationManager;
+}

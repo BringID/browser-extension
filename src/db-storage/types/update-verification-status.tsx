@@ -1,7 +1,0 @@
-import { TVerificationStatus } from '../../common/types';
-type TUpdateVerificationStatus = (
-  credentialGroupId: string,
-  status: TVerificationStatus,
-) => Promise<void>;
-
-export default TUpdateVerificationStatus;

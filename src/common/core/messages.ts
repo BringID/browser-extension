@@ -5,9 +5,8 @@ export type TSidepanelCloseRequest = {
 };
 
 export type TSidepanelNotarizeRequest = {
-  type: string;
-  task_id: number;
-  master_key: string;
+  type: string
+  task: string
 };
 
 export type TMessage = TSidepanelCloseRequest | TSidepanelNotarizeRequest;
