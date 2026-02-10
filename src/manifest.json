@@ -70,7 +70,6 @@
     "https://staging.widget.bringid.org/*"
   ],
   "permissions": [
-    "offscreen",
     "storage",
     "webRequest",
     "activeTab",
