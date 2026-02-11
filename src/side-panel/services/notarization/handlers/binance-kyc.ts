@@ -3,12 +3,11 @@ import { JsonValue } from 'type-fest'
 
 type TBinanceKycResponse = {
   code: string;
-  success: boolean;
   data: {
-    kycStatus: number;
-    currentKycLevel: string;
-    jumioStatus: string;
     userId: number;
+    certificateInfo: {
+      kycLevel: number;
+    };
   };
 };
 
@@ -17,12 +16,12 @@ export const BinanceKycHandlerConfig: SimpleHandlerConfig = {
   request: {
     method: 'POST',
     urlPattern:
-      'https://www.binance.com/bapi/kyc/v2/private/certificate/user-kyc/current-kyc-status',
+      'https://www.binance.com/bapi/kyc/v2/private/certificate/kyc-certificate/get-kyc-user-profile',
   },
   redirect: 'https://www.binance.com/en/my/dashboard',
   tlsnConfig: {
     serverDns: 'www.binance.com',
-    maxSentData: 1000,
+    maxSentData: 1032,
     maxRecvData: 24000,
   },
   replayRequestCfg: {
@@ -53,29 +52,22 @@ export const BinanceKycHandlerConfig: SimpleHandlerConfig = {
     },
   },
   transcriptDisclose: [
-    '/data/kycStatus',
-    '/data/currentKycLevel',
-    '/data/jumioStatus',
-    '/data/userId'
+    '/data/userId',
+    '/data/certificateInfo/kycLevel'
   ],
   responseMiddleware: async (_, response: JsonValue) => {
-    const { code, success, data } = response as TBinanceKycResponse;
-    console.log({ code, success, data });
+    const { code, data } = response as TBinanceKycResponse;
+    console.log({ code, data });
 
-
-    if (code !== '000000' || !success) {
+    if (code !== '000000') {
       return new Error('binance_data_not_found');
     }
 
-    if (data?.kycStatus === undefined) {
+    if (!data?.certificateInfo) {
       return new Error('binance_data_not_found');
     }
 
-    // kycStatus = 1 means verified, jumioStatus = 'PASS' means identity verified
-    const kycPassed = data.kycStatus === 1;
-    const identityVerified = data.jumioStatus === 'PASS';
-
-    if (!kycPassed || !identityVerified) {
+    if (data.certificateInfo.kycLevel < 2) {
       return new Error('binance_kyc_not_verified');
     }
   },
