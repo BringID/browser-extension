@@ -397,6 +397,10 @@ const TaskVerification: FC = () => {
                       origin
                     },
                   });
+                  chrome.tabs.update(tabId, { active: true });
+                  chrome.tabs.get(tabId).then(tab => {
+                    if (tab.windowId) chrome.windows.update(tab.windowId, { focused: true });
+                  });
                   chrome.storage.local.remove(['task', 'requestMeta']);
                   window.close()
                   setShowResultOverlay(false);
@@ -411,6 +415,10 @@ const TaskVerification: FC = () => {
                       requestId,
                       origin
                     }
+                  });
+                  chrome.tabs.update(tabId, { active: true });
+                  chrome.tabs.get(tabId).then(tab => {
+                    if (tab.windowId) chrome.windows.update(tab.windowId, { focused: true });
                   });
                   chrome.storage.local.remove(['task', 'requestMeta']);
                   console.log('ERROR: ', err);

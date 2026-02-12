@@ -45,6 +45,10 @@ const sidePanelPorts = new Map<number, { tabId: number; requestId: string; origi
           }).catch((err) => {
             console.error('Failed to send cancellation to tab:', err);
           });
+          chrome.tabs.update(session.tabId, { active: true });
+          chrome.tabs.get(session.tabId).then(tab => {
+            if (tab.windowId) chrome.windows.update(tab.windowId, { focused: true });
+          });
         }
         sidePanelPorts.delete(portId);
       });

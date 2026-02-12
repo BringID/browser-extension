@@ -1,6 +1,5 @@
 import { NotarizationTemplate } from './notarization-template';
 import {
-  AppleDevicesHandlerConfig,
   AppleSubscriptionsHandlerConfig,
   UberRidesHandlerConfig,
   BinanceKycHandlerConfig,
@@ -13,8 +12,6 @@ function getHandlerConfigForTask(taskId: string | undefined) {
   switch (taskId) {
     case '100':
       return UberRidesHandlerConfig;
-    case '101':
-      return AppleDevicesHandlerConfig;
     case '102':
       return BinanceKycHandlerConfig;
     case '103':

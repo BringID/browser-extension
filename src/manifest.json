@@ -21,8 +21,6 @@
   "content_scripts": [
     {
       "matches": [
-        "https://connect.bringid.org/*",
-        "https://dev.connect.bringid.org/*",
         "https://widget.bringid.org/*",
         "https://staging.widget.bringid.org/*"
       ],
@@ -33,8 +31,6 @@
   ],
   "externally_connectable": {
     "matches": [
-      "https://connect.bringid.org/*",
-      "https://dev.connect.bringid.org/*",
       "https://widget.bringid.org/*",
       "https://staging.widget.bringid.org/*"
     ],
@@ -46,8 +42,6 @@
         "content.bundle.js"
       ],
       "matches": [
-        "https://connect.bringid.org/*",
-        "https://dev.connect.bringid.org/*",
         "https://widget.bringid.org/*",
         "https://staging.widget.bringid.org/*"
       ],
@@ -64,8 +58,6 @@
     "https://apps.apple.com/*"
   ],
   "host_permissions": [
-    "https://connect.bringid.org/*",
-    "https://dev.connect.bringid.org/*",
     "https://widget.bringid.org/*",
     "https://staging.widget.bringid.org/*"
   ],

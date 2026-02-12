@@ -13,7 +13,9 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "noEmit": false,
-    "jsx": "react"
+    "jsx": "react",
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["chrome", "react", "react-dom", "node"]
   },
   "include": ["src", "./styled.d.ts", "./global.d.ts"],
   "exclude": ["build", "node_modules"]
