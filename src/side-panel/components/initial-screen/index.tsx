@@ -1,49 +1,45 @@
 import React, { FC } from "react"
 import {
-  Container,
-  LogoWrapperStyled,
-  Header,
-  TitleStyled,
-  Content,
-  Wrapper,
-  ButtonStyled,
-  Buttons,
-  TextStyled
+  HomeWrapper,
+  HomeLogoStyled,
+  HomeHeadline,
+  HomeSubtext,
+  HomeCTAButton,
+  HomeFootnote,
 } from '../styled-components'
 import { Page } from '../../../components';
 
 import BringGif from '../../../images/bring.gif';
 
-  const handleOpenGithub = () => {
-    chrome.tabs.create({ url: 'https://github.com/BringID/bringid' });
-  };
-
+const handleLearnMore = () => {
+  chrome.tabs.create({ url: 'https://bringid.org' });
+};
 
 const InitialScreen: FC = () => {
-  return <Wrapper>
+  return (
     <Page>
-      <Container>
-        <Header>
-          <LogoWrapperStyled icon={<img src={BringGif} style={{ width: 58, height: 58, objectFit: 'cover' }} />} status="error" />
-          <TitleStyled>BringID Extension</TitleStyled>
-          <TextStyled>
-            This extension works only with the BringID npm package.
-            Use BringIDModal to trigger verifications.
-          </TextStyled>
-        </Header>
-          
-        <Content>
-          <Buttons>
-            <ButtonStyled appearance="action" onClick={handleOpenGithub}>
-              View on GitHub
-            </ButtonStyled>
-          </Buttons>
-        </Content>
-          
-      </Container>
-    </Page>
-  </Wrapper>
-}
+      <HomeWrapper>
+        <HomeLogoStyled icon={<img src={BringGif} style={{ width: 58, height: 58, objectFit: 'cover' }} />} status="error" />
 
+        <HomeHeadline>
+          Prove you're real.<br />
+          Stay anonymous.
+        </HomeHeadline>
+
+        <HomeSubtext>
+          BringID uses zkTLS to verify your web accounts without revealing personal data.
+        </HomeSubtext>
+
+        <HomeCTAButton onClick={handleLearnMore}>
+          Learn more at bringid.org →
+        </HomeCTAButton>
+
+        <HomeFootnote>
+          This extension activates when a verification request is received from a supported application.
+        </HomeFootnote>
+      </HomeWrapper>
+    </Page>
+  );
+}
 
 export default InitialScreen
