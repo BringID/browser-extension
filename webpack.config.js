@@ -84,7 +84,7 @@ const options = {
         exclude: /node_modules/,
       },
       {
-        test: /\.png|gif$/,
+        test: /\.(png|gif|svg)$/,
         loader: "file-loader",
         exclude: /node_modules/,
    
