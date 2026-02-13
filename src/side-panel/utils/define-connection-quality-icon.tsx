@@ -1,6 +1,5 @@
 import React from 'react';
 import { Icons } from '../../components';
-import chains from '../../configs/chains';
 
 import styled from 'styled-components';
 import { TConnectionQuality } from '../../common/types';

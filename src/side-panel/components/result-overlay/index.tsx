@@ -71,7 +71,7 @@ const ResultOverlay: FC<TProps> = ({
               });
             }}
           >
-            Download notarization details JSON (~12 KB)
+            Download notarization details JSON (~40 KB)
           </ActionTextStyled>
 
           <Hr />
