@@ -1,67 +1,42 @@
 import browser from 'webextension-polyfill';
-import { TExtensionRequestType } from '../popup/types';
 
 (async () => {
   loadScript('content.bundle.js');
   chrome.runtime.onMessage.addListener((message) => {
     switch (message.type) {
-      case TExtensionRequestType.logout: {
-        window.postMessage(
-          {
-            source: 'bringID extension',
-            type: TExtensionRequestType.logout,
-          },
-          '*',
-        );
-        break;
-      }
 
-      case TExtensionRequestType.login: {
-        window.postMessage(
-          {
-            source: 'bringID extension',
-            type: TExtensionRequestType.login,
-          },
-          '*',
-        );
-        break;
-      }
+      case 'VERIFICATION_DATA_READY': {
+        const { transcriptRecv, presentationData, requestId, origin} = message.payload;
 
-      case TExtensionRequestType.has_user_key_response: {
         window.postMessage(
           {
             source: 'bringID extension',
-            data: {
-              hasUserKey: message.hasUserKey,
+            type: 'VERIFICATION_DATA_READY',
+            payload: {
+              transcriptRecv,
+              presentationData
             },
-            type: TExtensionRequestType.has_user_key_response,
+            requestId
           },
-          '*',
+          origin,
         );
         break;
       }
 
-      case TExtensionRequestType.proofs_generated: {
+      case 'VERIFICATION_DATA_ERROR': {
+        const { error, requestId, origin } = message.payload;
+
         window.postMessage(
           {
             source: 'bringID extension',
-            data: message.payload,
-            type: TExtensionRequestType.receive_proofs,
+            type: 'VERIFICATION_DATA_ERROR',
+            requestId,
+            payload: {
+              error
+            }
           },
-          '*',
+          origin,
         );
-        break;
-      }
-
-      case TExtensionRequestType.proofs_rejected: {
-        window.postMessage(
-          {
-            source: 'bringID extension',
-            type: TExtensionRequestType.proofs_rejected,
-          },
-          '*',
-        );
-
         break;
       }
     }

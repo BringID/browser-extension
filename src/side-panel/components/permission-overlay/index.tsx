@@ -14,7 +14,7 @@ import {
 } from './styled-components';
 import TProps from './types';
 import { requestHostPermission, checkIfPermissionGranted } from '../../utils';
-import { tasks } from '../../../common/core';
+import { defineTaskIcon } from '../../../common/utils';
 
 const showNote = () => {
   return (
@@ -65,11 +65,8 @@ const defineButtons = (
   );
 };
 
-const PermissionOverlay: FC<TProps> = ({ nextTaskIndex, onAccepted, devMode }) => {
+const PermissionOverlay: FC<TProps> = ({ onAccepted, currentTask }) => {
   const [loading, setLoading] = useState<boolean>(false);
-
-  const availableTasks = tasks(devMode);
-  const currentTask = availableTasks[nextTaskIndex];
 
   useEffect(() => {
     (async () => {
@@ -83,7 +80,7 @@ const PermissionOverlay: FC<TProps> = ({ nextTaskIndex, onAccepted, devMode }) =
   return (
     <Container>
       <Content>
-        <LogoWrapperStyled icon={<Image src={currentTask.icon} />} />
+        <LogoWrapperStyled icon={defineTaskIcon(currentTask.icon)} />
         <TitleStyled>{currentTask.title}</TitleStyled>
 
         <TextStyled>Private & Secure</TextStyled>

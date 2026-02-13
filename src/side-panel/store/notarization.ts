@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TConnectionQuality } from '../../common/types';
+import { TConnectionQuality, TNotarizationError, TTask } from '../../common/types';
 
 export enum NotarizationStatus {
   pending,
@@ -11,18 +11,22 @@ export enum NotarizationStatus {
 export interface NotarizationState {
   taskId: number | null;
   status: NotarizationStatus;
-  error?: string;
+  error?: TNotarizationError;
   currentStep: number;
   result?: string;
   transcriptRecv?: string;
   transcriptSent?: string;
-
+  task: TTask | null
   progress: number;
   connectionQuality?: TConnectionQuality;
   eta?: number;
   speed?: string;
 
-  devMode: boolean
+
+  // request meta
+  requestId: string | null;
+  tabId: number | null;
+  origin: string| null;
 
   // message => UI
   // result => UI
@@ -32,9 +36,11 @@ const initialState: NotarizationState = {
   taskId: null,
   status: NotarizationStatus.pending,
   progress: 0,
-  error: '',
+  task: null,
   currentStep: 0,
-  devMode: false
+  requestId: null,
+  tabId: null,
+  origin: null
 };
 
 export const notarizationSlice = createSlice({
@@ -45,6 +51,31 @@ export const notarizationSlice = createSlice({
       return { ...action.payload };
     },
 
+
+
+    setOrigin: (
+      state: NotarizationState,
+      action: PayloadAction<string>,
+    ) => {
+      state.origin = action.payload;
+    },
+
+
+    setRequestId: (
+      state: NotarizationState,
+      action: PayloadAction<string>,
+    ) => {
+      state.requestId = action.payload;
+    },
+
+    setTabId: (
+      state: NotarizationState,
+      action: PayloadAction<number>,
+    ) => {
+      state.tabId = action.payload;
+    },
+
+
     setStatus: (
       state: NotarizationState,
       action: PayloadAction<NotarizationStatus>,
@@ -52,11 +83,11 @@ export const notarizationSlice = createSlice({
       state.status = action.payload;
     },
 
-    setDevMode: (
+    setTask: (
       state: NotarizationState,
-      action: PayloadAction<boolean>,
+      action: PayloadAction<TTask>,
     ) => {
-      state.devMode = action.payload;
+      state.task = action.payload;
     },
 
     setProgress: (state: NotarizationState, action: PayloadAction<number>) => {
@@ -80,7 +111,7 @@ export const notarizationSlice = createSlice({
 
     setError: (
       state: NotarizationState,
-      action: PayloadAction<string | undefined>,
+      action: PayloadAction<TNotarizationError | undefined>,
     ) => {
       console.log('ERROR SET: ', action.payload);
       state.error = action.payload;
@@ -98,7 +129,7 @@ export const notarizationSlice = createSlice({
     },
 
     clear: (state: NotarizationState) => {
-      state = { ...initialState };
+      return { ...initialState };
     },
 
     setTranscriptRecv: (

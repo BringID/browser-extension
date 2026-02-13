@@ -4,6 +4,7 @@ type TProps = {
   title: string;
   transcriptRecv: string;
   transcriptSent: string;
+  presentationData: string;
   loading: boolean;
 };
 

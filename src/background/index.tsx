@@ -1,95 +1,69 @@
 import browser from 'webextension-polyfill';
-import { TWebsiteRequestType, TExtensionRequestType } from '../popup/types';
-import getStorage from '../db-storage';
-import getCurrentTab from '../common/utils/get-current-tab';
-import getTabsByHost from '../common/utils/get-tabs-by-host';
+import { TWebsiteRequestType } from '../common/types';
 
-import configs from '../configs';
-
-let creatingOffscreen: any;
-
-async function createOffscreenDocument() {
-  const offscreenUrl = browser.runtime.getURL('offscreen.html');
-  // @ts-ignore
-  const existingContexts = await browser.runtime.getContexts({
-    contextTypes: ['OFFSCREEN_DOCUMENT'],
-    documentUrls: [offscreenUrl],
-  });
-
-  if (existingContexts.length > 0) {
-    return;
-  }
-
-  if (creatingOffscreen) {
-    await creatingOffscreen;
-  } else {
-    creatingOffscreen = (chrome as any).offscreen.createDocument({
-      url: 'offscreen.html',
-      reasons: ['WORKERS'],
-      justification: 'workers for multithreading',
-    });
-    await creatingOffscreen;
-    creatingOffscreen = null;
-  }
-}
+// Track active side panel connections
+const sidePanelPorts = new Map<number, { tabId: number; requestId: string; origin: string }>();
 
 (async () => {
-  const storage = await getStorage();
-  await createOffscreenDocument();
 
-  chrome.storage.onChanged.addListener(async (changes, area) => {
-    if (area === 'sync' && changes.devMode) {
-      console.log('....logout....')
-      const storage = await getStorage();
-      await storage.destroyUser();
+  // Open side panel when extension icon is clicked
+  chrome.action.onClicked.addListener((tab) => {
+    if (tab.id) {
+      // @ts-ignore
+      chrome.sidePanel.open({ tabId: tab.id });
     }
   });
 
-  // related to options page
-
-
+  // Listen for side panel port connections
   chrome.runtime.onConnect.addListener((port) => {
-    if (port.name === 'offscreen') {
-      port.onMessage.addListener((msg) => {
-        console.log('[background] Message received via port', msg);
+    if (port.name === 'side-panel') {
+      const portId = Date.now();
 
-        if (msg.type === 'UPDATE_COMPLETED_INDICATOR') {
-          chrome.action.setBadgeBackgroundColor({ color: 'green' });
-          chrome.action.setBadgeText({ text: msg.completedCount });
-        } else if (msg.type === 'UPDATE_PENDING_INDICATOR') {
-          chrome.action.setBadgeBackgroundColor({ color: 'yellow' });
-          chrome.action.setBadgeText({ text: msg.completedCount });
+      port.onMessage.addListener((msg) => {
+        if (msg.type === 'REGISTER_SESSION') {
+          console.log('Side panel registered:', msg);
+          sidePanelPorts.set(portId, {
+            tabId: msg.tabId,
+            requestId: msg.requestId,
+            origin: msg.origin
+          });
         }
       });
 
       port.onDisconnect.addListener(() => {
-        console.warn('[background] Port disconnected');
-      });
-
-      port.postMessage({ status: 'ok' });
-    }
-
-    if (port.name === 'popup') {
-      port.onDisconnect.addListener(async function () {
-        const tab = await getCurrentTab();
-
-        if (tab) {
-          chrome.tabs.sendMessage(tab.id as number, {
-            type: TExtensionRequestType.proofs_rejected,
+        console.log('Side panel disconnected');
+        const session = sidePanelPorts.get(portId);
+        if (session && session.tabId && session.requestId) {
+          console.log('Sending cancellation to tab:', session.tabId);
+          chrome.tabs.sendMessage(session.tabId, {
+            type: 'VERIFICATION_DATA_ERROR',
+            payload: {
+              error: 'USER_CANCELLED',
+              requestId: session.requestId,
+              origin: session.origin
+            }
+          }).catch((err) => {
+            console.error('Failed to send cancellation to tab:', err);
           });
-        } else {
-          alert('NO TAB DETECTED');
         }
+        sidePanelPorts.delete(portId);
       });
     }
   });
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === 'openPopup') {
-      // @ts-ignore
-      chrome.action.openPopup().catch((err) => {
-        console.error('Failed to open popup:', err);
-      });
+    console.log({ message })
+
+    // Handle unregistering session (successful completion)
+    if (message.type === 'UNREGISTER_SESSION') {
+      // Find and remove the session so disconnect doesn't send cancellation
+      for (const [portId, session] of sidePanelPorts.entries()) {
+        if (session.requestId === message.requestId) {
+          sidePanelPorts.delete(portId);
+          console.log('Session unregistered:', message.requestId);
+          break;
+        }
+      }
     }
   });
 
@@ -99,64 +73,45 @@ async function createOffscreenDocument() {
     sendResponse: (data: any) => void,
   ) {
     switch (request.type) {
-      case TWebsiteRequestType.set_user_key: {
-        await storage.addUserKey(request.privateKey, request.address);
-        if (sender.tab?.id !== undefined && sender.frameId !== undefined) {
-          chrome.tabs.sendMessage(
-            sender.tab.id,
-            {
-              type: TExtensionRequestType.login
-            },
-            { frameId: sender.frameId }
-          );
+      case TWebsiteRequestType.request_zktls_verification: {
+        const { payload, requestId } = request;
+        const tabId = sender.tab?.id;
+        console.log('background: ', { tabId })
+        // Validation
+        if (!payload?.task) {
+          console.error('Invalid request: missing payload.task');
+          return false;
         }
-      
-        return true; // Important for async response
-      }
-
-      case TWebsiteRequestType.has_user_key: {
-        const userKey = await storage.getUserKey();
-
-        if (sender.tab?.id !== undefined && sender.frameId !== undefined) {
-          chrome.tabs.sendMessage(
-            sender.tab.id,
-            {
-              type: TExtensionRequestType.has_user_key_response,
-              hasUserKey: Boolean(userKey),
-            },
-            { frameId: sender.frameId }
-          );
+        if (!payload?.origin) {
+          console.error('Invalid request: missing payload.origin');
+          return false;
+        }
+        if (!requestId) {
+          console.error('Invalid request: missing requestId');
+          return false;
+        }
+        if (!tabId) {
+          console.error('Invalid request: missing sender.tab.id');
+          return false;
         }
 
-        const connectorTabs = await getTabsByHost(configs.CONNECTOR_HOSTS);
-        connectorTabs.forEach((tab) => {
-          chrome.tabs.sendMessage(tab.id as number, {
-            type: TExtensionRequestType.has_user_key_response,
-            hasUserKey: Boolean(userKey),
-          });
-        });
-
-        break;
-      }
-
-      case TWebsiteRequestType.open_extension: {
-        // @ts-ignore
-        chrome.action.openPopup();
-
-        sendResponse({ status: 'opened' });
-        return true;
-      }
-
-      case TWebsiteRequestType.request_proofs: {
-        const { host, pointsRequired, dropAddress } = request;
+        const { task, origin } = payload;
 
         chrome.storage.local.set(
-          { request: `${host}__${pointsRequired}__${dropAddress}` },
-          () => {
-            // @ts-ignore
-            chrome.action.openPopup();
+          {
+            task,
+            requestMeta: {
+              requestId,
+              tabId,
+              origin
+            }
           },
-        );
+          () => {
+
+            // @ts-ignore
+            chrome.sidePanel.open({ tabId });
+          },
+        )
 
         return true;
       }

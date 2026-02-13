@@ -41,6 +41,7 @@ const ResultOverlay: FC<TProps> = ({
   onReject,
   transcriptRecv,
   transcriptSent,
+  presentationData,
   loading,
 }) => {
   return (
@@ -66,6 +67,7 @@ const ResultOverlay: FC<TProps> = ({
               downloadDataAsFile({
                 transcriptRecv,
                 transcriptSent,
+                tlsn_presentation: presentationData,
               });
             }}
           >

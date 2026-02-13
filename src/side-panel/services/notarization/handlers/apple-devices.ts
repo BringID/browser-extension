@@ -28,6 +28,7 @@ export const AppleDevicesHandlerConfig: SimpleHandlerConfig = {
         'User-Agent':
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
       },
+      whitelist: [],
       cookie: {
         whitelist: ['aidsp'],
       },
@@ -36,11 +37,12 @@ export const AppleDevicesHandlerConfig: SimpleHandlerConfig = {
   transcriptDisclose: ['/devices'],
   responseMiddleware: async (_, response: JsonValue) => {
     const { devices } = response as TDevicesResponse;
+
     if (devices === undefined) {
-      return new Error('required_data_not_found');
+      return new Error('apple_data_not_found');
     }
     if (devices.length === 0) {
-      return new Error('not_enough_devices');
+      return new Error('apple_not_enough_data');
     }
   },
 };

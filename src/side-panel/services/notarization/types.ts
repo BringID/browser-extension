@@ -1,5 +1,4 @@
-import { Task } from '../../../common/core';
-import { Result } from '../../../common/types';
+import { Result, TTask } from '../../../common/types';
 import {
   OnStateUpdated,
   State as ProgressiveState,
@@ -21,7 +20,7 @@ export enum NotarizationStatus {
 export type ResultCallback = (presentation: Result<Presentation>) => void;
 
 export type NotarizationHandler = {
-  task: Task;
+  task: TTask;
   state: ProgressiveState<NotarizationStatus>;
   start: (
     resultCallback: ResultCallback,

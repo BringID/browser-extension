@@ -49,14 +49,15 @@ export const XVerifiedFollowersHandlerConfig: SimpleHandlerConfig = {
     '/data/viewer_v2/user_results/result/id',
   ],
   responseMiddleware: async (_, response: JsonValue) => {
+
     const verifiedFollowersMatch = JSON.stringify(response).match(
       /"verified_follower_count":"(\d+)"/,
     );
     if (!verifiedFollowersMatch) {
-      return new Error('required_data_not_found');
+      return new Error('twitter_data_not_found');
     }
     if (verifiedFollowersMatch[1] && Number(verifiedFollowersMatch[1]) < 10) {
-      return new Error('not_enough_followers');
+      return new Error('twitter_not_enough_data');
     }
   },
 };

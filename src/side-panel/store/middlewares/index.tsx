@@ -1,5 +1,5 @@
-import devModeSync from './dev-mode-sync'
+import taskSync from './task-sync'
 
 export {
-  devModeSync
+  taskSync
 }

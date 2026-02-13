@@ -7,7 +7,6 @@
     "service_worker": "background.bundle.js"
   },
   "action": {
-    "default_popup": "popup.html",
     "default_icon": "icon-32.png"
   },
   "side_panel": {
@@ -19,11 +18,13 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
   },
-  "options_page": "options.html",
   "content_scripts": [
     {
       "matches": [
-        "https://connect.bringid.org/*"
+        "https://connect.bringid.org/*",
+        "https://dev.connect.bringid.org/*",
+        "https://widget.bringid.org/*",
+        "https://staging.widget.bringid.org/*"
       ],
       "js": ["contentScript.bundle.js"],
       "css": [],
@@ -32,7 +33,10 @@
   ],
   "externally_connectable": {
     "matches": [
-      "https://connect.bringid.org/*"
+      "https://connect.bringid.org/*",
+      "https://dev.connect.bringid.org/*",
+      "https://widget.bringid.org/*",
+      "https://staging.widget.bringid.org/*"
     ],
     "all_frames": true
   },
@@ -42,24 +46,30 @@
         "content.bundle.js"
       ],
       "matches": [
-        "https://connect.bringid.org/*"
+        "https://connect.bringid.org/*",
+        "https://dev.connect.bringid.org/*",
+        "https://widget.bringid.org/*",
+        "https://staging.widget.bringid.org/*"
       ],
       "all_frames": true
     }
   ],
   "optional_host_permissions": [
-    "https://x.com/i/account_analytics/overview",
-    "https://x.com/i/api/graphql/LwtiA7urqM6eDeBheAFi5w/AccountOverviewQuery?*",
-    "https://appleid.apple.com/account/manage/security/devices",
-    "https://riders.uber.com/graphql",
-    "https://riders.uber.com/trips",
-    "https://account.apple.com/account/manage/section/devices"
+    "https://appleid.apple.com/*",
+    "https://riders.uber.com/*",
+    "https://account.apple.com/*",
+    "https://www.binance.com/*",
+    "https://www.okx.com/*",
+    "https://speedysub.apps.apple.com/*",
+    "https://apps.apple.com/*"
   ],
   "host_permissions": [
-    "https://connect.bringid.org/*"
+    "https://connect.bringid.org/*",
+    "https://dev.connect.bringid.org/*",
+    "https://widget.bringid.org/*",
+    "https://staging.widget.bringid.org/*"
   ],
   "permissions": [
-    "offscreen",
     "storage",
     "webRequest",
     "activeTab",

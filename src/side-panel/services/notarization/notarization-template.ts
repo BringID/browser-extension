@@ -1,11 +1,10 @@
-import { Task } from '../../../common/core';
 import { NotarizationBase } from './notarization-base';
 import { RequestRecorder } from '../requests-recorder';
 import { TargetRequest } from '../requests-recorder/types';
 import { Request } from '../../common/types';
 import { TLSNotary } from '../tlsn';
 import { Commit } from 'bringid-tlsn-js';
-import { Result } from '../../../common/types';
+import { Result, TTask } from '../../../common/types';
 import {
   newRequestMiddleware,
   newTranscriptMiddleware,
@@ -41,7 +40,7 @@ export class NotarizationTemplate extends NotarizationBase {
   requestMiddleware?: RequestHandler;
   responseMiddleware?: ResponseMiddleware;
 
-  constructor(cfg: HandlerConfig | SimpleHandlerConfig, task: Task) {
+  constructor(cfg: HandlerConfig | SimpleHandlerConfig, task: TTask) {
     super(task);
     this.redirect = cfg.redirect;
     this.tlsnConfig = {
@@ -103,7 +102,21 @@ export class NotarizationTemplate extends NotarizationBase {
       body: JSON.stringify(request.body),
     });
 
-    const responseJSON = await response.json();
+    const responseText = await response.text();
+    console.log(`[NotarizationTemplate] Fetch response size: ${responseText.length} bytes (maxRecvData: ${this.tlsnConfig.maxRecvData})`);
+
+    let responseJSON: any;
+    try {
+      responseJSON = JSON.parse(responseText);
+    } catch (err) {
+      console.error('[NotarizationTemplate] Failed to parse fetch response as JSON:', {
+        status: response.status,
+        contentType: response.headers.get('content-type'),
+        bodyPreview: responseText.substring(0, 500),
+      });
+      return this.result(new Error('Failed to parse API response as JSON'));
+    }
+
     if (this.responseMiddleware) {
       const responseProcessed = await this.responseMiddleware(
         log,
